@@ -15,7 +15,7 @@
   import FileSaver from 'file-saver'
 
   var canvas
-  var pickedColour = '000000f'
+  var pickedColour = '#000000'
   var tiles = []
 
   export default {
@@ -85,14 +85,5 @@
 <style>
   canvas{
     border: 1px solid;
-  }
-
-  .color label {
-    border-right: solid 1.4em #ddd;
-    width: 6em;
-    display: inline-block;
-    margin: 3px 1em 3px 0;
-    padding: 1px;
-    background: #ddd;
   }
 </style>
