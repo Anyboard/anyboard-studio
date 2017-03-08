@@ -7,6 +7,7 @@
     <input type='color' id='picker'/>
     <input type='button' id='tiles' value='Tiles'/>
     <input type='button' id='delete' value='Delete'/>
+    <input type='button' id='drawing' value='Draw'/>
   </div>
 </template>
 
@@ -18,6 +19,7 @@
   var canvas
   var pickedColour = '#000000'
   var tiles = []
+  var drawLineWidth = 30
 
   export default {
     name: 'editor',
@@ -27,12 +29,18 @@
     },
     mounted () {
       // Setting up Fabric.js canvas
-      canvas = new fabric.Canvas('c')
+      canvas = new fabric.Canvas('c', {
+        isDrawingMode: false
+      })
       canvas.backgroundColor = 'white'
+      canvas.freeDrawingBrush = new fabric['PencilBrush'](canvas)
+      canvas.freeDrawingBrush.width = drawLineWidth
+      canvas.freeDrawingBrush.color = pickedColour
 
       // Set colour when color is picked using standard html5 picker
       $('#picker').change(function () {
         pickedColour = $('#picker').val()
+        canvas.freeDrawingBrush.color = pickedColour
       })
 
       // Creates a new square/tile and adds it to a list of tiles
@@ -87,6 +95,16 @@
           tiles.splice(index, 1)
         }
         canvas.getActiveObject().remove()
+      })
+
+      // Free drawing
+      $('#drawing').click(function () {
+        canvas.isDrawingMode = !canvas.isDrawingMode
+        if (canvas.isDrawingMode) {
+          $('#drawing').val('Stop drawing')
+        } else {
+          $('#drawing').val('Draw')
+        }
       })
     }
   }
