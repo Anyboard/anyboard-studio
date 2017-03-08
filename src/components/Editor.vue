@@ -6,6 +6,7 @@
     <input type='file' id='image' value='Upload image'/>
     <input type='color' id='picker'/>
     <input type='button' id='tiles' value='Tiles'/>
+    <input type='button' id='delete' value='Delete'/>
   </div>
 </template>
 
@@ -77,6 +78,15 @@
         for (var i = 0; i < tiles.length; i++) {
           console.log(tiles[i].get('fill'))
         }
+      })
+
+      // Delete selected object
+      $('#delete').click(function () {
+        var index = tiles.indexOf(canvas.getActiveObject())
+        if (index > -1) {
+          tiles.splice(index, 1)
+        }
+        canvas.getActiveObject().remove()
       })
     }
   }
