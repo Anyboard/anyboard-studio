@@ -1,5 +1,6 @@
 <template>
   <div id = 'app'>
+    <toolbar :buttons="tb" v-on:createRect="createRect" @createCircle="createCircle"></toolbar>
     <canvas id='c' width = '1000' height = '700'></canvas>
     <input type='button' id='square' value='Square'/>
     <input type='button' id='save' value='Save image'/>
@@ -20,6 +21,41 @@
     name: 'editor',
     data () {
       return {
+        tb: [
+          { text: 'RE', event: 'createRect' },
+          { text: 'CI', event: 'createCircle' }
+        ]
+      }
+    },
+    components: {
+      'toolbar': require('./Toolbar.vue')
+    },
+    methods: {
+      createRect: function (properties) {
+        properties = {
+          top: Math.random() * 100 + 10,
+          left: Math.random() * 100 + 10,
+          width: Math.random() * 10 + 10,
+          height: Math.random() * 10 + 10,
+          fill: '#ff9900'
+        }
+
+        let rect = new fabric.Rect(properties)
+        canvas.add(rect).setActiveObject()
+        console.log('RECT!')
+      },
+      createCircle: function (properties) {
+        properties = {
+          top: Math.random() * 100 + 10,
+          left: Math.random() * 100 + 10,
+          width: Math.random() * 10 + 10,
+          height: Math.random() * 10 + 10,
+          fill: '#ff9900'
+        }
+
+        let circle = new fabric.Circle(properties)
+        canvas.add(circle).setActiveObject()
+        console.log('CIRC!')
       }
     },
     mounted () {
