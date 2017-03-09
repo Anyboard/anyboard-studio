@@ -18,6 +18,7 @@
       <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
     </ul>
     <boardEditor></boardEditor>
+    <bloremKnipsum></bloremKnipsum>
   </div>
 </template>
 
@@ -33,8 +34,9 @@ export default {
       msg: 'Welcome to Your Vue.js App'
     }
   },
-  components () {
-    boardEditor
+  components: {
+    boardEditor,
+    'BloremKnipsum': require('./BloremKnipsum.vue')
   }
 }
 
