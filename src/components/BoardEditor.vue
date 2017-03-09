@@ -9,6 +9,7 @@
     <input type='button' id='tiles' value='Tiles'/>
     <input type='button' id='delete' value='Delete'/>
     <input type='button' id='drawing' value='Draw'/>
+    <input type='button' id='export' value='Export'/>
   </div>
 </template>
 
@@ -23,7 +24,7 @@
   var drawLineWidth = 30
 
   export default {
-    name: 'editor',
+    name: 'boardEditor',
     data () {
       return {
         tb: [
@@ -141,6 +142,27 @@
         } else {
           $('#drawing').val('Draw')
         }
+      })
+      // Export function to JSON
+      $('#export').click(function () {
+        // Exports the canvas to a json object
+        var exportedCanvas = canvas.toObject()
+        // Gets only objects from the json object
+        var tiles = exportedCanvas['objects']
+        // Variables to get unique values
+        var tileType = []
+        var unique = {}
+        // Loops through all tiles and adds unique to a list
+        for (var i = 0, l = tiles.length; i < l; ++i) {
+          if (!unique.hasOwnProperty(tiles[i]['fill'])) {
+            tileType.push(tiles[i]['fill'])
+            unique[tiles[i]['fill']] = 1
+          }
+        }
+        // Turns list into string and saves
+        var jsonString = JSON.stringify(tileType)
+        var blobText = new Blob([jsonString])
+        FileSaver.saveAs(blobText, 'tileTypes.txt')
       })
     }
   }

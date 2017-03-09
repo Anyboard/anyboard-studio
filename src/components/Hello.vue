@@ -17,15 +17,14 @@
       <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
       <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
     </ul>
-    <editor></editor>
-    <blorem-knipsum></blorem-knipsum>
+    <boardEditor></boardEditor>
   </div>
 </template>
 
 <script>
 import Vue from 'vue'
-import editor from '../components/Editor.vue'
-Vue.component('editor', editor)
+import boardEditor from './BoardEditor.vue'
+Vue.component('boardEditor', boardEditor)
 
 export default {
   name: 'hello',
@@ -34,9 +33,8 @@ export default {
       msg: 'Welcome to Your Vue.js App'
     }
   },
-  components: {
-    editor: editor,
-    'bloremKnipsum': require('./BloremKnipsum.vue')
+  components () {
+    boardEditor
   }
 }
 
