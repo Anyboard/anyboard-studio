@@ -23,10 +23,6 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import boardEditor from './BoardEditor.vue'
-Vue.component('boardEditor', boardEditor)
-
 export default {
   name: 'hello',
   data () {
@@ -35,7 +31,7 @@ export default {
     }
   },
   components: {
-    boardEditor,
+    'boardEditor': require('./BoardEditor.vue'),
     'BloremKnipsum': require('./BloremKnipsum.vue')
   }
 }
