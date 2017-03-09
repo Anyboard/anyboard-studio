@@ -18,6 +18,7 @@
       <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
     </ul>
     <editor></editor>
+    <blorem-knipsum></blorem-knipsum>
   </div>
 </template>
 
@@ -33,8 +34,9 @@ export default {
       msg: 'Welcome to Your Vue.js App'
     }
   },
-  components () {
-    editor
+  components: {
+    editor: editor,
+    'bloremKnipsum': require('./BloremKnipsum.vue')
   }
 }
 
