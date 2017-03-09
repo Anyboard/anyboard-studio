@@ -6,7 +6,6 @@
     <input type='button' id='save' value='Save image'/>
     <input type='file' id='image' value='Upload image'/>
     <input type='color' id='picker'/>
-    <input type='button' id='tiles' value='Tiles'/>
     <input type='button' id='delete' value='Delete'/>
     <input type='button' id='drawing' value='Draw'/>
     <input type='button' id='export' value='Export'/>
@@ -116,15 +115,6 @@
         reader.readAsDataURL(file)
       })
 
-      // Check current tiles and prints their colours. Can change what it gets to custom properties in the future
-      // Mainly made to show how to get properties of tiles we make
-      $('#tiles').click(function () {
-        console.log(tiles)
-        for (var i = 0; i < tiles.length; i++) {
-          console.log(tiles[i].get('fill'))
-        }
-      })
-
       // Delete selected object
       $('#delete').click(function () {
         var index = tiles.indexOf(canvas.getActiveObject())
@@ -155,8 +145,11 @@
         // Loops through all tiles and adds unique to a list
         for (var i = 0, l = tiles.length; i < l; ++i) {
           if (!unique.hasOwnProperty(tiles[i]['fill'])) {
-            tileType.push(tiles[i]['fill'])
-            unique[tiles[i]['fill']] = 1
+            // Makes sure only rects (tiles) get added
+            if (tiles[i]['type'] === 'rect') {
+              tileType.push(tiles[i]['fill'])
+              unique[tiles[i]['fill']] = 1
+            }
           }
         }
         // Turns list into string and saves
