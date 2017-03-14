@@ -205,11 +205,18 @@
             fill: '#ffffff',
             stroke: '#000000',
             strokeWidth: 1,
-            fontFamily: 'Arial'
+            fontFamily: 'Arial',
+            fontSize: 30
           })
         canvas.add(text)
       })
 
+      // Press escape to stop selecting object
+      $(document).keyup(function (e) {
+        if (e.keyCode === 27) {
+          layerify()
+        }
+      })
       // Helping function for layerify
       function restoreObjs (group) {
         // Gets a list of objects from the group
