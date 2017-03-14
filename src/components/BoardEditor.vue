@@ -9,6 +9,7 @@
     <input type='button' id='delete' value='Delete'/>
     <input type='button' id='drawing' value='Draw'/>
     <input type='text' id='drawColor'/>
+    <input type='button' id='text' value='Text'/>
     <input type='button' id='export' value='Export'/>
     <input type='button' id='jayson' value='JSON'/> <!-- For debugging -->
   </div>
@@ -168,9 +169,13 @@
         // Change or add colours here
         palette: [
           ['#000000',
-            '#ff0000',
-            '#00ff00',
-            '#0000ff']
+            '#D5B2D3',
+            '#FFEC00',
+            '#302782',
+            '#01953F',
+            '#E84E1C',
+            '#A21A5C'
+          ]
         ]
       })
 
@@ -191,6 +196,20 @@
         canvas.freeDrawingBrush.color = drawColour
       })
 
+      // Add editable text objects
+      $('#text').click(function () {
+        var text = new fabric.IText('Text',
+          {
+            left: 100,
+            top: 100,
+            fill: '#ffffff',
+            stroke: '#000000',
+            strokeWidth: 1,
+            fontFamily: 'Arial'
+          })
+        canvas.add(text)
+      })
+
       // Helping function for layerify
       function restoreObjs (group) {
         // Gets a list of objects from the group
@@ -204,10 +223,11 @@
           canvas.add(items[i])
         }
       }
-      // Layers types of objects, rects > paths > images
+      // Layers types of objects, text > rects > paths > images
       function layerify () {
         // Sets up variables for all objects and lists for the types
         var obj = canvas.getObjects()
+        var textLayer = []
         var tileLayer = []
         var pathLayer = []
         var imageLayer = []
@@ -219,9 +239,12 @@
             pathLayer.push(obj[i])
           } else if (obj[i]['type'] === 'image') {
             imageLayer.push(obj[i])
+          } else if (obj[i]['type'] === 'i-text') {
+            textLayer.push(obj[i])
           }
         }
         // Adds lists of objects to respective fabric groups
+        var textGroup = new fabric.Group(textLayer)
         var tileGroup = new fabric.Group(tileLayer)
         var pathGroup = new fabric.Group(pathLayer)
         var imageGroup = new fabric.Group(imageLayer)
@@ -233,11 +256,13 @@
         canvas.add(imageGroup)
         canvas.add(pathGroup)
         canvas.add(tileGroup)
+        canvas.add(textGroup)
 
         // Restores objects from group to canvas to allow layerify to work multiple times
         restoreObjs(imageGroup)
         restoreObjs(pathGroup)
         restoreObjs(tileGroup)
+        restoreObjs(textGroup)
       }
 
       // Jsonify button for debugging
