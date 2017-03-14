@@ -10,6 +10,7 @@
     <input type='button' id='drawing' value='Draw'/>
     <input type='text' id='drawColor'/>
     <input type='button' id='export' value='Export'/>
+    <input type='button' id='jayson' value='JSON'/> <!-- For debugging -->
   </div>
 </template>
 
@@ -133,7 +134,8 @@
           var obj = canvas.getObjects()
           for (var i = 0, l = obj.length; i < l; ++i) {
             if (obj[i]['type'] === 'path') {
-              canvas.sendBackwards(obj[i])
+              canvas.sendToBack(obj[i])
+              canvas.bringForward(obj[i])
             }
           }
         }
@@ -194,6 +196,13 @@
         drawColour = $('#drawColor').val()
         canvas.freeDrawingBrush.color = drawColour
       })
+
+      // Jsonify button for debugging
+      $('#jayson').click(function () {
+        console.log(JSON.stringify(canvas))
+      })
+
+      // TODO: Add function to group together paths, images and rects, move groups accordingly to layer
     }
   }
 </script>
