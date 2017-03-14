@@ -5,7 +5,9 @@
     <input type='button' id='square' value='New tile'/>
     <input type='text' id='colourPickerTile'/>
     <input type='button' id='save' value='Save image'/>
-    <input type='file' id='image' value='Upload image'/>
+    <input type='file' id='image' style='display: none;'/>
+    <!-- Workaround button to avoid ugly file text-->
+    <input type="button" value="Upload image" onclick="document.getElementById('image').click();" />
     <input type='button' id='delete' value='Delete'/>
     <input type='button' id='drawing' value='Draw'/>
     <input type='text' id='drawColor'/>
