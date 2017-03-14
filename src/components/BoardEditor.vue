@@ -1,9 +1,7 @@
 <template>
   <div id = 'boardEditor'>
     <toolbar :buttons="tb" v-on:createRect="createRect" @createCircle="createCircle"></toolbar>
-    <div id='container'>
-      <canvas id='c' width = '947' height = '669'></canvas>
-    </div>
+    <canvas id='c' width = '947' height = '669'></canvas>
     <input type='button' id='square' value='New tile'/>
     <input type='text' id='colourPickerTile'/>
     <input type='button' id='save' value='Save image'/>
@@ -12,7 +10,6 @@
     <input type='button' id='drawing' value='Draw'/>
     <input type='text' id='drawColor'/>
     <input type='button' id='export' value='Export'/>
-
   </div>
 </template>
 
@@ -27,7 +24,6 @@
   var drawColour = '#000000'
   var tiles = []
   var drawLineWidth = 30
-
   export default {
     name: 'boardEditor',
     data () {
@@ -78,7 +74,6 @@
       canvas.freeDrawingBrush = new fabric['PencilBrush'](canvas)
       canvas.freeDrawingBrush.width = drawLineWidth
       canvas.freeDrawingBrush.color = drawColour
-
       // Creates a new square/tile and adds it to a list of tiles
       $('#square').click(function () {
         var rect = new fabric.Rect({
@@ -90,13 +85,16 @@
         })
         tiles.push(rect)
         canvas.add(rect).setActiveObject(rect)
+        canvas.bringToFront(rect)
       })
-
       // Save button
       $('#save').click(function () {
-        $('#c').get(0).toBlob(function (blob) {
-          FileSaver.saveAs(blob, 'Board.png')
-        })
+        if (canvas.getObjects().length > 0) {
+          canvas.deactivateAll().renderAll()
+          $('#c').get(0).toBlob(function (blob) {
+            FileSaver.saveAs(blob, 'Board.png')
+          })
+        }
       })
 
       // Upload image, standard boilerplate code
@@ -110,6 +108,7 @@
             canvas.add(oImg).renderAll()
             canvas.setActiveObject(oImg)
             canvas.toDataURL({format: 'png', quality: 0.8})
+            canvas.sendToBack(oImg)
           })
         }
         reader.readAsDataURL(file)
@@ -131,6 +130,12 @@
           $('#drawing').val('Stop drawing')
         } else {
           $('#drawing').val('Draw')
+          var obj = canvas.getObjects()
+          for (var i = 0, l = obj.length; i < l; ++i) {
+            if (obj[i]['type'] === 'path') {
+              canvas.sendToBack(obj[i])
+            }
+          }
         }
       })
       // Export function to JSON
