@@ -193,19 +193,25 @@
 
       // Helping function for layerify
       function restoreObjs (group) {
+        // Gets a list of objects from the group
         var items = group._objects
+        // Restores the states of the objects from the group
         group._restoreObjectsState()
+        // Removes the group object to canvas to avoid clogging with empty groups
         canvas.remove(group)
+        // Goes through all objects and adds them to the canvas
         for (var i = 0, l = items.length; i < l; ++i) {
           canvas.add(items[i])
         }
       }
       // Layers types of objects, rects > paths > images
       function layerify () {
+        // Sets up variables for all objects and lists for the types
         var obj = canvas.getObjects()
         var tileLayer = []
         var pathLayer = []
         var imageLayer = []
+        // Adds each relevant object to their respective list
         for (var i = 0, l = obj.length; i < l; ++i) {
           if (obj[i]['type'] === 'rect') {
             tileLayer.push(obj[i])
@@ -215,16 +221,20 @@
             imageLayer.push(obj[i])
           }
         }
+        // Adds lists of objects to respective fabric groups
         var tileGroup = new fabric.Group(tileLayer)
         var pathGroup = new fabric.Group(pathLayer)
         var imageGroup = new fabric.Group(imageLayer)
 
+        // Clears old objects
         canvas.clear().renderAll()
 
+        // Adds groups to canvas
         canvas.add(imageGroup)
         canvas.add(pathGroup)
         canvas.add(tileGroup)
 
+        // Restores objects from group to canvas to allow layerify to work multiple times
         restoreObjs(imageGroup)
         restoreObjs(pathGroup)
         restoreObjs(tileGroup)
