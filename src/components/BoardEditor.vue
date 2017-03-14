@@ -1,14 +1,18 @@
 <template>
-  <div id = 'app'>
+  <div id = 'boardEditor'>
     <toolbar :buttons="tb" v-on:createRect="createRect" @createCircle="createCircle"></toolbar>
-    <canvas id='c' width = '1000' height = '700'></canvas>
-    <input type='button' id='square' value='Square'/>
+    <div id='container'>
+      <canvas id='c' width = '947' height = '669'></canvas>
+    </div>
+    <input type='button' id='square' value='New tile'/>
+    <input type='text' id='colourPickerTile'/>
     <input type='button' id='save' value='Save image'/>
     <input type='file' id='image' value='Upload image'/>
-    <input type='color' id='picker'/>
     <input type='button' id='delete' value='Delete'/>
     <input type='button' id='drawing' value='Draw'/>
+    <input type='text' id='drawColor'/>
     <input type='button' id='export' value='Export'/>
+
   </div>
 </template>
 
@@ -16,9 +20,11 @@
   import {fabric} from 'fabric'
   import $ from 'jquery'
   import FileSaver from 'file-saver'
+  import spectrum from 'spectrum-colorpicker' /* eslint no-unused-vars: off */
 
   var canvas
-  var pickedColour = '#000000'
+  var tileColour = '#000000'
+  var drawColour = '#000000'
   var tiles = []
   var drawLineWidth = 30
 
@@ -71,13 +77,7 @@
       canvas.backgroundColor = 'white'
       canvas.freeDrawingBrush = new fabric['PencilBrush'](canvas)
       canvas.freeDrawingBrush.width = drawLineWidth
-      canvas.freeDrawingBrush.color = pickedColour
-
-      // Set colour when color is picked using standard html5 picker
-      $('#picker').change(function () {
-        pickedColour = $('#picker').val()
-        canvas.freeDrawingBrush.color = pickedColour
-      })
+      canvas.freeDrawingBrush.color = drawColour
 
       // Creates a new square/tile and adds it to a list of tiles
       $('#square').click(function () {
@@ -86,7 +86,7 @@
           left: 200,
           width: 100,
           height: 100,
-          fill: pickedColour
+          fill: tileColour
         })
         tiles.push(rect)
         canvas.add(rect).setActiveObject(rect)
@@ -153,16 +153,60 @@
           }
         }
         // Turns list into string and saves
-        var jsonString = JSON.stringify(tileType)
+        var jsonString = JSON.stringify(tileType).replace(/"/g, '\'')
         var blobText = new Blob([jsonString])
         FileSaver.saveAs(blobText, 'tileTypes.txt')
+      })
+
+      // Limited colour picker by swatches
+      $('#colourPickerTile').spectrum({
+        preferredFormat: 'hex',
+        color: '#000000',
+        // Allows only our predefined colours to be picked
+        showPaletteOnly: true,
+        // Change or add colours here
+        palette: [
+          ['#000000',
+            '#ff0000',
+            '#00ff00',
+            '#0000ff']
+        ]
+      })
+
+      // Changes tile colour to chosen
+      $('#colourPickerTile').change(function () {
+        tileColour = $('#colourPickerTile').val()
+      })
+
+      // Free drawing colour picker
+      $('#drawColor').spectrum({
+        preferredFormat: 'hex',
+        color: '#000000'
+      })
+
+      // Changes tile colour to chosen
+      $('#drawColor').change(function () {
+        drawColour = $('#drawColor').val()
+        canvas.freeDrawingBrush.color = drawColour
       })
     }
   }
 </script>
 
 <style>
-  canvas{
-    border: 1px solid;
+  #container{
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+    display: block;
   }
+
+  #c{
+    border: 1px solid black;
+    text-align: center;
+  }
+
 </style>
+
+<style src="../../node_modules/spectrum-colorpicker/spectrum.css"></style>
