@@ -133,7 +133,7 @@
           var obj = canvas.getObjects()
           for (var i = 0, l = obj.length; i < l; ++i) {
             if (obj[i]['type'] === 'path') {
-              canvas.sendToBack(obj[i])
+              canvas.sendBackwards(obj[i])
             }
           }
         }
