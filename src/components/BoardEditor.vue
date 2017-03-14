@@ -86,7 +86,7 @@
         })
         tiles.push(rect)
         canvas.add(rect).setActiveObject(rect)
-        canvas.bringToFront(rect)
+        layerify()
       })
       // Save button
       $('#save').click(function () {
@@ -109,7 +109,7 @@
             canvas.add(oImg).renderAll()
             canvas.setActiveObject(oImg)
             canvas.toDataURL({format: 'png', quality: 0.8})
-            canvas.sendToBack(oImg)
+            layerify()
           })
         }
         reader.readAsDataURL(file)
@@ -131,13 +131,7 @@
           $('#drawing').val('Stop drawing')
         } else {
           $('#drawing').val('Draw')
-          var obj = canvas.getObjects()
-          for (var i = 0, l = obj.length; i < l; ++i) {
-            if (obj[i]['type'] === 'path') {
-              canvas.sendToBack(obj[i])
-              canvas.bringForward(obj[i])
-            }
-          }
+          layerify()
         }
       })
       // Export function to JSON
@@ -197,12 +191,49 @@
         canvas.freeDrawingBrush.color = drawColour
       })
 
+      // Helping function for layerify
+      function restoreObjs (group) {
+        var items = group._objects
+        group._restoreObjectsState()
+        canvas.remove(group)
+        for (var i = 0, l = items.length; i < l; ++i) {
+          canvas.add(items[i])
+        }
+      }
+      // Layers types of objects, rects > paths > images
+      function layerify () {
+        var obj = canvas.getObjects()
+        var tileLayer = []
+        var pathLayer = []
+        var imageLayer = []
+        for (var i = 0, l = obj.length; i < l; ++i) {
+          if (obj[i]['type'] === 'rect') {
+            tileLayer.push(obj[i])
+          } else if (obj[i]['type'] === 'path') {
+            pathLayer.push(obj[i])
+          } else if (obj[i]['type'] === 'image') {
+            imageLayer.push(obj[i])
+          }
+        }
+        var tileGroup = new fabric.Group(tileLayer)
+        var pathGroup = new fabric.Group(pathLayer)
+        var imageGroup = new fabric.Group(imageLayer)
+
+        canvas.clear().renderAll()
+
+        canvas.add(imageGroup)
+        canvas.add(pathGroup)
+        canvas.add(tileGroup)
+
+        restoreObjs(imageGroup)
+        restoreObjs(pathGroup)
+        restoreObjs(tileGroup)
+      }
+
       // Jsonify button for debugging
       $('#jayson').click(function () {
         console.log(JSON.stringify(canvas))
       })
-
-      // TODO: Add function to group together paths, images and rects, move groups accordingly to layer
     }
   }
 </script>
