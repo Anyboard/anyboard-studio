@@ -80,7 +80,7 @@
         };
         var handleTokenTilt = function (token) {
           AnyBoard.Logger.log(" TILT Detect ");
-          $("#tilt").css("background-color", "blue");
+          app.diceRoll();
           setTimeout(function () {
             $("#tilt").css("background-color", "#99C2FF");
           }, 550);
@@ -206,7 +206,6 @@
           hyper.log("We happily send the COUNT command");
           hyper.log(data)
         };
-
         // Function to be executed upon failure of LED
         var errorCallback = function (errorMsg) {
           hyper.log("Failed to send the COUNT command");
@@ -302,6 +301,11 @@
       displayX: function (tokenName) {
         var token = this.devices[tokenName];
         this.sendDisplayXCmd(token);
+      },
+
+      diceRoll: function (){
+        document.getElementById("dice").innerHTML = "";
+        document.getElementById("dice").appendChild(document.createTextNode(""+Math.floor(Math.random() * 6 + 1)));
       }
     };
   </script>
@@ -337,7 +341,10 @@
       <p>Wanted tile</p>
       <div id="color" class="wanted_tile"></div>
     </div>
-
+  </div>
+  <div id="doYouLikeToDAIS">
+    <h1>LEGAL DICE ZONE</h1>
+    <div id="dice">0</div>
   </div>
 </div>
 </body>

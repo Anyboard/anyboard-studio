@@ -136,13 +136,23 @@
   background-color: #D3D3D3;
 }
 .tileContainer{
+  height: 200px;
 }
 .tile{
   margin: auto;
   height: 30px;
   width: 100px;
+  display: block;
 }
 #score{
   text-align: center;
 }
-
+#dice{
+  margin-top:30px;
+  margin-left: auto;
+  display: block;
+}
+#doYouLikeToDAIS{
+  margin-top: 200px;
+  display: block;
+}
