@@ -2,7 +2,10 @@
   <div>
     <div id="blockly-wrapper" style="height: 480px; width: 600px;"></div>
     <button v-on:click="showCode()">Show Code</button>
-    <p style="white-space: pre">{{ code }}</p>
+    <br/>
+    <div id="codeWrapper">
+      <p style="white-space: pre" id="shownCode">{{ code }}</p>
+    </div>
   </div>
 </template>
 <script>
@@ -547,4 +550,20 @@ export default {
 }
 </script>
 <style scoped>
+  #blockly-wrapper{
+    text-align: center;
+    margin: auto;
+  }
+
+  #codeWrapper{
+    text-align: center;
+    width: auto;
+    display: inline-block;
+  }
+
+  #shownCode{
+    text-align: left;
+    margin: auto;
+
+  }
 </style>

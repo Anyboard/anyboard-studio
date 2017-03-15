@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
+    <a href="/#/blockly">Blockly</a>
+    <a href="/#/">Board Editor</a>
     <router-view></router-view>
   </div>
 </template>
