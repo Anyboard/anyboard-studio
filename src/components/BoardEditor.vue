@@ -27,7 +27,7 @@
   import spectrum from 'spectrum-colorpicker' /* eslint no-unused-vars: off */
 
   var canvas
-  var tileColour = '#000000'
+  var tileColour = 'black'
   var drawColour = '#000000'
   var drawLineWidth = 30
 
@@ -90,7 +90,9 @@
         let rect = new fabric.Rect({
           width: 100,
           height: 100,
-          fill: tileColour
+          fill: tileColour,
+          stroke: '#000000',
+          strokeWidth: 1
         })
         canvas.add(rect).setActiveObject(rect)
         canvas.getActiveObject().center()
@@ -113,7 +115,9 @@
 
       $('#hexagon').click(function () {
         let hexagon = new fabric.Polygon(regularPolygonPoints(6, 60), {
-          fill: tileColour
+          fill: tileColour,
+          stroke: '#000000',
+          strokeWidth: 1
         })
         canvas.add(hexagon).setActiveObject(hexagon)
         canvas.getActiveObject().center()
@@ -123,13 +127,21 @@
       // Limited colour picker by swatches
       $('#colourPickerTile').spectrum({
         preferredFormat: 'hex',
-        color: '#000000',
+        color: tileColour,
         // Allows only our predefined colours to be picked
         showPaletteOnly: true,
         // Change or add colours here
         palette: [
-          ['#000000',
-            '#ffffff',
+          ['black',
+            '#ffffff'],
+          [
+            'red',
+            'yellow',
+            'green',
+            'purple',
+            'blue'
+          ],
+          [
             '#D5B2D3',
             '#FFEC00',
             '#302782',
