@@ -5,15 +5,15 @@
     <input type='button' id='square' value='New square tile'/>
     <input type='button' id='hexagon' value='New hexagon tile'/>
     <input type='text' id='colourPickerTile'/>
-    <input type='button' id='save' value='Save image'/>
     <input type='file' id='image' style='display: none;'/>
     <!-- Workaround button to avoid ugly file text-->
     <input type="button" value="Upload image" onclick="document.getElementById('image').click();" />
+    <input type='button' id='clone' value='Clone'/>
     <input type='button' id='delete' value='Delete'/>
     <input type='button' id='drawing' value='Draw'/>
     <input type='text' id='drawColor'/>
     <input type='button' id='text' value='Text'/>
-    <input type='button' id='clone' value='Clone'/>
+    <input type='button' id='save' value='Save image'/>
     <!-- For debugging and testing-->
     <input type='button' id='export' value='Export'/>
     <input type='button' id='jayson' value='JSON'/>
@@ -88,13 +88,12 @@
       // Creates a new square/tile and adds it to a list of tiles
       $('#square').click(function () {
         let rect = new fabric.Rect({
-          top: 100,
-          left: 200,
           width: 100,
           height: 100,
           fill: tileColour
         })
         canvas.add(rect).setActiveObject(rect)
+        canvas.getActiveObject().center()
         layerify()
       })
 
@@ -114,11 +113,10 @@
 
       $('#hexagon').click(function () {
         let hexagon = new fabric.Polygon(regularPolygonPoints(6, 60), {
-          top: 100,
-          left: 200,
           fill: tileColour
         })
         canvas.add(hexagon).setActiveObject(hexagon)
+        canvas.getActiveObject().center()
         layerify()
       })
 
@@ -157,16 +155,18 @@
 
       // Clone currently selected object
       $('#clone').click(function () {
-        var copyData = canvas.getActiveObject().toObject()
-        fabric.util.enlivenObjects([copyData], function (objects) {
-          objects.forEach(function (o) {
-            o.set('top', o.top + 15)
-            o.set('left', o.left + 15)
-            canvas.add(o)
+        if (canvas.getActiveObject() !== null) {
+          var copyData = canvas.getActiveObject().toObject()
+          fabric.util.enlivenObjects([copyData], function (objects) {
+            objects.forEach(function (o) {
+              o.set('top', o.top + 15)
+              o.set('left', o.left + 15)
+              canvas.add(o)
+              layerify()
+            })
+            canvas.renderAll()
           })
-          canvas.renderAll()
-        })
-        layerify()
+        }
       })
 
       // ######################################### FREE DRAWING ########################################################
@@ -176,6 +176,7 @@
         canvas.isDrawingMode = !canvas.isDrawingMode
         if (canvas.isDrawingMode) {
           $('#drawing').val('Stop drawing')
+          layerify()
         } else {
           $('#drawing').val('Draw')
           layerify()
@@ -203,9 +204,10 @@
         reader.onload = function (f) {
           var data = f.target.result
           fabric.Image.fromURL(data, function (img) {
-            var oImg = img.set({left: 0, top: 0, angle: 0}).scale(0.5)
+            var oImg = img.set({angle: 0}).scale(0.5)
             canvas.add(oImg).renderAll()
             canvas.setActiveObject(oImg)
+            canvas.getActiveObject().center()
             canvas.toDataURL({format: 'png', quality: 0.8})
             layerify()
           })
@@ -217,10 +219,9 @@
       // ###############################################################################################################
       // Add editable text objects
       $('#text').click(function () {
+        layerify()
         var text = new fabric.IText('Text',
           {
-            left: 100,
-            top: 100,
             fill: '#ffffff',
             stroke: '#000000',
             strokeWidth: 1,
@@ -229,6 +230,9 @@
             textAlign: 'center'
           })
         canvas.add(text)
+        canvas.setActiveObject(text)
+        canvas.getActiveObject().center()
+        layerify()
       })
 
       // ############################################ EXPORTING ########################################################
