@@ -290,8 +290,7 @@
         var token = this.devices[tokenName];
         this.sendCountCmd(token);
 
-      }
-      ,
+      },
 
       displayX: function (tokenName) {
         var token = this.devices[tokenName];
@@ -310,14 +309,7 @@
   <button type="button" class="black" onclick="app.discover()">
     Discover Bluetooth devices
   </button>
-
 </div>
-<div id="main">
-
-</div>
-<div id="token_feedback">
-</div>
-
 <div id="token_constraint">
   <h1>Colors</h1>
   <div id="scorediv">
@@ -329,9 +321,9 @@
     </div>
     <p>Current tile</p>
     <div id="color" class="current_tile">
-      <p>Wanted tile</p>
-      <div id="color" class="wanted_tile"></div>
     </div>
+    <p>Wanted tile</p>
+    <div id="color" class="wanted_tile"></div>
   </div>
 </div>
 
