@@ -1,7 +1,6 @@
 <template>
   <div id = 'boardEditor'>
     <toolbar :buttons="tb" v-on:createRect="createRect" @createCircle="createCircle"></toolbar>
-    <canvas id='c' width = '947' height = '669'></canvas>
     <input type='button' id='square' value='New square tile'/>
     <input type='button' id='hexagon' value='New hexagon tile'/>
     <input type='text' id='colourPickerTile'/>
@@ -17,6 +16,13 @@
     <!-- For debugging and testing-->
     <input type='button' id='export' value='Export'/>
     <input type='button' id='jayson' value='JSON'/>
+    <div id='wrapper'>
+      <canvas id='c' width = '947' height = '669'></canvas>
+      <div id='controls'>
+        <span id='width'>20</span>
+        <input type='range' value='20' min='1' max='100' id='drawingLineWidth'/>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -161,13 +167,15 @@
       // ###############################################################################################################
       // Delete selected object
       $('#delete').click(function () {
-        canvas.getActiveObject().remove()
-        layerify()
+        if (canvas.getActiveObject() != null) {
+          canvas.getActiveObject().remove()
+          layerify()
+        }
       })
 
       // Clone currently selected object
       $('#clone').click(function () {
-        if (canvas.getActiveObject() !== null) {
+        if (canvas.getActiveObject() != null) {
           var copyData = canvas.getActiveObject().toObject()
           fabric.util.enlivenObjects([copyData], function (objects) {
             objects.forEach(function (o) {
@@ -188,9 +196,11 @@
         canvas.isDrawingMode = !canvas.isDrawingMode
         if (canvas.isDrawingMode) {
           $('#drawing').val('Stop drawing')
+          $('#controls').css('display', 'block')
           layerify()
         } else {
           $('#drawing').val('Draw')
+          $('#controls').css('display', 'none')
           layerify()
         }
       })
@@ -201,12 +211,18 @@
         color: '#000000'
       })
 
-      // Changes tile colour to chosen
+      // Changes pencil colour to chosen
       $('#drawColor').change(function () {
         drawColour = $('#drawColor').val()
         canvas.freeDrawingBrush.color = drawColour
       })
 
+      // Choose line width
+      $('#drawingLineWidth').change(function () {
+        $('#width').html($('#drawingLineWidth').val())
+        drawLineWidth = parseInt($('#drawingLineWidth').val() || 1)
+        canvas.freeDrawingBrush.width = drawLineWidth
+      })
       // ######################################## IMAGE HANDLING #######################################################
       // ###############################################################################################################
       // Upload image, standard boilerplate code
@@ -367,8 +383,20 @@
   #c{
     margin: auto;
     border: 1px solid black;
+    position: absolute;
   }
 
+  #wrapper{
+    position: relative;
+  }
+
+  #controls {
+    position: absolute;
+    top: 0;
+    left: auto;
+    background-color: aliceblue;
+    display: none;
+  }
   /* Container made by fabric when creating a fabric canvas */
   .canvas-container{
     text-align: center;
