@@ -29,6 +29,9 @@
   height : 180px;
   margin-bottom : 20px;
 }
+#token_constraint{
+  display:none;
+}
 
 #ind {
 }
@@ -130,10 +133,17 @@
   float: left;
 }
 
-#tiles {
-  margin-left: 80px;
-}
-
 .unavailable{
   background-color: #D3D3D3;
 }
+.tileContainer{
+}
+.tile{
+  margin: auto;
+  height: 30px;
+  width: 100px;
+}
+#score{
+  text-align: center;
+}
+

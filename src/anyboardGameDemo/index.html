@@ -169,7 +169,8 @@
 
         // Signal that we're attempting to connect
         document.getElementById(tokenName).className = 'blue';
-
+        $("token_feedback").style.display = "block";
+        $("token_constraint").style.display = "block";
         // Send connect command.
         token.connect(app.next_panel());
 
@@ -310,20 +311,21 @@
     Discover Bluetooth devices
   </button>
 </div>
+<div id="token_feedback"></div>
 <div id="token_constraint">
   <h1>Colors</h1>
   <div id="scorediv">
     <p id="score">Current score is 0</p>
   </div>
-  <div id="tiles">
-    <p>Previous tile</p>
-    <div id="color" class="previous_tile">
+  <div id="tileContainer">
+    <div class="tile">
+      <p>Current tile</p>
+      <div id="color" class="current_tile"></div>
     </div>
-    <p>Current tile</p>
-    <div id="color" class="current_tile">
+    <div class="tile">
+      <p>Wanted tile</p>
+      <div id="color" class="wanted_tile"></div>
     </div>
-    <p>Wanted tile</p>
-    <div id="color" class="wanted_tile"></div>
   </div>
 </div>
 
