@@ -80,7 +80,8 @@
         };
         var handleTokenTilt = function (token) {
           AnyBoard.Logger.log(" TILT Detect ");
-          app.diceRoll();
+          app.pickRandomColor();
+          document.getElementById("pleaseTilt").innerHTML = "";
           setTimeout(function () {
             $("#tilt").css("background-color", "#99C2FF");
           }, 550);
@@ -270,7 +271,12 @@
         if (app.tiles[2] == this.currentColor) {
           this.sendVibrationCmd(token);
           this.updateScore();
-          this.pickRandomColor();
+          document.getElementById("pleaseTilt")
+            .appendChild(
+              document.createTextNode(
+                "Please tilt the pawn to recieve a new color."
+              )
+            );
         }
         else {
           this.downgradeScore();
@@ -299,15 +305,9 @@
       displayX: function (tokenName) {
         var token = this.devices[tokenName];
         this.sendDisplayXCmd(token);
-      },
-
-      diceRoll: function (){
-        document.getElementById("dice").innerHTML = "";
-        document.getElementById("dice").appendChild(document.createTextNode(""+Math.floor(Math.random() * 6 + 1)));
       }
     };
   </script>
-
 </head>
 
 <body ontouchstart="">
@@ -340,9 +340,7 @@
       <div id="color" class="wanted_tile"></div>
     </div>
   </div>
-  <div id="doYouLikeToDAIS">
-    <h1>LEGAL DICE ZONE</h1>
-    <div id="dice">0</div>
+  <div id="pleaseTilt">
   </div>
 </div>
 </body>
