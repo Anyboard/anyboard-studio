@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Hello from 'components/Hello'
+import Blockly from 'components/Blockly'
 import BoardEditor from 'components/BoardEditor'
 
 Vue.use(Router)
@@ -16,6 +17,11 @@ export default new Router({
       path: '/Hello',
       name: 'Hello',
       component: Hello
+    },
+    {
+      path: '/blockly',
+      name: 'Blockly',
+      component: Blockly
     }
   ]
 })
