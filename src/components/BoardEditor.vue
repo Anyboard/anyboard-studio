@@ -79,7 +79,7 @@
       canvas = new fabric.Canvas('c', {
         isDrawingMode: false
       })
-      canvas.backgroundColor = 'white'
+      canvas.setBackgroundColor('white')
       canvas.freeDrawingBrush = new fabric['PencilBrush'](canvas)
       canvas.freeDrawingBrush.width = drawLineWidth
       canvas.freeDrawingBrush.color = drawColour
@@ -118,7 +118,6 @@
           left: 200,
           fill: tileColour
         })
-        console.log('I work')
         canvas.add(hexagon).setActiveObject(hexagon)
         layerify()
       })
@@ -153,15 +152,21 @@
       // Delete selected object
       $('#delete').click(function () {
         canvas.getActiveObject().remove()
+        layerify()
       })
 
       // Clone currently selected object
       $('#clone').click(function () {
-        var object = fabric.util.object.clone(canvas.getActiveObject())
-        canvas.deactivateAll().renderAll()
-        object.set('top', object.top + 15)
-        object.set('left', object.left + 15)
-        canvas.add(object)
+        var copyData = canvas.getActiveObject().toObject()
+        fabric.util.enlivenObjects([copyData], function (objects) {
+          objects.forEach(function (o) {
+            o.set('top', o.top + 15)
+            o.set('left', o.left + 15)
+            canvas.add(o)
+          })
+          canvas.renderAll()
+        })
+        layerify()
       })
 
       // ######################################### FREE DRAWING ########################################################
@@ -312,6 +317,7 @@
 
         // Clears old objects
         canvas.clear().renderAll()
+        canvas.setBackgroundColor('white')
 
         // Adds groups to canvas
         canvas.add(imageGroup)
@@ -331,6 +337,7 @@
       // Jsonify button for debugging
       $('#jayson').click(function () {
         console.log(JSON.stringify(canvas))
+        canvas.setBackgroundColor('red')
       })
     }
   }
