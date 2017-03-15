@@ -92,11 +92,9 @@
 
         var handleTokenMove = function (token, constraint, options) {
           AnyBoard.Logger.log("Moved to tilee " + constraint);
-          app.tiles[1] = app.tiles[2];
           app.tiles[2] = app.locations[constraint];
-          this.verifyColor();
-          $('.previous_tile').css("background-color", app.tiles[1]);
           $('.current_tile').css("background-color", app.tiles[2]);
+          app.verifyColor(token.name);
         };
 
         //TT Events not implmented
