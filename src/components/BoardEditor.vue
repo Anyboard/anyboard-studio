@@ -31,9 +31,11 @@
   import $ from 'jquery'
   import FileSaver from 'file-saver'
   import spectrum from 'spectrum-colorpicker' /* eslint no-unused-vars: off */
+  // TODO: import store in root and still be able to use store in this component
+  import store from '../vuex/store'
 
   var canvas
-  var tileColour = 'black'
+  var tileColour = '#000000'
   var drawColour = '#000000'
   var drawLineWidth = 30
 
@@ -89,6 +91,7 @@
       canvas.freeDrawingBrush = new fabric['PencilBrush'](canvas)
       canvas.freeDrawingBrush.width = drawLineWidth
       canvas.freeDrawingBrush.color = drawColour
+      loadState()
       // ########################################## TILES ##############################################################
       // ###############################################################################################################
       // Creates a new square/tile and adds it to a list of tiles
@@ -138,22 +141,26 @@
         showPaletteOnly: true,
         // Change or add colours here
         palette: [
-          ['black',
+          ['#000000',
             '#ffffff'],
           [
-            'red',
-            'yellow',
-            'green',
-            'purple',
-            'blue'
-          ],
+            '#166CA0',  // 2
+            '#4194D0',  // 5
+            '#112A95',  // 7
+            '#C047A3',  // 14
+            '#FB50A6'], // 15
           [
-            '#D5B2D3',
-            '#FFEC00',
-            '#302782',
-            '#01953F',
-            '#E84E1C',
-            '#A21A5C'
+            '#5E1014',  // 16
+            '#9B3235',  // 18
+            '#FF483E',  // 20
+            '#66C889',  // 21
+            '#30A747'], // 24
+          [
+            '#31682E',  // 30
+            '#FF9344',  // 31
+            '#D96623',  // 33
+            '#F6EA77',  // 36
+            '#F4E658'   // 37
           ]
         ]
       })
@@ -300,6 +307,28 @@
         FileSaver.saveAs(blobText, 'tileTypes.txt')
       })
 
+      // Method to save state, change canvasState to vuex-store
+      function saveState () {
+        var canvasState = canvas.toDatalessJSON()
+        store.dispatch('SAVE_CANVAS', canvasState)
+      }
+
+      // Method to load state, change where it loads from to vuex-store
+      function loadState () {
+        var state = store.getters.GET_CANVAS
+        if (state !== 0) {
+          canvas.loadFromDatalessJSON(state)
+        }
+      }
+
+      // Saves the state on canvas change
+      canvas.on('object:added', function () {
+        saveState()
+      })
+
+      canvas.on('object:modified', function () {
+        saveState()
+      })
       // ############################################## LAYERIFY #######################################################
       // ###############################################################################################################
       // Press escape to stop selecting object
@@ -369,7 +398,6 @@
       // Jsonify button for debugging
       $('#jayson').click(function () {
         console.log(JSON.stringify(canvas))
-        canvas.setBackgroundColor('red')
       })
     }
   }
