@@ -296,8 +296,6 @@
           }
         }
         store.commit('save', tileType)
-        console.log(tileType)
-        console.log(store.state.colours)
         // Turns list into string and saves
         var jsonString = JSON.stringify(tileType).replace(/"/g, '\'')
         var blobText = new Blob([jsonString])

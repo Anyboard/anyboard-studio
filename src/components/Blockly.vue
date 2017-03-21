@@ -141,6 +141,38 @@ Blockly.JavaScript['move_to'] = function (block) {
   return code
 }
 
+Blockly.JavaScript['move'] = function (block) {
+  var color = block.getFieldValue('COLOR')
+  var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
+  var code = 'var handleTokenMove = function(Token, ' + color + ', options) {\n'
+  code += stack + '};\n'
+  return code
+}
+
+Blockly.JavaScript['move_to_tile'] = function (block) {
+  var tile = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('TILE'), Blockly.Variables.NAME_TYPE)
+  var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
+  var code = 'var handleTokenMove = function(Token, ' + tile + ', options) {\n'
+  code += stack + '};\n'
+  return code
+}
+
+Blockly.JavaScript['tap'] = function (block) {
+  var token = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('TOKEN'), Blockly.Variables.NAME_TYPE)
+  var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
+  var code = 'var handleTokenTap = function(' + token + ', options) {\n'
+  code += stack + '};\n'
+  return code
+}
+
+Blockly.JavaScript['double_tap'] = function (block) {
+  var token = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('TOKEN'), Blockly.Variables.NAME_TYPE)
+  var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
+  var code = 'var handleTokenDoubleTap = function(' + token + ', options) {\n'
+  code += stack + '};\n'
+  return code
+}
+
 Blockly.JavaScript['test_init'] = function (block) {
   var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
   var code = 'init () {\n'
@@ -157,7 +189,6 @@ export default {
     }
   },
   mounted () {
-    console.log(store.state.colours)
     Blockly.FieldColour.COLOURS = store.state.colours
     Blockly.FieldColour.COLUMNS = 3
 
