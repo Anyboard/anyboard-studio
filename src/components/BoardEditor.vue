@@ -31,6 +31,7 @@
   import $ from 'jquery'
   import FileSaver from 'file-saver'
   import spectrum from 'spectrum-colorpicker' /* eslint no-unused-vars: off */
+  import store from '../store'
 
   var canvas
   var tileColour = 'black'
@@ -294,6 +295,9 @@
             }
           }
         }
+        store.commit('save', tileType)
+        console.log(tileType)
+        console.log(store.state.colours)
         // Turns list into string and saves
         var jsonString = JSON.stringify(tileType).replace(/"/g, '\'')
         var blobText = new Blob([jsonString])

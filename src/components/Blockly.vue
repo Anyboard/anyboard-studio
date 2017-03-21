@@ -12,9 +12,6 @@
 import Blockly from 'node-blockly/browser'
 import store from '../store'
 
-Blockly.FieldColour.COLOURS = store.state.colours
-Blockly.FieldColour.COLUMNS = 3
-
 Blockly.Blocks['move_to'] = {
   init: function () {
     this.appendDummyInput()
@@ -160,6 +157,10 @@ export default {
     }
   },
   mounted () {
+    console.log(store.state.colours)
+    Blockly.FieldColour.COLOURS = store.state.colours
+    Blockly.FieldColour.COLUMNS = 3
+
     let toolbox = '<xml>'
     toolbox += '  <category name="Logic" colour="#5C81A6">'
     toolbox += '    <block type="controls_if"></block>'
