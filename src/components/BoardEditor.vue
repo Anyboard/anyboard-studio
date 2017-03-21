@@ -18,9 +18,15 @@
     <input type='button' id='jayson' value='JSON'/>
     <div id='wrapper'>
       <canvas id='c' width = '947' height = '669'></canvas>
-      <div id='controls'>
-        <span id='width'>20</span>
-        <input type='range' value='20' min='1' max='100' id='drawingLineWidth'/>
+      <div id='container'>
+        <div id='controls'>
+          <span id='width'>20</span>
+          <input type='range' value='20' min='1' max='100' id='drawingLineWidth'/>
+        </div>
+        <div id='tileTutorial'>
+          <p>Tiles need a minimum size and have an orange dashed border! Important bznz!!!</p>
+          <input type='button' id='tutClose' value='Understood'/>
+        </div>
       </div>
     </div>
   </div>
@@ -38,6 +44,7 @@
   var tileColour = '#000000'
   var drawColour = '#000000'
   var drawLineWidth = 30
+  var tutorialViewed = 0
 
   export default {
     name: 'boardEditor',
@@ -94,14 +101,20 @@
       loadState()
       // ########################################## TILES ##############################################################
       // ###############################################################################################################
-      // Creates a new square/tile and adds it to a list of tiles
+      // Creates a new square tile
       $('#square').click(function () {
+        if (tutorialViewed === 0) {
+          $('#tileTutorial').css('display', 'block')
+        }
         let rect = new fabric.Rect({
-          width: 100,
-          height: 100,
+          width: 150,
+          height: 150,
           fill: tileColour,
-          stroke: '#000000',
-          strokeWidth: 1
+          stroke: '#ffd445',
+          strokeDashArray: [6, 1.5],
+          strokeWidth: 2,
+          minHeight: 100,
+          minWidth: 100
         })
         canvas.add(rect).setActiveObject(rect)
         canvas.getActiveObject().center()
@@ -123,10 +136,16 @@
       }
 
       $('#hexagon').click(function () {
+        if (tutorialViewed === 0) {
+          $('#tileTutorial').css('display', 'block')
+        }
         let hexagon = new fabric.Polygon(regularPolygonPoints(6, 60), {
           fill: tileColour,
-          stroke: '#000000',
-          strokeWidth: 1
+          stroke: '#ffd445',
+          strokeDashArray: [6, 1.5],
+          strokeWidth: 2,
+          minHeight: 105,
+          minWidth: 120
         })
         canvas.add(hexagon).setActiveObject(hexagon)
         canvas.getActiveObject().center()
@@ -170,6 +189,29 @@
         tileColour = $('#colourPickerTile').val()
       })
 
+      // Restricts size of object to a minimum required size
+      canvas.observe('object:scaling', function (e) {
+        var shape = e.target
+        var minWidth = shape.get('minWidth')
+        var minHeight = shape.get('minHeight')
+        var actualWidth = shape.scaleX * shape.width
+        var actualHeight = shape.scaleY * shape.height
+
+        if (!isNaN(minWidth) && actualWidth <= minWidth) {
+          // dividing minWidth by the shape.width gives us our 'min scale'
+          shape.set({ scaleX: minWidth / shape.width })
+        }
+
+        if (!isNaN(minHeight) && actualHeight <= minHeight) {
+          shape.set({ scaleY: minHeight / shape.height })
+        }
+      })
+
+      // Hide tutorial
+      $('#tutClose').click(function () {
+        $('#tileTutorial').css('display', 'none')
+        tutorialViewed = 1
+      })
       // ##################################### OBJECT MANIPULATION #####################################################
       // ###############################################################################################################
       // Delete selected object
@@ -418,13 +460,28 @@
     position: relative;
   }
 
-  #controls {
+  #container{
     position: absolute;
+    top: 0;
+    left: auto;
+    width: 20em;
+  }
+  #controls {
+    position: relative;
     top: 0;
     left: auto;
     background-color: aliceblue;
     display: none;
   }
+
+  #tileTutorial {
+    position: relative;
+    top: 0;
+    left: auto;
+    background-color: aliceblue;
+    display: none;
+  }
+
   /* Container made by fabric when creating a fabric canvas */
   .canvas-container{
     text-align: center;
