@@ -10,6 +10,10 @@
 </template>
 <script>
 import Blockly from 'node-blockly/browser'
+import store from '../store'
+
+Blockly.FieldColour.COLOURS = store.state.colours
+Blockly.FieldColour.COLUMNS = 3
 
 Blockly.Blocks['move_to'] = {
   init: function () {
