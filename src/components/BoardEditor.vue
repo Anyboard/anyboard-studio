@@ -4,11 +4,13 @@
     <input type='button' id='square' value='New square tile'/>
     <input type='button' id='hexagon' value='New hexagon tile'/>
     <input type='text' id='colourPickerTile'/>
+    <input type='button' id='colourChange' value='Change colour'/>
     <input type='file' id='image' style='display: none;'/>
     <!-- Workaround button to avoid ugly file text-->
     <input type="button" value="Upload image" onclick="document.getElementById('image').click();" />
     <input type='button' id='clone' value='Clone'/>
     <input type='button' id='delete' value='Delete'/>
+    <input type='button' id='center' value='Center object'/>
     <input type='button' id='drawing' value='Draw'/>
     <input type='text' id='drawColor'/>
     <input type='button' id='text' value='Text'/>
@@ -107,14 +109,14 @@
           $('#tileTutorial').css('display', 'block')
         }
         let rect = new fabric.Rect({
-          width: 150,
-          height: 150,
+          width: 190,
+          height: 190,
           fill: tileColour,
           stroke: '#ffd445',
           strokeDashArray: [6, 1.5],
           strokeWidth: 2,
-          minHeight: 100,
-          minWidth: 100
+          minHeight: 190,
+          minWidth: 190
         })
         canvas.add(rect).setActiveObject(rect)
         canvas.getActiveObject().center()
@@ -139,13 +141,13 @@
         if (tutorialViewed === 0) {
           $('#tileTutorial').css('display', 'block')
         }
-        let hexagon = new fabric.Polygon(regularPolygonPoints(6, 60), {
+        let hexagon = new fabric.Polygon(regularPolygonPoints(6, 101), {
           fill: tileColour,
           stroke: '#ffd445',
           strokeDashArray: [6, 1.5],
           strokeWidth: 2,
-          minHeight: 105,
-          minWidth: 120
+          minHeight: 173,
+          minWidth: 200
         })
         canvas.add(hexagon).setActiveObject(hexagon)
         canvas.getActiveObject().center()
@@ -207,6 +209,15 @@
         }
       })
 
+      // Change chosen tile to selected colour
+      $('#colourChange').click(function () {
+        var activeObj = canvas.getActiveObject()
+        if (activeObj != null && (activeObj['type'] === 'rect' || activeObj['type'] === 'polygon')) {
+          activeObj.set('fill', tileColour)
+          canvas.renderAll()
+        }
+      })
+
       // Hide tutorial
       $('#tutClose').click(function () {
         $('#tileTutorial').css('display', 'none')
@@ -238,6 +249,12 @@
         }
       })
 
+      // Center chosen object
+      $('#center').click(function () {
+        if (canvas.getActiveObject() != null) {
+          canvas.getActiveObject().center()
+        }
+      })
       // ######################################### FREE DRAWING ########################################################
       // ###############################################################################################################
       // Free drawing
@@ -290,6 +307,7 @@
           })
         }
         reader.readAsDataURL(file)
+        $('#image')[0].value = ''
       })
 
       // ########################################## EDITABLE TEXT ######################################################
