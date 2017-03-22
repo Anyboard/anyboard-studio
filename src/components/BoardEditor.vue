@@ -222,6 +222,7 @@
         if (activeObj != null && (activeObj['type'] === 'rect' || activeObj['type'] === 'polygon')) {
           activeObj.set('fill', tileColour)
           canvas.renderAll()
+          exportTiles()
         }
       })
 
@@ -382,7 +383,7 @@
       })
 
       // Export tile colours to be used by Blockly.vue
-      $('#export').click(function () {
+      function exportTiles () {
         // Exports the canvas to a json object
         var exportedCanvas = canvas.toObject()
         // Gets only objects from the json object
@@ -404,8 +405,7 @@
         // Turns list into string and saves
         var jsonString = JSON.stringify(tileType).replace(/"/g, '\'')
         store.dispatch('SAVE_COLOURS', jsonString)
-        // console.log(store.getters.GET_COLOURS) // Check if colours are stored correctly
-      })
+      }
 
       // Method to save state, change canvasState to vuex-store
       function saveState () {
@@ -424,10 +424,12 @@
       // Saves the state on canvas change
       canvas.on('object:added', function () {
         saveState()
+        exportTiles()
       })
 
       canvas.on('object:modified', function () {
         saveState()
+        exportTiles()
       })
       // ############################################## LAYERIFY #######################################################
       // ###############################################################################################################
