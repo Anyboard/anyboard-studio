@@ -336,7 +336,8 @@
         // Loops through all tiles and adds unique to a list
         for (var i = 0, l = tiles.length; i < l; ++i) {
           if (!unique.hasOwnProperty(tiles[i]['fill'])) {
-            // Makes sure only rects (tiles) get added
+            // Makes sure only rectangles or hexagons get added
+            // May want to give all tiles a unique property to allow for more tile types in the future
             if (tiles[i]['type'] === 'rect' || tiles[i]['type'] === 'polygon') {
               tileType.push(tiles[i]['fill'])
               unique[tiles[i]['fill']] = 1
@@ -345,8 +346,8 @@
         }
         // Turns list into string and saves
         var jsonString = JSON.stringify(tileType).replace(/"/g, '\'')
-        var blobText = new Blob([jsonString])
-        FileSaver.saveAs(blobText, 'tileTypes.txt')
+        store.dispatch('SAVE_COLOURS', jsonString)
+        // console.log(store.getters.GET_COLOURS) // Check if colours are stored correctly
       })
 
       // Method to save state, change canvasState to vuex-store
