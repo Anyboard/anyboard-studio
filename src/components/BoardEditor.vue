@@ -10,6 +10,7 @@
     <input type="button" value="Upload image" onclick="document.getElementById('image').click();" />
     <input type='button' id='clone' value='Clone'/>
     <input type='button' id='delete' value='Delete'/>
+    <br/>
     <input type='button' id='center' value='Center object'/>
     <input type='button' id='moveUp' value='Move up'/>
     <input type='button' id='moveDown' value='Move down'/>
@@ -24,8 +25,8 @@
       <canvas id='c' width = '947' height = '669'></canvas>
       <div id='container'>
         <div id='controls'>
-          <span id='width'>20</span>
-          <input type='range' value='20' min='1' max='100' id='drawingLineWidth'/>
+          <span id='width'>10</span>
+          <input type='range' value='10' min='1' max='100' id='drawingLineWidth'/>
           <br/>
           <input type='button' id='backgroundDrawing' value='Background Drawing' disabled/>
           <input type='button' id='foregroundDrawing' value='Foreground Drawing'/>
@@ -50,7 +51,7 @@
   var canvas
   var tileColour = '#000000'
   var drawColour = '#000000'
-  var drawLineWidth = 30
+  var drawLineWidth = 10
   var tutorialViewed = 0
   var freeDrawLayer = 'bottom'
 
@@ -311,10 +312,8 @@
       })
 
       // Adds path to layer
-      canvas.on('object:added', function (e) {
-        if (e.target['type'] === 'path') {
-          e.target.set('name', freeDrawLayer)
-        }
+      canvas.on('path:created', function (e) {
+        e.path.set('name', freeDrawLayer)
       })
 
       // Change layer of drawing
