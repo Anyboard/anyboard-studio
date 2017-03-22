@@ -147,7 +147,7 @@
         if (tutorialViewed === 0) {
           $('#tileTutorial').css('display', 'block')
         }
-        let hexagon = new fabric.Polygon(regularPolygonPoints(6, 101), {
+        let hexagon = new fabric.Polygon(regularPolygonPoints(6, 100), {
           fill: tileColour,
           stroke: '#ffd445',
           strokeDashArray: [6, 1.5],
@@ -259,6 +259,7 @@
       $('#center').click(function () {
         if (canvas.getActiveObject() != null) {
           canvas.getActiveObject().center()
+          canvas.getActiveObject().setCoords()
         }
       })
 
