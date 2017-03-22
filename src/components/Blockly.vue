@@ -1,5 +1,6 @@
 <template>
   <div>
+    <img src='../assets/smiley.png'>
     <div id="blockly-wrapper" style="height: 480px; width: 600px;"></div>
     <button v-on:click="showCode()">Show Code</button>
     <br/>
@@ -116,6 +117,45 @@ Blockly.Blocks['test_init'] = {
     this.setTooltip('')
     this.setHelpUrl('')
   }
+}
+
+Blockly.Blocks['show_grid'] = {
+  init: function () {
+    this.appendValueInput('GRID')
+        .setCheck('Grid')
+        .setAlign(Blockly.ALIGN_CENTRE)
+        .appendField('Show Grid')
+    this.setPreviousStatement(true, null)
+    this.setNextStatement(true, null)
+    this.setColour(255)
+    this.setTooltip('')
+    this.setHelpUrl('')
+  }
+}
+
+Blockly.Blocks['grid'] = {
+  init: function () {
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldDropdown([[{'src': '../assets/smiley.png', 'width': 16, 'height': 16, 'alt': '*'}, 'SMILEY'], [{'src': '../assets/x.png', 'width': 16, 'height': 16, 'alt': '*'}, 'X'], [{'src': '../assets/square.png', 'width': 16, 'height': 16, 'alt': '*'}, 'SQUARE']]), 'GRID')
+    this.setOutput(true, 'Grid')
+    this.setColour(255)
+    this.setTooltip('')
+    this.setHelpUrl('')
+  }
+}
+
+Blockly.JavaScript['grid'] = function (block) {
+  var dropdownGrid = block.getFieldValue('GRID')
+  var code = dropdownGrid
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.JavaScript.ORDER_NONE]
+}
+
+Blockly.JavaScript['show_grid'] = function (block) {
+  var grid = Blockly.JavaScript.valueToCode(block, 'GRID', Blockly.JavaScript.ORDER_ATOMIC)
+  // TODO: Assemble JavaScript into code variable.
+  var code = 'show_grid(' + grid + ');\n'
+  return code
 }
 
 Blockly.JavaScript['vibrate'] = function (block) {
@@ -574,6 +614,8 @@ export default {
     toolbox += '  </category>'
     toolbox += '  <category name="Output">'
     toolbox += '    <block type="vibrate"></block>'
+    toolbox += '    <block type="grid"></block>'
+    toolbox += '    <block type="show_grid"></block>'
     toolbox += '  </category>'
     toolbox += '</xml>'
     this.workspace = Blockly.inject('blockly-wrapper', {toolbox: toolbox})
