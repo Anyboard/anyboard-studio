@@ -26,6 +26,7 @@
         <div id='controls'>
           <span id='width'>20</span>
           <input type='range' value='20' min='1' max='100' id='drawingLineWidth'/>
+          <br/>
           <input type='button' id='backgroundDrawing' value='Background Drawing' disabled/>
           <input type='button' id='foregroundDrawing' value='Foreground Drawing'/>
         </div>
@@ -268,7 +269,7 @@
         }
       })
 
-      $('#moveDowp').click(function () {
+      $('#moveDown').click(function () {
         if (canvas.getActiveObject() != null) {
           canvas.sendBackwards(canvas.getActiveObject())
         }
