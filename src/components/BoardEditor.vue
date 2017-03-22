@@ -11,6 +11,8 @@
     <input type='button' id='clone' value='Clone'/>
     <input type='button' id='delete' value='Delete'/>
     <input type='button' id='center' value='Center object'/>
+    <input type='button' id='moveUp' value='Move up'/>
+    <input type='button' id='moveDown' value='Move down'/>
     <input type='button' id='drawing' value='Draw'/>
     <input type='text' id='drawColor'/>
     <input type='button' id='text' value='Text'/>
@@ -24,6 +26,8 @@
         <div id='controls'>
           <span id='width'>20</span>
           <input type='range' value='20' min='1' max='100' id='drawingLineWidth'/>
+          <input type='button' id='backgroundDrawing' value='Background Drawing' disabled/>
+          <input type='button' id='foregroundDrawing' value='Foreground Drawing'/>
         </div>
         <div id='tileTutorial'>
           <p>Tiles need a minimum size and have an orange dashed border! Important bznz!!!</p>
@@ -47,6 +51,7 @@
   var drawColour = '#000000'
   var drawLineWidth = 30
   var tutorialViewed = 0
+  var freeDrawLayer = 'bottom'
 
   export default {
     name: 'boardEditor',
@@ -255,6 +260,19 @@
           canvas.getActiveObject().center()
         }
       })
+
+      // Move object up and down
+      $('#moveUp').click(function () {
+        if (canvas.getActiveObject() != null) {
+          canvas.bringForward(canvas.getActiveObject())
+        }
+      })
+
+      $('#moveDowp').click(function () {
+        if (canvas.getActiveObject() != null) {
+          canvas.sendBackwards(canvas.getActiveObject())
+        }
+      })
       // ######################################### FREE DRAWING ########################################################
       // ###############################################################################################################
       // Free drawing
@@ -288,6 +306,26 @@
         $('#width').html($('#drawingLineWidth').val())
         drawLineWidth = parseInt($('#drawingLineWidth').val() || 1)
         canvas.freeDrawingBrush.width = drawLineWidth
+      })
+
+      // Adds path to layer
+      canvas.on('object:added', function (e) {
+        if (e.target['type'] === 'path') {
+          e.target.set('name', freeDrawLayer)
+        }
+      })
+
+      // Change layer of drawing
+      $('#backgroundDrawing').click(function () {
+        freeDrawLayer = 'bottom'
+        $('#backgroundDrawing').attr('disabled', true)
+        $('#foregroundDrawing').attr('disabled', false)
+      })
+
+      $('#foregroundDrawing').click(function () {
+        freeDrawLayer = 'top'
+        $('#backgroundDrawing').attr('disabled', false)
+        $('#foregroundDrawing').attr('disabled', true)
       })
       // ######################################## IMAGE HANDLING #######################################################
       // ###############################################################################################################
@@ -342,7 +380,7 @@
         }
       })
 
-      // Export function to JSON
+      // Export tile colours to be used by Blockly.vue
       $('#export').click(function () {
         // Exports the canvas to a json object
         var exportedCanvas = canvas.toObject()
@@ -417,25 +455,29 @@
         var obj = canvas.getObjects()
         var textLayer = []
         var tileLayer = []
-        var pathLayer = []
+        var bPathLayer = []
+        var fPathLayer = []
         var imageLayer = []
         // Adds each relevant object to their respective list
         for (var i = 0, l = obj.length; i < l; ++i) {
           if (obj[i]['type'] === 'rect' || obj[i]['type'] === 'polygon') {
             tileLayer.push(obj[i])
-          } else if (obj[i]['type'] === 'path') {
-            pathLayer.push(obj[i])
+          } else if (obj[i]['type'] === 'path' && obj[i]['name'] === 'bottom') {
+            bPathLayer.push(obj[i])
           } else if (obj[i]['type'] === 'image') {
             imageLayer.push(obj[i])
           } else if (obj[i]['type'] === 'i-text') {
             textLayer.push(obj[i])
+          } else if (obj[i]['type'] === 'path' && obj[i]['name'] === 'top') {
+            fPathLayer.push(obj[i])
           }
         }
         // Adds lists of objects to respective fabric groups
         var textGroup = new fabric.Group(textLayer)
         var tileGroup = new fabric.Group(tileLayer)
-        var pathGroup = new fabric.Group(pathLayer)
+        var bPathGroup = new fabric.Group(bPathLayer)
         var imageGroup = new fabric.Group(imageLayer)
+        var fPathGroup = new fabric.Group(fPathLayer)
 
         // Clears old objects
         canvas.clear().renderAll()
@@ -443,14 +485,16 @@
 
         // Adds groups to canvas
         canvas.add(imageGroup)
-        canvas.add(pathGroup)
+        canvas.add(bPathGroup)
         canvas.add(tileGroup)
+        canvas.add(fPathGroup)
         canvas.add(textGroup)
 
         // Restores objects from group to canvas to allow layerify to work multiple times
         restoreObjs(imageGroup)
-        restoreObjs(pathGroup)
+        restoreObjs(bPathGroup)
         restoreObjs(tileGroup)
+        restoreObjs(fPathGroup)
         restoreObjs(textGroup)
       }
 
