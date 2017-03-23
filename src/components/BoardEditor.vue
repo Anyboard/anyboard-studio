@@ -19,7 +19,6 @@
     <input type='button' id='text' value='Text'/>
     <input type='button' id='save' value='Save image'/>
     <!-- For debugging and testing-->
-    <input type='button' id='export' value='Export'/>
     <input type='button' id='jayson' value='JSON'/>
     <div id='wrapper'>
       <canvas id='c' width = '947' height = '669'></canvas>
@@ -121,7 +120,7 @@
           fill: tileColour,
           stroke: '#ffd445',
           strokeDashArray: [6, 1.5],
-          strokeWidth: 2,
+          strokeWidth: 3.5,
           minHeight: 190,
           minWidth: 190
         })
@@ -152,7 +151,7 @@
           fill: tileColour,
           stroke: '#ffd445',
           strokeDashArray: [6, 1.5],
-          strokeWidth: 2,
+          strokeWidth: 3.5,
           minHeight: 173,
           minWidth: 200
         })
@@ -238,6 +237,9 @@
         if (canvas.getActiveObject() != null) {
           canvas.getActiveObject().remove()
           layerify()
+        } else if (canvas.getActiveGroup() != null) {
+          canvas.getActiveGroup().forEachObject(function (o) { canvas.remove(o) })
+          canvas.discardActiveGroup().renderAll()
         }
       })
 
@@ -322,12 +324,14 @@
         freeDrawLayer = 'bottom'
         $('#backgroundDrawing').attr('disabled', true)
         $('#foregroundDrawing').attr('disabled', false)
+        layerify()
       })
 
       $('#foregroundDrawing').click(function () {
         freeDrawLayer = 'top'
         $('#backgroundDrawing').attr('disabled', false)
         $('#foregroundDrawing').attr('disabled', true)
+        layerify()
       })
       // ######################################## IMAGE HANDLING #######################################################
       // ###############################################################################################################
@@ -361,7 +365,7 @@
             stroke: '#000000',
             strokeWidth: 1,
             fontFamily: 'Arial',
-            fontSize: 30,
+            fontSize: 60,
             textAlign: 'center'
           })
         canvas.add(text)
