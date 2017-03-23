@@ -13,11 +13,50 @@
 import Blockly from 'node-blockly/browser'
 import store from '../store'
 
+Blockly.Blocks['increase_score'] = {
+  init: function () {
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldDropdown([['Increase', 'INCREASE'], ['Decrease', 'DECREASE']]), 'TYPE')
+        .appendField(new Blockly.FieldVariable('score'), 'SCORE')
+        .appendField('By')
+        .appendField(new Blockly.FieldNumber(1, 0), 'AMOUNT')
+    this.setPreviousStatement(true, null)
+    this.setNextStatement(true, null)
+    this.setColour(255)
+    this.setTooltip('')
+    this.setHelpUrl('')
+  }
+}
+
+Blockly.Blocks['show_score'] = {
+  init: function () {
+    this.appendDummyInput()
+        .appendField('Show Score')
+    this.setPreviousStatement(true, null)
+    this.setNextStatement(true, null)
+    this.setColour(255)
+    this.setTooltip('')
+    this.setHelpUrl('')
+  }
+}
+
+Blockly.Blocks['random_color'] = {
+  init: function () {
+    this.appendDummyInput()
+        .appendField('Pick Random Color')
+    this.setPreviousStatement(true, null)
+    this.setNextStatement(true, null)
+    this.setColour(255)
+    this.setTooltip('')
+    this.setHelpUrl('')
+  }
+}
+
 Blockly.Blocks['move_to'] = {
   init: function () {
     this.appendDummyInput()
         .appendField('Move')
-        .appendField(new Blockly.FieldVariable('Token'), 'TOKEN')
+        .appendField(new Blockly.FieldVariable('token'), 'TOKEN')
         .appendField('To')
         .appendField(new Blockly.FieldColour('#ff0000'), 'COLOR')
     this.appendStatementInput('STACK')
@@ -45,7 +84,7 @@ Blockly.Blocks['move_to_tile'] = {
   init: function () {
     this.appendDummyInput()
         .appendField('Move To')
-        .appendField(new Blockly.FieldVariable('Tile'), 'TILE')
+        .appendField(new Blockly.FieldVariable('tile'), 'TILE')
     this.appendStatementInput('STACK')
         .setCheck(null)
     this.setColour(65)
@@ -58,9 +97,9 @@ Blockly.Blocks['move_token_to_tile'] = {
   init: function () {
     this.appendDummyInput()
         .appendField('Move')
-        .appendField(new Blockly.FieldVariable('Token'), 'TOKEN')
+        .appendField(new Blockly.FieldVariable('token'), 'TOKEN')
         .appendField('To')
-        .appendField(new Blockly.FieldVariable('Tile'), 'TILE')
+        .appendField(new Blockly.FieldVariable('tile'), 'TILE')
     this.appendStatementInput('STACK')
         .setCheck(null)
     this.setColour(65)
@@ -73,6 +112,7 @@ Blockly.Blocks['vibrate'] = {
   init: function () {
     this.appendDummyInput()
         .appendField('Vibrate')
+        .appendField(new Blockly.FieldVariable('token'), 'TOKEN')
     this.setPreviousStatement(true, null)
     this.setNextStatement(true, null)
     this.setColour(255)
@@ -85,7 +125,7 @@ Blockly.Blocks['tap'] = {
   init: function () {
     this.appendDummyInput()
         .appendField('Tap')
-        .appendField(new Blockly.FieldVariable('Token'), 'TOKEN')
+        .appendField(new Blockly.FieldVariable('token'), 'TOKEN')
     this.appendStatementInput('STACK')
         .setCheck(null)
     this.setColour(65)
@@ -98,7 +138,7 @@ Blockly.Blocks['double_tap'] = {
   init: function () {
     this.appendDummyInput()
         .appendField('Doubletap')
-        .appendField(new Blockly.FieldVariable('Token'), 'TOKEN')
+        .appendField(new Blockly.FieldVariable('token'), 'TOKEN')
     this.appendStatementInput('STACK')
         .setCheck(null)
     this.setColour(65)
@@ -159,7 +199,8 @@ Blockly.JavaScript['show_grid'] = function (block) {
 }
 
 Blockly.JavaScript['vibrate'] = function (block) {
-  var code = 'token.vibrate();\n'
+  var token = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('TOKEN'), Blockly.Variables.NAME_TYPE)
+  var code = 'this.sendVibrationCmd(' + token + ');\n'
   return code
 }
 
@@ -167,8 +208,8 @@ Blockly.JavaScript['move_token_to_tile'] = function (block) {
   var token = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('TOKEN'), Blockly.Variables.NAME_TYPE)
   var tile = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('TILE'), Blockly.Variables.NAME_TYPE)
   var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
-  var code = 'var handleTokenMove = function(' + token + ', ' + tile + ', options) {\n'
-  code += stack + '};\n'
+  var code = 'handleTokenMove: function(' + token + ', ' + tile + ', options) {\n'
+  code += stack + '},\n'
   return code
 }
 
@@ -176,48 +217,98 @@ Blockly.JavaScript['move_to'] = function (block) {
   var token = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('TOKEN'), Blockly.Variables.NAME_TYPE)
   var color = block.getFieldValue('COLOR')
   var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
-  var code = 'var handleTokenMove = function(' + token + ', ' + color + ', options) {\n'
-  code += stack + '};\n'
+  var code = 'handleTokenMove: function(' + token + ', ' + color + ', options) {\n'
+  code += stack + '},\n'
   return code
 }
 
 Blockly.JavaScript['move'] = function (block) {
   var color = block.getFieldValue('COLOR')
   var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
-  var code = 'var handleTokenMove = function(Token, ' + color + ', options) {\n'
-  code += stack + '};\n'
+  var code = 'handleTokenMove: function(Token, ' + color + ', options) {\n'
+  code += stack + '},\n'
   return code
 }
 
 Blockly.JavaScript['move_to_tile'] = function (block) {
   var tile = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('TILE'), Blockly.Variables.NAME_TYPE)
   var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
-  var code = 'var handleTokenMove = function(Token, ' + tile + ', options) {\n'
-  code += stack + '};\n'
+  var code = 'handleTokenMove: function(Token, ' + tile + ', options) {\n'
+  code += stack + '},\n'
   return code
 }
 
 Blockly.JavaScript['tap'] = function (block) {
   var token = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('TOKEN'), Blockly.Variables.NAME_TYPE)
   var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
-  var code = 'var handleTokenTap = function(' + token + ', options) {\n'
-  code += stack + '};\n'
+  var code = 'var handleTokenTap: function(' + token + ', options) {\n'
+  code += stack + '},\n'
   return code
 }
 
 Blockly.JavaScript['double_tap'] = function (block) {
   var token = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('TOKEN'), Blockly.Variables.NAME_TYPE)
   var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
-  var code = 'var handleTokenDoubleTap = function(' + token + ', options) {\n'
-  code += stack + '};\n'
+  var code = 'var handleTokenDoubleTap: function(' + token + ', options) {\n'
+  code += stack + '},\n'
   return code
 }
 
 Blockly.JavaScript['test_init'] = function (block) {
   var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
-  var code = 'init () {\n'
-  code += stack + '};\n'
+  var code = 'hardCodedInitialise: function () {\n'
+  code += stack + '},\n'
   return code
+}
+
+Blockly.JavaScript['increase_score'] = function (block) {
+  var type = block.getFieldValue('TYPE')
+  var score = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('SCORE'), Blockly.Variables.NAME_TYPE)
+  var amount = block.getFieldValue('AMOUNT')
+  var sign = (type === 'INCREASE' ? '+' : '-')
+  var code = 'this.' + score + ' ' + sign + '= ' + amount + ';\n'
+  return code
+}
+
+Blockly.JavaScript['show_score'] = function (block) {
+  var code = 'this.showScore();\n'
+  return code
+}
+
+Blockly.JavaScript['random_color'] = function (block) {
+  var code = 'this.pickRandomColor();\n'
+  return code
+}
+
+Blockly.JavaScript['text_print'] = function (block) {
+  var msg = Blockly.JavaScript.valueToCode(block, 'TEXT', Blockly.JavaScript.ORDER_NONE) || '\'\''
+  return 'this.setMessage(' + msg + ');\n'
+}
+
+Blockly.JavaScript.init = function (workspace) {
+  // Create a dictionary of definitions to be printed before the code.
+  Blockly.JavaScript.definitions_ = Object.create(null)
+  // Create a dictionary mapping desired function names in definitions_
+  // to actual function names (to avoid collisions with user functions).
+  Blockly.JavaScript.functionNames_ = Object.create(null)
+
+  if (!Blockly.JavaScript.variableDB_) {
+    Blockly.JavaScript.variableDB_ =
+        new Blockly.Names(Blockly.JavaScript.RESERVED_WORDS_)
+  } else {
+    Blockly.JavaScript.variableDB_.reset()
+  }
+
+  var defvars = []
+  var variables = workspace.variableList
+  if (variables.length) {
+    for (var i = 0; i < variables.length; i++) {
+      defvars[i] = Blockly.JavaScript.variableDB_.getNormalName(variables[i],
+          Blockly.Variables.NAME_TYPE) + ': 0,'
+    }
+    Blockly.JavaScript.definitions_['variables'] =
+        defvars.join('\n')
+  }
 }
 
 export default {
@@ -616,6 +707,9 @@ export default {
     toolbox += '    <block type="vibrate"></block>'
     toolbox += '    <block type="grid"></block>'
     toolbox += '    <block type="show_grid"></block>'
+    toolbox += '    <block type="increase_score"></block>'
+    toolbox += '    <block type="show_score"></block>'
+    toolbox += '    <block type="random_color"></block>'
     toolbox += '  </category>'
     toolbox += '</xml>'
     this.workspace = Blockly.inject('blockly-wrapper', {toolbox: toolbox})
