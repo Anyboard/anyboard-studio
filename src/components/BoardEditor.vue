@@ -271,12 +271,14 @@
       $('#moveUp').click(function () {
         if (canvas.getActiveObject() != null) {
           canvas.bringForward(canvas.getActiveObject())
+          layerify()
         }
       })
 
       $('#moveDown').click(function () {
         if (canvas.getActiveObject() != null) {
           canvas.sendBackwards(canvas.getActiveObject())
+          layerify()
         }
       })
       // ######################################### FREE DRAWING ########################################################
