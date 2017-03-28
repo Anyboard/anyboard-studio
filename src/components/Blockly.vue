@@ -13,6 +13,8 @@
 import Blockly from 'node-blockly/browser'
 import store from '../store/store'
 import toolbox from '../store/toolbox'
+import templateStore from '../store/templateStore'
+import FileSaver from 'file-saver'
 
 Blockly.Blocks['move_to'] = {
   init: function () {
@@ -254,11 +256,25 @@ export default {
     }
 
     loadState()
+
+    /** function loadHTMLString () {
+      var temp = templateStore.getters.GET_HTML
+      var done = temp.replace('!!!REPLACEME!!!', 'var handleTokenDoubleTap = function (token) {' + '        };')
+      var blob = new Blob([done], {
+        type: 'text/html'
+      })
+      FileSaver.saveAs(blob, 'testing.html')
+    }**/
   },
   methods: {
     showCode: function () {
       this.code = Blockly.JavaScript.workspaceToCode(this.workspace)
-      console.log(store.getters.GET_BLOCKLY)
+      var temp = templateStore.getters.GET_HTML
+      var done = temp.replace('!!!REPLACEME!!!', Blockly.JavaScript.workspaceToCode(this.workspace))
+      var blob = new Blob([done], {
+        type: 'text/html'
+      })
+      FileSaver.saveAs(blob, 'testing.html')
     }
   }
 }
