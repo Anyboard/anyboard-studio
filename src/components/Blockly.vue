@@ -11,7 +11,7 @@
 </template>
 <script>
 import Blockly from 'node-blockly/browser'
-import store from '../store'
+import store from '../store/store'
 
 Blockly.Blocks['move_to'] = {
   init: function () {
@@ -229,7 +229,9 @@ export default {
     }
   },
   mounted () {
-    Blockly.FieldColour.COLOURS = store.state.colours
+    var tileColours = store.getters.GET_COLOURS
+    console.log(typeof tileColours === 'string')
+    Blockly.FieldColour.COLOURS = tileColours
     Blockly.FieldColour.COLUMNS = 3
 
     let toolbox = '<xml>'
