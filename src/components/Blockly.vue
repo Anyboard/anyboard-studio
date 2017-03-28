@@ -3,7 +3,6 @@
     <img src='../assets/smiley.png'>
     <div id="blockly-wrapper" style="height: 480px; width: 600px;"></div>
     <button v-on:click="showCode()">Show Code</button>
-    <button v-on:click="txtToHTML()">Test txtToHTML</button>
     <br/>
     <div id="codeWrapper">
       <p style="white-space: pre" id="shownCode">{{ code }}</p>
@@ -13,7 +12,6 @@
 <script>
 import Blockly from 'node-blockly/browser'
 import store from '../store/store'
-import FileSaver from 'file-saver'
 
 Blockly.Blocks['move_to'] = {
   init: function () {
@@ -627,14 +625,6 @@ export default {
   methods: {
     showCode: function () {
       this.code = Blockly.JavaScript.workspaceToCode(this.workspace)
-    },
-    // Beklager René, trello var ute av sync og så ikke at du hadde plassert deg på samme kort :(
-    txtToHTML: function () {
-      var htmlString = '<html><head><body><p>Hello</p></body></head></html>' // Replace with our html file string
-      var blob = new Blob([htmlString], {
-        type: 'text/plain'
-      })
-      FileSaver.saveAs(blob, 'htmlTest.html')
     }
   }
 }
