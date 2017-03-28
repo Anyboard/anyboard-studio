@@ -1,5 +1,6 @@
 <template>
   <div>
+    <img src='../assets/smiley.png'>
     <div id="blockly-wrapper" style="height: 480px; width: 600px;"></div>
     <button v-on:click="showCode()">Show Code</button>
     <br/>
@@ -10,6 +11,7 @@
 </template>
 <script>
 import Blockly from 'node-blockly/browser'
+import store from '../store'
 
 Blockly.Blocks['move_to'] = {
   init: function () {
@@ -117,6 +119,45 @@ Blockly.Blocks['test_init'] = {
   }
 }
 
+Blockly.Blocks['show_grid'] = {
+  init: function () {
+    this.appendValueInput('GRID')
+        .setCheck('Grid')
+        .setAlign(Blockly.ALIGN_CENTRE)
+        .appendField('Show Grid')
+    this.setPreviousStatement(true, null)
+    this.setNextStatement(true, null)
+    this.setColour(255)
+    this.setTooltip('')
+    this.setHelpUrl('')
+  }
+}
+
+Blockly.Blocks['grid'] = {
+  init: function () {
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldDropdown([[{'src': '../assets/smiley.png', 'width': 16, 'height': 16, 'alt': '*'}, 'SMILEY'], [{'src': '../assets/x.png', 'width': 16, 'height': 16, 'alt': '*'}, 'X'], [{'src': '../assets/square.png', 'width': 16, 'height': 16, 'alt': '*'}, 'SQUARE']]), 'GRID')
+    this.setOutput(true, 'Grid')
+    this.setColour(255)
+    this.setTooltip('')
+    this.setHelpUrl('')
+  }
+}
+
+Blockly.JavaScript['grid'] = function (block) {
+  var dropdownGrid = block.getFieldValue('GRID')
+  var code = dropdownGrid
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.JavaScript.ORDER_NONE]
+}
+
+Blockly.JavaScript['show_grid'] = function (block) {
+  var grid = Blockly.JavaScript.valueToCode(block, 'GRID', Blockly.JavaScript.ORDER_ATOMIC)
+  // TODO: Assemble JavaScript into code variable.
+  var code = 'show_grid(' + grid + ');\n'
+  return code
+}
+
 Blockly.JavaScript['vibrate'] = function (block) {
   var code = 'token.vibrate();\n'
   return code
@@ -140,6 +181,38 @@ Blockly.JavaScript['move_to'] = function (block) {
   return code
 }
 
+Blockly.JavaScript['move'] = function (block) {
+  var color = block.getFieldValue('COLOR')
+  var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
+  var code = 'var handleTokenMove = function(Token, ' + color + ', options) {\n'
+  code += stack + '};\n'
+  return code
+}
+
+Blockly.JavaScript['move_to_tile'] = function (block) {
+  var tile = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('TILE'), Blockly.Variables.NAME_TYPE)
+  var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
+  var code = 'var handleTokenMove = function(Token, ' + tile + ', options) {\n'
+  code += stack + '};\n'
+  return code
+}
+
+Blockly.JavaScript['tap'] = function (block) {
+  var token = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('TOKEN'), Blockly.Variables.NAME_TYPE)
+  var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
+  var code = 'var handleTokenTap = function(' + token + ', options) {\n'
+  code += stack + '};\n'
+  return code
+}
+
+Blockly.JavaScript['double_tap'] = function (block) {
+  var token = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('TOKEN'), Blockly.Variables.NAME_TYPE)
+  var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
+  var code = 'var handleTokenDoubleTap = function(' + token + ', options) {\n'
+  code += stack + '};\n'
+  return code
+}
+
 Blockly.JavaScript['test_init'] = function (block) {
   var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
   var code = 'init () {\n'
@@ -156,6 +229,9 @@ export default {
     }
   },
   mounted () {
+    Blockly.FieldColour.COLOURS = store.state.colours
+    Blockly.FieldColour.COLUMNS = 3
+
     let toolbox = '<xml>'
     toolbox += '  <category name="Logic" colour="#5C81A6">'
     toolbox += '    <block type="controls_if"></block>'
@@ -538,6 +614,8 @@ export default {
     toolbox += '  </category>'
     toolbox += '  <category name="Output">'
     toolbox += '    <block type="vibrate"></block>'
+    toolbox += '    <block type="grid"></block>'
+    toolbox += '    <block type="show_grid"></block>'
     toolbox += '  </category>'
     toolbox += '</xml>'
     this.workspace = Blockly.inject('blockly-wrapper', {toolbox: toolbox})

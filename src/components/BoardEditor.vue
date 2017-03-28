@@ -45,8 +45,8 @@
   import $ from 'jquery'
   import FileSaver from 'file-saver'
   import spectrum from 'spectrum-colorpicker' /* eslint no-unused-vars: off */
+  import store from '../store/store'
   // TODO: import store in root and still be able to use store in this component
-  import store from '../vuex/store'
 
   var canvas
   var tileColour = '#000000'
