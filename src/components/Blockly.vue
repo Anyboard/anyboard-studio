@@ -230,7 +230,6 @@ export default {
   },
   mounted () {
     var tileColours = store.getters.GET_COLOURS
-    console.log(typeof tileColours === 'string')
     Blockly.FieldColour.COLOURS = tileColours
     Blockly.FieldColour.COLUMNS = 3
 
@@ -621,10 +620,28 @@ export default {
     toolbox += '  </category>'
     toolbox += '</xml>'
     this.workspace = Blockly.inject('blockly-wrapper', {toolbox: toolbox})
+
+    this.workspace.addChangeListener(function () {
+      var blocklyXML = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace)
+      var blocklyState = Blockly.Xml.domToPrettyText(blocklyXML)
+      store.dispatch('SAVE_BLOCKLY', blocklyState)
+    })
+
+    function loadState () {
+      var state = store.getters.GET_BLOCKLY
+      if (state !== 0) {
+        var textToDom = Blockly.Xml.textToDom(state)
+        Blockly.Xml.domToWorkspace(textToDom, Blockly.mainWorkspace)
+        Blockly.mainWorkspace.render()
+      }
+    }
+
+    loadState()
   },
   methods: {
     showCode: function () {
       this.code = Blockly.JavaScript.workspaceToCode(this.workspace)
+      console.log(store.getters.GET_BLOCKLY)
     }
   }
 }

@@ -6,7 +6,8 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
   state: {
     canvasState: 0,
-    colours: []
+    colours: [],
+    blocklyState: 0
   },
   actions: {
     SAVE_CANVAS: function ({commit}, canvas) {
@@ -14,6 +15,9 @@ const store = new Vuex.Store({
     },
     SAVE_COLOURS: function ({commit}, colours) {
       commit('SET_COLOURS', colours)
+    },
+    SAVE_BLOCKLY: function ({commit}, blockly) {
+      commit('SET_BLOCKLY', blockly)
     }
   },
   mutations: {
@@ -22,6 +26,9 @@ const store = new Vuex.Store({
     },
     SET_COLOURS: (state, colours) => {
       state.colours = colours
+    },
+    SET_BLOCKLY: (state, blockly) => {
+      state.blocklyState = blockly
     }
   },
   getters: {
@@ -30,6 +37,9 @@ const store = new Vuex.Store({
     },
     GET_COLOURS: state => {
       return state.colours
+    },
+    GET_BLOCKLY: state => {
+      return state.blocklyState
     }
   },
   modules: {
