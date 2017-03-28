@@ -162,7 +162,7 @@ Blockly.JavaScript['show_grid'] = function (block) {
 }
 
 Blockly.JavaScript['vibrate'] = function (block) {
-  var code = 'token.vibrate();\n'
+  var code = '   app.sendVibration(token.name)\n'
   return code
 }
 
@@ -176,11 +176,12 @@ Blockly.JavaScript['move_token_to_tile'] = function (block) {
 }
 
 Blockly.JavaScript['move_to'] = function (block) {
-  var token = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('TOKEN'), Blockly.Variables.NAME_TYPE)
-  var color = block.getFieldValue('COLOR')
+  // var token = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('TOKEN'), Blockly.Variables.NAME_TYPE)
+  var color = block.getFieldValue('COLOR').toUpperCase()
   var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
-  var code = 'var handleTokenMove = function(' + token + ', ' + color + ', options) {\n'
-  code += stack + '};\n'
+  var code = 'var handleTokenMove = function(token, constraint, options) {\n'
+  code += ' if (constraint == Object.keys(app.locations)[Object.values(app.locations).indexOf("' + color + '")]) {\n'
+  code += stack + '}};\n'
   return code
 }
 
@@ -270,11 +271,11 @@ export default {
     showCode: function () {
       this.code = Blockly.JavaScript.workspaceToCode(this.workspace)
       var temp = templateStore.getters.GET_HTML
-      var done = temp.replace('!!!REPLACEME!!!', Blockly.JavaScript.workspaceToCode(this.workspace))
+      var done = temp.replace('//REPLACEMEOKAY//\n', Blockly.JavaScript.workspaceToCode(this.workspace))
       var blob = new Blob([done], {
         type: 'text/html'
       })
-      FileSaver.saveAs(blob, 'testing.html')
+      FileSaver.saveAs(blob, 'index.html')
     }
   }
 }

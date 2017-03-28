@@ -47,12 +47,21 @@
       },
 
       locations: {
-        1: "red", // 12228
-        2: "black", // 5737
-        3: "yellow", // 18330
-        4: "green", // 4560
-        5: "purple", // 8550
-        6: "blue", // 6306
+        2: '#166CA0',  // 2
+        5: '#4194D0',  // 5
+        7: '#112A95',  // 7
+        14: '#C047A3',  // 14
+        15: '#FB50A6', // 15
+        16: '#5E1014',  // 16
+        18: '#9B3235',  // 18
+        20: '#FF483E',  // 20
+        21: '#66C889',  // 21
+        24: '#30A747', // 24
+        30: '#31682E',  // 30
+        31: '#FF9344',  // 31
+        33: '#D96623',  // 33
+        34: '#F6EA77',  // 36
+        35: '#F4E658'   // 37
       },
 
       initiate: function () {
@@ -86,17 +95,18 @@
             $("#tilt").css("background-color", "#99C2FF");
           }, 550);
         };
+        //REPLACEMEOKAY//
         AnyBoard.TokenManager.onTokenEvent("TAP", handleTokenTap);
         AnyBoard.TokenManager.onTokenEvent("DOUBLE_TAP", handleTokenDoubleTap);
         AnyBoard.TokenManager.onTokenEvent("SHAKE", handleTokenShake);
         AnyBoard.TokenManager.onTokenEvent("TILT", handleTokenTilt);
 
-        var handleTokenMove = function (token, constraint, options) {
+        /**var handleTokenMove = function (token, constraint, options) {
           AnyBoard.Logger.log("Moved to tilee " + constraint);
           app.tiles[2] = app.locations[constraint];
           $('.current_tile').css("background-color", app.tiles[2]);
           app.verifyColor(token.name);
-        };
+        };**/
 
         //TT Events not implmented
         var handleTokenTokenEvent = function (token) {
@@ -256,7 +266,7 @@
       },
 
       pickRandomColor: function () {
-        var currentColor = this.locations[Math.floor(Math.random() *6 + 1)]
+        var currentColor = this.locations[Math.floor(Math.random() *15 + 1)]
         if (currentColor == this.currentColor) {
           this.pickRandomColor();
         }
@@ -264,6 +274,11 @@
           this.currentColor = currentColor;
           $('.wanted_tile').css("background-color", this.currentColor);
         }
+      },
+
+      sendVibration: function (tokenName) {
+        var token = this.devices[tokenName];
+        this.sendVibrationCmd(token)
       },
 
       verifyColor: function (tokenName) {
