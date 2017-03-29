@@ -203,7 +203,7 @@ Blockly.JavaScript['show_grid'] = function (block) {
 
 Blockly.JavaScript['vibrate'] = function (block) {
   var token = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('TOKEN'), Blockly.Variables.NAME_TYPE)
-  var code = 'this.sendVibrationCmd(' + token + ');\n'
+  var code = 'app.sendVibrationCmd(' + token + ');\n'
   return code
 }
 
@@ -276,23 +276,31 @@ Blockly.JavaScript['increase_score'] = function (block) {
   var score = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('SCORE'), Blockly.Variables.NAME_TYPE)
   var amount = block.getFieldValue('AMOUNT')
   var sign = (type === 'INCREASE' ? '+' : '-')
-  var code = 'this.' + score + ' ' + sign + '= ' + amount + ';\n'
+  var code = 'app.' + score + ' ' + sign + '= ' + amount + ';\n'
   return code
 }
 
 Blockly.JavaScript['show_score'] = function (block) {
-  var code = 'this.showScore();\n'
+  var code = 'app.showScore();\n'
   return code
 }
 
 Blockly.JavaScript['random_color'] = function (block) {
-  var code = 'this.pickRandomColor();\n'
+  var code = 'app.pickRandomColor();\n'
   return code
 }
 
 Blockly.JavaScript['text_print'] = function (block) {
   var msg = Blockly.JavaScript.valueToCode(block, 'TEXT', Blockly.JavaScript.ORDER_NONE) || '\'\''
-  return 'this.setMessage(' + msg + ');\n'
+  return 'app.setMessage(' + msg + ');\n'
+}
+
+Blockly.JavaScript['variables_get'] = function (block) {
+  // Variable getter.
+  var code = 'app.'
+  code += Blockly.JavaScript.variableDB_.getName(block.getFieldValue('VAR'),
+      Blockly.Variables.NAME_TYPE)
+  return [code, Blockly.JavaScript.ORDER_ATOMIC]
 }
 
 Blockly.JavaScript.init = function (workspace) {
