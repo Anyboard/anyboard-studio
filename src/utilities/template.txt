@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, user-scalable=no
- initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+		initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
 
   <title>AnyboardGameDemo</title>
 
@@ -38,85 +38,77 @@
   <script>
     var app;
     app = {
+      score: 0,
       currentColor: "some value",
       devices: {},
-      currentTile: "white",
+      tiles: {
+        1: "white",
+        2: "white"
+      },
 
       locations: {
-        2: '#166CA0',  // 2
-        5: '#4194D0',  // 5
-        7: '#112A95',  // 7
-        14: '#C047A3',  // 14
-        15: '#FB50A6', // 15
-        16: '#5E1014',  // 16
-        18: '#9B3235',  // 18
-        20: '#FF483E',  // 20
-        21: '#66C889',  // 21
-        24: '#30A747', // 24
-        30: '#31682E',  // 30
-        31: '#FF9344',  // 31
-        33: '#D96623',  // 33
-        34: '#F6EA77',  // 36
-        35: '#F4E658'   // 37
+        1: "red", // 12228
+        2: "black", // 5737
+        3: "yellow", // 18330
+        4: "green", // 4560
+        5: "purple", // 8550
+        6: "blue", // 6306
       },
-
-      /*
-      * BLOCKLY CODE BEGINS
-      */
-
-      score: 0,
-
-      hardCodedInitialise: function () {
-        this.currentTile = this.locations[1];
-        this.showCurrentTile(this.currentTile);
-        this.pickRandomColor();
-      },
-
-      handleTokenTilt: function (token) {
-          this.pickRandomColor();
-      }
-
-      handleTokenTilt: function (token, constraint, options) {
-          this.currentTile = this.locations[constraint];
-          this.showCurrentTile(this.currentTile);
-          if (this.currentTile == this.currentColor) {
-            this.sendVibrationCmd(token);
-            this.score += 1;
-            this.showScore();
-            this.setMessage("Correct! Please tilt the pawn to recieve a new color.");
-          }
-          else {
-            this.score -= 1;
-            this.showScore();
-            this.setMessage("Wrong Color!");
-          }
-      }
-
-      /*
-      * BLOCKLY CODE ENDS
-      */
 
       initiate: function () {
         $("#scorediv").html("Current score is 0");
-
-        var handleTokenTilt = function (token) {
-          app.handleTokenTilt(token);
+        var handleTokenTap = function (token) {
+          AnyBoard.Logger.log(" TAP Detect ");
+          $("#tap").css("background-color", "red");
+          setTimeout(function () {
+            $("#tap").css("background-color", "#99C2FF");
+          }, 300);
         };
-        //REPLACEMEOKAY//
+        var handleTokenDoubleTap = function (token) {
+          AnyBoard.Logger.log(" DOUBLE TAP Detect ");
+          $("#double_tap").css("background-color", "blue");
+          setTimeout(function () {
+            $("#double_tap").css("background-color", "#99C2FF");
+          }, 300);
+        };
+        var handleTokenShake = function (token) {
+          AnyBoard.Logger.log(" SHAKE Detect ");
+          $("#shake").css("background-color", "blue");
+          setTimeout(function () {
+            $("#shake").css("background-color", "#99C2FF");
+          }, 300);
+        };
+        var handleTokenTilt = function (token) {
+          AnyBoard.Logger.log(" TILT Detect ");
+          app.pickRandomColor();
+          document.getElementById("pleaseTilt").innerHTML = "";
+          setTimeout(function () {
+            $("#tilt").css("background-color", "#99C2FF");
+          }, 550);
+        };
         AnyBoard.TokenManager.onTokenEvent("TAP", handleTokenTap);
         AnyBoard.TokenManager.onTokenEvent("DOUBLE_TAP", handleTokenDoubleTap);
         AnyBoard.TokenManager.onTokenEvent("SHAKE", handleTokenShake);
         AnyBoard.TokenManager.onTokenEvent("TILT", handleTokenTilt);
 
-        /**var handleTokenMove = function (token, constraint, options) {
+        var handleTokenMove = function (token, constraint, options) {
           AnyBoard.Logger.log("Moved to tilee " + constraint);
           app.tiles[2] = app.locations[constraint];
           $('.current_tile').css("background-color", app.tiles[2]);
           app.verifyColor(token.name);
-        };**/
+        };
+
+        //TT Events not implmented
+        var handleTokenTokenEvent = function (token) {
+          AnyBoard.Logger.log("Token-Token event triggered.");
+          $("#tokentoken").css("background-color", "blue");
+          setTimeout(function () {
+            $("#tokentoken").css("background-color", "#99C2FF");
+          }, 550);
+        };
 
         AnyBoard.TokenManager.onTokenConstraintEvent("MOVE_TO", handleTokenMove);
-
+        AnyBoard.TokenManager.onTokenTokenEvent("TTEVENT", handleTokenTokenEvent);
         this.hardCodedInitialise();
       },
 
@@ -205,12 +197,66 @@
         );
       },
 
+      // Send green led command. Works on every token with a AnyBoard compatible driver and firmware.
+      sendCountCmd: function (token) {
+        token.vibrate(100);
+        // Function to be executed when LED is successfully turned on
+        var completedFunction = function (data) {
+          hyper.log("We happily send the COUNT command");
+          hyper.log(data)
+        };
+        // Function to be executed upon failure of LED
+        var errorCallback = function (errorMsg) {
+          hyper.log("Failed to send the COUNT command");
+          hyper.log(errorMsg);
+        };
+
+        // Turns on token led.
+        token.vibrate(token),
+          token.count([100], // Instead of "green" color, on could also use array, e.g. [0, 255, 0]
+            completedFunction,  // function to be executed when token signals
+            errorCallback  // function to be executed in case of failure to send command to token
+          );
+      },
+
+      sendDisplayXCmd: function (token) {
+
+        // Function to be executed when LED is successfully turned on
+        var completedFunction = function (data) {
+          hyper.log("We happily send the DISPLAY_X command");
+          hyper.log(data)
+        };
+
+        // Function to be executed upon failure of LED
+        var errorCallback = function (errorMsg) {
+          hyper.log("Failed to send the DISPLAY_X command");
+          hyper.log(errorMsg);
+        };
+
+        // Turns on token led.
+        token.displayX([0, 255, 0], // Instead of "green" color, on could also use array, e.g. [0, 255, 0]
+          completedFunction,  // function to be executed when token signals
+          errorCallback  // function to be executed in case of failure to send command to token
+        );
+      },
+
       next_panel: function () {
         $("#summary").hide();
       },
 
+      vibrate: function (tokenName) {
+        var token = this.devices[tokenName];
+        this.sendVibrationCmd(token);
+      },
+
+      hardCodedInitialise: function () {
+        this.pickRandomColor();
+        app.tiles[2] = app.locations[1];
+        $('.current_tile').css("background-color", app.tiles[2]);
+      },
+
       pickRandomColor: function () {
-        var currentColor = this.locations[Math.floor(Math.random() *15 + 1)]
+        var currentColor = this.locations[Math.floor(Math.random() *6 + 1)]
         if (currentColor == this.currentColor) {
           this.pickRandomColor();
         }
@@ -218,11 +264,6 @@
           this.currentColor = currentColor;
           $('.wanted_tile').css("background-color", this.currentColor);
         }
-      },
-
-      sendVibration: function (tokenName) {
-        var token = this.devices[tokenName];
-        this.sendVibrationCmd(token)
       },
 
       verifyColor: function (tokenName) {
@@ -240,14 +281,31 @@
         else {
           this.downgradeScore();
 
-      showScore: function () {
-        $("#message").html("Current score is " + this.score.toString());
-      }
+        }
+      },
 
-      showCurrentTile: function (color) {
-        $('.current_tile').css("background-color", color);
-      }
+      downgradeScore: function () {
+        this.score-=1;
+        var scoreString = "Wrong color! Current score is " + this.score.toString();
+        $("#scorediv").html(scoreString);
+      },
 
+      updateScore: function () {
+        this.score+=1;
+        var scoreString = "Correct color! Current score is " + this.score.toString();
+        $("#scorediv").html(scoreString);
+      },
+
+      count: function (tokenName) {
+        var token = this.devices[tokenName];
+        this.sendCountCmd(token);
+
+      },
+
+      displayX: function (tokenName) {
+        var token = this.devices[tokenName];
+        this.sendDisplayXCmd(token);
+      }
     };
   </script>
 </head>
@@ -281,6 +339,8 @@
       <p>Wanted tile</p>
       <div id="color" class="wanted_tile"></div>
     </div>
+  </div>
+  <div id="pleaseTilt">
   </div>
 </div>
 </body>
