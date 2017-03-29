@@ -60,65 +60,7 @@
         35: '#F4E658'   // 37
       },
 
-      /*
-      * BLOCKLY CODE BEGINS
-      */
-
-      score: 0,
-
-      hardCodedInitialise: function () {
-        this.currentTile = this.locations[1];
-        this.showCurrentTile(this.currentTile);
-        this.pickRandomColor();
-      },
-
-      handleTokenTilt: function (token) {
-          this.pickRandomColor();
-      }
-
-      handleTokenTilt: function (token, constraint, options) {
-          this.currentTile = this.locations[constraint];
-          this.showCurrentTile(this.currentTile);
-          if (this.currentTile == this.currentColor) {
-            this.sendVibrationCmd(token);
-            this.score += 1;
-            this.showScore();
-            this.setMessage("Correct! Please tilt the pawn to recieve a new color.");
-          }
-          else {
-            this.score -= 1;
-            this.showScore();
-            this.setMessage("Wrong Color!");
-          }
-      }
-
-      /*
-      * BLOCKLY CODE ENDS
-      */
-
-      initiate: function () {
-        $("#scorediv").html("Current score is 0");
-
-        var handleTokenTilt = function (token) {
-          app.handleTokenTilt(token);
-        };
-        //REPLACEMEOKAY//
-        AnyBoard.TokenManager.onTokenEvent("TAP", handleTokenTap);
-        AnyBoard.TokenManager.onTokenEvent("DOUBLE_TAP", handleTokenDoubleTap);
-        AnyBoard.TokenManager.onTokenEvent("SHAKE", handleTokenShake);
-        AnyBoard.TokenManager.onTokenEvent("TILT", handleTokenTilt);
-
-        /**var handleTokenMove = function (token, constraint, options) {
-          AnyBoard.Logger.log("Moved to tilee " + constraint);
-          app.tiles[2] = app.locations[constraint];
-          $('.current_tile').css("background-color", app.tiles[2]);
-          app.verifyColor(token.name);
-        };**/
-
-        AnyBoard.TokenManager.onTokenConstraintEvent("MOVE_TO", handleTokenMove);
-
-        this.hardCodedInitialise();
-      },
+      //REPLACEMEOKAY//
 
       // Discover bluetooth tokens in proximity
       discover: function () {

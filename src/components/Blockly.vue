@@ -211,8 +211,9 @@ Blockly.JavaScript['move_token_to_tile'] = function (block) {
   var token = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('TOKEN'), Blockly.Variables.NAME_TYPE)
   var tile = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('TILE'), Blockly.Variables.NAME_TYPE)
   var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
-  var code = 'handleTokenMove: function(' + token + ', ' + tile + ', options) {\n'
-  code += stack + '},\n'
+  var code = 'var handleTokenMove = function(' + token + ', ' + tile + ', options) {\n'
+  code += stack + '};\n'
+  code += 'AnyBoard.TokenManager.onTokenConstraintEvent("MOVE_TO", handleTokenMove);'
   return code
 }
 
@@ -223,38 +224,43 @@ Blockly.JavaScript['move_to'] = function (block) {
   var code = 'var handleTokenMove = function(token, constraint, options) {\n'
   code += ' if (constraint == Object.keys(app.locations)[Object.values(app.locations).indexOf("' + color + '")]) {\n'
   code += stack + '}};\n'
+  code += 'AnyBoard.TokenManager.onTokenConstraintEvent("MOVE_TO", handleTokenMove);'
   return code
 }
 
 Blockly.JavaScript['move'] = function (block) {
   var color = block.getFieldValue('COLOR')
   var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
-  var code = 'handleTokenMove: function(Token, ' + color + ', options) {\n'
+  var code = 'var handleTokenMove = function(Token, ' + color + ', options) {\n'
   code += stack + '},\n'
+  code += 'AnyBoard.TokenManager.onTokenConstraintEvent("MOVE_TO", handleTokenMove);'
   return code
 }
 
 Blockly.JavaScript['move_to_tile'] = function (block) {
   var tile = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('TILE'), Blockly.Variables.NAME_TYPE)
   var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
-  var code = 'handleTokenMove: function(Token, ' + tile + ', options) {\n'
-  code += stack + '},\n'
+  var code = 'var handleTokenMove = function(Token, ' + tile + ', options) {\n'
+  code += stack + '};\n'
+  code += 'AnyBoard.TokenManager.onTokenConstraintEvent("MOVE_TO", handleTokenMove);'
   return code
 }
 
 Blockly.JavaScript['tap'] = function (block) {
   var token = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('TOKEN'), Blockly.Variables.NAME_TYPE)
   var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
-  var code = 'var handleTokenTap: function(' + token + ', options) {\n'
-  code += stack + '},\n'
+  var code = 'var handleTokenTap = function(' + token + ', options) {\n'
+  code += stack + '};\n'
+  code += 'AnyBoard.TokenManager.onTokenConstraintEvent("TAP", handleTokenTap);'
   return code
 }
 
 Blockly.JavaScript['double_tap'] = function (block) {
   var token = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('TOKEN'), Blockly.Variables.NAME_TYPE)
   var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
-  var code = 'var handleTokenDoubleTap: function(' + token + ', options) {\n'
-  code += stack + '},\n'
+  var code = 'var handleTokenDoubleTap = function(' + token + ', options) {\n'
+  code += stack + '};\n'
+  code += 'AnyBoard.TokenManager.onTokenConstraintEvent("DOUBLE_TAP", handleTokenDoubleTap);'
   return code
 }
 
@@ -313,6 +319,24 @@ Blockly.JavaScript.init = function (workspace) {
     Blockly.JavaScript.definitions_['variables'] =
         defvars.join('\n')
   }
+}
+
+Blockly.JavaScript.finish = function (code) {
+  // Convert the definitions dictionary into a list.
+  var definitions = []
+  for (var name in Blockly.JavaScript.definitions_) {
+    definitions.push(Blockly.JavaScript.definitions_[name])
+  }
+  // Clean up temporary data.
+  delete Blockly.JavaScript.definitions_
+  delete Blockly.JavaScript.functionNames_
+  Blockly.JavaScript.variableDB_.reset()
+  var output = definitions.join('\n\n') + '\n\n\n'
+  output += 'initiate: function() {\n'
+  output += code
+  output += '\n\n'
+  output += '},'
+  return output
 }
 
 export default {

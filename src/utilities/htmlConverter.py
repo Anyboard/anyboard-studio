@@ -4,6 +4,6 @@ file = open("templateHTML.txt","w")
 
 for line in lines:
     line = line.replace("'", "\\'")
-    file.write("    htmlTemplate += '" + line + "\\n'\n")
+    file.write("htmlTemplate += '" + line + "\\n'\n")
 
 file.close()
