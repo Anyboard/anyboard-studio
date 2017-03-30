@@ -202,8 +202,8 @@ Blockly.JavaScript['show_grid'] = function (block) {
 }
 
 Blockly.JavaScript['vibrate'] = function (block) {
-  // var token = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('TOKEN'), Blockly.Variables.NAME_TYPE)
-  var code = 'app.sendVibrationCmd(token);\n'
+  var token = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('TOKEN'), Blockly.Variables.NAME_TYPE)
+  var code = 'app.sendVibrationCmd(' + token + ');\n'
   return code
 }
 
@@ -218,10 +218,10 @@ Blockly.JavaScript['move_token_to_tile'] = function (block) {
 }
 
 Blockly.JavaScript['move_to'] = function (block) {
-  // var token = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('TOKEN'), Blockly.Variables.NAME_TYPE)
+  var token = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('TOKEN'), Blockly.Variables.NAME_TYPE)
   var color = block.getFieldValue('COLOR').toUpperCase()
   var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
-  var code = 'var handleTokenMove = function(token, constraint, options) {\n'
+  var code = 'var handleTokenMove = function(' + token + ', constraint, options) {\n'
   code += ' if (constraint == Object.keys(app.locations)[Object.values(app.locations).indexOf("' + color + '")]) {\n'
   code += stack + '}};\n'
   code += 'AnyBoard.TokenManager.onTokenConstraintEvent("MOVE_TO", handleTokenMove);'
