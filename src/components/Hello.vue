@@ -19,6 +19,7 @@
     </ul>
     <boardEditor></boardEditor>
     <bloremKnipsum></bloremKnipsum>
+    <HeiHvorDetKogges></HeiHvorDetKogges>
   </div>
 </template>
 
@@ -32,7 +33,8 @@ export default {
   },
   components: {
     'boardEditor': require('./BoardEditor.vue'),
-    'BloremKnipsum': require('./BloremKnipsum.vue')
+    'BloremKnipsum': require('./BloremKnipsum.vue'),
+    'HeiHvorDetKogges': require('./HeiHvorDetKogges.vue')
   }
 }
 

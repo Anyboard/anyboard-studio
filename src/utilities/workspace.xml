@@ -357,18 +357,18 @@
   <category name="Functions" colour="#9A5CA6" custom="PROCEDURE"></category>
   <category name="Input">
     <block type="move">
-      <field name="NAME">#ff0000</field>
+      <field name="COLOR">#ff0000</field>
     </block>
     <block type="move_to_tile">
-      <field name="TILE">Tile</field>
+      <field name="TILE">tile</field>
     </block>
     <block type="move_to">
-      <field name="TOKEN">Token</field>
+      <field name="TOKEN">token</field>
       <field name="COLOR">#ff0000</field>
     </block>
     <block type="move_token_to_tile">
-      <field name="TOKEN">Token</field>
-      <field name="TILE">Tile</field>
+      <field name="TOKEN">token</field>
+      <field name="TILE">tile</field>
     </block>
     <block type="tap">
       <field name="TOKEN">Token</field>
@@ -379,6 +379,13 @@
     <block type="init"></block>
   </category>
   <category name="Output">
-    <block type="vibrate"></block>
+    <block type="vibrate">
+      <field name="TOKEN">token</field>
+    </block>
+    <block type="grid"></block>
+    <block type="show_grid"></block>
+    <block type="increase_score"></block>
+    <block type="show_score"></block>
+    <block type="random_color"></block>
   </category>
 </xml>

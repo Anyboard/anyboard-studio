@@ -55,62 +55,7 @@
         6: "blue", // 6306
       },
 
-      initiate: function () {
-        $("#scorediv").html("Current score is 0");
-        var handleTokenTap = function (token) {
-          AnyBoard.Logger.log(" TAP Detect ");
-          $("#tap").css("background-color", "red");
-          setTimeout(function () {
-            $("#tap").css("background-color", "#99C2FF");
-          }, 300);
-        };
-        var handleTokenDoubleTap = function (token) {
-          AnyBoard.Logger.log(" DOUBLE TAP Detect ");
-          $("#double_tap").css("background-color", "blue");
-          setTimeout(function () {
-            $("#double_tap").css("background-color", "#99C2FF");
-          }, 300);
-        };
-        var handleTokenShake = function (token) {
-          AnyBoard.Logger.log(" SHAKE Detect ");
-          $("#shake").css("background-color", "blue");
-          setTimeout(function () {
-            $("#shake").css("background-color", "#99C2FF");
-          }, 300);
-        };
-        var handleTokenTilt = function (token) {
-          AnyBoard.Logger.log(" TILT Detect ");
-          app.pickRandomColor();
-          document.getElementById("pleaseTilt").innerHTML = "";
-          setTimeout(function () {
-            $("#tilt").css("background-color", "#99C2FF");
-          }, 550);
-        };
-        AnyBoard.TokenManager.onTokenEvent("TAP", handleTokenTap);
-        AnyBoard.TokenManager.onTokenEvent("DOUBLE_TAP", handleTokenDoubleTap);
-        AnyBoard.TokenManager.onTokenEvent("SHAKE", handleTokenShake);
-        AnyBoard.TokenManager.onTokenEvent("TILT", handleTokenTilt);
-
-        var handleTokenMove = function (token, constraint, options) {
-          AnyBoard.Logger.log("Moved to tilee " + constraint);
-          app.tiles[2] = app.locations[constraint];
-          $('.current_tile').css("background-color", app.tiles[2]);
-          app.verifyColor(token.name);
-        };
-
-        //TT Events not implmented
-        var handleTokenTokenEvent = function (token) {
-          AnyBoard.Logger.log("Token-Token event triggered.");
-          $("#tokentoken").css("background-color", "blue");
-          setTimeout(function () {
-            $("#tokentoken").css("background-color", "#99C2FF");
-          }, 550);
-        };
-
-        AnyBoard.TokenManager.onTokenConstraintEvent("MOVE_TO", handleTokenMove);
-        AnyBoard.TokenManager.onTokenTokenEvent("TTEVENT", handleTokenTokenEvent);
-        this.hardCodedInitialise();
-      },
+      //REPLACEMEOKAY//
 
       // Discover bluetooth tokens in proximity
       discover: function () {
