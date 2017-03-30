@@ -20,6 +20,7 @@
     <input type='button' id='save' value='Save image'/>
     <!-- For debugging and testing-->
     <input type='button' id='jayson' value='JSON'/>
+    <input type='button' id='namecheck' value='Name Check'/>
     <div id='wrapper'>
       <canvas id='c' width = '947' height = '669'></canvas>
       <div id='container'>
@@ -33,6 +34,10 @@
         <div id='tileTutorial'>
           <p>Tiles need a minimum size and have an orange dashed border! Important bznz!!!</p>
           <input type='button' id='tutClose' value='Understood'/>
+        </div>
+        <div id='tileAttr' disabled>
+          <input type='text' id='tileName' value='Tile Name'/>
+          <input type='button' id='renameTile' value='Rename'/>
         </div>
       </div>
     </div>
@@ -122,8 +127,10 @@
           strokeDashArray: [6, 1.5],
           strokeWidth: 3.5,
           minHeight: 190,
-          minWidth: 190
+          minWidth: 190,
+          name: tileColour
         })
+        renameSameTile(rect)
         canvas.add(rect).setActiveObject(rect)
         canvas.getActiveObject().center()
         layerify()
@@ -153,8 +160,10 @@
           strokeDashArray: [6, 1.5],
           strokeWidth: 3.5,
           minHeight: 173,
-          minWidth: 200
+          minWidth: 200,
+          name: tileColour
         })
+        renameSameTile(hexagon)
         canvas.add(hexagon).setActiveObject(hexagon)
         canvas.getActiveObject().center()
         layerify()
@@ -215,21 +224,24 @@
         }
       })
 
-      // Change chosen tile to selected colour
-      $('#colourChange').click(function () {
-        var activeObj = canvas.getActiveObject()
-        if (activeObj != null && (activeObj['type'] === 'rect' || activeObj['type'] === 'polygon')) {
-          activeObj.set('fill', tileColour)
-          canvas.renderAll()
-          exportTiles()
-        }
-      })
-
       // Hide tutorial
       $('#tutClose').click(function () {
         $('#tileTutorial').css('display', 'none')
         tutorialViewed = 1
       })
+
+      // Helping function to rename new tile to same name of other tiles of same type
+      function renameSameTile (obj) {
+        var objs = canvas.getObjects()
+        for (var i = 0, l = objs.length; i < l; ++i) {
+          if (obj['fill'] === objs[i]['fill']) {
+            obj['name'] = objs[i]['name']
+            break
+          } else {
+            obj['name'] = obj['fill']
+          }
+        }
+      }
       // ##################################### OBJECT MANIPULATION #####################################################
       // ###############################################################################################################
       // Delete selected object
@@ -280,6 +292,50 @@
           canvas.sendBackwards(canvas.getActiveObject())
           layerify()
         }
+      })
+
+      // Change chosen tile to selected colour
+      $('#colourChange').click(function () {
+        var activeObj = canvas.getActiveObject()
+        if (activeObj != null && (activeObj['type'] === 'rect' || activeObj['type'] === 'polygon')) {
+          activeObj.set('fill', tileColour)
+          renameSameTile(activeObj)
+          $('#tileName').val(activeObj['name'])
+          canvas.renderAll()
+          exportTiles()
+        }
+      })
+      // Renaming tiles
+      // Helping function for selection
+      function getSelection () {
+        return canvas.getActiveObject() == null ? canvas.getActiveGroup() : canvas.getActiveObject()
+      }
+
+      // See name of selected tile
+      canvas.on('object:selected', function () {
+        var selObj = getSelection()
+        if (selObj['type'] === 'rect' || selObj['type'] === 'polygon') {
+          $('#tileAttr').css('display', 'block')
+          $('#tileName').val(selObj['name'])
+        } else {
+          $('#tileAttr').css('display', 'none')
+        }
+      })
+
+      canvas.on('selection:cleared', function () {
+        $('#tileAttr').css('display', 'none')
+      })
+
+      // Rename selected tile
+      $('#renameTile').click(function () {
+        var selObj = canvas.getActiveObject()
+        var obj = canvas.getObjects()
+        for (var i = 0, l = obj.length; i < l; ++i) {
+          if (obj[i]['fill'] === selObj['fill']) {
+            obj[i]['name'] = $('#tileName').val()
+          }
+        }
+        // selObj['name'] = $('#tileName').val()
       })
       // ######################################### FREE DRAWING ########################################################
       // ###############################################################################################################
@@ -536,12 +592,12 @@
     top: 0;
     left: auto;
     width: 20em;
+    background-color: aliceblue;
   }
   #controls {
     position: relative;
     top: 0;
     left: auto;
-    background-color: aliceblue;
     display: none;
   }
 
@@ -549,8 +605,16 @@
     position: relative;
     top: 0;
     left: auto;
-    background-color: aliceblue;
     display: none;
+  }
+
+  #tileAttr {
+    position: relative;
+    top: 0;
+    left: auto;
+    display: none;
+    padding-top: 5px;
+    padding-bottom: 5px;
   }
 
   /* Container made by fabric when creating a fabric canvas */
