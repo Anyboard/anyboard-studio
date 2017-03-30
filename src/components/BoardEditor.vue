@@ -45,7 +45,7 @@
   import FileSaver from 'file-saver'
   import spectrum from 'spectrum-colorpicker' /* eslint no-unused-vars: off */
   // TODO: import store in root and still be able to use store in this component
-  import store from '../vuex/store'
+  import store from '../store/store'
 
   var canvas
   var tileColour = '#000000'
@@ -409,17 +409,16 @@
           }
         }
         // Turns list into string and saves
-        var jsonString = JSON.stringify(tileType).replace(/"/g, '\'')
-        store.dispatch('SAVE_COLOURS', jsonString)
+        store.dispatch('SAVE_COLOURS', tileType)
       }
 
-      // Method to save state, change canvasState to vuex-store
+      // Method to save state, change canvasState to store-store
       function saveState () {
         var canvasState = canvas.toDatalessJSON()
         store.dispatch('SAVE_CANVAS', canvasState)
       }
 
-      // Method to load state, change where it loads from to vuex-store
+      // Method to load state, change where it loads from to store-store
       function loadState () {
         var state = store.getters.GET_CANVAS
         if (state !== 0) {
