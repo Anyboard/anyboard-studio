@@ -202,8 +202,8 @@ Blockly.JavaScript['show_grid'] = function (block) {
 }
 
 Blockly.JavaScript['vibrate'] = function (block) {
-  var token = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('TOKEN'), Blockly.Variables.NAME_TYPE)
-  var code = 'app.sendVibrationCmd(' + token + ');\n'
+  // var token = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('TOKEN'), Blockly.Variables.NAME_TYPE)
+  var code = 'app.sendVibrationCmd(token);\n'
   return code
 }
 

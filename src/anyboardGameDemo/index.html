@@ -181,10 +181,12 @@
         }
         else {
           this.downgradeScore();
+        }
+      },
 
       showScore: function () {
         $("#message").html("Current score is " + this.score.toString());
-      }
+      },
 
       showCurrentTile: function (color) {
         $('.current_tile').css("background-color", color);
