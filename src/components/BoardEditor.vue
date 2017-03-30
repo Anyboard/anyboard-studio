@@ -20,7 +20,7 @@
     <input type='button' id='save' value='Save image'/>
     <!-- For debugging and testing-->
     <input type='button' id='jayson' value='JSON'/>
-    <input type='button' id='namecheck' value='Name Check'/>
+    <input type='button' id='listCheck' value='Add to list'/>
     <div id='wrapper'>
       <canvas id='c' width = '947' height = '669'></canvas>
       <div id='container'>
@@ -35,9 +35,14 @@
           <p>Tiles need a minimum size and have an orange dashed border! Important bznz!!!</p>
           <input type='button' id='tutClose' value='Understood'/>
         </div>
-        <div id='tileAttr' disabled>
+        <div id='tileAttr'>
           <input type='text' id='tileName' value='Tile Name'/>
           <input type='button' id='renameTile' value='Rename'/>
+        </div>
+        <div id='tileList'>
+          <p>List of tiles</p>
+          <ul id = 'tList'>
+          </ul>
         </div>
       </div>
     </div>
@@ -58,6 +63,7 @@
   var drawLineWidth = 10
   var tutorialViewed = 0
   var freeDrawLayer = 'bottom'
+  var usedColours = {}
 
   export default {
     name: 'boardEditor',
@@ -114,26 +120,34 @@
       loadState()
       // ########################################## TILES ##############################################################
       // ###############################################################################################################
-      // Creates a new square tile
-      $('#square').click(function () {
+      // Function for creating rectangle
+      function createRectangleTile (colour) {
         if (tutorialViewed === 0) {
           $('#tileTutorial').css('display', 'block')
         }
         let rect = new fabric.Rect({
           width: 190,
           height: 190,
-          fill: tileColour,
+          fill: colour,
           stroke: '#ffd445',
           strokeDashArray: [6, 1.5],
           strokeWidth: 3.5,
           minHeight: 190,
           minWidth: 190,
-          name: tileColour
+          name: colour
         })
         renameSameTile(rect)
         canvas.add(rect).setActiveObject(rect)
         canvas.getActiveObject().center()
         layerify()
+      }
+      // Creates a new square tile
+      $('#square').click(function () {
+        createRectangleTile(tileColour)
+      })
+
+      $('body').on('click', 'input.dynamicButtonRect', function () {
+        createRectangleTile(event.target.id)
       })
 
       // Can create any regular polygon with set amount of sides and radius
@@ -150,23 +164,31 @@
         return (points)
       }
 
-      $('#hexagon').click(function () {
+      function createHexagonTile (colour) {
         if (tutorialViewed === 0) {
           $('#tileTutorial').css('display', 'block')
         }
         let hexagon = new fabric.Polygon(regularPolygonPoints(6, 100), {
-          fill: tileColour,
+          fill: colour,
           stroke: '#ffd445',
           strokeDashArray: [6, 1.5],
           strokeWidth: 3.5,
           minHeight: 173,
           minWidth: 200,
-          name: tileColour
+          name: colour
         })
         renameSameTile(hexagon)
         canvas.add(hexagon).setActiveObject(hexagon)
         canvas.getActiveObject().center()
         layerify()
+      }
+
+      $('#hexagon').click(function () {
+        createHexagonTile(tileColour)
+      })
+
+      $('body').on('click', 'input.dynamicButtonHex', function () {
+        createHexagonTile(event.target.id)
       })
 
       // Limited colour picker by swatches
@@ -234,7 +256,8 @@
       function renameSameTile (obj) {
         var objs = canvas.getObjects()
         for (var i = 0, l = objs.length; i < l; ++i) {
-          if (obj['fill'] === objs[i]['fill']) {
+          if (obj['fill'] === objs[i]['fill'] && objs[i]['name'] !== obj['name']) {
+            console.log('Actual name found: ' + objs[i]['name'])
             obj['name'] = objs[i]['name']
             break
           } else {
@@ -299,9 +322,11 @@
         var activeObj = canvas.getActiveObject()
         if (activeObj != null && (activeObj['type'] === 'rect' || activeObj['type'] === 'polygon')) {
           activeObj.set('fill', tileColour)
+          activeObj.set('name', activeObj.fill)
+          canvas.renderAll()
           renameSameTile(activeObj)
           $('#tileName').val(activeObj['name'])
-          canvas.renderAll()
+          updateTileList()
           exportTiles()
         }
       })
@@ -335,7 +360,7 @@
             obj[i]['name'] = $('#tileName').val()
           }
         }
-        // selObj['name'] = $('#tileName').val()
+        updateTileList()
       })
       // ######################################### FREE DRAWING ########################################################
       // ###############################################################################################################
@@ -468,6 +493,36 @@
         store.dispatch('SAVE_COLOURS', tileType)
       }
 
+      // Helping function for inserting tiles into json object
+      function insertIntoDict (dict, key, value) {
+        // If key is not initialized or some bad structure
+        if (!(key in dict)) {
+          dict[key] = value
+        }
+      }
+      // Method to update list of tiles
+      function updateTileList () {
+        $('#tileList ul').empty()
+        var obj = canvas.getObjects()
+        var colour = ''
+        usedColours = {}
+        for (var z = 0, y = obj.length; z < y; ++z) {
+          if (obj[z]['type'] === 'rect' || obj[z]['type'] === 'polygon') {
+            insertIntoDict(usedColours, obj[z]['name'], obj[z]['fill'])
+          }
+        }
+        for (var key in usedColours) {
+          if (usedColours.hasOwnProperty(key)) {
+            // console.log(key + ' -> ' + usedColours[key])
+            colour = usedColours[key]
+            let s = `<li>${key} <span style="background: ${colour}; display: inline-block; width:1em; height: 1em;"/>
+            <input type="button" id="${colour}" class="dynamicButtonRect" value="Add Square"/>
+            <input type="button" id="${colour}" class="dynamicButtonHex" value="Add Hexagon"/>
+            </li>`
+            $('#tileList ul').append(s)
+          }
+        }
+      }
       // Method to save state, change canvasState to store-store
       function saveState () {
         var canvasState = canvas.toDatalessJSON()
@@ -481,16 +536,17 @@
           canvas.loadFromDatalessJSON(state)
         }
       }
-
       // Saves the state on canvas change
       canvas.on('object:added', function () {
         saveState()
         exportTiles()
+        updateTileList()
       })
 
       canvas.on('object:modified', function () {
         saveState()
         exportTiles()
+        updateTileList()
       })
       // ############################################## LAYERIFY #######################################################
       // ###############################################################################################################
@@ -568,6 +624,11 @@
       $('#jayson').click(function () {
         console.log(JSON.stringify(canvas))
       })
+
+      // Testing adding dynamically to list
+      $('#listCheck').click(function () {
+        $('#tileList ul').append('<li>Ye boiiii</li>')
+      })
     }
   }
 </script>
@@ -613,6 +674,15 @@
     top: 0;
     left: auto;
     display: none;
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+
+  #tileList {
+    position: relative;
+    top: 0;
+    left: auto;
+    display: block;
     padding-top: 5px;
     padding-bottom: 5px;
   }
