@@ -58,12 +58,30 @@
   import store from '../store/store'
 
   var canvas
-  var tileColour = '#000000'
+  var tileColour = '#166CA0'
   var drawColour = '#000000'
   var drawLineWidth = 10
   var tutorialViewed = 0
   var freeDrawLayer = 'bottom'
   var usedColours = {}
+
+  var colourDict = {
+    '#166CA0': 2,
+    '#4194D0': 5,
+    '#112A95': 7,
+    '#C047A3': 14,
+    '#FB50A6': 15,
+    '#5E1014': 16,
+    '#9B3235': 18,
+    '#FF483E': 20,
+    '#66C889': 21,
+    '#30A747': 24,
+    '#31682E': 30,
+    '#FF9344': 31,
+    '#D96623': 33,
+    '#F6EA77': 36,
+    '#F4E658': 37
+  }
 
   export default {
     name: 'boardEditor',
@@ -199,8 +217,6 @@
         showPaletteOnly: true,
         // Change or add colours here
         palette: [
-          ['#000000',
-            '#ffffff'],
           [
             '#166CA0',  // 2
             '#4194D0',  // 5
@@ -286,6 +302,7 @@
             objects.forEach(function (o) {
               o.set('top', o.top + 15)
               o.set('left', o.left + 15)
+              renameSameTile(o)
               canvas.add(o)
               layerify()
             })
@@ -361,6 +378,7 @@
           }
         }
         updateTileList()
+        exportTiles()
       })
       // ######################################### FREE DRAWING ########################################################
       // ###############################################################################################################
@@ -471,12 +489,11 @@
 
       // Export tile colours to be used by Blockly.vue
       function exportTiles () {
-        // Exports the canvas to a json object
-        var exportedCanvas = canvas.toObject()
-        // Gets only objects from the json object
-        var tiles = exportedCanvas['objects']
+        // Gets objects from the json object
+        var tiles = canvas.getObjects()
         // Variables to get unique values
         var tileType = []
+        var tileTypeTest = {}
         var unique = {}
         // Loops through all tiles and adds unique to a list
         for (var i = 0, l = tiles.length; i < l; ++i) {
@@ -485,11 +502,13 @@
             // May want to give all tiles a unique property to allow for more tile types in the future
             if (tiles[i]['type'] === 'rect' || tiles[i]['type'] === 'polygon') {
               tileType.push(tiles[i]['fill'])
+              insertIntoDict(tileTypeTest, tiles[i]['name'].toUpperCase(), colourDict[tiles[i]['fill'].toUpperCase()])
               unique[tiles[i]['fill']] = 1
             }
           }
         }
         // Turns list into string and saves
+        console.log(tileTypeTest)
         store.dispatch('SAVE_COLOURS', tileType)
       }
 
