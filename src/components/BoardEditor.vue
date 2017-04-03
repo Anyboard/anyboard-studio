@@ -493,7 +493,7 @@
         var tiles = canvas.getObjects()
         // Variables to get unique values
         var tileType = []
-        var tileTypeTest = {}
+        var tileTypeObject = {}
         var unique = {}
         // Loops through all tiles and adds unique to a list
         for (var i = 0, l = tiles.length; i < l; ++i) {
@@ -502,13 +502,13 @@
             // May want to give all tiles a unique property to allow for more tile types in the future
             if (tiles[i]['type'] === 'rect' || tiles[i]['type'] === 'polygon') {
               tileType.push(tiles[i]['fill'])
-              insertIntoDict(tileTypeTest, tiles[i]['name'].toUpperCase(), colourDict[tiles[i]['fill'].toUpperCase()])
+              insertIntoDict(tileTypeObject, tiles[i]['name'].toUpperCase(), colourDict[tiles[i]['fill'].toUpperCase()])
               unique[tiles[i]['fill']] = 1
             }
           }
         }
         // Turns list into string and saves
-        console.log(tileTypeTest)
+        store.dispatch('SAVE_TILES', tileTypeObject)
         store.dispatch('SAVE_COLOURS', tileType)
       }
 

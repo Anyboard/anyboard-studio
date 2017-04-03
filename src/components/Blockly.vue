@@ -3,6 +3,7 @@
     <img src='../assets/smiley.png'>
     <div id="blockly-wrapper" style="height: 480px; width: 600px;"></div>
     <button v-on:click="showCode()">Show Code</button>
+    <button v-on:click="exportHTML()">Export</button>
     <br/>
     <div id="codeWrapper">
       <p style="white-space: pre" id="shownCode">{{ code }}</p>
@@ -357,6 +358,8 @@ export default {
   },
   mounted () {
     var tileColours = store.getters.GET_COLOURS
+    var tileObject = store.getters.GET_TILES
+    var tileNames = Object.keys(tileObject)
     Blockly.FieldColour.COLOURS = tileColours
     Blockly.FieldColour.COLUMNS = 3
 
@@ -380,6 +383,8 @@ export default {
     }
 
     loadState()
+    console.log(tileObject)
+    console.log(tileNames)
 
     /** function loadHTMLString () {
       var temp = templateStore.getters.GET_HTML
@@ -393,6 +398,8 @@ export default {
   methods: {
     showCode: function () {
       this.code = Blockly.JavaScript.workspaceToCode(this.workspace)
+    },
+    exportHTML: function () {
       var temp = templateStore.getters.GET_HTML
       var done = temp.replace('//REPLACEMEOKAY//\n', Blockly.JavaScript.workspaceToCode(this.workspace))
       var blob = new Blob([done], {
