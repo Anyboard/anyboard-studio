@@ -52,6 +52,8 @@ _Example:_
 
 
 ## A simple explanation of the file structure.
+There is no forced file structure for Vue-projects. Thus we can put bits and pieces all around as we wish as long as there are noe broken references. 
+
 ```
 .
 ├─ src/                   
@@ -73,8 +75,40 @@ _Example:_
 
 ```
 
-## Store Structure
-The store is basically only a global object connected to the root Vue instance. So after you have initialized your Vue-object, the store accessible using `this.$store`. However, this only applies as long as you haven't messed with what `this` references. E.g. through the use of fat-arrow functions ( `(arg) => {}` ). 
+## Understanding the store
+The store is basically a global object bound to the root Vue instance. So after you have initialized your Vue-object, the store's functions are accessible through `this.$store`. However, this only applies as long as you haven't messed with what `this` references. E.g. through the use of fat-arrow functions like `(arg) => {}`. Within that function scope `this` points to the browser window and you'll either have to pass in the reference to the Vue-instance as an argument or find it through other means. 
+
+To make it easier to maintain we've broken up the store in several smaller pieces and put them alongside their related components. This should make it easier to understand the structure as the project grows.
+
+
+
+### Global store
+`Store.js` is composed of both direct and imported pieces. Only the "root" store has to import Vue and Vuex. "Child" stores are imported either partially or as a whole and will inherit it's parent's scope. By namespacing the children we also make sure to avoid any ambiguity on where something belongs.
+
+Basic example of the scaffold for a global store 
+```JavaScript
+import Vue from 'vue'
+import Vuex from 'vuex'
+
+// Setting the root Vue-instance to use Vuex
+Vue.use(Vuex)       
+
+// Initiating a new Store
+export default new Vuex.Store({
+  // The state object holds all the data that needs to be globally accessible, but should never be directly referenced.
+  state: {},        
+  
+  // Mutations are functions for changing a single state and must be synchronous. Keep them simple.
+  mutations: {},    
+  
+  // Actions are more complex methods that mutate one or more states by calling the corresponding mutation. Actions allows asynchronousity.
+  actions: {},      
+  
+  // When you need data from the store use it's corresponding getter. 
+  getters: {}
+})
+
+```
 
 ## Component Structure
 
