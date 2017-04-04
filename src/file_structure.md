@@ -67,8 +67,27 @@ _Example:_
 │  ├─ App.vue                     # Root render template including a the base router view
 │  ├─ main.js                     # Initiatlization of Vue root
 │  ├─ router.js                   # All the router files
-│  └─ store.js                    # Assembling all partial stores to a global store 
+│  └─ store.js                    # Assembling all partial stores to a global  
 │
 :
 
 ```
+
+## Store Structure
+The store is basically only a global object connected to the root Vue instance. So after you have initialized your Vue-object, the store accessible using `this.$store`. However, this only applies as long as you haven't messed with what `this` references. E.g. through the use of fat-arrow functions ( `(arg) => {}` ). 
+
+## Component Structure
+
+
+
+
+
+
+
+
+
+
+
+
+
+
