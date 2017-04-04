@@ -106,6 +106,9 @@ export default new Vuex.Store({
   
   // When you need data from the store use it's corresponding getter. 
   getters: {}
+
+  // Child stores are imported and referenced here
+  modules: {}
 })
 
 ```
