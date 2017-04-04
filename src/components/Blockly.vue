@@ -16,13 +16,31 @@ import toolbox from '../store/toolbox'
 import templateStore from '../store/templateStore'
 import FileSaver from 'file-saver'
 
-Blockly.Blocks['increase_score'] = {
+Blockly.Blocks['math_change'] = {
+  init: function () {
+    this.appendValueInput('AMOUNT')
+        .appendField(new Blockly.FieldDropdown([['Increase', 'INCREASE'], ['Decrease', 'DECREASE']]), 'TYPE')
+        .appendField(new Blockly.FieldVariable('score'), 'VAR')
+        .appendField('By')
+    this.setPreviousStatement(true, null)
+    this.setNextStatement(true, null)
+    this.setColour(330)
+    this.setTooltip('')
+    this.setHelpUrl('')
+  }
+}
+
+// TODO Autogenerate this list ?? Maybe
+var NUMBERFIELDS =
+  [['Number Field 1', '1'],
+   ['Number Field 1', '2'],
+   ['Another Number Field', '3']]
+
+Blockly.Blocks['show_numberfield'] = {
   init: function () {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldDropdown([['Increase', 'INCREASE'], ['Decrease', 'DECREASE']]), 'TYPE')
-        .appendField(new Blockly.FieldVariable('score'), 'SCORE')
-        .appendField('By')
-        .appendField(new Blockly.FieldNumber(1, 0), 'AMOUNT')
+        .appendField(new Blockly.FieldDropdown([['Show', 'SHOW'], ['Hide', 'HIDE']]), 'TYPE')
+        .appendField(new Blockly.FieldDropdown(NUMBERFIELDS), 'TYPE')
     this.setPreviousStatement(true, null)
     this.setNextStatement(true, null)
     this.setColour(255)
@@ -31,10 +49,49 @@ Blockly.Blocks['increase_score'] = {
   }
 }
 
-Blockly.Blocks['show_score'] = {
+Blockly.Blocks['show_number'] = {
+  init: function () {
+    this.appendValueInput('NUMBER')
+        .setCheck('Number')
+        .appendField('Show')
+    this.appendDummyInput()
+        .appendField('On')
+        .appendField(new Blockly.FieldDropdown(NUMBERFIELDS), 'TYPE')
+    this.setPreviousStatement(true, null)
+    this.setNextStatement(true, null)
+    this.setColour(255)
+    this.setTooltip('')
+    this.setHelpUrl('')
+  }
+}
+
+// TODO Autogenerate this list ?? Maybe
+var TEXTFIELDS =
+  [['Text Field 1', '1'],
+   ['Text Field 1', '2'],
+   ['Another Text Field', '3']]
+
+Blockly.Blocks['show_textfield'] = {
   init: function () {
     this.appendDummyInput()
-        .appendField('Show Score')
+        .appendField(new Blockly.FieldDropdown([['Show', 'SHOW'], ['Hide', 'HIDE']]), 'TYPE')
+        .appendField(new Blockly.FieldDropdown(TEXTFIELDS), 'TYPE')
+    this.setPreviousStatement(true, null)
+    this.setNextStatement(true, null)
+    this.setColour(255)
+    this.setTooltip('')
+    this.setHelpUrl('')
+  }
+}
+
+Blockly.Blocks['show_text'] = {
+  init: function () {
+    this.appendValueInput('TEXT')
+        .setCheck('String')
+        .appendField('Show')
+    this.appendDummyInput()
+        .appendField('On')
+        .appendField(new Blockly.FieldDropdown(TEXTFIELDS), 'TYPE')
     this.setPreviousStatement(true, null)
     this.setNextStatement(true, null)
     this.setColour(255)
@@ -55,54 +112,10 @@ Blockly.Blocks['random_color'] = {
   }
 }
 
-Blockly.Blocks['move_to'] = {
-  init: function () {
-    this.appendDummyInput()
-        .appendField('Move')
-        .appendField(new Blockly.FieldVariable('token'), 'TOKEN')
-        .appendField('To')
-        .appendField(new Blockly.FieldColour('#ff0000'), 'COLOR')
-    this.appendStatementInput('STACK')
-        .setCheck(null)
-    this.setColour(65)
-    this.setTooltip('')
-    this.setHelpUrl('')
-  }
-}
-
 Blockly.Blocks['move'] = {
   init: function () {
     this.appendDummyInput()
-        .appendField('Move To')
-        .appendField(new Blockly.FieldColour('#ff0000'), 'COLOR')
-    this.appendStatementInput('STACK')
-        .setCheck(null)
-    this.setColour(65)
-    this.setTooltip('')
-    this.setHelpUrl('')
-  }
-}
-
-Blockly.Blocks['move_to_tile'] = {
-  init: function () {
-    this.appendDummyInput()
-        .appendField('Move To')
-        .appendField(new Blockly.FieldVariable('tile'), 'TILE')
-    this.appendStatementInput('STACK')
-        .setCheck(null)
-    this.setColour(65)
-    this.setTooltip('')
-    this.setHelpUrl('')
-  }
-}
-
-Blockly.Blocks['move_token_to_tile'] = {
-  init: function () {
-    this.appendDummyInput()
-        .appendField('Move')
-        .appendField(new Blockly.FieldVariable('token'), 'TOKEN')
-        .appendField('To')
-        .appendField(new Blockly.FieldVariable('tile'), 'TILE')
+        .appendField('Move Token to Tile')
     this.appendStatementInput('STACK')
         .setCheck(null)
     this.setColour(65)
@@ -127,8 +140,19 @@ Blockly.Blocks['vibrate'] = {
 Blockly.Blocks['tap'] = {
   init: function () {
     this.appendDummyInput()
-        .appendField('Tap')
-        .appendField(new Blockly.FieldVariable('token'), 'TOKEN')
+        .appendField('Tap Token')
+    this.appendStatementInput('STACK')
+        .setCheck(null)
+    this.setColour(65)
+    this.setTooltip('')
+    this.setHelpUrl('')
+  }
+}
+
+Blockly.Blocks['tilt'] = {
+  init: function () {
+    this.appendDummyInput()
+        .appendField('Tilt Token')
     this.appendStatementInput('STACK')
         .setCheck(null)
     this.setColour(65)
@@ -140,8 +164,7 @@ Blockly.Blocks['tap'] = {
 Blockly.Blocks['double_tap'] = {
   init: function () {
     this.appendDummyInput()
-        .appendField('Doubletap')
-        .appendField(new Blockly.FieldVariable('token'), 'TOKEN')
+        .appendField('Doubletap Token')
     this.appendStatementInput('STACK')
         .setCheck(null)
     this.setColour(65)
@@ -176,12 +199,147 @@ Blockly.Blocks['show_grid'] = {
   }
 }
 
+// TODO Autogenerate this list
+var GRIDS =
+  [[{'src': '../assets/smiley.png', 'width': 16, 'height': 16, 'alt': '*'}, 'SMILEY'],
+   [{'src': '../assets/x.png', 'width': 16, 'height': 16, 'alt': '*'}, 'X'],
+   [{'src': '../assets/square.png', 'width': 16, 'height': 16, 'alt': '*'}, 'SQUARE']]
+
 Blockly.Blocks['grid'] = {
   init: function () {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldDropdown([[{'src': '../assets/smiley.png', 'width': 16, 'height': 16, 'alt': '*'}, 'SMILEY'], [{'src': '../assets/x.png', 'width': 16, 'height': 16, 'alt': '*'}, 'X'], [{'src': '../assets/square.png', 'width': 16, 'height': 16, 'alt': '*'}, 'SQUARE']]), 'GRID')
+        .appendField(new Blockly.FieldDropdown(GRIDS), 'GRID')
     this.setOutput(true, 'Grid')
+    this.setColour(120)
+    this.setTooltip('')
+    this.setHelpUrl('')
+  }
+}
+
+Blockly.Blocks['random_grid'] = {
+  init: function () {
+    this.appendDummyInput()
+        .appendField('Random Grid')
+    this.setOutput(true, 'Grid')
+    this.setColour(120)
+    this.setTooltip('')
+    this.setHelpUrl('')
+  }
+}
+
+Blockly.Blocks['get_grid'] = {
+  init: function () {
+    this.appendValueInput('TOKEN')
+        .setCheck('Token')
+        .appendField('Whatever is displayed on')
+    this.setOutput(true, 'Grid')
+    this.setColour(120)
+    this.setTooltip('')
+    this.setHelpUrl('')
+  }
+}
+
+// TODO Autogenerate this list
+var TOKENS =
+  [['Dragon', 'DRAGON'],
+   ['Knight', 'KNIGHT']]
+
+Blockly.Blocks['token'] = {
+  init: function () {
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldDropdown(TOKENS), 'TOKEN')
+    this.setOutput(true, 'Token')
+    this.setColour(290)
+    this.setTooltip('')
+    this.setHelpUrl('')
+  }
+}
+
+Blockly.Blocks['current_token'] = {
+  init: function () {
+    this.appendDummyInput()
+        .appendField('Current Token')
+    this.setOutput(true, 'Token')
+    this.setColour(290)
+    this.setTooltip('')
+    this.setHelpUrl('')
+  }
+}
+
+Blockly.Blocks['random_token'] = {
+  init: function () {
+    this.appendDummyInput()
+        .appendField('Random Token')
+    this.setOutput(true, 'Token')
+    this.setColour(290)
+    this.setTooltip('')
+    this.setHelpUrl('')
+  }
+}
+
+Blockly.Blocks['token_test'] = {
+  init: function () {
+    this.appendDummyInput()
+        .appendField('Current Token is ')
+        .appendField(new Blockly.FieldDropdown(TOKENS), 'TOKEN')
+    this.setOutput(true, 'Boolean')
+    this.setColour(210)
+    this.setTooltip('')
+    this.setHelpUrl('')
+  }
+}
+
+// TODO Autogenerate this list
+var TILES =
+  [['Tile 1', 'TILE1'],
+   ['Tile 2', 'TILE2']]
+
+Blockly.Blocks['tile'] = {
+  init: function () {
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldDropdown(TILES), 'TILE')
+    this.setOutput(true, 'Tile')
+    this.setColour(20)
+    this.setTooltip('')
+    this.setHelpUrl('')
+  }
+}
+
+Blockly.Blocks['random_tile'] = {
+  init: function () {
+    this.appendDummyInput()
+        .appendField('Random Tile')
+    this.setOutput(true, 'Tile')
+    this.setColour(20)
+    this.setTooltip('')
+    this.setHelpUrl('')
+  }
+}
+
+Blockly.Blocks['wait'] = {
+  init: function () {
+    this.appendValueInput('SECONDS')
+        .setCheck('Number')
+        .appendField('Wait')
+    this.appendDummyInput()
+        .appendField('Seconds')
+    this.setPreviousStatement(true, null)
+    this.setNextStatement(true, null)
     this.setColour(255)
+    this.setTooltip('')
+    this.setHelpUrl('')
+  }
+}
+
+Blockly.Blocks['get_tile'] = {
+  init: function () {
+    this.appendValueInput('TOKEN')
+        .setCheck('Token')
+        .appendField('The tile that')
+    this.appendDummyInput()
+        .appendField('is standing on')
+    this.setOutput(true, 'Tile')
+    this.setColour(20)
     this.setTooltip('')
     this.setHelpUrl('')
   }
@@ -271,12 +429,14 @@ Blockly.JavaScript['test_init'] = function (block) {
   return code
 }
 
-Blockly.JavaScript['increase_score'] = function (block) {
+Blockly.JavaScript['math_change'] = function (block) {
   var type = block.getFieldValue('TYPE')
-  var score = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('SCORE'), Blockly.Variables.NAME_TYPE)
-  var amount = block.getFieldValue('AMOUNT')
+  var amount = Blockly.JavaScript.valueToCode(block, 'AMOUNT',
+    Blockly.JavaScript.ORDER_ADDITION) || '0'
+  var variable = Blockly.JavaScript.variableDB_.getName(
+    block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE)
   var sign = (type === 'INCREASE' ? '+' : '-')
-  var code = 'app.' + score + ' ' + sign + '= ' + amount + ';\n'
+  var code = 'app.' + variable + ' ' + sign + '= ' + amount + ';\n'
   return code
 }
 
