@@ -50,6 +50,7 @@ _Example:_
   
 ```
 
+Read more at https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import
 
 ## A simple explanation of the file structure.
 There is no forced file structure for Vue-projects. Thus we can put bits and pieces all around as we wish as long as there are noe broken references. 
@@ -83,12 +84,13 @@ To make it easier to maintain we've broken up the store in several smaller piece
 
 
 ### Global store
-`Store.js` is composed of both direct and imported pieces. Only the "root" store has to import Vue and Vuex. "Child" stores are imported either partially or as a whole and will inherit it's parent's scope. By namespacing the children we also make sure to avoid any ambiguity on where something belongs.
+`Store.js` is composed of both direct and imported pieces. Only the "root" store has to import Vue and Vuex. "Child" stores are imported either partially or as a whole and will inherit it's parent's scope. By namespacing the children we also make sure to avoid any ambiguity on where a function belongs.
 
-Basic example of the scaffold for a global store 
+#### Example of the scaffold for a global store:
 ```JavaScript
 import Vue from 'vue'
 import Vuex from 'vuex'
+import child from './component/child/child_store.js'
 
 // Setting the root Vue-instance to use Vuex
 Vue.use(Vuex)       
@@ -108,10 +110,55 @@ export default new Vuex.Store({
   getters: {}
 
   // Child stores are imported and referenced here
-  modules: {}
+  modules: {
+    child
+  }
 })
 
 ```
+
+#### Mutation example
+Mutations are required by Vue to be synchronous and transaction like. Only one function should be able to edit the state at the time and all or none of mutation must be completed.
+
+Let's show it with an example of how to add some tiles from `Fabric.js`.
+```JavaScript
+// global_store.js
+export default new Vuex.Store({
+  state: {
+    canvas_tiles: []
+  },        
+  
+  mutations: {                                            // Caveat 1
+    ADD_TILES (state, tilesArray) {                       // Caveat 2
+      for (tile in tilesArray) {
+        const idx = state.canvas_tiles.indexOf(tile)
+        if ( idx > -1 ) {
+          state.canvas_tiles[idx] = tile
+        } else {
+          state.canvas_tiles.push(tile)
+        }
+      }
+    }
+  }
+})
+```
+
+**Some caveats to note**
+1. Similarily to the data, a mutation is *not* called directly. All mutations are done via the `commit`-function, that requires at least one argument which must be the name of the mutation you wish to invoke. Typically you also pass a payload object as the second argument, unless e.g. the mutation is purely computational or uses other data from the store.
+
+```JavaScript
+
+// From within the store-scope
+commit('ADD_TILES', payload)
+
+// From a component mapping the mutation
+this.$store.commit('ADD_TILES', payload)
+
+// From a namespaced child store (root=true must be the 3rd argument)
+commit('ADD_TILES', payload, { root: true })
+```
+
+2. Mutations must take in at least one argument, a context object for it's local state. This is to ensure that the mutation don't change data outside of it's intended scope. If you have to mutate data somewhere else you invoke that data's corresponding mutation-function through a commit instead.
 
 ## Component Structure
 
