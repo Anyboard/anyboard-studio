@@ -3,7 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from 'router.js'
-import store from 'store.js'
+import store from 'global_store.js'
 
 /* eslint-disable no-new */
 new Vue({
