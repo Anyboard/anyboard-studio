@@ -201,21 +201,31 @@ getWebData () {
   // Say we have a REST api that returns a string at the following URL
   const url = 'http://ireturnrandomdata.com/simplestring/1'    
 
-  return new Promise ( (resolve, reject) => 
-    request( url, (error, response, body) => {
+  return new Promise ( (resolve, reject) =>               // A.
+    request( url, (error, response, body) => {            // B.
+      
       if( error ) {
-        reject ( error )
-        return
-      } else {
-        let str = parseToGetString( body )    // Fictional parser
-        resolve ( str )
+        reject ( error )                                  // A1.
+        returns                                           // C.
       }
+      
+      let str = parseToGetString( body )    // Fictional parser
+      resolve ( str )                                   // A2.
+      
     })
   ) 
 }
 ```
 
-The Promise-object allows async-await functions to pass in resolve and reject functions which will be called when the 
+**Some explanation**
+A. The promise takes in two functions as it's only parameters and pass it in to an anonomous function (aka lambda or fat arrow function). The reason for using lambdas is simply that it doesn't need to have `this` bound. These functions will, when invoked, reinitiate the method that used `await`, in this case: `saveWebResponse`. 
+A1. If there is an error in the web response the promise invokes the `reject` function with the `error` object.
+A2. If the response was succesful, it invokes the `resolve` function passing in the parsed string `str` for `saveWebResponse` to use as payload.
+
+B. Calling a typical http request passing in the url and a callback (built like a normal lambda function) which takes in an error, response and body object as arguments. We use those to verify and handle what the server gave us.
+
+C. By returning early we skip the rest of the function.
+
 ## Component Structure
 
 
