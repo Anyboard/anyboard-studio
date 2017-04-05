@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import inspector from './components/inspector/store.js'
+import fabricInspector from './components/fabricInspector/store.js'
 
 // Setting the root Vue-instance to use Vuex
 Vue.use(Vuex)
@@ -21,6 +21,6 @@ export default new Vuex.Store({
 
   // Child stores are imported and referenced here
   modules: {
-    inspector
+    fabricInspector
   }
 })
