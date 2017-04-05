@@ -38,30 +38,79 @@
   <script>
     var app;
     app = {
+      keys: [],
+      score: 0,
       currentColor: "some value",
+      currentKey: "some value",
       devices: {},
       currentTile: "white",
 
       locations: {
-        2: '#166CA0',  // 2
-        5: '#4194D0',  // 5
-        7: '#112A95',  // 7
-        14: '#C047A3',  // 14
-        15: '#FB50A6', // 15
-        16: '#5E1014',  // 16
-        18: '#9B3235',  // 18
-        20: '#FF483E',  // 20
-        21: '#66C889',  // 21
-        24: '#30A747', // 24
-        30: '#31682E',  // 30
-        31: '#FF9344',  // 31
-        33: '#D96623',  // 33
-        34: '#F6EA77',  // 36
-        35: '#F4E658'   // 37
+        2: '#166CA0',
+        15: '#FB50A6',
+        24: '#30A747',
+        33: '#D96623',
+        36: '#F4E658',
+        16:  '#5E1014',
       },
 
-      //REPLACEMEOKAY//
+      initiate: function () {
+        $("#scorediv").html("Current score is 0");
+        var handleTokenTap = function (token) {
+          AnyBoard.Logger.log(" TAP Detect ");
+          $("#tap").css("background-color", "red");
+          setTimeout(function () {
+            $("#tap").css("background-color", "#99C2FF");
+          }, 300);
+        };
+        var handleTokenDoubleTap = function (token) {
+          AnyBoard.Logger.log(" DOUBLE TAP Detect ");
+          $("#double_tap").css("background-color", "blue");
+          setTimeout(function () {
+            $("#double_tap").css("background-color", "#99C2FF");
+          }, 300);
+        };
+        var handleTokenShake = function (token) {
+          AnyBoard.Logger.log(" SHAKE Detect ");
+          $("#shake").css("background-color", "blue");
+          setTimeout(function () {
+            $("#shake").css("background-color", "#99C2FF");
+          }, 300);
+        };
+        var handleTokenTilt = function (token) {
+          AnyBoard.Logger.log(" TILT Detect ");
+          app.pickRandomColor();
+          document.getElementById("pleaseTilt").innerHTML = "";
+          setTimeout(function () {
+            $("#tilt").css("background-color", "#99C2FF");
+          }, 550);
+        };
+        AnyBoard.TokenManager.onTokenEvent("TAP", handleTokenTap);
+        AnyBoard.TokenManager.onTokenEvent("DOUBLE_TAP", handleTokenDoubleTap);
+        AnyBoard.TokenManager.onTokenEvent("SHAKE", handleTokenShake);
+        AnyBoard.TokenManager.onTokenEvent("TILT", handleTokenTilt);
 
+        var handleTokenMove = function (token, constraint, options) {
+          AnyBoard.Logger.log("Moved to tilee " + constraint);
+          app.tiles[2] = app.locations[constraint];
+          $('.current_tile').css("background-color", app.tiles[2]);
+          app.verifyColor(token.name);
+        };
+
+        //TT Events not implmented
+        var handleTokenTokenEvent = function (token) {
+          AnyBoard.Logger.log("Token-Token event triggered.");
+          $("#tokentoken").css("background-color", "blue");
+          setTimeout(function () {
+            $("#tokentoken").css("background-color", "#99C2FF");
+          }, 550);
+        };
+
+        AnyBoard.TokenManager.onTokenConstraintEvent("MOVE_TO", handleTokenMove);
+        AnyBoard.TokenManager.onTokenTokenEvent("TTEVENT", handleTokenTokenEvent);
+        this.hardCodedInitialise();
+      },
+        
       // Discover bluetooth tokens in proximity
       discover: function () {
         var self = this;
@@ -151,15 +200,32 @@
         $("#summary").hide();
       },
 
+      vibrate: function (tokenName) {
+        var token = this.devices[tokenName];
+        this.sendVibrationCmd(token);
+      },
+
+      hardCodedInitialise: function () {
+        this.pickRandomColor();
+        this.appendKeys();
+
+      },
+
+      appendKeys: function() {
+        for (var k in this.locations) {
+          this.keys.push(k);
+        }
+      },
+
       pickRandomColor: function () {
-        var currentColor = this.locations[Math.floor(Math.random() *15 + 1)]
-        if (currentColor == this.currentColor) {
-          this.pickRandomColor();
+        var currentKey = this.keys[Math.floor(Math.random() *6 + 1)];
+        while (currentKey == this.currentKey) {
+          currentKey = this.keys[Math.floor(Math.random() *6 + 1)];
         }
-        else {
-          this.currentColor = currentColor;
-          $('.wanted_tile').css("background-color", this.currentColor);
-        }
+        this.currentKey = currentKey;
+        this.currentColor = this.locations[this.currentKey];
+        $('.wanted_tile').css("background-color", this.currentColor);
+
       },
 
       sendVibration: function (tokenName) {
