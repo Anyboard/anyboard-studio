@@ -343,6 +343,7 @@
           canvas.renderAll()
           renameSameTile(activeObj)
           $('#tileName').val(activeObj['name'])
+          saveState()
           updateTileList()
           exportTiles()
         }
@@ -377,6 +378,7 @@
             obj[i]['name'] = $('#tileName').val()
           }
         }
+        saveState()
         updateTileList()
         exportTiles()
       })
