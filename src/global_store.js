@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import fabricInspector from './components/fabricInspector/store.js'
+import fabricInspector from './store/fabric_inspectorjs'
 
 // Setting the root Vue-instance to use Vuex
 Vue.use(Vuex)
