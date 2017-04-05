@@ -10,6 +10,7 @@
     <input type="button" value="Upload image" onclick="document.getElementById('image').click();" />
     <input type='button' id='clone' value='Clone'/>
     <input type='button' id='delete' value='Delete'/>
+    <input type='button' id='clearCanvas' value='Clear'/>
     <br/>
     <input type='button' id='center' value='Center object'/>
     <input type='button' id='moveUp' value='Move up'/>
@@ -20,7 +21,6 @@
     <input type='button' id='save' value='Save image'/>
     <!-- For debugging and testing-->
     <input type='button' id='jayson' value='JSON'/>
-    <input type='button' id='listCheck' value='Add to list'/>
     <div id='wrapper'>
       <canvas id='c' width = '947' height = '669'></canvas>
       <div id='container'>
@@ -32,7 +32,7 @@
           <input type='button' id='foregroundDrawing' value='Foreground Drawing'/>
         </div>
         <div id='tileTutorial'>
-          <p>Tiles need a minimum size and have an orange dashed border! Important bznz!!!</p>
+          <p>Tiles need a minimum size and have an yellow dashed border! Important bznz!!!</p>
           <input type='button' id='tutClose' value='Understood'/>
         </div>
         <div id='tileAttr'>
@@ -43,6 +43,11 @@
           <p>List of tiles</p>
           <ul id = 'tList'>
           </ul>
+        </div>
+        <div id='clearConfirm'>
+          <p>Are you sure you want to clear the board?</p>
+          <input type='button' id='confirmClearButton' value="Yes, I'm sure!"/>
+          <input type='button' id='denyClearButton' value='No, nevermind!'/>
         </div>
       </div>
     </div>
@@ -148,8 +153,8 @@
           height: 190,
           fill: colour.toUpperCase(),
           stroke: '#ffd445',
-          strokeDashArray: [6, 1.5],
-          strokeWidth: 3.5,
+          strokeDashArray: [15, 3],
+          strokeWidth: 7,
           minHeight: 190,
           minWidth: 190,
           name: colour
@@ -189,8 +194,8 @@
         let hexagon = new fabric.Polygon(regularPolygonPoints(6, 100), {
           fill: colour.toUpperCase(),
           stroke: '#ffd445',
-          strokeDashArray: [6, 1.5],
-          strokeWidth: 3.5,
+          strokeDashArray: [15, 3],
+          strokeWidth: 7,
           minHeight: 173,
           minWidth: 200,
           name: colour
@@ -381,6 +386,21 @@
         saveState()
         updateTileList()
         exportTiles()
+      })
+
+      // Clear canvas
+      $('#clearCanvas').click(function () {
+        $('#clearConfirm').css('display', 'block')
+      })
+      $('#confirmClearButton').click(function () {
+        $('#clearConfirm').css('display', 'none')
+        canvas.clear().renderAll()
+        saveState()
+        updateTileList()
+        exportTiles()
+      })
+      $('#denyClearButton').click(function () {
+        $('#clearConfirm').css('display', 'none')
       })
       // ######################################### FREE DRAWING ########################################################
       // ###############################################################################################################
@@ -654,11 +674,6 @@
         console.log('here goes getObjects')
         console.log(canvas.getObjects())
       })
-
-      // Testing adding dynamically to list
-      $('#listCheck').click(function () {
-        $('#tileList ul').append('<li>Ye boiiii</li>')
-      })
     }
   }
 </script>
@@ -717,6 +732,14 @@
     padding-bottom: 5px;
   }
 
+  #clearConfirm {
+    position: relative;
+    top: 0;
+    left: auto;
+    display: none;
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
   /* Container made by fabric when creating a fabric canvas */
   .canvas-container{
     text-align: center;
