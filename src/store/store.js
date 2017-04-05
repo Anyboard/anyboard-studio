@@ -7,6 +7,7 @@ const store = new Vuex.Store({
   state: {
     canvasState: 0,
     colours: [],
+    coloursObject: {},
     blocklyState: 0
   },
   actions: {
@@ -15,6 +16,9 @@ const store = new Vuex.Store({
     },
     SAVE_COLOURS: function ({commit}, colours) {
       commit('SET_COLOURS', colours)
+    },
+    SAVE_TILES: function ({commit}, tiles) {
+      commit('SET_TILES', tiles)
     },
     SAVE_BLOCKLY: function ({commit}, blockly) {
       commit('SET_BLOCKLY', blockly)
@@ -27,6 +31,9 @@ const store = new Vuex.Store({
     SET_COLOURS: (state, colours) => {
       state.colours = colours
     },
+    SET_TILES: (state, tiles) => {
+      state.coloursObject = tiles
+    },
     SET_BLOCKLY: (state, blockly) => {
       state.blocklyState = blockly
     }
@@ -37,6 +44,9 @@ const store = new Vuex.Store({
     },
     GET_COLOURS: state => {
       return state.colours
+    },
+    GET_TILES: state => {
+      return state.coloursObject
     },
     GET_BLOCKLY: state => {
       return state.blocklyState
