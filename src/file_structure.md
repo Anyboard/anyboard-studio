@@ -163,7 +163,7 @@ commit('ADD_TILES', payload, { root: true })
 ### Action Example
 Whenever you need to update several pieces of the state or you need to fetch something from e.g. a database actions is the way to go. Actions are expected to change the pieces through their corresponding mutation, but it only does so when it's relevant. 
 
-For example if you want to fetch something from a web source, and using parts of the response you build up a new value that you want to put into the store. You don't want to lock up the thread while waiting for the web server to respond, but you can't change the state until you have a response. Thus asynchronous is the way to go. Vuex supports using Promises better control on success or failure.
+For example if you want to fetch something from a web source, and using parts of the response you build up a new value that you want to put into the store. You don't want to lock up the thread while waiting for the web server to respond, but you can't change the state until you have a response. Thus we have to work asynchronously. Vuex supports using Promises to have better control on success or failure.
 
 **Look at this example.**
 ```JavaScript
@@ -225,6 +225,32 @@ A2. If the response was succesful, it invokes the `resolve` function passing in 
 B. Calling a typical http request passing in the url and a callback (built like a normal lambda function) which takes in an error, response and body object as arguments. We use those to verify and handle what the server gave us.
 
 C. By returning early we skip the rest of the function.
+
+**From a component we'd usually call it like this**
+```HTML
+// WebResponseComponent.vue
+<template>
+  <a @click="saveWebResponse">Click me to call saveWebResponse</a> 
+  <a @click="secondOption">Click me to call saveWebResponse through secondOption</a>
+</template>
+<script>
+import {mapActions} from 'vuex'
+
+export default {
+  name: 'WebResponseComponent',
+  computed: {
+    ...mapActions(['saveWebResponse'])
+  },
+  methods: {
+    secondOption () {
+      this.$store.dispatch('saveWebResponse')
+    }
+  }
+}
+
+</script>
+
+```
 
 ## Component Structure
 
