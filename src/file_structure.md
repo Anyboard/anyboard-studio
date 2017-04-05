@@ -160,6 +160,62 @@ commit('ADD_TILES', payload, { root: true })
 
 2. Mutations must take in at least one argument, a context object for it's local state. This is to ensure that the mutation don't change data outside of it's intended scope. If you have to mutate data somewhere else you invoke that data's corresponding mutation-function through a commit instead.
 
+### Action Example
+Whenever you need to update several pieces of the state or you need to fetch something from e.g. a database actions is the way to go. Actions are expected to change the pieces through their corresponding mutation, but it only does so when it's relevant. 
+
+For example if you want to fetch something from a web source, and using parts of the response you build up a new value that you want to put into the store. You don't want to lock up the thread while waiting for the web server to respond, but you can't change the state until you have a response. Thus asynchronous is the way to go. Vuex supports using Promises better control on success or failure.
+
+**Look at this example.**
+```JavaScript
+// global_store.js
+  state: {
+    webResponse: ""
+  },
+
+  mutations: {
+    SAVE_WEB_RESPONSE (state, payload) {
+      if (typeof payload === "string") {
+        state.webResponse = payload
+      } else {
+        state.webResponse = JSON.stringify(payload)
+      }
+    }
+  },
+
+  actions: {
+    async saveWebResponse ({commit}) {                    // 1.
+      commit( 'SAVE_WEB_RESPONSE', await getWebData() )   // 2.
+    }
+  }  
+```
+
+1. One thing to note here is that the function is set to not take in anything else than a context object and destructure it to get out the commit function. The reason here is that we don't have anything apart from the web response to save, otherwise we would send in a payload object as the second argument.
+
+2. While a little cryptic this way of writing an asynchronous function is coming in the next ES-build. It utilises the async-await pattern. Simply explained (but probably not technically correct), it sort of puts the function/scope aside while waiting for `getWebData()` to resolve. GetWebData must return a Promise-object like below.
+
+```JavaScript
+// getWebData.js
+const request = require('request')  // Node module for Http requests
+
+getWebData () {
+  // Say we have a REST api that returns a string at the following URL
+  const url = 'http://ireturnrandomdata.com/simplestring/1'    
+
+  return new Promise ( (resolve, reject) => 
+    request( url, (error, response, body) => {
+      if( error ) {
+        reject ( error )
+        return
+      } else {
+        let str = parseToGetString( body )    // Fictional parser
+        resolve ( str )
+      }
+    })
+  ) 
+}
+```
+
+The Promise-object allows async-await functions to pass in resolve and reject functions which will be called when the 
 ## Component Structure
 
 
