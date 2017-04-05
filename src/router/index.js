@@ -6,7 +6,7 @@ import BoardEditor from 'components/BoardEditor'
 import TokenEditor from 'components/TokenEditor'
 import DisplayEditor from 'components/DisplayEditor'
 
-Vue.use(Router);
+Vue.use(Router)
 
 export default new Router({
   routes: [
