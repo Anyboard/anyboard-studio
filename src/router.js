@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Hello from 'components/Hello'
-import FabricInspector from 'components/fabricinspector/FabricInspector.vue'
+import FabricInspector from 'components/FabricInspector.vue'
+import BoardEditor from 'components/BoardEditor.vue'
 
 Vue.use(Router)
 
@@ -16,6 +17,11 @@ export default new Router({
       path: '/fabricinspector',
       name: 'FabricInspector',
       component: FabricInspector
+    },
+    {
+      path: '/boardeditor',
+      name: 'Board Editor',
+      component: BoardEditor
     }
   ]
 })
