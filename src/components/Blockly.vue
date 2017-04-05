@@ -40,7 +40,7 @@ Blockly.Blocks['show_numberfield'] = {
   init: function () {
     this.appendDummyInput()
         .appendField(new Blockly.FieldDropdown([['Show', 'SHOW'], ['Hide', 'HIDE']]), 'TYPE')
-        .appendField(new Blockly.FieldDropdown(NUMBERFIELDS), 'TYPE')
+        .appendField(new Blockly.FieldDropdown(NUMBERFIELDS), 'FIELD')
     this.setPreviousStatement(true, null)
     this.setNextStatement(true, null)
     this.setColour(255)
@@ -56,7 +56,7 @@ Blockly.Blocks['show_number'] = {
         .appendField('Show')
     this.appendDummyInput()
         .appendField('On')
-        .appendField(new Blockly.FieldDropdown(NUMBERFIELDS), 'TYPE')
+        .appendField(new Blockly.FieldDropdown(NUMBERFIELDS), 'FIELD')
     this.setPreviousStatement(true, null)
     this.setNextStatement(true, null)
     this.setColour(255)
@@ -75,7 +75,7 @@ Blockly.Blocks['show_textfield'] = {
   init: function () {
     this.appendDummyInput()
         .appendField(new Blockly.FieldDropdown([['Show', 'SHOW'], ['Hide', 'HIDE']]), 'TYPE')
-        .appendField(new Blockly.FieldDropdown(TEXTFIELDS), 'TYPE')
+        .appendField(new Blockly.FieldDropdown(TEXTFIELDS), 'FIELD')
     this.setPreviousStatement(true, null)
     this.setNextStatement(true, null)
     this.setColour(255)
@@ -91,19 +91,7 @@ Blockly.Blocks['show_text'] = {
         .appendField('Show')
     this.appendDummyInput()
         .appendField('On')
-        .appendField(new Blockly.FieldDropdown(TEXTFIELDS), 'TYPE')
-    this.setPreviousStatement(true, null)
-    this.setNextStatement(true, null)
-    this.setColour(255)
-    this.setTooltip('')
-    this.setHelpUrl('')
-  }
-}
-
-Blockly.Blocks['random_color'] = {
-  init: function () {
-    this.appendDummyInput()
-        .appendField('Pick Random Color')
+        .appendField(new Blockly.FieldDropdown(TEXTFIELDS), 'FIELD')
     this.setPreviousStatement(true, null)
     this.setNextStatement(true, null)
     this.setColour(255)
@@ -126,9 +114,9 @@ Blockly.Blocks['move'] = {
 
 Blockly.Blocks['vibrate'] = {
   init: function () {
-    this.appendDummyInput()
+    this.appendValueInput('TOKEN')
+        .setCheck('Token')
         .appendField('Vibrate')
-        .appendField(new Blockly.FieldVariable('token'), 'TOKEN')
     this.setPreviousStatement(true, null)
     this.setNextStatement(true, null)
     this.setColour(255)
@@ -190,7 +178,12 @@ Blockly.Blocks['show_grid'] = {
     this.appendValueInput('GRID')
         .setCheck('Grid')
         .setAlign(Blockly.ALIGN_CENTRE)
-        .appendField('Show Grid')
+        .appendField('Show')
+    this.appendValueInput('TOKEN')
+        .setCheck('Token')
+        .setAlign(Blockly.ALIGN_CENTRE)
+        .appendField('On')
+    this.setInputsInline(true)
     this.setPreviousStatement(true, null)
     this.setNextStatement(true, null)
     this.setColour(255)
@@ -279,9 +272,9 @@ Blockly.Blocks['random_token'] = {
 
 Blockly.Blocks['token_test'] = {
   init: function () {
-    this.appendDummyInput()
+    this.appendValueInput('TOKEN')
+        .setCheck('Token')
         .appendField('Current Token is ')
-        .appendField(new Blockly.FieldDropdown(TOKENS), 'TOKEN')
     this.setOutput(true, 'Boolean')
     this.setColour(210)
     this.setTooltip('')
@@ -316,6 +309,35 @@ Blockly.Blocks['random_tile'] = {
   }
 }
 
+Blockly.Blocks['get_tile'] = {
+  init: function () {
+    this.appendValueInput('TOKEN')
+        .setCheck('Token')
+        .appendField('The tile that')
+    this.appendDummyInput()
+        .appendField('is standing on')
+    this.setOutput(true, 'Tile')
+    this.setColour(20)
+    this.setTooltip('')
+    this.setHelpUrl('')
+  }
+}
+
+Blockly.Blocks['tile_test'] = {
+  init: function () {
+    this.appendValueInput('TOKEN')
+        .setCheck('Token')
+    this.appendValueInput('TILE')
+        .setCheck('Tile')
+        .appendField('is standing on')
+    this.setInputsInline(true)
+    this.setOutput(true, 'Boolean')
+    this.setColour(210)
+    this.setTooltip('')
+    this.setHelpUrl('')
+  }
+}
+
 Blockly.Blocks['wait'] = {
   init: function () {
     this.appendValueInput('SECONDS')
@@ -331,101 +353,127 @@ Blockly.Blocks['wait'] = {
   }
 }
 
-Blockly.Blocks['get_tile'] = {
-  init: function () {
-    this.appendValueInput('TOKEN')
-        .setCheck('Token')
-        .appendField('The tile that')
-    this.appendDummyInput()
-        .appendField('is standing on')
-    this.setOutput(true, 'Tile')
-    this.setColour(20)
-    this.setTooltip('')
-    this.setHelpUrl('')
-  }
-}
-
 Blockly.JavaScript['grid'] = function (block) {
   var dropdownGrid = block.getFieldValue('GRID')
   var code = dropdownGrid
   // TODO: Change ORDER_NONE to the correct strength.
-  return [code, Blockly.JavaScript.ORDER_NONE]
+  return [code, Blockly.JavaScript.ORDER_MEMBER]
 }
 
 Blockly.JavaScript['show_grid'] = function (block) {
-  var grid = Blockly.JavaScript.valueToCode(block, 'GRID', Blockly.JavaScript.ORDER_ATOMIC)
-  // TODO: Assemble JavaScript into code variable.
-  var code = 'show_grid(' + grid + ');\n'
+  var grid = Blockly.JavaScript.valueToCode(block, 'GRID', Blockly.JavaScript.ORDER_COMMA)
+  var token = Blockly.JavaScript.valueToCode(block, 'TOKEN', Blockly.JavaScript.ORDER_COMMA)
+  var code = 'app.show_grid(' + token + ', ' + grid + ');\n'
   return code
+}
+
+Blockly.JavaScript['random_grid'] = function (block) {
+  var code = 'app.getRandomGrid()'
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.JavaScript.ORDER_MEMBER]
+}
+
+Blockly.JavaScript['get_grid'] = function (block) {
+  var token = Blockly.JavaScript.valueToCode(block, 'TOKEN', Blockly.JavaScript.ORDER_FUNCTION_CALL)
+  var code = 'app.getGrid(' + token + ');\n'
+  return [code, Blockly.JavaScript.ORDER_MEMBER]
+}
+
+Blockly.JavaScript['token'] = function (block) {
+  var token = block.getFieldValue('TOKEN')
+  var code = token
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.JavaScript.ORDER_MEMBER]
+}
+
+Blockly.JavaScript['current_token'] = function (block) {
+  var code = 'currentToken'
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.JavaScript.ORDER_MEMBER]
+}
+
+Blockly.JavaScript['token_test'] = function (block) {
+  var token = Blockly.JavaScript.valueToCode(block, 'TOKEN', Blockly.JavaScript.ORDER_EQUALITY)
+  var code = 'currentToken == ' + token
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.JavaScript.ORDER_EQUALITY]
+}
+
+Blockly.JavaScript['random_token'] = function (block) {
+  var code = 'app.getRandomToken()'
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.JavaScript.ORDER_MEMBER]
+}
+
+Blockly.JavaScript['tile'] = function (block) {
+  var tile = block.getFieldValue('TILE')
+  var code = tile
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.JavaScript.ORDER_MEMBER]
+}
+
+Blockly.JavaScript['random_tile'] = function (block) {
+  var code = 'app.getRandomTile()'
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.JavaScript.ORDER_MEMBER]
+}
+
+Blockly.JavaScript['get_tile'] = function (block) {
+  var token = Blockly.JavaScript.valueToCode(block, 'TOKEN', Blockly.JavaScript.ORDER_FUNCTION_CALL)
+  var code = 'app.getTile(' + token + ');\n'
+  return [code, Blockly.JavaScript.ORDER_MEMBER]
+}
+
+Blockly.JavaScript['tile_test'] = function (block) {
+  var token = Blockly.JavaScript.valueToCode(block, 'TOKEN', Blockly.JavaScript.ORDER_FUNCTION_CALL)
+  var tile = Blockly.JavaScript.valueToCode(block, 'TILE', Blockly.JavaScript.ORDER_EQUALITY)
+  var code = tile + ' == getTile(' + token + ')'
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.JavaScript.ORDER_NONE]
 }
 
 Blockly.JavaScript['vibrate'] = function (block) {
-  var token = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('TOKEN'), Blockly.Variables.NAME_TYPE)
-  var code = 'app.sendVibrationCmd(' + token + ');\n'
-  return code
-}
-
-Blockly.JavaScript['move_token_to_tile'] = function (block) {
-  var token = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('TOKEN'), Blockly.Variables.NAME_TYPE)
-  var tile = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('TILE'), Blockly.Variables.NAME_TYPE)
-  var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
-  var code = 'var handleTokenMove = function(' + token + ', ' + tile + ', options) {\n'
-  code += stack + '};\n'
-  code += 'AnyBoard.TokenManager.onTokenConstraintEvent("MOVE_TO", handleTokenMove);'
-  return code
-}
-
-Blockly.JavaScript['move_to'] = function (block) {
-  var token = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('TOKEN'), Blockly.Variables.NAME_TYPE)
-  var color = block.getFieldValue('COLOR').toUpperCase()
-  var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
-  var code = 'var handleTokenMove = function(' + token + ', constraint, options) {\n'
-  code += ' if (constraint == Object.keys(app.locations)[Object.values(app.locations).indexOf("' + color + '")]) {\n'
-  code += stack + '}};\n'
-  code += 'AnyBoard.TokenManager.onTokenConstraintEvent("MOVE_TO", handleTokenMove);'
+  var token = Blockly.JavaScript.valueToCode(block, 'TOKEN', Blockly.JavaScript.ORDER_FUNCTION_CALL)
+  var code = 'app.vibrate(' + token + ');\n'
   return code
 }
 
 Blockly.JavaScript['move'] = function (block) {
-  var color = block.getFieldValue('COLOR')
   var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
-  var code = 'var handleTokenMove = function(Token, ' + color + ', options) {\n'
+  var code = 'var handleTokenMove = function(currentToken, constraint, options) {\n'
   code += stack + '},\n'
   code += 'AnyBoard.TokenManager.onTokenConstraintEvent("MOVE_TO", handleTokenMove);'
   return code
 }
 
-Blockly.JavaScript['move_to_tile'] = function (block) {
-  var tile = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('TILE'), Blockly.Variables.NAME_TYPE)
-  var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
-  var code = 'var handleTokenMove = function(Token, ' + tile + ', options) {\n'
-  code += stack + '};\n'
-  code += 'AnyBoard.TokenManager.onTokenConstraintEvent("MOVE_TO", handleTokenMove);'
-  return code
-}
-
 Blockly.JavaScript['tap'] = function (block) {
-  var token = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('TOKEN'), Blockly.Variables.NAME_TYPE)
   var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
-  var code = 'var handleTokenTap = function(' + token + ', options) {\n'
+  var code = 'var handleTokenTap = function(currentToken , options) {\n'
   code += stack + '};\n'
   code += 'AnyBoard.TokenManager.onTokenConstraintEvent("TAP", handleTokenTap);'
   return code
 }
 
 Blockly.JavaScript['double_tap'] = function (block) {
-  var token = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('TOKEN'), Blockly.Variables.NAME_TYPE)
   var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
-  var code = 'var handleTokenDoubleTap = function(' + token + ', options) {\n'
+  var code = 'var handleTokenDoubleTap = function(currentToken , options) {\n'
   code += stack + '};\n'
   code += 'AnyBoard.TokenManager.onTokenConstraintEvent("DOUBLE_TAP", handleTokenDoubleTap);'
   return code
 }
 
+Blockly.JavaScript['tilt'] = function (block) {
+  var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
+  var code = 'var handleTokenTilt = function(currentToken , options) {\n'
+  code += stack + '};\n'
+  code += 'AnyBoard.TokenManager.onTokenConstraintEvent("TILT", handleTokenTilt);'
+  return code
+}
+
 Blockly.JavaScript['test_init'] = function (block) {
   var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
-  var code = 'hardCodedInitialise: function () {\n'
-  code += stack + '},\n'
+  var code = '\n'
+  code += stack + '\n'
   return code
 }
 
@@ -440,19 +488,36 @@ Blockly.JavaScript['math_change'] = function (block) {
   return code
 }
 
-Blockly.JavaScript['show_score'] = function (block) {
-  var code = 'app.showScore();\n'
+Blockly.JavaScript['wait'] = function (block) {
+  var seconds = Blockly.JavaScript.valueToCode(block, 'SECONDS', Blockly.JavaScript.ORDER_ATOMIC)
+  var code = 'app.wait(' + seconds + ');\n'
   return code
 }
 
-Blockly.JavaScript['random_color'] = function (block) {
-  var code = 'app.pickRandomColor();\n'
-  return code
-}
-
-Blockly.JavaScript['text_print'] = function (block) {
+Blockly.JavaScript['show_text'] = function (block) {
   var msg = Blockly.JavaScript.valueToCode(block, 'TEXT', Blockly.JavaScript.ORDER_NONE) || '\'\''
-  return 'app.setMessage(' + msg + ');\n'
+  var field = block.getFieldValue('FIELD')
+  return 'app.setMessage(' + msg + ', ' + field + ');\n'
+}
+
+Blockly.JavaScript['show_textfield'] = function (block) {
+  var type = block.getFieldValue('TYPE')
+  var field = block.getFieldValue('FIELD')
+  var truth = (type === 'SHOW' ? 'true' : 'false')
+  return 'app.showTextField(' + truth + ', ' + field + ');\n'
+}
+
+Blockly.JavaScript['show_number'] = function (block) {
+  var num = Blockly.JavaScript.valueToCode(block, 'NUMBER', Blockly.JavaScript.ORDER_NONE) || '\'\''
+  var field = block.getFieldValue('FIELD')
+  return 'app.setNumber(' + num + ', ' + field + ');\n'
+}
+
+Blockly.JavaScript['show_numberfield'] = function (block) {
+  var type = block.getFieldValue('TYPE')
+  var field = block.getFieldValue('FIELD')
+  var truth = (type === 'SHOW' ? 'true' : 'false')
+  return 'app.showNumberField(' + truth + ', ' + field + ');\n'
 }
 
 Blockly.JavaScript['variables_get'] = function (block) {
@@ -516,10 +581,6 @@ export default {
     }
   },
   mounted () {
-    var tileColours = store.getters.GET_COLOURS
-    Blockly.FieldColour.COLOURS = tileColours
-    Blockly.FieldColour.COLUMNS = 3
-
     var tb = toolbox.getters.GET_TOOLBOX
 
     this.workspace = Blockly.inject('blockly-wrapper', {toolbox: tb})
