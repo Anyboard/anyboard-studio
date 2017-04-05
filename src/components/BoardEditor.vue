@@ -88,6 +88,14 @@
     '#F4E658': 37
   }
 
+  var tileDict = {
+    'Start Tile': '#FB50A6',
+    'Mid Tile': '#F4E658',
+    'End Tile': '#30A747'
+  }
+
+  var tileList = Object.keys(tileDict)
+
   export default {
     name: 'boardEditor',
     data () {
@@ -141,6 +149,7 @@
       canvas.freeDrawingBrush.width = drawLineWidth
       canvas.freeDrawingBrush.color = drawColour
       loadState()
+      updateTileList()
       // ########################################## TILES ##############################################################
       // ###############################################################################################################
       // Function for creating rectangle
@@ -274,15 +283,27 @@
       })
 
       // Helping function to rename new tile to same name of other tiles of same type
+      function _isContains (json, value) {
+        let contains = false
+        Object.keys(json).some(key => {
+          contains = typeof json[key] === 'object' ? _isContains(json[key], value) : json[key] === value
+          return contains
+        })
+        return contains
+      }
       function renameSameTile (obj) {
         var objs = canvas.getObjects()
-        for (var i = 0, l = objs.length; i < l; ++i) {
-          if (obj['fill'] === objs[i]['fill'] && objs[i]['name'] !== obj['name']) {
-            console.log('Actual name found: ' + objs[i]['name'])
-            obj['name'] = objs[i]['name']
-            break
-          } else {
-            obj['name'] = obj['fill']
+        if (_isContains(tileDict, obj['fill'])) {
+          obj['name'] = Object.keys(tileDict)[Object.values(tileDict).indexOf(obj['fill'])]
+        } else {
+          for (var i = 0, l = objs.length; i < l; ++i) {
+            if (obj['fill'] === objs[i]['fill'] && objs[i]['name'] !== obj['name']) {
+              console.log('Actual name found: ' + objs[i]['name'])
+              obj['name'] = objs[i]['name']
+              break
+            } else {
+              obj['name'] = obj['fill']
+            }
           }
         }
       }
@@ -378,9 +399,15 @@
       $('#renameTile').click(function () {
         var selObj = canvas.getActiveObject()
         var obj = canvas.getObjects()
+        var oldName = selObj['name']
+        var newName = $('#tileName').val()
+        if (oldName in tileDict && oldName !== newName) {
+          insertIntoDict(tileDict, newName, selObj['fill'])
+          delete tileDict[oldName]
+        }
         for (var i = 0, l = obj.length; i < l; ++i) {
           if (obj[i]['fill'] === selObj['fill']) {
-            obj[i]['name'] = $('#tileName').val()
+            obj[i]['name'] = newName
           }
         }
         saveState()
@@ -547,6 +574,10 @@
         var obj = canvas.getObjects()
         var colour = ''
         usedColours = {}
+        tileList = Object.keys(tileDict)
+        for (var i = 0; i < tileList.length; i++) {
+          insertIntoDict(usedColours, tileList[i], tileDict[tileList[i]])
+        }
         for (var z = 0, y = obj.length; z < y; ++z) {
           if (obj[z]['type'] === 'rect' || obj[z]['type'] === 'polygon') {
             insertIntoDict(usedColours, obj[z]['name'], obj[z]['fill'])
@@ -664,15 +695,7 @@
       // ###############################################################################################################
       // Jsonify button for debugging
       $('#jayson').click(function () {
-        console.log('Here goes stringified shit')
         console.log(JSON.stringify(canvas))
-        console.log('--------------------------')
-        console.log('Here goes dataless json')
-        var canvasState = canvas.toDatalessJSON()
-        console.log(canvasState)
-        console.log('--------------------------')
-        console.log('here goes getObjects')
-        console.log(canvas.getObjects())
       })
     }
   }
