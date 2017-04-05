@@ -85,5 +85,21 @@
   "engines": {
     "node": ">= 4.0.0",
     "npm": ">= 3.0.0"
-  }
+  },
+  "main": ".eslintrc.js",
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github-abstudio:bronlund/anyboard-studio.git"
+  },
+  "keywords": [
+    "Anyboard",
+    "Hybrid",
+    "Board",
+    "Game",
+    "Editor"
+  ],
+  "license": "ISC"
 }
