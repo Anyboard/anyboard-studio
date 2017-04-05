@@ -28,8 +28,5 @@ export default {
 }
 </script>
 
-<style type="text/css">
-#board_editor {
-  padding:2em;
-}
+<style lang="SASS">
 </style>

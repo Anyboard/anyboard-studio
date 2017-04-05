@@ -2,12 +2,14 @@
   <div id="app">
     <nav id="navigation">
       <a id="logo" href="#">Anyboard Studio</a>
+      
       <a href="/#/boardeditor">File</a>
       <a href="#">Edit</a>
       <a href="#">Game</a>
       <a href="#">Help</a>
+
     </nav>
-    <router-view></router-view>
+    <router-view id="wrapper"></router-view>
   </div>
 </template>
 
@@ -17,7 +19,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="SASS">
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -25,38 +27,56 @@ export default {
   color: #2c3e50;
 }
 
+#wrapper {
+  font-size:11pt;
+  overflow:hidden;
+  padding:5em 2em;
+
+  a { color:#f50; }
+  a:hover { border-bottom:1px dotted currentColor; }
+  p { margin-bottom:1em; }
+
+}
+
+
 #navigation {
+  position: fixed;
+  top:0;
+  left:0;
+  width:100%;
   background:#efefef;
-  font-size: 12px;
   padding:0 1em;
   border-bottom:1px solid #000;
+  text-align: center;
+  box-shadow:1em 0 1em #000;
+
+  a {
+    color:#333;
+    text-decoration: none;
+    display:inline-block;
+    font-family: Tahoma, Geneva, sans-serif;
+  }
+
+  a:hover {
+    background:#cdcdcd;
+  }
+
+  a:not(#logo) {
+    padding:1.25em 2em 0.95em 2em;
+    text-transform: uppercase;
+  }
+
+  a#logo {
+    display:block;
+    font-size:1.5em;
+    position:absolute;
+    padding:.5em 2.5em;
+    background-image: url('./assets/logo.svg');
+    background-size: 1.5em 1.5em;
+    background-position: .5em;
+    background-repeat: no-repeat;
+    letter-spacing: .1em;
+  }
 }
 
-#navigation > a {
-  color:#333;
-  text-decoration: none;
-  display:inline-block;
-  font-family: Tahoma, Geneva, sans-serif;
-}
-
-#navigation > *:not(#logo) {
-  font-size: 1em;
-  padding:1.25em 2em 0.95em 2em;
-  text-transform: uppercase;
-}
-
-#navigation > a:hover {
-  background:#cdcdcd;
-}
-
-#navigation > #logo {
-  font-size:1.5em;
-  padding:.5em 2.5em;
-  background-image: url('./assets/logo.svg');
-  background-size: 1.5em 1.5em;
-  background-position: .5em;
-  background-repeat: no-repeat;
-  letter-spacing: .1em;
-  margin-right:2em;
-}
 </style>
