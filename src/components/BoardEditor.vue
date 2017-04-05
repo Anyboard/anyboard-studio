@@ -146,7 +146,7 @@
         let rect = new fabric.Rect({
           width: 190,
           height: 190,
-          fill: colour,
+          fill: colour.toUpperCase(),
           stroke: '#ffd445',
           strokeDashArray: [6, 1.5],
           strokeWidth: 3.5,
@@ -187,7 +187,7 @@
           $('#tileTutorial').css('display', 'block')
         }
         let hexagon = new fabric.Polygon(regularPolygonPoints(6, 100), {
-          fill: colour,
+          fill: colour.toUpperCase(),
           stroke: '#ffd445',
           strokeDashArray: [6, 1.5],
           strokeWidth: 3.5,
@@ -338,7 +338,7 @@
       $('#colourChange').click(function () {
         var activeObj = canvas.getActiveObject()
         if (activeObj != null && (activeObj['type'] === 'rect' || activeObj['type'] === 'polygon')) {
-          activeObj.set('fill', tileColour)
+          activeObj.set('fill', tileColour.toUpperCase())
           activeObj.set('name', activeObj.fill)
           canvas.renderAll()
           renameSameTile(activeObj)
@@ -502,7 +502,7 @@
             // May want to give all tiles a unique property to allow for more tile types in the future
             if (tiles[i]['type'] === 'rect' || tiles[i]['type'] === 'polygon') {
               tileType.push(tiles[i]['fill'])
-              insertIntoDict(tileTypeObject, tiles[i]['name'].toUpperCase(), colourDict[tiles[i]['fill'].toUpperCase()])
+              insertIntoDict(tileTypeObject, tiles[i]['name'], colourDict[tiles[i]['fill'].toUpperCase()])
               unique[tiles[i]['fill']] = 1
             }
           }
@@ -544,7 +544,7 @@
       }
       // Method to save state, change canvasState to store-store
       function saveState () {
-        var canvasState = canvas.toDatalessJSON()
+        var canvasState = canvas.toDatalessJSON(['name'])
         store.dispatch('SAVE_CANVAS', canvasState)
       }
 
@@ -553,6 +553,7 @@
         var state = store.getters.GET_CANVAS
         if (state !== 0) {
           canvas.loadFromDatalessJSON(state)
+          updateTileList()
         }
       }
       // Saves the state on canvas change
@@ -641,7 +642,15 @@
       // ###############################################################################################################
       // Jsonify button for debugging
       $('#jayson').click(function () {
+        console.log('Here goes stringified shit')
         console.log(JSON.stringify(canvas))
+        console.log('--------------------------')
+        console.log('Here goes dataless json')
+        var canvasState = canvas.toDatalessJSON()
+        console.log(canvasState)
+        console.log('--------------------------')
+        console.log('here goes getObjects')
+        console.log(canvas.getObjects())
       })
 
       // Testing adding dynamically to list
