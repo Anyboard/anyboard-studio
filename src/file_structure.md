@@ -230,8 +230,8 @@ C. By returning early we skip the rest of the function.
 ```HTML
 // WebResponseComponent.vue
 <template>
-  <a @click="saveWebResponse">Click me to call saveWebResponse</a> 
-  <a @click="secondOption">Click me to call saveWebResponse through secondOption</a>
+  <a @click="saveWebResponse" id="A">Click me to call saveWebResponse</a> 
+  <a @click="secondOption" id="B">Click me to call saveWebResponse through secondOption</a>
 </template>
 <script>
 import {mapActions} from 'vuex'
@@ -251,6 +251,12 @@ export default {
 </script>
 
 ```
+
+The total roundtrip would be something like this:
+
+![Sequence diagram](https://dl.dropboxusercontent.com/u/11103676/Sequence%20diagram%20for%20store%20dispatch.png)
+
+
 
 ## Component Structure
 
