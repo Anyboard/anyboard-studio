@@ -4,8 +4,12 @@
 
 export default {
   namespaced: true,
-  state: {},
-  mutations: {},
+  state: {paragraph: 'HEI PÅ DEG MIN GODE KOGG JEG DIGGER Å KOGGE DEG'},
+  mutations: {
+    SET_PARAGRAPH (state, payload) {
+      state.paragraph = payload
+    }
+  },
   actions: {},
   getters: {}
 }
