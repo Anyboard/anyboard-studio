@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <a href="/#/blockly">Blockly</a>
     <a href="/#/">Board Editor</a>
+    <a href="/#/blockly">Blockly</a>
     <router-view></router-view>
   </div>
 </template>

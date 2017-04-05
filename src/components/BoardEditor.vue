@@ -10,6 +10,7 @@
     <input type="button" value="Upload image" onclick="document.getElementById('image').click();" />
     <input type='button' id='clone' value='Clone'/>
     <input type='button' id='delete' value='Delete'/>
+    <input type='button' id='clearCanvas' value='Clear'/>
     <br/>
     <input type='button' id='center' value='Center object'/>
     <input type='button' id='moveUp' value='Move up'/>
@@ -19,7 +20,6 @@
     <input type='button' id='text' value='Text'/>
     <input type='button' id='save' value='Save image'/>
     <!-- For debugging and testing-->
-    <input type='button' id='export' value='Export'/>
     <input type='button' id='jayson' value='JSON'/>
     <div id='wrapper'>
       <canvas id='c' width = '947' height = '669'></canvas>
@@ -32,8 +32,22 @@
           <input type='button' id='foregroundDrawing' value='Foreground Drawing'/>
         </div>
         <div id='tileTutorial'>
-          <p>Tiles need a minimum size and have an orange dashed border! Important bznz!!!</p>
+          <p>Tiles need a minimum size and have an yellow dashed border! Important bznz!!!</p>
           <input type='button' id='tutClose' value='Understood'/>
+        </div>
+        <div id='tileAttr'>
+          <input type='text' id='tileName' value='Tile Name'/>
+          <input type='button' id='renameTile' value='Rename'/>
+        </div>
+        <div id='tileList'>
+          <p>List of tiles</p>
+          <ul id = 'tList'>
+          </ul>
+        </div>
+        <div id='clearConfirm'>
+          <p>Are you sure you want to clear the board?</p>
+          <input type='button' id='confirmClearButton' value="Yes, I'm sure!"/>
+          <input type='button' id='denyClearButton' value='No, nevermind!'/>
         </div>
       </div>
     </div>
@@ -49,11 +63,38 @@
   import store from '../store/store'
 
   var canvas
-  var tileColour = '#000000'
+  var tileColour = '#166CA0'
   var drawColour = '#000000'
   var drawLineWidth = 10
   var tutorialViewed = 0
   var freeDrawLayer = 'bottom'
+  var usedColours = {}
+
+  var colourDict = {
+    '#166CA0': 2,
+    '#4194D0': 5,
+    '#112A95': 7,
+    '#C047A3': 14,
+    '#FB50A6': 15,
+    '#5E1014': 16,
+    '#9B3235': 18,
+    '#FF483E': 20,
+    '#66C889': 21,
+    '#30A747': 24,
+    '#31682E': 30,
+    '#FF9344': 31,
+    '#D96623': 33,
+    '#F6EA77': 36,
+    '#F4E658': 37
+  }
+
+  var tileDict = {
+    'Start Tile': '#FB50A6',
+    'Mid Tile': '#F4E658',
+    'End Tile': '#30A747'
+  }
+
+  var tileList = Object.keys(tileDict)
 
   export default {
     name: 'boardEditor',
@@ -108,26 +149,37 @@
       canvas.freeDrawingBrush.width = drawLineWidth
       canvas.freeDrawingBrush.color = drawColour
       loadState()
+      updateTileList()
       // ########################################## TILES ##############################################################
       // ###############################################################################################################
-      // Creates a new square tile
-      $('#square').click(function () {
+      // Function for creating rectangle
+      function createRectangleTile (colour) {
         if (tutorialViewed === 0) {
           $('#tileTutorial').css('display', 'block')
         }
         let rect = new fabric.Rect({
           width: 190,
           height: 190,
-          fill: tileColour,
+          fill: colour.toUpperCase(),
           stroke: '#ffd445',
-          strokeDashArray: [6, 1.5],
-          strokeWidth: 2,
+          strokeDashArray: [15, 3],
+          strokeWidth: 7,
           minHeight: 190,
-          minWidth: 190
+          minWidth: 190,
+          name: colour
         })
+        renameSameTile(rect)
         canvas.add(rect).setActiveObject(rect)
         canvas.getActiveObject().center()
         layerify()
+      }
+      // Creates a new square tile
+      $('#square').click(function () {
+        createRectangleTile(tileColour)
+      })
+
+      $('body').on('click', 'input.dynamicButtonRect', function () {
+        createRectangleTile(event.target.id)
       })
 
       // Can create any regular polygon with set amount of sides and radius
@@ -144,21 +196,31 @@
         return (points)
       }
 
-      $('#hexagon').click(function () {
+      function createHexagonTile (colour) {
         if (tutorialViewed === 0) {
           $('#tileTutorial').css('display', 'block')
         }
         let hexagon = new fabric.Polygon(regularPolygonPoints(6, 100), {
-          fill: tileColour,
+          fill: colour.toUpperCase(),
           stroke: '#ffd445',
-          strokeDashArray: [6, 1.5],
-          strokeWidth: 2,
+          strokeDashArray: [15, 3],
+          strokeWidth: 7,
           minHeight: 173,
-          minWidth: 200
+          minWidth: 200,
+          name: colour
         })
+        renameSameTile(hexagon)
         canvas.add(hexagon).setActiveObject(hexagon)
         canvas.getActiveObject().center()
         layerify()
+      }
+
+      $('#hexagon').click(function () {
+        createHexagonTile(tileColour)
+      })
+
+      $('body').on('click', 'input.dynamicButtonHex', function () {
+        createHexagonTile(event.target.id)
       })
 
       // Limited colour picker by swatches
@@ -169,8 +231,6 @@
         showPaletteOnly: true,
         // Change or add colours here
         palette: [
-          ['#000000',
-            '#ffffff'],
           [
             '#166CA0',  // 2
             '#4194D0',  // 5
@@ -216,21 +276,37 @@
         }
       })
 
-      // Change chosen tile to selected colour
-      $('#colourChange').click(function () {
-        var activeObj = canvas.getActiveObject()
-        if (activeObj != null && (activeObj['type'] === 'rect' || activeObj['type'] === 'polygon')) {
-          activeObj.set('fill', tileColour)
-          canvas.renderAll()
-          exportTiles()
-        }
-      })
-
       // Hide tutorial
       $('#tutClose').click(function () {
         $('#tileTutorial').css('display', 'none')
         tutorialViewed = 1
       })
+
+      // Helping function to rename new tile to same name of other tiles of same type
+      function _isContains (json, value) {
+        let contains = false
+        Object.keys(json).some(key => {
+          contains = typeof json[key] === 'object' ? _isContains(json[key], value) : json[key] === value
+          return contains
+        })
+        return contains
+      }
+      function renameSameTile (obj) {
+        var objs = canvas.getObjects()
+        if (_isContains(tileDict, obj['fill'])) {
+          obj['name'] = Object.keys(tileDict)[Object.values(tileDict).indexOf(obj['fill'])]
+        } else {
+          for (var i = 0, l = objs.length; i < l; ++i) {
+            if (obj['fill'] === objs[i]['fill'] && objs[i]['name'] !== obj['name']) {
+              console.log('Actual name found: ' + objs[i]['name'])
+              obj['name'] = objs[i]['name']
+              break
+            } else {
+              obj['name'] = obj['fill']
+            }
+          }
+        }
+      }
       // ##################################### OBJECT MANIPULATION #####################################################
       // ###############################################################################################################
       // Delete selected object
@@ -238,6 +314,9 @@
         if (canvas.getActiveObject() != null) {
           canvas.getActiveObject().remove()
           layerify()
+        } else if (canvas.getActiveGroup() != null) {
+          canvas.getActiveGroup().forEachObject(function (o) { canvas.remove(o) })
+          canvas.discardActiveGroup().renderAll()
         }
       })
 
@@ -249,6 +328,7 @@
             objects.forEach(function (o) {
               o.set('top', o.top + 15)
               o.set('left', o.left + 15)
+              renameSameTile(o)
               canvas.add(o)
               layerify()
             })
@@ -269,13 +349,85 @@
       $('#moveUp').click(function () {
         if (canvas.getActiveObject() != null) {
           canvas.bringForward(canvas.getActiveObject())
+          layerify()
         }
       })
 
       $('#moveDown').click(function () {
         if (canvas.getActiveObject() != null) {
           canvas.sendBackwards(canvas.getActiveObject())
+          layerify()
         }
+      })
+
+      // Change chosen tile to selected colour
+      $('#colourChange').click(function () {
+        var activeObj = canvas.getActiveObject()
+        if (activeObj != null && (activeObj['type'] === 'rect' || activeObj['type'] === 'polygon')) {
+          activeObj.set('fill', tileColour.toUpperCase())
+          activeObj.set('name', activeObj.fill)
+          canvas.renderAll()
+          renameSameTile(activeObj)
+          $('#tileName').val(activeObj['name'])
+          saveState()
+          updateTileList()
+          exportTiles()
+        }
+      })
+      // Renaming tiles
+      // Helping function for selection
+      function getSelection () {
+        return canvas.getActiveObject() == null ? canvas.getActiveGroup() : canvas.getActiveObject()
+      }
+
+      // See name of selected tile
+      canvas.on('object:selected', function () {
+        var selObj = getSelection()
+        if (selObj['type'] === 'rect' || selObj['type'] === 'polygon') {
+          $('#tileAttr').css('display', 'block')
+          $('#tileName').val(selObj['name'])
+        } else {
+          $('#tileAttr').css('display', 'none')
+        }
+      })
+
+      canvas.on('selection:cleared', function () {
+        $('#tileAttr').css('display', 'none')
+      })
+
+      // Rename selected tile
+      $('#renameTile').click(function () {
+        var selObj = canvas.getActiveObject()
+        var obj = canvas.getObjects()
+        var oldName = selObj['name']
+        var newName = $('#tileName').val()
+        if (oldName in tileDict && oldName !== newName) {
+          insertIntoDict(tileDict, newName, selObj['fill'])
+          delete tileDict[oldName]
+        }
+        for (var i = 0, l = obj.length; i < l; ++i) {
+          if (obj[i]['fill'] === selObj['fill']) {
+            obj[i]['name'] = newName
+          }
+        }
+        saveState()
+        updateTileList()
+        exportTiles()
+      })
+
+      // Clear canvas
+      $('#clearCanvas').click(function () {
+        $('#clearConfirm').css('display', 'block')
+      })
+      $('#confirmClearButton').click(function () {
+        $('#clearConfirm').css('display', 'none')
+        canvas.clear().renderAll()
+        saveState()
+        updateTileList()
+        exportTiles()
+      })
+      $('#denyClearButton').click(function () {
+        $('#clearConfirm').css('display', 'none')
       })
       // ######################################### FREE DRAWING ########################################################
       // ###############################################################################################################
@@ -322,12 +474,14 @@
         freeDrawLayer = 'bottom'
         $('#backgroundDrawing').attr('disabled', true)
         $('#foregroundDrawing').attr('disabled', false)
+        layerify()
       })
 
       $('#foregroundDrawing').click(function () {
         freeDrawLayer = 'top'
         $('#backgroundDrawing').attr('disabled', false)
         $('#foregroundDrawing').attr('disabled', true)
+        layerify()
       })
       // ######################################## IMAGE HANDLING #######################################################
       // ###############################################################################################################
@@ -361,7 +515,7 @@
             stroke: '#000000',
             strokeWidth: 1,
             fontFamily: 'Arial',
-            fontSize: 30,
+            fontSize: 60,
             textAlign: 'center'
           })
         canvas.add(text)
@@ -384,12 +538,11 @@
 
       // Export tile colours to be used by Blockly.vue
       function exportTiles () {
-        // Exports the canvas to a json object
-        var exportedCanvas = canvas.toObject()
-        // Gets only objects from the json object
-        var tiles = exportedCanvas['objects']
+        // Gets objects from the json object
+        var tiles = canvas.getObjects()
         // Variables to get unique values
         var tileType = []
+        var tileTypeObject = {}
         var unique = {}
         // Loops through all tiles and adds unique to a list
         for (var i = 0, l = tiles.length; i < l; ++i) {
@@ -398,17 +551,53 @@
             // May want to give all tiles a unique property to allow for more tile types in the future
             if (tiles[i]['type'] === 'rect' || tiles[i]['type'] === 'polygon') {
               tileType.push(tiles[i]['fill'])
+              insertIntoDict(tileTypeObject, tiles[i]['name'], colourDict[tiles[i]['fill'].toUpperCase()])
               unique[tiles[i]['fill']] = 1
             }
           }
         }
         // Turns list into string and saves
+        store.dispatch('SAVE_TILES', tileTypeObject)
         store.dispatch('SAVE_COLOURS', tileType)
       }
 
+      // Helping function for inserting tiles into json object
+      function insertIntoDict (dict, key, value) {
+        // If key is not initialized or some bad structure
+        if (!(key in dict)) {
+          dict[key] = value
+        }
+      }
+      // Method to update list of tiles
+      function updateTileList () {
+        $('#tileList ul').empty()
+        var obj = canvas.getObjects()
+        var colour = ''
+        usedColours = {}
+        tileList = Object.keys(tileDict)
+        for (var i = 0; i < tileList.length; i++) {
+          insertIntoDict(usedColours, tileList[i], tileDict[tileList[i]])
+        }
+        for (var z = 0, y = obj.length; z < y; ++z) {
+          if (obj[z]['type'] === 'rect' || obj[z]['type'] === 'polygon') {
+            insertIntoDict(usedColours, obj[z]['name'], obj[z]['fill'])
+          }
+        }
+        for (var key in usedColours) {
+          if (usedColours.hasOwnProperty(key)) {
+            // console.log(key + ' -> ' + usedColours[key])
+            colour = usedColours[key]
+            let s = `<li>${key} <span style="background: ${colour}; display: inline-block; width:1em; height: 1em;"/>
+            <input type="button" id="${colour}" class="dynamicButtonRect" value="Add Square"/>
+            <input type="button" id="${colour}" class="dynamicButtonHex" value="Add Hexagon"/>
+            </li>`
+            $('#tileList ul').append(s)
+          }
+        }
+      }
       // Method to save state, change canvasState to store-store
       function saveState () {
-        var canvasState = canvas.toDatalessJSON()
+        var canvasState = canvas.toDatalessJSON(['name'])
         store.dispatch('SAVE_CANVAS', canvasState)
       }
 
@@ -417,18 +606,20 @@
         var state = store.getters.GET_CANVAS
         if (state !== 0) {
           canvas.loadFromDatalessJSON(state)
+          updateTileList()
         }
       }
-
       // Saves the state on canvas change
       canvas.on('object:added', function () {
         saveState()
         exportTiles()
+        updateTileList()
       })
 
       canvas.on('object:modified', function () {
         saveState()
         exportTiles()
+        updateTileList()
       })
       // ############################################## LAYERIFY #######################################################
       // ###############################################################################################################
@@ -530,12 +721,12 @@
     top: 0;
     left: auto;
     width: 20em;
+    background-color: aliceblue;
   }
   #controls {
     position: relative;
     top: 0;
     left: auto;
-    background-color: aliceblue;
     display: none;
   }
 
@@ -543,10 +734,35 @@
     position: relative;
     top: 0;
     left: auto;
-    background-color: aliceblue;
     display: none;
   }
 
+  #tileAttr {
+    position: relative;
+    top: 0;
+    left: auto;
+    display: none;
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+
+  #tileList {
+    position: relative;
+    top: 0;
+    left: auto;
+    display: block;
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+
+  #clearConfirm {
+    position: relative;
+    top: 0;
+    left: auto;
+    display: none;
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
   /* Container made by fabric when creating a fabric canvas */
   .canvas-container{
     text-align: center;
