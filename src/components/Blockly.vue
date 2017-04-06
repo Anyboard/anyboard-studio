@@ -117,7 +117,7 @@ export default {
     Blockly.Blocks['move'] = {
       init: function () {
         this.appendDummyInput()
-            .appendField('Move Token to Tile')
+            .appendField('Move Token to Sector')
         this.appendStatementInput('STACK')
             .setCheck(null)
         this.setColour(65)
@@ -352,6 +352,19 @@ export default {
       }
     }
 
+    Blockly.Blocks['current_sector_test'] = {
+      init: function () {
+        this.appendValueInput('SECTOR')
+            .setCheck('Sector')
+            .appendField('Current token is standing on')
+        this.setInputsInline(true)
+        this.setOutput(true, 'Boolean')
+        this.setColour(210)
+        this.setTooltip('')
+        this.setHelpUrl('')
+      }
+    }
+
     Blockly.Blocks['wait'] = {
       init: function () {
         this.appendValueInput('SECONDS')
@@ -420,8 +433,9 @@ export default {
     }
 
     Blockly.JavaScript['sector'] = function (block) {
-      var tile = block.getFieldValue('SECTOR')
-      var code = tile
+      var sector = block.getFieldValue('SECTOR')
+      var constr = sectorObject[sector]
+      var code = constr
       // TODO: Change ORDER_NONE to the correct strength.
       return [code, Blockly.JavaScript.ORDER_MEMBER]
     }
@@ -440,22 +454,29 @@ export default {
 
     Blockly.JavaScript['sector_test'] = function (block) {
       var token = Blockly.JavaScript.valueToCode(block, 'TOKEN', Blockly.JavaScript.ORDER_FUNCTION_CALL)
-      var tile = Blockly.JavaScript.valueToCode(block, 'SECTOR', Blockly.JavaScript.ORDER_EQUALITY)
-      var code = tile + ' == getSector(' + token + ')'
+      var sector = Blockly.JavaScript.valueToCode(block, 'SECTOR', Blockly.JavaScript.ORDER_EQUALITY)
+      var code = sector + ' == getSector(' + token + ')'
+      // TODO: Change ORDER_NONE to the correct strength.
+      return [code, Blockly.JavaScript.ORDER_NONE]
+    }
+
+    Blockly.JavaScript['current_sector_test'] = function (block) {
+      var sector = Blockly.JavaScript.valueToCode(block, 'SECTOR', Blockly.JavaScript.ORDER_EQUALITY)
+      var code = sector + ' == constraint'
       // TODO: Change ORDER_NONE to the correct strength.
       return [code, Blockly.JavaScript.ORDER_NONE]
     }
 
     Blockly.JavaScript['vibrate'] = function (block) {
       var token = Blockly.JavaScript.valueToCode(block, 'TOKEN', Blockly.JavaScript.ORDER_FUNCTION_CALL)
-      var code = 'app.vibrate(' + token + ');\n'
+      var code = 'app.sendVibrationCmd(' + token + ');\n'
       return code
     }
 
     Blockly.JavaScript['move'] = function (block) {
       var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
       var code = 'var handleTokenMove = function(currentToken, constraint, options) {\n'
-      code += stack + '},\n'
+      code += stack + '};\n'
       code += 'AnyBoard.TokenManager.onTokenConstraintEvent("MOVE_TO", handleTokenMove);'
       return code
     }
@@ -567,13 +588,13 @@ export default {
           defvars.join('\n')
       }
     }
-
+/*
     var tilesdict = {
       'key1': 'value1',
       'key2': 'value2',
       'key3': 'value3'
     }
-
+*/
     Blockly.JavaScript.writeDictionary = function (name, dict) {
       var result = name
       result += ': {\n'
@@ -600,7 +621,7 @@ export default {
       delete Blockly.JavaScript.functionNames_
       Blockly.JavaScript.variableDB_.reset()
       var output = definitions.join('\n\n') + '\n\n\n'
-      output += Blockly.JavaScript.writeDictionary('tiles', tilesdict)
+      // output += Blockly.JavaScript.writeDictionary('tiles', tilesdict)
       output += 'initiate: function() {\n'
       output += code
       output += '\n\n'
