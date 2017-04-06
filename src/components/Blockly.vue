@@ -74,7 +74,7 @@ export default {
           .appendField('Move')
           .appendField(new Blockly.FieldVariable('token'), 'TOKEN')
           .appendField('To')
-          .appendField(new Blockly.FieldDropdown(tileNames), 'TILES')
+          .appendField(new Blockly.FieldDropdown(tileNames), 'SECTORS')
         this.appendStatementInput('STACK')
           .setCheck(null)
         this.setColour(65)
@@ -369,7 +369,7 @@ export default {
     const toMatrix = (arr, width) =>
       arr.reduce((rows, key, index) => (index % width === 0 ? rows.push([key])
         : rows[rows.length - 1].push(key)) && rows, [])
-    var tileObject = store.getters.GET_TILES
+    var tileObject = store.getters.GET_SECTORS
     var tileNames = toMatrix(Object.keys(tileObject), 1)
 
     var tb = toolbox.getters.GET_TOOLBOX

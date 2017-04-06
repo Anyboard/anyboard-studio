@@ -1,9 +1,9 @@
 <template>
   <div id = 'boardEditor'>
     <toolbar :buttons="tb" v-on:createRect="createRect" @createCircle="createCircle"></toolbar>
-    <input type='button' id='square' value='New square tile'/>
-    <input type='button' id='hexagon' value='New hexagon tile'/>
-    <input type='text' id='colourPickerTile'/>
+    <input type='button' id='square' value='New square sector'/>
+    <input type='button' id='hexagon' value='New hexagon sector'/>
+    <input type='text' id='colourPickerSector'/>
     <input type='button' id='colourChange' value='Change colour'/>
     <input type='file' id='image' style='display: none;'/>
     <!-- Workaround button to avoid ugly file text-->
@@ -31,16 +31,16 @@
           <input type='button' id='backgroundDrawing' value='Background Drawing' disabled/>
           <input type='button' id='foregroundDrawing' value='Foreground Drawing'/>
         </div>
-        <div id='tileTutorial'>
-          <p>Tiles need a minimum size and have an yellow dashed border! Important bznz!!!</p>
+        <div id='sectorTutorial'>
+          <p>Sectors need a minimum size and have an yellow dashed border! Important bznz!!!</p>
           <input type='button' id='tutClose' value='Understood'/>
         </div>
-        <div id='tileAttr'>
-          <input type='text' id='tileName' value='Tile Name'/>
-          <input type='button' id='renameTile' value='Rename'/>
+        <div id='sectorAttr'>
+          <input type='text' id='sectorName' value='Sector Name'/>
+          <input type='button' id='renameSector' value='Rename'/>
         </div>
-        <div id='tileList'>
-          <p>List of tiles</p>
+        <div id='sectorList'>
+          <p>List of sectors</p>
           <ul id = 'tList'>
           </ul>
         </div>
@@ -63,7 +63,7 @@
   import store from '../store/store'
 
   var canvas
-  var tileColour = '#166CA0'
+  var sectorColour = '#166CA0'
   var drawColour = '#000000'
   var drawLineWidth = 10
   var tutorialViewed = 0
@@ -88,13 +88,13 @@
     '#F4E658': 37
   }
 
-  var tileDict = {
-    'Start Tile': '#FB50A6',
-    'Mid Tile': '#F4E658',
-    'End Tile': '#30A747'
+  var sectorDict = {
+    'Start Sector': '#FB50A6',
+    'Mid Sector': '#F4E658',
+    'End Sector': '#30A747'
   }
 
-  var tileList = Object.keys(tileDict)
+  var sectorList = Object.keys(sectorDict)
 
   export default {
     name: 'boardEditor',
@@ -149,13 +149,13 @@
       canvas.freeDrawingBrush.width = drawLineWidth
       canvas.freeDrawingBrush.color = drawColour
       loadState()
-      updateTileList()
-      // ########################################## TILES ##############################################################
+      updateSectorList()
+      // ########################################## SECTORS ##############################################################
       // ###############################################################################################################
       // Function for creating rectangle
-      function createRectangleTile (colour) {
+      function createRectangleSector (colour) {
         if (tutorialViewed === 0) {
-          $('#tileTutorial').css('display', 'block')
+          $('#sectorTutorial').css('display', 'block')
         }
         let rect = new fabric.Rect({
           width: 190,
@@ -168,18 +168,18 @@
           minWidth: 190,
           name: colour
         })
-        renameSameTile(rect)
+        renameSameSector(rect)
         canvas.add(rect).setActiveObject(rect)
         canvas.getActiveObject().center()
         layerify()
       }
-      // Creates a new square tile
+      // Creates a new square sector
       $('#square').click(function () {
-        createRectangleTile(tileColour)
+        createRectangleSector(sectorColour)
       })
 
       $('body').on('click', 'input.dynamicButtonRect', function () {
-        createRectangleTile(event.target.id)
+        createRectangleSector(event.target.id)
       })
 
       // Can create any regular polygon with set amount of sides and radius
@@ -196,9 +196,9 @@
         return (points)
       }
 
-      function createHexagonTile (colour) {
+      function createHexagonSector (colour) {
         if (tutorialViewed === 0) {
-          $('#tileTutorial').css('display', 'block')
+          $('#sectorTutorial').css('display', 'block')
         }
         let hexagon = new fabric.Polygon(regularPolygonPoints(6, 100), {
           fill: colour.toUpperCase(),
@@ -209,24 +209,24 @@
           minWidth: 200,
           name: colour
         })
-        renameSameTile(hexagon)
+        renameSameSector(hexagon)
         canvas.add(hexagon).setActiveObject(hexagon)
         canvas.getActiveObject().center()
         layerify()
       }
 
       $('#hexagon').click(function () {
-        createHexagonTile(tileColour)
+        createHexagonSector(sectorColour)
       })
 
       $('body').on('click', 'input.dynamicButtonHex', function () {
-        createHexagonTile(event.target.id)
+        createHexagonSector(event.target.id)
       })
 
       // Limited colour picker by swatches
-      $('#colourPickerTile').spectrum({
+      $('#colourPickerSector').spectrum({
         preferredFormat: 'hex',
-        color: tileColour,
+        color: sectorColour,
         // Allows only our predefined colours to be picked
         showPaletteOnly: true,
         // Change or add colours here
@@ -253,9 +253,9 @@
         ]
       })
 
-      // Changes tile colour to chosen
-      $('#colourPickerTile').change(function () {
-        tileColour = $('#colourPickerTile').val()
+      // Changes sector colour to chosen
+      $('#colourPickerSector').change(function () {
+        sectorColour = $('#colourPickerSector').val()
       })
 
       // Restricts size of object to a minimum required size
@@ -278,11 +278,11 @@
 
       // Hide tutorial
       $('#tutClose').click(function () {
-        $('#tileTutorial').css('display', 'none')
+        $('#sectorTutorial').css('display', 'none')
         tutorialViewed = 1
       })
 
-      // Helping function to rename new tile to same name of other tiles of same type
+      // Helping function to rename new sector to same name of other sectors of same type
       function _isContains (json, value) {
         let contains = false
         Object.keys(json).some(key => {
@@ -291,10 +291,10 @@
         })
         return contains
       }
-      function renameSameTile (obj) {
+      function renameSameSector (obj) {
         var objs = canvas.getObjects()
-        if (_isContains(tileDict, obj['fill'])) {
-          obj['name'] = Object.keys(tileDict)[Object.values(tileDict).indexOf(obj['fill'])]
+        if (_isContains(sectorDict, obj['fill'])) {
+          obj['name'] = Object.keys(sectorDict)[Object.values(sectorDict).indexOf(obj['fill'])]
         } else {
           for (var i = 0, l = objs.length; i < l; ++i) {
             if (obj['fill'] === objs[i]['fill'] && objs[i]['name'] !== obj['name']) {
@@ -328,7 +328,7 @@
             objects.forEach(function (o) {
               o.set('top', o.top + 15)
               o.set('left', o.left + 15)
-              renameSameTile(o)
+              renameSameSector(o)
               canvas.add(o)
               layerify()
             })
@@ -360,50 +360,50 @@
         }
       })
 
-      // Change chosen tile to selected colour
+      // Change chosen sector to selected colour
       $('#colourChange').click(function () {
         var activeObj = canvas.getActiveObject()
         if (activeObj != null && (activeObj['type'] === 'rect' || activeObj['type'] === 'polygon')) {
-          activeObj.set('fill', tileColour.toUpperCase())
+          activeObj.set('fill', sectorColour.toUpperCase())
           activeObj.set('name', activeObj.fill)
           canvas.renderAll()
-          renameSameTile(activeObj)
-          $('#tileName').val(activeObj['name'])
+          renameSameSector(activeObj)
+          $('#sectorName').val(activeObj['name'])
           saveState()
-          updateTileList()
-          exportTiles()
+          updateSectorList()
+          exportSectors()
         }
       })
-      // Renaming tiles
+      // Renaming sectors
       // Helping function for selection
       function getSelection () {
         return canvas.getActiveObject() == null ? canvas.getActiveGroup() : canvas.getActiveObject()
       }
 
-      // See name of selected tile
+      // See name of selected sector
       canvas.on('object:selected', function () {
         var selObj = getSelection()
         if (selObj['type'] === 'rect' || selObj['type'] === 'polygon') {
-          $('#tileAttr').css('display', 'block')
-          $('#tileName').val(selObj['name'])
+          $('#sectorAttr').css('display', 'block')
+          $('#sectorName').val(selObj['name'])
         } else {
-          $('#tileAttr').css('display', 'none')
+          $('#sectorAttr').css('display', 'none')
         }
       })
 
       canvas.on('selection:cleared', function () {
-        $('#tileAttr').css('display', 'none')
+        $('#sectorAttr').css('display', 'none')
       })
 
-      // Rename selected tile
-      $('#renameTile').click(function () {
+      // Rename selected sector
+      $('#renameSector').click(function () {
         var selObj = canvas.getActiveObject()
         var obj = canvas.getObjects()
         var oldName = selObj['name']
-        var newName = $('#tileName').val()
-        if (oldName in tileDict && oldName !== newName) {
-          insertIntoDict(tileDict, newName, selObj['fill'])
-          delete tileDict[oldName]
+        var newName = $('#sectorName').val()
+        if (oldName in sectorDict && oldName !== newName) {
+          insertIntoDict(sectorDict, newName, selObj['fill'])
+          delete sectorDict[oldName]
         }
         for (var i = 0, l = obj.length; i < l; ++i) {
           if (obj[i]['fill'] === selObj['fill']) {
@@ -411,8 +411,8 @@
           }
         }
         saveState()
-        updateTileList()
-        exportTiles()
+        updateSectorList()
+        exportSectors()
       })
 
       // Clear canvas
@@ -423,8 +423,8 @@
         $('#clearConfirm').css('display', 'none')
         canvas.clear().renderAll()
         saveState()
-        updateTileList()
-        exportTiles()
+        updateSectorList()
+        exportSectors()
       })
       $('#denyClearButton').click(function () {
         $('#clearConfirm').css('display', 'none')
@@ -536,47 +536,47 @@
         }
       })
 
-      // Export tile colours to be used by Blockly.vue
-      function exportTiles () {
+      // Export sector colours to be used by Blockly.vue
+      function exportSectors () {
         // Gets objects from the json object
-        var tiles = canvas.getObjects()
+        var sectors = canvas.getObjects()
         // Variables to get unique values
-        var tileType = []
-        var tileTypeObject = {}
+        var sectorType = []
+        var sectorTypeObject = {}
         var unique = {}
-        // Loops through all tiles and adds unique to a list
-        for (var i = 0, l = tiles.length; i < l; ++i) {
-          if (!unique.hasOwnProperty(tiles[i]['fill'])) {
+        // Loops through all sectors and adds unique to a list
+        for (var i = 0, l = sectors.length; i < l; ++i) {
+          if (!unique.hasOwnProperty(sectors[i]['fill'])) {
             // Makes sure only rectangles or hexagons get added
-            // May want to give all tiles a unique property to allow for more tile types in the future
-            if (tiles[i]['type'] === 'rect' || tiles[i]['type'] === 'polygon') {
-              tileType.push(tiles[i]['fill'])
-              insertIntoDict(tileTypeObject, tiles[i]['name'], colourDict[tiles[i]['fill'].toUpperCase()])
-              unique[tiles[i]['fill']] = 1
+            // May want to give all sectors a unique property to allow for more sector types in the future
+            if (sectors[i]['type'] === 'rect' || sectors[i]['type'] === 'polygon') {
+              sectorType.push(sectors[i]['fill'])
+              insertIntoDict(sectorTypeObject, sectors[i]['name'], colourDict[sectors[i]['fill'].toUpperCase()])
+              unique[sectors[i]['fill']] = 1
             }
           }
         }
         // Turns list into string and saves
-        store.dispatch('SAVE_TILES', tileTypeObject)
-        store.dispatch('SAVE_COLOURS', tileType)
+        store.dispatch('SAVE_SECTORS', sectorTypeObject)
+        store.dispatch('SAVE_COLOURS', sectorType)
       }
 
-      // Helping function for inserting tiles into json object
+      // Helping function for inserting sectors into json object
       function insertIntoDict (dict, key, value) {
         // If key is not initialized or some bad structure
         if (!(key in dict)) {
           dict[key] = value
         }
       }
-      // Method to update list of tiles
-      function updateTileList () {
-        $('#tileList ul').empty()
+      // Method to update list of sectors
+      function updateSectorList () {
+        $('#sectorList ul').empty()
         var obj = canvas.getObjects()
         var colour = ''
         usedColours = {}
-        tileList = Object.keys(tileDict)
-        for (var i = 0; i < tileList.length; i++) {
-          insertIntoDict(usedColours, tileList[i], tileDict[tileList[i]])
+        sectorList = Object.keys(sectorDict)
+        for (var i = 0; i < sectorList.length; i++) {
+          insertIntoDict(usedColours, sectorList[i], sectorDict[sectorList[i]])
         }
         for (var z = 0, y = obj.length; z < y; ++z) {
           if (obj[z]['type'] === 'rect' || obj[z]['type'] === 'polygon') {
@@ -591,7 +591,7 @@
             <input type="button" id="${colour}" class="dynamicButtonRect" value="Add Square"/>
             <input type="button" id="${colour}" class="dynamicButtonHex" value="Add Hexagon"/>
             </li>`
-            $('#tileList ul').append(s)
+            $('#sectorList ul').append(s)
           }
         }
       }
@@ -606,20 +606,20 @@
         var state = store.getters.GET_CANVAS
         if (state !== 0) {
           canvas.loadFromDatalessJSON(state)
-          updateTileList()
+          updateSectorList()
         }
       }
       // Saves the state on canvas change
       canvas.on('object:added', function () {
         saveState()
-        exportTiles()
-        updateTileList()
+        exportSectors()
+        updateSectorList()
       })
 
       canvas.on('object:modified', function () {
         saveState()
-        exportTiles()
-        updateTileList()
+        exportSectors()
+        updateSectorList()
       })
       // ############################################## LAYERIFY #######################################################
       // ###############################################################################################################
@@ -647,14 +647,14 @@
         // Sets up variables for all objects and lists for the types
         var obj = canvas.getObjects()
         var textLayer = []
-        var tileLayer = []
+        var sectorLayer = []
         var bPathLayer = []
         var fPathLayer = []
         var imageLayer = []
         // Adds each relevant object to their respective list
         for (var i = 0, l = obj.length; i < l; ++i) {
           if (obj[i]['type'] === 'rect' || obj[i]['type'] === 'polygon') {
-            tileLayer.push(obj[i])
+            sectorLayer.push(obj[i])
           } else if (obj[i]['type'] === 'path' && obj[i]['name'] === 'bottom') {
             bPathLayer.push(obj[i])
           } else if (obj[i]['type'] === 'image') {
@@ -667,7 +667,7 @@
         }
         // Adds lists of objects to respective fabric groups
         var textGroup = new fabric.Group(textLayer)
-        var tileGroup = new fabric.Group(tileLayer)
+        var sectorGroup = new fabric.Group(sectorLayer)
         var bPathGroup = new fabric.Group(bPathLayer)
         var imageGroup = new fabric.Group(imageLayer)
         var fPathGroup = new fabric.Group(fPathLayer)
@@ -679,14 +679,14 @@
         // Adds groups to canvas
         canvas.add(imageGroup)
         canvas.add(bPathGroup)
-        canvas.add(tileGroup)
+        canvas.add(sectorGroup)
         canvas.add(fPathGroup)
         canvas.add(textGroup)
 
         // Restores objects from group to canvas to allow layerify to work multiple times
         restoreObjs(imageGroup)
         restoreObjs(bPathGroup)
-        restoreObjs(tileGroup)
+        restoreObjs(sectorGroup)
         restoreObjs(fPathGroup)
         restoreObjs(textGroup)
       }
@@ -730,14 +730,14 @@
     display: none;
   }
 
-  #tileTutorial {
+  #sectorTutorial {
     position: relative;
     top: 0;
     left: auto;
     display: none;
   }
 
-  #tileAttr {
+  #sectorAttr {
     position: relative;
     top: 0;
     left: auto;
@@ -746,7 +746,7 @@
     padding-bottom: 5px;
   }
 
-  #tileList {
+  #sectorList {
     position: relative;
     top: 0;
     left: auto;
