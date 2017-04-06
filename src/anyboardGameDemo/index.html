@@ -38,21 +38,20 @@
   <script>
     var app;
     app = {
-      currentColor: "some value",
       devices: {},
       currentTile: "white",
 
       locations: {
-        2: '#166CA0',  // 2
-        5: '#4194D0',  // 5
-        7: '#112A95',  // 7
+        2: '#166CA0',   // 2
+        5: '#4194D0',   // 5
+        7: '#112A95',   // 7
         14: '#C047A3',  // 14
-        15: '#FB50A6', // 15
+        15: '#FB50A6',  // 15
         16: '#5E1014',  // 16
         18: '#9B3235',  // 18
         20: '#FF483E',  // 20
         21: '#66C889',  // 21
-        24: '#30A747', // 24
+        24: '#30A747',  // 24
         30: '#31682E',  // 30
         31: '#FF9344',  // 31
         33: '#D96623',  // 33
@@ -182,6 +181,10 @@
         else {
           this.downgradeScore();
         }
+      },
+
+      vibrate: function (token) {
+        sendVibrationCmd(token);
       },
 
       showScore: function () {
