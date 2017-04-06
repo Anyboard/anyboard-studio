@@ -284,51 +284,51 @@ Blockly.Blocks['token_test'] = {
 
 // TODO Autogenerate this list
 var TILES =
-  [['Tile 1', 'TILE1'],
-   ['Tile 2', 'TILE2']]
+  [['Sector 1', 'SECTOR1'],
+   ['Sector 2', 'SECTOR2']]
 
-Blockly.Blocks['tile'] = {
+Blockly.Blocks['sector'] = {
   init: function () {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldDropdown(TILES), 'TILE')
-    this.setOutput(true, 'Tile')
+        .appendField(new Blockly.FieldDropdown(TILES), 'SECTOR')
+    this.setOutput(true, 'Sector')
     this.setColour(20)
     this.setTooltip('')
     this.setHelpUrl('')
   }
 }
 
-Blockly.Blocks['random_tile'] = {
+Blockly.Blocks['random_sector'] = {
   init: function () {
     this.appendDummyInput()
-        .appendField('Random Tile')
-    this.setOutput(true, 'Tile')
+        .appendField('Random Sector')
+    this.setOutput(true, 'Sector')
     this.setColour(20)
     this.setTooltip('')
     this.setHelpUrl('')
   }
 }
 
-Blockly.Blocks['get_tile'] = {
+Blockly.Blocks['get_sector'] = {
   init: function () {
     this.appendValueInput('TOKEN')
         .setCheck('Token')
         .appendField('The tile that')
     this.appendDummyInput()
         .appendField('is standing on')
-    this.setOutput(true, 'Tile')
+    this.setOutput(true, 'Sector')
     this.setColour(20)
     this.setTooltip('')
     this.setHelpUrl('')
   }
 }
 
-Blockly.Blocks['tile_test'] = {
+Blockly.Blocks['sector_test'] = {
   init: function () {
     this.appendValueInput('TOKEN')
         .setCheck('Token')
-    this.appendValueInput('TILE')
-        .setCheck('Tile')
+    this.appendValueInput('SECTOR')
+        .setCheck('Sector')
         .appendField('is standing on')
     this.setInputsInline(true)
     this.setOutput(true, 'Boolean')
@@ -405,29 +405,29 @@ Blockly.JavaScript['random_token'] = function (block) {
   return [code, Blockly.JavaScript.ORDER_MEMBER]
 }
 
-Blockly.JavaScript['tile'] = function (block) {
-  var tile = block.getFieldValue('TILE')
+Blockly.JavaScript['sector'] = function (block) {
+  var tile = block.getFieldValue('SECTOR')
   var code = tile
   // TODO: Change ORDER_NONE to the correct strength.
   return [code, Blockly.JavaScript.ORDER_MEMBER]
 }
 
-Blockly.JavaScript['random_tile'] = function (block) {
-  var code = 'app.getRandomTile()'
+Blockly.JavaScript['random_sector'] = function (block) {
+  var code = 'app.getRandomSector()'
   // TODO: Change ORDER_NONE to the correct strength.
   return [code, Blockly.JavaScript.ORDER_MEMBER]
 }
 
-Blockly.JavaScript['get_tile'] = function (block) {
+Blockly.JavaScript['get_sector'] = function (block) {
   var token = Blockly.JavaScript.valueToCode(block, 'TOKEN', Blockly.JavaScript.ORDER_FUNCTION_CALL)
-  var code = 'app.getTile(' + token + ');\n'
+  var code = 'app.getSector(' + token + ');\n'
   return [code, Blockly.JavaScript.ORDER_MEMBER]
 }
 
-Blockly.JavaScript['tile_test'] = function (block) {
+Blockly.JavaScript['sector_test'] = function (block) {
   var token = Blockly.JavaScript.valueToCode(block, 'TOKEN', Blockly.JavaScript.ORDER_FUNCTION_CALL)
-  var tile = Blockly.JavaScript.valueToCode(block, 'TILE', Blockly.JavaScript.ORDER_EQUALITY)
-  var code = tile + ' == getTile(' + token + ')'
+  var tile = Blockly.JavaScript.valueToCode(block, 'SECTOR', Blockly.JavaScript.ORDER_EQUALITY)
+  var code = tile + ' == getSector(' + token + ')'
   // TODO: Change ORDER_NONE to the correct strength.
   return [code, Blockly.JavaScript.ORDER_NONE]
 }
