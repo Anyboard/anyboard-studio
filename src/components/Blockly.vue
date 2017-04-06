@@ -554,6 +554,27 @@ Blockly.JavaScript.init = function (workspace) {
   }
 }
 
+var tilesdict = {
+  'key1': 'value1',
+  'key2': 'value2',
+  'key3': 'value3'
+}
+
+Blockly.JavaScript.writeDictionary = function (name, dict) {
+  var result = name
+  result += ': {\n'
+  var first = true
+  for (var key in dict) {
+    if (!first) {
+      result += ',\n'
+    }
+    first = false
+    result += key + ': ' + dict[key]
+  }
+  result += '\n},\n\n\n'
+  return result
+}
+
 Blockly.JavaScript.finish = function (code) {
   // Convert the definitions dictionary into a list.
   var definitions = []
@@ -565,6 +586,7 @@ Blockly.JavaScript.finish = function (code) {
   delete Blockly.JavaScript.functionNames_
   Blockly.JavaScript.variableDB_.reset()
   var output = definitions.join('\n\n') + '\n\n\n'
+  output += Blockly.JavaScript.writeDictionary('tiles', tilesdict)
   output += 'initiate: function() {\n'
   output += code
   output += '\n\n'
