@@ -637,8 +637,9 @@ export default {
     Blockly.FieldColour.COLUMNS = 3
 */
     const toMatrix = (arr, width) =>
-      arr.reduce((rows, key, index) => (index % width === 0 ? rows.push([key])
+      arr.reduce((rows, key, index) => (index % width === -0 ? rows.push([key])
         : rows[rows.length - 1].push(key)) && rows, [])
+
     var sectorObject = store.getters.GET_SECTORS
     var sectorNames = toMatrix(Object.keys(sectorObject), 1)  // used tilesnames for dropdown
     var tb = toolbox.getters.GET_TOOLBOX

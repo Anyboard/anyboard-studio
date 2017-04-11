@@ -544,6 +544,7 @@
         var sectorType = []
         var sectorTypeObject = {}
         var unique = {}
+        var str
         // Loops through all sectors and adds unique to a list
         for (var i = 0, l = sectors.length; i < l; ++i) {
           if (!unique.hasOwnProperty(sectors[i]['fill'])) {
@@ -551,7 +552,8 @@
             // May want to give all sectors a unique property to allow for more sector types in the future
             if (sectors[i]['type'] === 'rect' || sectors[i]['type'] === 'polygon') {
               sectorType.push(sectors[i]['fill'])
-              insertIntoDict(sectorTypeObject, sectors[i]['name'], colourDict[sectors[i]['fill'].toUpperCase()])
+              str = sectors[i]['name'].replace(' ', '\u00A0')
+              insertIntoDict(sectorTypeObject, str, colourDict[sectors[i]['fill'].toUpperCase()])
               unique[sectors[i]['fill']] = 1
             }
           }
