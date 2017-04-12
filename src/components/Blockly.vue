@@ -380,6 +380,19 @@ export default {
       }
     }
 
+    Blockly.Blocks['set_id'] = {
+      init: function () {
+        this.appendValueInput('TEXT')
+          .setCheck('String')
+          .appendField('Set token name to: ')
+        this.setPreviousStatement(true, null)
+        this.setNextStatement(true, null)
+        this.setColour(255)
+        this.setTooltip('')
+        this.setHelpUrl('')
+      }
+    }
+
     Blockly.JavaScript['grid'] = function (block) {
       var dropdownGrid = block.getFieldValue('GRID')
       var code = dropdownGrid
@@ -455,7 +468,7 @@ export default {
     Blockly.JavaScript['sector_test'] = function (block) {
       var token = Blockly.JavaScript.valueToCode(block, 'TOKEN', Blockly.JavaScript.ORDER_FUNCTION_CALL)
       var sector = Blockly.JavaScript.valueToCode(block, 'SECTOR', Blockly.JavaScript.ORDER_EQUALITY)
-      var code = sector + ' == getSector(' + token + ')'
+      var code = sector + ' == app.getSector(\'' + token + '\')'
       // TODO: Change ORDER_NONE to the correct strength.
       return [code, Blockly.JavaScript.ORDER_NONE]
     }
@@ -476,6 +489,7 @@ export default {
     Blockly.JavaScript['move'] = function (block) {
       var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
       var code = 'var handleTokenMove = function(currentToken, constraint, options) {\n'
+      code += 'currentToken.sector = constraint;\n'
       code += stack + '};\n'
       code += 'AnyBoard.TokenManager.onTokenConstraintEvent("MOVE_TO", handleTokenMove);'
       return code
@@ -485,7 +499,7 @@ export default {
       var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
       var code = 'var handleTokenTap = function(currentToken , options) {\n'
       code += stack + '};\n'
-      code += 'AnyBoard.TokenManager.onTokenConstraintEvent("TAP", handleTokenTap);'
+      code += 'AnyBoard.TokenManager.onTokenEvent("TAP", handleTokenTap);'
       return code
     }
 
@@ -493,7 +507,7 @@ export default {
       var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
       var code = 'var handleTokenDoubleTap = function(currentToken , options) {\n'
       code += stack + '};\n'
-      code += 'AnyBoard.TokenManager.onTokenConstraintEvent("DOUBLE_TAP", handleTokenDoubleTap);'
+      code += 'AnyBoard.TokenManager.onTokenEvent("DOUBLE_TAP", handleTokenDoubleTap);'
       return code
     }
 
@@ -501,7 +515,7 @@ export default {
       var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
       var code = 'var handleTokenTilt = function(currentToken , options) {\n'
       code += stack + '};\n'
-      code += 'AnyBoard.TokenManager.onTokenConstraintEvent("TILT", handleTokenTilt);'
+      code += 'AnyBoard.TokenManager.onTokenEvent("TILT", handleTokenTilt);'
       return code
     }
 
@@ -553,6 +567,11 @@ export default {
       var field = block.getFieldValue('FIELD')
       var truth = (type === 'SHOW' ? 'true' : 'false')
       return 'app.showNumberField(' + truth + ', ' + field + ');\n'
+    }
+
+    Blockly.JavaScript['set_id'] = function (block) {
+      var text = Blockly.JavaScript.valueToCode(block, 'TEXT', Blockly.JavaScript.ORDER_EQUALITY)
+      return 'currentToken.id = (' + text + ')\n'
     }
 
     Blockly.JavaScript['variables_get'] = function (block) {
