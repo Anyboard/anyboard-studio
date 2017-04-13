@@ -1,9 +1,8 @@
 <template>
-  <div class="headex">
+  <div>
    <p>Hei på deg min kogg</p>
     <p>{{header}}</p>
     <p>{{paragraph}}</p>
-    <p>{{computed}}</p>
     <a @click="hei">LIKER JEG Å KOGEEEEEEEEEEE</a>
   </div>
 </template>
@@ -30,19 +29,4 @@
 </script>
 
 <style scoped>
-  @import url('https://fonts.googleapis.com/css?family=Lato');
-  h3{
-    color: #262626;
-    font-weight: 600;
-    font-family: 'Lato', Helvetica, sans-serif;
-  }
-  p{
-    color: #262626;
-    font-weight: 300;
-    font-family: Georgia, serif;
-  }
-  #container_div{
-    width: 50%;
-    left: 50%;
-  }
 </style>

@@ -28,9 +28,15 @@ export default {
 }
 
 #wrapper {
+  display:flex;
+  flex-direction: row;
+  align-items: flex-start;
+  align-content: stretch;
   font-size:11pt;
   overflow:hidden;
   padding:5em 2em;
+  height:100%;
+  min-height: 100%;
 
   a { color:#f50; }
   a:hover { border-bottom:1px dotted currentColor; }
