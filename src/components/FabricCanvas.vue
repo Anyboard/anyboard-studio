@@ -34,16 +34,18 @@
 
       canvas.observe('object:scaling', function (e) {
         const shape = e.target
-        const minWidth = shape.get('minWidth')
-        const minHeight = shape.get('minHeight')
-        const actualWidth = shape.scaleX * shape.width
-        const actualHeight = shape.scaleY * shape.height
-        if (!isNaN(minWidth) && actualWidth <= minWidth) {
-          // dividing minWidth by the shape.width gives us our 'min scale'
-          shape.set({ scaleX: minWidth / shape.width })
-        }
-        if (!isNaN(minHeight) && actualHeight <= minHeight) {
-          shape.set({ scaleY: minHeight / shape.height })
+        if (shape['type'] === 'rect' || shape['type'] === 'poly' || shape['type'] === 'circle') {
+          const minWidth = 200
+          const minHeight = 200
+          const actualWidth = shape.scaleX * shape.width
+          const actualHeight = shape.scaleY * shape.height
+          if (!isNaN(minWidth) && actualWidth <= minWidth) {
+            // dividing minWidth by the shape.width gives us our 'min scale'
+            shape.set({ scaleX: minWidth / shape.width })
+          }
+          if (!isNaN(minHeight) && actualHeight <= minHeight) {
+            shape.set({ scaleY: minHeight / shape.height })
+          }
         }
       })
 

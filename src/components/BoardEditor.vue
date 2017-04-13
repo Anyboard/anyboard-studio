@@ -7,10 +7,14 @@
       <a @click="cloneObject">Clone Object</a>
       <a @click="deleteObject">Delete Object</a>
 
-      <a @click="bringForward">Arrange Object</a>
+      <a @click="arrangeObject" id="back">Arrange Object</a>
       <a @click="insertText">Insert Text</a>
       <a href="#">Free Drawing</a>
       <a href="#">Colorpicker</a>
+
+      <a @click="clickImage">Upload Image</a>
+      <input @change="uploadImage"type="file" id="image" style="display: none"/>
+      <a @click="saveBoard">Save Board</a>
     </nav>
     <FabricCanvas></FabricCanvas>
     <FabricInspector></FabricInspector>
@@ -41,8 +45,18 @@
       centerObject () {
         this.$store.dispatch('centerObject')
       },
-      bringForward () {
-        this.$store.dispatch('bringForward')
+      arrangeObject (event) {
+        this.$store.dispatch('arrangeObject', event.target.id)
+      },
+      clickImage () {
+        document.getElementById('image').click()
+      },
+      uploadImage (event) {
+        this.$store.dispatch('uploadImage', event.target.files[0])
+        document.getElementById('image').value = ''
+      },
+      saveBoard () {
+        this.$store.dispatch('saveBoard')
       }
 
     },

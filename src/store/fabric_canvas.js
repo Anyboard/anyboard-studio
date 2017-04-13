@@ -1,5 +1,6 @@
 import {fabric as F} from 'fabric'
-import {createPolyPoints} from '../utilities/helpers.js'
+import FileSaver from 'file-saver'
+import {createPolyPoints, dataURLtoBlob} from '../utilities/helpers.js'
 
 export default {
   state: {
@@ -97,6 +98,45 @@ export default {
       if (state.canvas.getActiveObject() != null) {
         state.canvas.bringForward(state.canvas.getActiveObject())
       }
+    },
+    SEND_BACKWARD (state) {
+      if (state.canvas.getActiveObject() != null) {
+        state.canvas.sendBackwards(state.canvas.getActiveObject())
+      }
+    },
+    BRING_TO_FRONT (state) {
+      if (state.canvas.getActiveObject() != null) {
+        state.canvas.bringToFront(state.canvas.getActiveObject())
+      }
+    },
+    SEND_TO_BACK (state) {
+      if (state.canvas.getActiveObject() != null) {
+        state.canvas.sendToBack(state.canvas.getActiveObject())
+      }
+    },
+
+    UPLOAD_IMAGE (state, file) {
+      console.log(file)
+      let reader = new FileReader()
+      reader.onload = function (f) {
+        const data = f.target.result
+        F.Image.fromURL(data, function (img) {
+          const oImg = img.set({angle: 0}).scale(0.5)
+          state.canvas.add(oImg).renderAll()
+          state.canvas.setActiveObject(oImg)
+          state.canvas.toDataURL({format: 'png', quality: 0.8})
+        })
+      }
+      reader.readAsDataURL(file)
+    },
+
+    SAVE_BOARD (state) {
+      if (state.canvas.getObjects().length > 0) {
+        state.canvas.deactivateAll().renderAll()
+        const img = state.canvas.toDataURL('png')
+        const blob = dataURLtoBlob(img)
+        FileSaver.saveAs(blob, 'Board.png')
+      }
     }
   },
 
@@ -129,8 +169,27 @@ export default {
     centerObject ({commit}, payload) {
       commit('CENTER_OBJECT', payload)
     },
-    bringForward ({commit}, payload) {
-      commit('BRING_FORWARD', payload)
+    arrangeObject ({commit}, type) {
+      switch (type) {
+        case 'forward':
+          commit('BRING_FORWARD')
+          break
+        case 'backward':
+          commit('SEND_BACKWARD')
+          break
+        case 'front':
+          commit('BRING_TO_FRONT')
+          break
+        case 'back':
+          commit('SEND_TO_BACK')
+          break
+      }
+    },
+    uploadImage ({commit}, file) {
+      commit('UPLOAD_IMAGE', file)
+    },
+    saveBoard ({commit}, payload) {
+      commit('SAVE_BOARD', payload)
     }
   },
   getters: {}
