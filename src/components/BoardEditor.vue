@@ -2,7 +2,7 @@
   <div id="board_editor">
     {{test}}
     <nav id="fabric_toolbar">
-      <a @click="makeShape" id="rect">New Sector</a>
+      <a @click="makeShape" id="circle">New Sector</a>
       <a href="#">Center Selected Object</a>
       <a href="#">Clone Object</a>
       <a href="#">Delete Object</a>
