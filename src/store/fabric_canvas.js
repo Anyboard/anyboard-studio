@@ -1,11 +1,15 @@
 import {fabric as F} from 'fabric'
 
 export default {
-  state: {canvas: null},
+  state: {
+    canvas: null
+  },
+
   mutations: {
     SET_CANVAS (state, payload) {
       state.canvas = payload
     },
+
     CREATE_RECT (state) {
       const rect = new F.Rect({
         width: 190,
@@ -18,10 +22,11 @@ export default {
         minWidth: 190,
         name: 'NamedRect'
       })
-      this.canvas.add(rect).setActiveObject(rect)
-      this.canvas.getActiveObject().render()
+      state.canvas.add(rect).setActiveObject(rect)
+      console.log('test')
     }
   },
+
   actions: {
     setCanvas ({commit}, payload) {
       commit('SET_CANVAS', payload)

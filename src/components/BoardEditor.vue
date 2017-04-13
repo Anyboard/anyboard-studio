@@ -2,7 +2,7 @@
   <div id="board_editor">
     {{test}}
     <nav id="fabric_toolbar">
-      <a @click="createShape">New Sector</a>
+      <a @click="makeShape" id="rect">New Sector</a>
       <a href="#">Center Selected Object</a>
       <a href="#">Clone Object</a>
       <a href="#">Delete Object</a>
@@ -28,6 +28,11 @@
     },
     computed: {
       ...mapActions(['createShape'])
+    },
+    methods: {
+      makeShape (event) {
+        this.$store.dispatch('createShape', event.target.id)
+      }
     },
     components: {
       FabricInspector: require('./FabricInspector.vue'),

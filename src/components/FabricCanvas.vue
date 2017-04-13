@@ -28,9 +28,10 @@
     },
     mounted () {
       const canvas = new F.Canvas('fabric_canvas', {
-        isDrawingMode: false
+        isDrawingMode: false,
+        backgroundColor: 'white'
       })
-      canvas.setBackgroundColor('white')
+
       this.$store.dispatch('setCanvas', canvas)
     }
   }
