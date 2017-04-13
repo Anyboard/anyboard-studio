@@ -1,5 +1,5 @@
 <template>
-  <canvas id="fabric_canvas" width="300" height="300"></canvas>
+  <canvas id="fabric_canvas" width="700" height="450"></canvas>
 </template>
 
 <script>
@@ -30,6 +30,21 @@
       const canvas = new F.Canvas('fabric_canvas', {
         isDrawingMode: false,
         backgroundColor: 'white'
+      })
+
+      canvas.observe('object:scaling', function (e) {
+        const shape = e.target
+        const minWidth = shape.get('minWidth')
+        const minHeight = shape.get('minHeight')
+        const actualWidth = shape.scaleX * shape.width
+        const actualHeight = shape.scaleY * shape.height
+        if (!isNaN(minWidth) && actualWidth <= minWidth) {
+          // dividing minWidth by the shape.width gives us our 'min scale'
+          shape.set({ scaleX: minWidth / shape.width })
+        }
+        if (!isNaN(minHeight) && actualHeight <= minHeight) {
+          shape.set({ scaleY: minHeight / shape.height })
+        }
       })
 
       this.$store.dispatch('setCanvas', canvas)

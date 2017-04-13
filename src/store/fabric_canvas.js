@@ -13,14 +13,14 @@ export default {
 
     CREATE_RECT (state) {
       const rect = new F.Rect({
-        width: 190,
-        height: 190,
+        width: 200,
+        height: 200,
         fill: '#555555',
         stroke: '#ffd445',
         strokeDashArray: [15, 3],
         strokeWidth: 7,
-        minHeight: 190,
-        minWidth: 190,
+        minHeight: 200,
+        minWidth: 200,
         name: 'NamedRect'
       })
       state.canvas.add(rect).setActiveObject(rect)
@@ -32,7 +32,7 @@ export default {
         stroke: '#ffd445',
         strokeDashArray: [6, 1.5],
         strokeWidth: 2,
-        minHeight: 173,
+        minHeight: 200,
         minWidth: 200
       })
       state.canvas.add(poly).setActiveObject(poly)
@@ -50,6 +50,53 @@ export default {
         name: 'NamedCirc'
       })
       state.canvas.add(circ).setActiveObject(circ)
+    },
+
+    INSERT_TEXT (state) {
+      const text = new F.IText('InsertedText',
+        {
+          fill: '#ffffff',
+          stroke: '#000000',
+          strokeWidth: 1,
+          fontFamily: 'Arial',
+          fontSize: 30,
+          textAlign: 'center'
+        })
+      state.canvas.add(text)
+      state.canvas.setActiveObject(text)
+    },
+
+    DELETE_OBJECT (state) {
+      if (state.canvas.getActiveObject() != null) {
+        state.canvas.getActiveObject().remove()
+      }
+    },
+
+    CLONE_OBJECT (state) {
+      if (state.canvas.getActiveObject() != null) {
+        var copyData = state.canvas.getActiveObject().toObject()
+        F.util.enlivenObjects([copyData], function (objects) {
+          objects.forEach(function (o) {
+            o.set('top', o.top + 15)
+            o.set('left', o.left + 15)
+            state.canvas.add(o)
+          })
+          state.canvas.renderAll()
+        })
+      }
+    },
+
+    CENTER_OBJECT (state) {
+      if (state.canvas.getActiveObject() != null) {
+        state.canvas.getActiveObject().center()
+        state.canvas.getActiveObject().setCoords()
+      }
+    },
+
+    BRING_FORWARD (state) {
+      if (state.canvas.getActiveObject() != null) {
+        state.canvas.bringForward(state.canvas.getActiveObject())
+      }
     }
   },
 
@@ -69,6 +116,21 @@ export default {
           commit('CREATE_CIRCLE')
           break
       }
+    },
+    insertText ({commit}, payload) {
+      commit('INSERT_TEXT', payload)
+    },
+    deleteObject ({commit}, payload) {
+      commit('DELETE_OBJECT', payload)
+    },
+    cloneObject ({commit}, payload) {
+      commit('CLONE_OBJECT', payload)
+    },
+    centerObject ({commit}, payload) {
+      commit('CENTER_OBJECT', payload)
+    },
+    bringForward ({commit}, payload) {
+      commit('BRING_FORWARD', payload)
     }
   },
   getters: {}
