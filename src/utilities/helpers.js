@@ -153,3 +153,56 @@ export const updateSectorList = function (canvas) {
   }
   return usedColours
 }
+
+function _isContains (json, value) {
+  let contains = false
+  Object.keys(json).some(key => {
+    contains = typeof json[key] === 'object' ? _isContains(json[key], value) : json[key] === value
+    return contains
+  })
+  return contains
+}
+
+export const renameSameSector = function (obj, canvas) {
+  const objs = canvas.getObjects()
+  if (_isContains(sectorDict, obj['fill'])) {
+    obj['name'] = Object.keys(sectorDict)[Object.values(sectorDict).indexOf(obj['fill'])]
+  } else {
+    for (let i = 0, l = objs.length; i < l; ++i) {
+      if (obj['fill'] === objs[i]['fill'] && objs[i]['name'] !== obj['name']) {
+        console.log('Actual name found: ' + objs[i]['name'])
+        obj['name'] = objs[i]['name']
+        break
+      } else {
+        obj['name'] = obj['fill']
+      }
+    }
+  }
+}
+
+export const colorChange = function (canvas, sectorColor) {
+  let activeObj = canvas.getActiveObject()
+  if (activeObj != null && (activeObj['type'] === 'rect' || activeObj['type'] === 'polygon' ||
+    activeObj['type'] === 'circle')) {
+    activeObj.set('fill', sectorColor.toUpperCase())
+    activeObj.set('name', activeObj.fill)
+    canvas.renderAll()
+    renameSameSector(activeObj, canvas)
+  }
+}
+
+export const renameSector = function (canvas, name) {
+  let selObj = canvas.getActiveObject()
+  const obj = canvas.getObjects()
+  const oldName = selObj['name']
+  let newName = name
+  if (oldName in sectorDict && oldName !== newName) {
+    insertIntoDict(sectorDict, newName, selObj['fill'])
+    delete sectorDict[oldName]
+  }
+  for (var i = 0, l = obj.length; i < l; ++i) {
+    if (obj[i]['fill'] === selObj['fill']) {
+      obj[i]['name'] = newName
+    }
+  }
+}

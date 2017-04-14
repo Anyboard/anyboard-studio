@@ -13,7 +13,7 @@
       <li>
           <IconButton @click="centerObject" icon="fa-crosshairs" text="Center" tooltip="Center selected object"></IconButton>
       </li>
-    
+
     </ul>
     <nav id="fabric_toolbar">
       <a @click="makeShape" id="circle">New Sector</a>
@@ -31,6 +31,9 @@
       <input @change="uploadImage"type="file" id="image" style="display: none"/>
       <a @click="saveBoard">Save Board</a>
 
+      <a @click="changeColor">Change Color</a>
+      <a @click="renameSector">Change name</a>
+      <input type="text" id="sectorName"/>
       <a @click="jsonDebug">JSON DEBUG</a>
     </nav>
     <FabricCanvas></FabricCanvas>
@@ -45,16 +48,26 @@
     name: 'BoardEditor',
     data () {
       return {
+        // TODO: Make picker have correct color on load
         colors: [
-          '#1ba6cc',
-          '#189ba7',
-          '#98c6ae',
-          '#45a270',
-          '#7cb325',
-          '#eb9826'
+          '#166CA0',  // 2
+          '#4194D0',  // 5
+          '#112A95',  // 7
+          '#C047A3',  // 14
+          '#FB50A6',  // 15
+          '#5E1014',  // 16
+          '#9B3235',  // 18
+          '#FF483E',  // 20
+          '#66C889',  // 21
+          '#30A747',  // 24
+          '#31682E',  // 30
+          '#FF9344',  // 31
+          '#D96623',  // 33
+          '#F6EA77',  // 36
+          '#F4E658'   // 37
         ],
         index: 0,
-        color: '#1ba6cc'
+        color: '#166CA0'
       }
     },
     methods: {
@@ -95,6 +108,13 @@
       updateColor ({ index, color }) {
         this.index = index
         this.color = color
+        this.$store.dispatch('updateColor', color)
+      },
+      changeColor () {
+        this.$store.dispatch('changeColor')
+      },
+      renameSector () {
+        this.$store.dispatch('renameSector', document.getElementById('sectorName').value)
       }
     },
 
@@ -150,7 +170,7 @@ $icon-size: 50px;
       text-transform: uppercase;
     }
   }
-  
+
   .icon:hover {
     border-color:#777 #444 #444 #777;
   }
@@ -212,4 +232,3 @@ $icon-size: 50px;
   border-radius:.2em;
 }
 </style>
-<style src="../../node_modules/spectrum-colorpicker/spectrum.css"></style>

@@ -1,13 +1,15 @@
 import {fabric as F} from 'fabric'
 import FileSaver from 'file-saver'
-import {createPolyPoints, dataURLtoBlob, layerify, exportSectors, updateSectorList} from '../utilities/helpers.js'
+import {createPolyPoints, dataURLtoBlob, layerify, exportSectors, updateSectorList,
+        renameSameSector, colorChange, renameSector} from '../utilities/helpers.js'
 
 export default {
   state: {
     canvas: null,
     canvasState: 0,
     sectors: {},
-    usedSectors: {}
+    usedSectors: {},
+    sectorColor: '#166CA0'
   },
 
   mutations: {
@@ -27,21 +29,22 @@ export default {
       const rect = new F.Rect({
         width: 200,
         height: 200,
-        fill: '#C047A3',
+        fill: state.sectorColor,
         stroke: '#ffd445',
         strokeDashArray: [15, 3],
         strokeWidth: 7,
         minHeight: 200,
         minWidth: 200,
-        name: 'NamedRect'
+        name: state.sectorColor
       })
       layerify(state.canvas)
+      renameSameSector(rect, state.canvas)
       state.canvas.add(rect).setActiveObject(rect)
     },
 
     CREATE_POLYGON (state, sides) {
       const poly = new F.Polygon(createPolyPoints(sides, 100), {
-        fill: '#C047A3',
+        fill: state.sectorColor,
         stroke: '#ffd445',
         strokeDashArray: [6, 1.5],
         strokeWidth: 2,
@@ -49,24 +52,37 @@ export default {
         minWidth: 200
       })
       layerify(state.canvas)
+      renameSameSector(poly, state.canvas)
       state.canvas.add(poly).setActiveObject(poly)
     },
 
     CREATE_CIRCLE (state) {
       const circ = new F.Circle({
         radius: 100,
-        fill: '#C047A3',
+        fill: state.sectorColor,
         stroke: '#ffd445',
         strokeDashArray: [15, 3],
         strokeWidth: 7,
         minHeight: 200,
         minWidth: 200,
-        name: 'NamedCirc'
+        name: state.sectorColor
       })
       layerify(state.canvas)
+      renameSameSector(circ, state.canvas)
       state.canvas.add(circ).setActiveObject(circ)
     },
 
+    UPDATE_COLOR (state, payload) {
+      state.sectorColor = payload
+    },
+
+    CHANGE_COLOR (state) {
+      colorChange(state.canvas, state.sectorColor)
+    },
+
+    RENAME_SECTOR (state, payload) {
+      renameSector(state.canvas, payload)
+    },
     // Inserting text
     INSERT_TEXT (state) {
       const text = new F.IText('InsertedText',
@@ -108,6 +124,7 @@ export default {
           objects.forEach(function (o) {
             o.set('top', o.top + 15)
             o.set('left', o.left + 15)
+            renameSameSector(o, state.canvas)
             state.canvas.add(o)
           })
           state.canvas.renderAll()
@@ -197,6 +214,7 @@ export default {
     // Debugging
     JSON_DEBUG (state) {
       console.log(JSON.stringify(state.canvas))
+      console.log(state.usedSectors)
     }
   },
 
@@ -226,6 +244,22 @@ export default {
       }
     },
 
+    updateColor ({commit}, color) {
+      commit('UPDATE_COLOR', color)
+    },
+
+    renameSector ({commit}, name) {
+      commit('RENAME_SECTOR', name)
+      commit('SAVE_STATE')
+      commit('USED_SECTORS')
+      commit('SAVE_SECTORS')
+    },
+    changeColor ({commit}) {
+      commit('CHANGE_COLOR')
+      commit('SAVE_STATE')
+      commit('USED_SECTORS')
+      commit('SAVE_SECTORS')
+    },
     // Text
     insertText ({commit}, payload) {
       commit('INSERT_TEXT', payload)
