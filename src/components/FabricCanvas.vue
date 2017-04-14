@@ -26,8 +26,6 @@
         isDrawingMode: false,
         backgroundColor: 'white'
       })
-      cvs.setHeight(1)
-      cvs.setWidth(1)
 
       cvs.observe('object:scaling', function (e) {
         const shape = e.target
@@ -45,9 +43,17 @@
           }
         }
       })
+      cvs.on('path:created', function (e) {
+        e.path.set('name', 'bottom')
+      })
+      cvs.on('object:added', () => {
+        this.$store.dispatch('stateHandling')
+      })
+      cvs.on('object:modified', () => {
+        this.$store.dispatch('stateHandling')
+      })
 
       this.$store.dispatch('setCanvas', cvs)
-
     }
   }
 </script>

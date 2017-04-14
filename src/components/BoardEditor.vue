@@ -6,30 +6,44 @@
 
     <nav id="fabric_toolbar">
       <a @click="makeShape" id="circle">New Sector</a>
+      <a @click="insertText">Insert Text</a>
+      <a @click="toggleDraw">Toggle free drawing</a>
       <a @click="centerObject">Center Selected Object</a>
+
       <a @click="cloneObject">Clone Object</a>
       <a @click="deleteObject">Delete Object</a>
-
       <a @click="arrangeObject" id="back">Arrange Object</a>
-      <a @click="insertText">Insert Text</a>
       <a href="#">Free Drawing</a>
-      <a href="#">Colorpicker</a>
 
+      <a href="#">Colorpicker</a>
       <a @click="clickImage">Upload Image</a>
       <input @change="uploadImage"type="file" id="image" style="display: none"/>
       <a @click="saveBoard">Save Board</a>
+
+      <a @click="jsonDebug">JSON DEBUG</a>
     </nav>
     <FabricCanvas></FabricCanvas>
     <FabricInspector></FabricInspector>
+    <choiceColor :colors='colors' radius='10em' @updateColor='updateColor'></choiceColor>
   </div>
 </template>
 
 <script type="text/javascript">
+  import {choiceColor} from 'vue-circle-choice'
   export default {
     name: 'BoardEditor',
     data () {
       return {
-        test: 'nothing'
+        colors: [
+          '#1ba6cc',
+          '#189ba7',
+          '#98c6ae',
+          '#45a270',
+          '#7cb325',
+          '#eb9826'
+        ],
+        index: 0,
+        color: '#1ba6cc'
       }
     },
     methods: {
@@ -38,6 +52,9 @@
       },
       insertText () {
         this.$store.dispatch('insertText')
+      },
+      toggleDraw () {
+        this.$store.dispatch('toggleDraw')
       },
       deleteObject () {
         this.$store.dispatch('deleteObject')
@@ -60,6 +77,13 @@
       },
       saveBoard () {
         this.$store.dispatch('saveBoard')
+      },
+      jsonDebug () {
+        this.$store.dispatch('jsonDebug')
+      },
+      updateColor ({ index, color }) {
+        this.index = index
+        this.color = color
       }
 
     },
@@ -67,7 +91,8 @@
     components: {
       FabricInspector: require('./FabricInspector.vue'),
       FabricCanvas: require('./FabricCanvas.vue'),
-      IconButton: require('./IconButton.vue')
+      IconButton: require('./IconButton.vue'),
+      choiceColor: choiceColor
     }
   }
 </script>
@@ -75,7 +100,7 @@
 <style lang="SASS">
 
 /**
-* TOOLBAR 
+* TOOLBAR
 */
 .fabric_toolbar {
   font-size:2em;
@@ -151,7 +176,7 @@
 
 /**
 * CONTENT
-*/ 
+*/
 .content, .canvas_container {
   flex-grow:10;
   min-width: 580px;
@@ -168,3 +193,4 @@
   border-radius:.2em;
 }
 </style>
+<style src="../../node_modules/spectrum-colorpicker/spectrum.css"></style>
