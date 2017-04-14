@@ -1,14 +1,8 @@
 <template>
-  <li>
-      <span class="icon is-large">
-        <i :class="'fa ' + icon"></i>
-      </span>
-      
-      <span>
-        <b>{{text}}</b>
-        {{tooltip}}
-      </span>
-  </li>
+  <span class="icon is-medium" :alt="tooltip">
+    <i :class="'fa ' + icon"></i>
+    <span>{{text}}</span>
+  </span>
 </template>
 
 <script type="text/javascript">
@@ -19,5 +13,4 @@
   }
 </script>
 
-<style lang="SASS">
-</style>
+<style lang="SASS"></style>
