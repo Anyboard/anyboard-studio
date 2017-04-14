@@ -26,8 +26,6 @@
         isDrawingMode: false,
         backgroundColor: 'white'
       })
-      cvs.setHeight(1)
-      cvs.setWidth(1)
 
       cvs.observe('object:scaling', function (e) {
         const shape = e.target
@@ -47,7 +45,6 @@
       })
 
       this.$store.dispatch('setCanvas', cvs)
-
     }
   }
 </script>
