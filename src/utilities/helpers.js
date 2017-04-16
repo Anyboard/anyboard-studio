@@ -164,17 +164,18 @@ function _isContains (json, value) {
 }
 
 export const renameSameSector = function (obj, canvas) {
-  const objs = canvas.getObjects()
-  if (_isContains(sectorDict, obj['fill'])) {
-    obj['name'] = Object.keys(sectorDict)[Object.values(sectorDict).indexOf(obj['fill'])]
-  } else {
-    for (let i = 0, l = objs.length; i < l; ++i) {
-      if (obj['fill'] === objs[i]['fill'] && objs[i]['name'] !== obj['name']) {
-        console.log('Actual name found: ' + objs[i]['name'])
-        obj['name'] = objs[i]['name']
-        break
-      } else {
-        obj['name'] = obj['fill']
+  if (obj['type'] === 'rect' || obj['type'] === 'polygon' || obj['type'] === 'circle') {
+    const objs = canvas.getObjects()
+    if (_isContains(sectorDict, obj['fill'])) {
+      obj['name'] = Object.keys(sectorDict)[Object.values(sectorDict).indexOf(obj['fill'])]
+    } else {
+      for (let i = 0, l = objs.length; i < l; ++i) {
+        if (obj['fill'] === objs[i]['fill'] && objs[i]['name'] !== obj['name']) {
+          obj['name'] = objs[i]['name']
+          break
+        } else {
+          obj['name'] = obj['fill']
+        }
       }
     }
   }

@@ -35,6 +35,10 @@
       <a @click="renameSector">Change name</a>
       <input type="text" id="sectorName"/>
       <a @click="jsonDebug">JSON DEBUG</a>
+
+      <input type="range" value="20" min="1" max="100" @change="changeWidth" id="drawLineWidth"/>
+      <a @click="changeDrawLayer">Change draw layer</a>
+      <a @click="clearCanvas">Clear Board</a>
     </nav>
     <FabricCanvas></FabricCanvas>
     <FabricInspector></FabricInspector>
@@ -80,11 +84,20 @@
       toggleDraw () {
         this.$store.dispatch('toggleDraw')
       },
+      changeWidth () {
+        this.$store.dispatch('changeWidth', document.getElementById('drawLineWidth').value)
+      },
+      changeDrawLayer () {
+        this.$store.dispatch('changeDrawLayer')
+      },
       deleteObject () {
         this.$store.dispatch('deleteObject')
       },
       cloneObject () {
         this.$store.dispatch('cloneObject')
+      },
+      clearCanvas () {
+        this.$store.dispatch('clearCanvas')
       },
       centerObject () {
         this.$store.dispatch('centerObject')

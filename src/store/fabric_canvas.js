@@ -9,7 +9,8 @@ export default {
     canvasState: 0,
     sectors: {},
     usedSectors: {},
-    sectorColor: '#166CA0'
+    sectorColor: '#166CA0',
+    drawLayer: 'bottom'
   },
 
   mutations: {
@@ -108,6 +109,21 @@ export default {
         layerify(state.canvas)
       }
     },
+
+    // Change brush width
+    CHANGE_WIDTH (state, payload) {
+      state.canvas.freeDrawingBrush.width = parseInt(payload || 1)
+    },
+
+    // Change draw layer
+    CHANGE_DRAW_LAYER (state) {
+      if (state.drawLayer === 'bottom') {
+        state.drawLayer = 'top'
+      } else if (state.drawLayer === 'top') {
+        state.drawLayer = 'bottom'
+      }
+    },
+
     // Object manipulation
     DELETE_OBJECT (state) {
       if (state.canvas.getActiveObject() != null) {
@@ -116,19 +132,23 @@ export default {
       }
     },
 
-    // BUG: Paths aren't cloned
+    CLEAR_CANVAS (state) {
+      state.canvas.clear()
+      state.canvas.setBackgroundColor('white')
+      state.canvas.renderAll()
+    },
+
     CLONE_OBJECT (state) {
       if (state.canvas.getActiveObject() != null) {
-        var copyData = state.canvas.getActiveObject().toObject()
-        F.util.enlivenObjects([copyData], function (objects) {
-          objects.forEach(function (o) {
-            o.set('top', o.top + 15)
-            o.set('left', o.left + 15)
-            renameSameSector(o, state.canvas)
-            state.canvas.add(o)
+        const obj = state.canvas.getActiveObject()
+        if (F.util.getKlass(obj.type).async) {
+          obj.clone(function (clone) {
+            clone.set({left: obj.left + 15, top: obj.top + 15, name: obj.name})
+            state.canvas.add(clone)
           })
-          state.canvas.renderAll()
-        })
+        } else {
+          state.canvas.add(obj.clone().set({left: obj.left + 15, top: obj.top + 15, name: obj.name}))
+        }
         layerify(state.canvas)
       }
     },
@@ -269,10 +289,28 @@ export default {
     toggleDraw ({commit}, payload) {
       commit('TOGGLE_DRAW', payload)
     },
+
+    changeWidth ({commit}, width) {
+      commit('CHANGE_WIDTH', width)
+    },
+
+    changeDrawLayer ({commit}) {
+      commit('CHANGE_DRAW_LAYER')
+    },
+
     // Object manipulation
     deleteObject ({commit}, payload) {
       commit('DELETE_OBJECT', payload)
     },
+
+    clearCanvas ({commit}) {
+      commit('CLEAR_CANVAS')
+      commit('SAVE_STATE')
+      commit('USED_SECTORS')
+      commit('SAVE_SECTORS')
+      commit('LOAD_STATE')
+    },
+
     cloneObject ({commit}, payload) {
       commit('CLONE_OBJECT', payload)
     },
@@ -321,5 +359,9 @@ export default {
       commit('JSON_DEBUG')
     }
   },
-  getters: {}
+  getters: {
+    GET_DRAW_LAYER: state => {
+      return state.drawLayer
+    }
+  }
 }

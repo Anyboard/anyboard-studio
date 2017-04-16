@@ -43,8 +43,8 @@
           }
         }
       })
-      cvs.on('path:created', function (e) {
-        e.path.set('name', 'bottom')
+      cvs.on('path:created', (e) => {
+        e.path.set('name', this.$store.getters.GET_DRAW_LAYER)
       })
       cvs.on('object:added', () => {
         this.$store.dispatch('stateHandling')
@@ -53,6 +53,9 @@
         this.$store.dispatch('stateHandling')
       })
 
+      /* cvs.on('canvas:cleared', () => {
+        this.$store.dispatch('setCanvas', cvs)
+      }) */
       this.$store.dispatch('setCanvas', cvs)
     }
   }
