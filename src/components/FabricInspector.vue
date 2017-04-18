@@ -1,9 +1,9 @@
 <template>
   <div>
-   <p>Hei på deg min kogg</p>
+   <p>Fabric inspector</p>
     <p>{{header}}</p>
     <p>{{paragraph}}</p>
-    <a @click="hei">LIKER JEG Å KOGEEEEEEEEEEE</a>
+    <a @click="getHeight">Click here to see a tiles height</a>
   </div>
 </template>
 
@@ -14,19 +14,22 @@
     name: 'FabricInspector',
     data () {
       return {
-        header: 'det må jo kogges der det kogges kan og jeg håper at jeg kan KOGGE DEEEEEEG der det kogges kan :) har du sett mitt gode ark'
+        header: 'Click on a tile to see it"s properties.'
       }
     },
     computed: {
       ...mapState('fabricInspector', {paragraph: state => state.paragraph})
     },
     methods: {
-      hei () {
-        this.$store.commit('fabricInspector/SET_PARAGRAPH', 'serr har du kogga :O')
+      getHeight () {
+        this.$store.commit('fabricInspector/SET_PARAGRAPH', this.$store.getters.GET_HEIGHT)
       }
     }
   }
 </script>
 
 <style scoped>
+ p {
+   color: white;
+ }
 </style>

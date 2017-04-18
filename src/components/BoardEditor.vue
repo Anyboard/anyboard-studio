@@ -39,9 +39,10 @@
       <input type="range" value="20" min="1" max="100" @change="changeWidth" id="drawLineWidth"/>
       <a @click="changeDrawLayer">Change draw layer</a>
       <a @click="clearCanvas">Clear Board</a>
+      <FabricInspector></FabricInspector>
     </nav>
     <FabricCanvas></FabricCanvas>
-    <FabricInspector></FabricInspector>
+
     <choiceColor :colors='colors' radius='10em' @updateColor='updateColor'></choiceColor>
   </div>
 </template>

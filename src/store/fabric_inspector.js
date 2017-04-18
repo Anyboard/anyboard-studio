@@ -4,7 +4,7 @@
 
 export default {
   namespaced: true,
-  state: {paragraph: 'HEI PÅ DEG MIN GODE KOGG JEG DIGGER Å KOGGE DEG'},
+  state: {paragraph: 'Height: '},
   mutations: {
     SET_PARAGRAPH (state, payload) {
       state.paragraph = payload

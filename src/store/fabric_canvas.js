@@ -362,6 +362,37 @@ export default {
   getters: {
     GET_DRAW_LAYER: state => {
       return state.drawLayer
+    },
+    GET_HEIGHT: state => {
+      return state.canvas.getActiveObject()
+     // return state.canvas.getActiveObject().height * state.canvas.getActiveObject().scaleY
+    },
+    GET_WIDTH: state => {
+      return state.canvas.getActiveObject().width * state.canvas.getActiveObject().scaleX
+    },
+    GET_FILL: state => {
+      return state.canvas.getActiveObject().fill
+    },
+    GET_STROKE: state => {
+      return state.canvas.getActiveObject().stroke
+    },
+    GET_STROKE_DASH_ARRAY: state => {
+      return state.canvas.getActiveObject().strokeDashArray
+    },
+    GET_STROKE_WIDTH: state => {
+      return state.canvas.getActiveObject().strokeWidth
+    },
+    GET_MIN_HEIGHT: state => {
+      return state.canvas.getActiveObject().minHeight
+    },
+    GET_MAX_HEIGHT: state => {
+      return state.canvas.getActiveObject().maxHeight
+    },
+    GET_NAME: state => {
+      return state.canvas.getActiveObject().name
+    },
+    GET_COLOR: state => {
+      return state.canvas.getActiveObject().color
     }
   }
 }
