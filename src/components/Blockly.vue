@@ -46,9 +46,9 @@ export default {
 
     // TODO Autogenerate this list ?? Maybe
     var NUMBERFIELDS =
-      [['Number Field 1', '1'],
-       ['Number Field 1', '2'],
-       ['Another Number Field', '3']]
+      [['Number Field 1', 'number1'],
+       ['Number Field 2', 'number2'],
+       ['Number Field 3', 'number3']]
 
     Blockly.Blocks['show_numberfield'] = {
       init: function () {
@@ -546,7 +546,6 @@ export default {
     Blockly.JavaScript['show_text'] = function (block) {
       var msg = Blockly.JavaScript.valueToCode(block, 'TEXT', Blockly.JavaScript.ORDER_NONE) || '\'\''
       var field = block.getFieldValue('FIELD')
-      // return 'app.setMessage(' + msg + ', ' + field + ');\n'
       return '$(\'#' + field + '\').html(' + msg + ');\n'
     }
 
@@ -559,20 +558,23 @@ export default {
       } else {
         return '$(\'#' + field + '\').hide();\n'
       }
-      // return 'app.showTextField(' + truth + ', ' + field + ');\n'
     }
 
     Blockly.JavaScript['show_number'] = function (block) {
       var num = Blockly.JavaScript.valueToCode(block, 'NUMBER', Blockly.JavaScript.ORDER_NONE) || '\'\''
       var field = block.getFieldValue('FIELD')
-      return 'app.setNumber(' + num + ', ' + field + ');\n'
+      return '$(\'#' + field + '\').html(' + num + ');\n'
     }
 
     Blockly.JavaScript['show_numberfield'] = function (block) {
       var type = block.getFieldValue('TYPE')
       var field = block.getFieldValue('FIELD')
-      var truth = (type === 'SHOW' ? 'true' : 'false')
-      return 'app.showNumberField(' + truth + ', ' + field + ');\n'
+      var truth = (type === 'SHOW')
+      if (truth) {
+        return '$(\'#' + field + '\').show();\n'
+      } else {
+        return '$(\'#' + field + '\').hide();\n'
+      }
     }
 
     Blockly.JavaScript['set_id'] = function (block) {
