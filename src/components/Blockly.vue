@@ -546,14 +546,20 @@ export default {
     Blockly.JavaScript['show_text'] = function (block) {
       var msg = Blockly.JavaScript.valueToCode(block, 'TEXT', Blockly.JavaScript.ORDER_NONE) || '\'\''
       var field = block.getFieldValue('FIELD')
-      return 'app.setMessage(' + msg + ', ' + field + ');\n'
+      // return 'app.setMessage(' + msg + ', ' + field + ');\n'
+      return '$(\'#' + field + '\').html(' + msg + ');\n'
     }
 
     Blockly.JavaScript['show_textfield'] = function (block) {
       var type = block.getFieldValue('TYPE')
       var field = block.getFieldValue('FIELD')
-      var truth = (type === 'SHOW' ? 'true' : 'false')
-      return 'app.showTextField(' + truth + ', ' + field + ');\n'
+      var truth = (type === 'SHOW')
+      if (truth) {
+        return '$(\'#' + field + '\').show();\n'
+      } else {
+        return '$(\'#' + field + '\').hide();\n'
+      }
+      // return 'app.showTextField(' + truth + ', ' + field + ');\n'
     }
 
     Blockly.JavaScript['show_number'] = function (block) {
