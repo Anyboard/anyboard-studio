@@ -22,7 +22,8 @@
     },
     methods: {
       getHeight () {
-        this.$store.commit('fabricInspector/SET_PARAGRAPH', this.$store.getters.GET_HEIGHT)
+        this.$store.dispatch('fabricInspector/setParagraph', this.$store.getters.GET_HEIGHT)
+        this.$store.dispatch('stateHandling')
       }
     }
   }

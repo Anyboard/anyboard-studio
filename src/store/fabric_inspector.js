@@ -10,6 +10,10 @@ export default {
       state.paragraph = payload
     }
   },
-  actions: {},
+  actions: {
+    setParagraph ({commit}, para) {
+      commit('SET_PARAGRAPH', para)
+    }
+  },
   getters: {}
 }

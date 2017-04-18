@@ -364,8 +364,7 @@ export default {
       return state.drawLayer
     },
     GET_HEIGHT: state => {
-      return state.canvas.getActiveObject()
-     // return state.canvas.getActiveObject().height * state.canvas.getActiveObject().scaleY
+      return state.canvas.getActiveObject().height * state.canvas.getActiveObject().scaleY
     },
     GET_WIDTH: state => {
       return state.canvas.getActiveObject().width * state.canvas.getActiveObject().scaleX

@@ -27,7 +27,7 @@
         backgroundColor: 'white'
       })
 
-      cvs.observe('object:scaling', function (e) {
+      cvs.on('object:scaling', (e) => {
         const shape = e.target
         if (shape['type'] === 'rect' || shape['type'] === 'poly' || shape['type'] === 'circle') {
           const minWidth = 200
@@ -42,6 +42,7 @@
             shape.set({ scaleY: minHeight / shape.height })
           }
         }
+        this.$store.dispatch('stateHandling')
       })
       cvs.on('path:created', (e) => {
         e.path.set('name', this.$store.getters.GET_DRAW_LAYER)
