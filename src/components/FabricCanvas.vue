@@ -53,6 +53,12 @@
       cvs.on('object:modified', () => {
         this.$store.dispatch('stateHandling')
       })
+      cvs.on('object:selected', () => {
+        this.$store.dispatch('updateActiveObj')
+      })
+      cvs.on('selection:cleared', () => {
+        this.$store.dispatch('updateActiveObj')
+      })
 
       /* cvs.on('canvas:cleared', () => {
         this.$store.dispatch('setCanvas', cvs)
