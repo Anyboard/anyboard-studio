@@ -81,9 +81,9 @@ export default {
 
     // TODO Autogenerate this list ?? Maybe
     var TEXTFIELDS =
-      [['Text Field 1', '1'],
-       ['Text Field 1', '2'],
-       ['Another Text Field', '3']]
+      [['Text Field 1', 'message1'],
+       ['Text Field 2', 'message2'],
+       ['Text Field 3', 'message3']]
 
     Blockly.Blocks['show_textfield'] = {
       init: function () {
