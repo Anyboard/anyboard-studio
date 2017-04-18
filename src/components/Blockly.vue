@@ -427,7 +427,7 @@ export default {
     }
 
     Blockly.JavaScript['current_token'] = function (block) {
-      var code = 'currentToken.id'
+      var code = 'currentToken'
       // TODO: Change ORDER_NONE to the correct strength.
       return [code, Blockly.JavaScript.ORDER_MEMBER]
     }
