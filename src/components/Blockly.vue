@@ -421,20 +421,20 @@ export default {
 
     Blockly.JavaScript['token'] = function (block) {
       var token = block.getFieldValue('TOKEN')
-      var code = token
+      var code = '\'' + token + '\''
       // TODO: Change ORDER_NONE to the correct strength.
       return [code, Blockly.JavaScript.ORDER_MEMBER]
     }
 
     Blockly.JavaScript['current_token'] = function (block) {
-      var code = 'currentToken'
+      var code = 'currentToken.id'
       // TODO: Change ORDER_NONE to the correct strength.
       return [code, Blockly.JavaScript.ORDER_MEMBER]
     }
 
     Blockly.JavaScript['token_test'] = function (block) {
       var token = Blockly.JavaScript.valueToCode(block, 'TOKEN', Blockly.JavaScript.ORDER_EQUALITY)
-      var code = 'currentToken == ' + token
+      var code = 'currentToken.id == \'' + token + '\''
       // TODO: Change ORDER_NONE to the correct strength.
       return [code, Blockly.JavaScript.ORDER_EQUALITY]
     }
