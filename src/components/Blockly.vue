@@ -492,7 +492,7 @@ export default {
     Blockly.JavaScript['sector_test'] = function (block) {
       var token = Blockly.JavaScript.valueToCode(block, 'TOKEN', Blockly.JavaScript.ORDER_FUNCTION_CALL)
       var sector = Blockly.JavaScript.valueToCode(block, 'SECTOR', Blockly.JavaScript.ORDER_EQUALITY)
-      var code = sector + ' == app.getSector(\'' + token + '\')'
+      var code = sector + ' == app.getSector(' + token + ')'
       // TODO: Change ORDER_NONE to the correct strength.
       return [code, Blockly.JavaScript.ORDER_NONE]
     }
