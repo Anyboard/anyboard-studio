@@ -16,7 +16,7 @@
 
     <p>Change object name</p>
     <input type="text" id="sectorName"/>
-    <a @click="renameSector">Change name</a>
+    <a @click="renameSector2">Change name</a>
 
   </div>
 </template>
@@ -24,6 +24,7 @@
 
 <script>
   import {mapState} from 'vuex'
+
   export default {
     name: 'FabricInspector',
     data () {
@@ -83,7 +84,7 @@
           }
         }
       },
-      renameSector () {
+      renameSector2 () {
         this.$store.dispatch('renameSector', document.getElementById('sectorName').value)
       }
     }
