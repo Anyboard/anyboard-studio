@@ -617,13 +617,17 @@ export default {
           defvars.join('\n')
       }
     }
-/*
-    var tilesdict = {
+
+    /* var tilesdict = {
       'key1': 'value1',
       'key2': 'value2',
       'key3': 'value3'
+    } */
+
+    var tokenVal = {
+      'Dragon': ['vibrate', 'yooo']
     }
-*/
+
     Blockly.JavaScript.writeDictionary = function (name, dict) {
       var result = name
       result += ': {\n'
@@ -633,7 +637,7 @@ export default {
           result += ',\n'
         }
         first = false
-        result += key + ': ' + dict[key]
+        result += '  ' + key + ': ' + dict[key]
       }
       result += '\n},\n\n\n'
       return result
@@ -651,6 +655,7 @@ export default {
       Blockly.JavaScript.variableDB_.reset()
       var output = definitions.join('\n\n') + '\n\n\n'
       // output += Blockly.JavaScript.writeDictionary('tiles', tilesdict)
+      output += Blockly.JavaScript.writeDictionary('tokenVal', tokenVal)
       output += 'initiate: function() {\n'
       output += code
       output += '\n\n'
