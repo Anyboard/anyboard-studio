@@ -1,7 +1,7 @@
 <template>
   <div id="displayEditor">
     <div class="input-row">
-      <div class="display-led inactive-led"></div>
+      <div id="circle1" class="display-led inactive-led"></div>
       <div class="display-led inactive-led"></div>
       <div class="display-led inactive-led"></div>
       <div class="display-led inactive-led"></div>
@@ -90,10 +90,12 @@
     name: 'displayEditor'
   }
 
-  $('.display-led').toggle(function () {
-  },
-  function () {
-
+  $('#circle1').addEventListener('click', function () {
+    if (this.className === 'display-led inactive-led') {
+      this.className = 'display-led active-led'
+    } else {
+      this.className = 'display-led inactive-led'
+    }
   })
 
 </script>

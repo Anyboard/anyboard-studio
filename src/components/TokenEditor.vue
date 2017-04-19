@@ -13,7 +13,6 @@
       <label class="firstview-label">placeholder event:</label><input class="token-input" type="checkbox"><br>
       <label class="firstview-label">placeholder event:</label><input class="token-input" type="checkbox"><br>
     </div>
-
   </div>
 </template>
 
