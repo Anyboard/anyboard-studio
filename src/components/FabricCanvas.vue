@@ -52,6 +52,7 @@
       })
       cvs.on('object:modified', () => {
         this.$store.dispatch('stateHandling')
+        this.$store.dispatch('updateActiveObj')
       })
       cvs.on('object:selected', () => {
         this.$store.dispatch('updateActiveObj')
