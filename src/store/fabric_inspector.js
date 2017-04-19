@@ -4,7 +4,7 @@
 
 export default {
   namespaced: true,
-  state: {height: 'Height: ', width: 'Width: ', type: 'Type: ', fill: 'Fill: ', name: 'Name: ', stroke: 'Stroke: ', strokedasharray: 'StrokeDashArray: ', strokewidth: 'StrokeWidth: ', maxheight: 'MaxHeight: ', minheight: 'MinHeight'},
+  state: {height: 'Height: ', width: 'Width: ', type: 'Type: ', fill: 'Fill: ', name: 'Name: ', stroke: 'Stroke: ', strokedasharray: 'StrokeDashArray: ', strokewidth: 'StrokeWidth: ', minwidth: 'MinWidth: ', minheight: 'MinHeight'},
   mutations: {
     SET_HEIGHT (state, payload) {
       state.height = payload
@@ -30,8 +30,8 @@ export default {
     SET_STROKE_WIDTH (state, payload) {
       state.strokewidth = payload
     },
-    SET_MAX_HEIGHT (state, payload) {
-      state.maxheight = payload
+    SET_MIN_WIDTH (state, payload) {
+      state.minwidth = payload
     },
     SET_MIN_HEIGHT (state, payload) {
       state.minheight = payload
@@ -63,8 +63,8 @@ export default {
     setStrokeWidth ({commit}, para) {
       commit('SET_STROKE_WIDTH', para)
     },
-    setMaxHeight ({commit}, para) {
-      commit('SET_MAX_HEIGHT', para)
+    setMinWidth ({commit}, para) {
+      commit('SET_MIN_WIDTH', para)
     },
     setMinHeight ({commit}, para) {
       commit('SET_MIN_HEIGHT', para)

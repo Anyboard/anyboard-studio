@@ -206,7 +206,7 @@ export default {
     // Exporting
     UPDATE_ACTIVEOBJ (state) {
       if (state.canvas.getActiveObject() !== null) {
-        state.activeObj = state.canvas.getActiveObject().toObject(['name'])
+        state.activeObj = state.canvas.getActiveObject().toObject(['name', 'minWidth', 'minHeight'])
       } else {
         state.activeObj = null
       }

@@ -1,18 +1,19 @@
 <template>
   <div>
    <p>Fabric inspector</p>
+    <a @click="updateSectorInfo">Click here to update info about selected sector</a>
     <p>{{header}}</p>
     <p>{{name}}</p>
     <p>{{type}}</p>
+    <p>{{fill}}</p>
     <p>{{height}}</p>
     <p>{{width}}</p>
-    <p>{{fill}}</p>
+    <p>{{minHeight}}</p>
+    <p>{{minWidth}}</p>
     <p>{{stroke}}</p>
-    <p>{{strokedasharray}}</p>
-    <p>{{strokewidth}}</p>
-    <p>{{maxheight}}</p>
-    <p>{{minheight}}</p>
-    <a @click="updateSectorInfo">Click here to update info about selected sector</a>
+    <p>{{strokeDashArray}}</p>
+    <p>{{strokeWidth}}</p>
+
   </div>
 </template>
 
@@ -33,26 +34,52 @@
       ...mapState('fabricInspector', {fill: state => state.fill}),
       ...mapState('fabricInspector', {name: state => state.name}),
       ...mapState('fabricInspector', {stroke: state => state.stroke}),
-      ...mapState('fabricInspector', {strokedasharray: state => state.strokedasharray}),
-      ...mapState('fabricInspector', {strokewidth: state => state.strokewidth}),
-      ...mapState('fabricInspector', {strokewidth: state => state.maxheight}),
-      ...mapState('fabricInspector', {strokewidth: state => state.minheight})
+      ...mapState('fabricInspector', {strokeDashArray: state => state.strokedasharray}),
+      ...mapState('fabricInspector', {strokeWidth: state => state.strokewidth}),
+      ...mapState('fabricInspector', {minWidth: state => state.minwidth}),
+      ...mapState('fabricInspector', {minHeight: state => state.minheight})
     },
     methods: {
       updateSectorInfo () {
         const activeObj = this.$store.getters.GET_ACTIVEOBJ
         if (activeObj !== null) {
-          this.$store.dispatch('fabricInspector/setName', 'Name: ' + activeObj.name)
-          this.$store.dispatch('fabricInspector/setType', 'Type: ' + activeObj.type)
-          this.$store.dispatch('fabricInspector/setHeight', 'Height: ' + activeObj.height * activeObj.scaleY)
-          this.$store.dispatch('fabricInspector/setWidth', 'Width: ' + activeObj.width * activeObj.scaleX)
-          this.$store.dispatch('fabricInspector/setFill', 'Fill: ' + activeObj.fill)
-          this.$store.dispatch('fabricInspector/setStroke', 'Stroke: ' + activeObj.stroke)
-          this.$store.dispatch('fabricInspector/setStrokeDashArray', 'StrokeDashArray: ' + activeObj.strokeDashArray)
-          this.$store.dispatch('fabricInspector/setStrokeWidth', 'StrokeWidth: ' + activeObj.strokeWidth)
-          this.$store.dispatch('fabricInspector/setMaxHeight', 'MaxHeight: ' + activeObj.maxHeight)
-          this.$store.dispatch('fabricInspector/setMinHeight', 'MinHeight: ' + activeObj.minHeight)
-        }// TODO:  legge til color? og legge til sjekk for type slik at kun relevante verdier vises
+          if (activeObj.type === 'rect' || activeObj.type === 'circle' || activeObj.type === 'triangle') {
+            this.$store.dispatch('fabricInspector/setName', 'Name: ' + activeObj.name)
+            this.$store.dispatch('fabricInspector/setType', 'Type: ' + activeObj.type)
+            this.$store.dispatch('fabricInspector/setHeight', 'Height: ' + activeObj.height * activeObj.scaleY)
+            this.$store.dispatch('fabricInspector/setWidth', 'Width: ' + activeObj.width * activeObj.scaleX)
+            this.$store.dispatch('fabricInspector/setFill', 'Fill: ' + activeObj.fill)
+            this.$store.dispatch('fabricInspector/setStroke', 'Stroke: ' + activeObj.stroke)
+            this.$store.dispatch('fabricInspector/setStrokeDashArray', 'StrokeDashArray: ' + activeObj.strokeDashArray)
+            this.$store.dispatch('fabricInspector/setStrokeWidth', 'StrokeWidth: ' + activeObj.strokeWidth)
+            this.$store.dispatch('fabricInspector/setMinWidth', 'MinWidth: ' + activeObj.minWidth)
+            this.$store.dispatch('fabricInspector/setMinHeight', 'MinHeight: ' + activeObj.minHeight)
+          }
+          if (activeObj.type === 'image') {
+            this.$store.dispatch('fabricInspector/setName', 'Name: ' + activeObj.name)
+            this.$store.dispatch('fabricInspector/setType', 'Type: ' + activeObj.type)
+            this.$store.dispatch('fabricInspector/setHeight', 'Height: ' + activeObj.height * activeObj.scaleY)
+            this.$store.dispatch('fabricInspector/setWidth', 'Width: ' + activeObj.width * activeObj.scaleX)
+            this.$store.dispatch('fabricInspector/setFill', 'Fill: ')
+            this.$store.dispatch('fabricInspector/setStroke', 'Stroke: ')
+            this.$store.dispatch('fabricInspector/setStrokeDashArray', 'StrokeDashArray: ')
+            this.$store.dispatch('fabricInspector/setStrokeWidth', 'StrokeWidth: ')
+            this.$store.dispatch('fabricInspector/setMinWidth', 'MinWidth: ')
+            this.$store.dispatch('fabricInspector/setMinHeight', 'MinHeight: ')
+          }
+          if (activeObj.type === 'path') {
+            this.$store.dispatch('fabricInspector/setName', 'Name: ' + activeObj.name)
+            this.$store.dispatch('fabricInspector/setType', 'Type: ' + activeObj.type)
+            this.$store.dispatch('fabricInspector/setFill', 'Fill: ' + activeObj.fill)
+            this.$store.dispatch('fabricInspector/setHeight', 'Height: ')
+            this.$store.dispatch('fabricInspector/setWidth', 'Width: ')
+            this.$store.dispatch('fabricInspector/setStroke', 'Stroke: ')
+            this.$store.dispatch('fabricInspector/setStrokeDashArray', 'StrokeDashArray: ')
+            this.$store.dispatch('fabricInspector/setStrokeWidth', 'StrokeWidth: ')
+            this.$store.dispatch('fabricInspector/setMinWidth', 'MinWidth: ')
+            this.$store.dispatch('fabricInspector/setMinHeight', 'MinHeight: ')
+          }
+        }
       }
     }
   }
