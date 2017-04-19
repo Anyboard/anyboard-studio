@@ -163,6 +163,18 @@ export default {
       }
     }
 
+    Blockly.Blocks['turn'] = {
+      init: function () {
+        this.appendDummyInput()
+            .appendField('Turn Token')
+        this.appendStatementInput('STACK')
+            .setCheck(null)
+        this.setColour(65)
+        this.setTooltip('')
+        this.setHelpUrl('')
+      }
+    }
+
     Blockly.Blocks['double_tap'] = {
       init: function () {
         this.appendDummyInput()
@@ -335,7 +347,7 @@ export default {
       init: function () {
         this.appendValueInput('TOKEN')
             .setCheck('Token')
-            .appendField('The tile that')
+            .appendField('The sector that')
         this.appendDummyInput()
             .appendField('is standing on')
         this.setOutput(true, 'Sector')
@@ -511,6 +523,14 @@ export default {
       var code = 'var handleTokenTilt = function(currentToken , options) {\n'
       code += stack + '};\n'
       code += 'AnyBoard.TokenManager.onTokenEvent("TILT", handleTokenTilt);'
+      return code
+    }
+
+    Blockly.JavaScript['turn'] = function (block) {
+      var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
+      var code = 'var handleTokenTurn = function(currentToken , options) {\n'
+      code += stack + '};\n'
+      code += 'AnyBoard.TokenManager.onTokenEvent("TURN", handleTokenTurn);'
       return code
     }
 
