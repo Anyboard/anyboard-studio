@@ -201,13 +201,19 @@
         $('.current_tile').css("background-color", color);
       },
 
-      getSector: function (tokenName) {
+      getSector: function (token) {
         for (var key in this.devices){
-          if (this.devices[key].id == tokenName){
+          if (this.devices[key] == token){
             return this.devices[key].sector;
           }
         }
         return false;
+      },
+
+      getRandomToken: function () {
+        var obj_keys = Object.keys(app.devices);
+        var ran_key = obj_keys[Math.floor(Math.random() *obj_keys.length)];
+        return app.devices[ran_key];
       }
 
     };
