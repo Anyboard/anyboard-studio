@@ -200,7 +200,7 @@ export default {
         this.setInputsInline(true)
         this.setPreviousStatement(true, null)
         this.setNextStatement(true, null)
-        this.setColour(255)
+        this.setColour(120)
         this.setTooltip('')
         this.setHelpUrl('')
       }
@@ -248,8 +248,8 @@ export default {
 
     // TODO Autogenerate this list
     var TOKENS =
-      [['Dragon', 'DRAGON'],
-       ['Knight', 'KNIGHT']]
+      [['Dragon'],
+       ['Knight']]
 
     Blockly.Blocks['token'] = {
       init: function () {
@@ -290,7 +290,20 @@ export default {
             .setCheck('Token')
             .appendField('Current Token is ')
         this.setOutput(true, 'Boolean')
-        this.setColour(210)
+        this.setColour(290)
+        this.setTooltip('')
+        this.setHelpUrl('')
+      }
+    }
+
+    Blockly.Blocks['set_id'] = {
+      init: function () {
+        this.appendDummyInput()
+          .appendField('Set token name to: ')
+          .appendField(new Blockly.FieldDropdown(TOKENS), 'TOKEN')
+        this.setPreviousStatement(true, null)
+        this.setNextStatement(true, null)
+        this.setColour(290)
         this.setTooltip('')
         this.setHelpUrl('')
       }
@@ -346,7 +359,7 @@ export default {
             .appendField('is standing on')
         this.setInputsInline(true)
         this.setOutput(true, 'Boolean')
-        this.setColour(210)
+        this.setColour(20)
         this.setTooltip('')
         this.setHelpUrl('')
       }
@@ -359,7 +372,7 @@ export default {
             .appendField('Current token is standing on')
         this.setInputsInline(true)
         this.setOutput(true, 'Boolean')
-        this.setColour(210)
+        this.setColour(20)
         this.setTooltip('')
         this.setHelpUrl('')
       }
@@ -372,19 +385,6 @@ export default {
             .appendField('Wait')
         this.appendDummyInput()
             .appendField('Seconds')
-        this.setPreviousStatement(true, null)
-        this.setNextStatement(true, null)
-        this.setColour(255)
-        this.setTooltip('')
-        this.setHelpUrl('')
-      }
-    }
-
-    Blockly.Blocks['set_id'] = {
-      init: function () {
-        this.appendValueInput('TEXT')
-          .setCheck('String')
-          .appendField('Set token name to: ')
         this.setPreviousStatement(true, null)
         this.setNextStatement(true, null)
         this.setColour(255)
@@ -434,7 +434,7 @@ export default {
 
     Blockly.JavaScript['token_test'] = function (block) {
       var token = Blockly.JavaScript.valueToCode(block, 'TOKEN', Blockly.JavaScript.ORDER_EQUALITY)
-      var code = 'currentToken.id == \'' + token + '\''
+      var code = 'currentToken.id == ' + token
       // TODO: Change ORDER_NONE to the correct strength.
       return [code, Blockly.JavaScript.ORDER_EQUALITY]
     }
@@ -578,8 +578,10 @@ export default {
     }
 
     Blockly.JavaScript['set_id'] = function (block) {
-      var text = Blockly.JavaScript.valueToCode(block, 'TEXT', Blockly.JavaScript.ORDER_EQUALITY)
-      return 'currentToken.id = (' + text + ')\n'
+      // var text = Blockly.JavaScript.valueToCode(block, 'TEXT', Blockly.JavaScript.ORDER_EQUALITY)
+      var token = block.getFieldValue('TOKEN')
+      var code = 'currentToken.id = (\'' + token + '\')\n'
+      return code
     }
 
     Blockly.JavaScript['variables_get'] = function (block) {
