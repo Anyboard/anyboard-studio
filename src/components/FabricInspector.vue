@@ -14,6 +14,10 @@
     <p>{{strokeDashArray}}</p>
     <p>{{strokeWidth}}</p>
 
+    <p>Change object name</p>
+    <input type="text" id="sectorName"/>
+    <a @click="renameSector">Change name</a>
+
   </div>
 </template>
 
@@ -78,6 +82,9 @@
             this.$store.dispatch('fabricInspector/setMinHeight', 'MinHeight: ')
           }
         }
+      },
+      renameSector () {
+        this.$store.dispatch('renameSector', document.getElementById('sectorName').value)
       }
     }
   }

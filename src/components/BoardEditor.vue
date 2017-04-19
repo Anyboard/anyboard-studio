@@ -16,7 +16,7 @@
 
     </ul>
     <nav id="fabric_toolbar">
-      <a @click="makeShape" id="rect">New Sector</a>
+      <a @click="makeShape" id="cr">New Sector</a>
       <a @click="insertText">Insert Text</a>
       <a @click="toggleDraw">Toggle free drawing</a>
       <a @click="centerObject">Center Selected Object</a>
