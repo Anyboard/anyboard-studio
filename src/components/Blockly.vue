@@ -391,9 +391,10 @@ export default {
             .setCheck('Number')
             .appendField('Wait')
         this.appendDummyInput()
-            .appendField('Seconds')
+            .appendField('Seconds then do')
+        this.appendStatementInput('STACK')
+            .setCheck(null)
         this.setPreviousStatement(true, null)
-        this.setNextStatement(true, null)
         this.setColour(255)
         this.setTooltip('')
         this.setHelpUrl('')
@@ -553,8 +554,12 @@ export default {
     }
 
     Blockly.JavaScript['wait'] = function (block) {
+      var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
       var seconds = Blockly.JavaScript.valueToCode(block, 'SECONDS', Blockly.JavaScript.ORDER_ATOMIC)
-      var code = 'app.wait(' + seconds + ');\n'
+      var milliseconds = seconds * 1000
+      var code = 'setTimeout(function () {\n'
+      code += stack
+      code += '}, ' + milliseconds + ');\n'
       return code
     }
 
