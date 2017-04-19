@@ -222,7 +222,7 @@ export default {
     },
 
     SAVE_STATE (state) {
-      state.canvasState = state.canvas.toDatalessJSON(['name'])
+      state.canvasState = state.canvas.toDatalessJSON(['name', 'minWidth', 'minHeight'])
     },
 
     LOAD_STATE (state) {
@@ -243,6 +243,7 @@ export default {
     JSON_DEBUG (state) {
       console.log(JSON.stringify(state.canvas))
       console.log(state.usedSectors)
+      console.log(state.activeObj.name)
     }
   },
 
@@ -278,6 +279,7 @@ export default {
 
     renameSector ({commit}, name) {
       commit('RENAME_SECTOR', name)
+      commit('UPDATE_ACTIVEOBJ')
       commit('SAVE_STATE')
       commit('USED_SECTORS')
       commit('SAVE_SECTORS')
