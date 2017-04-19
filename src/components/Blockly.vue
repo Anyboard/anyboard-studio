@@ -637,9 +637,38 @@ export default {
           result += ',\n'
         }
         first = false
-        result += '  ' + key + ': ' + dict[key]
+        result += '  "' + key + '": "' + dict[key] + '"'
       }
       result += '\n},\n\n\n'
+      return result
+    }
+
+    Blockly.JavaScript.writeListDictionary = function (name, dict) {
+      var result = name
+      result += ': {\n'
+      var first = true
+      for (var key in dict) {
+        if (!first) {
+          result += ',\n'
+        }
+        first = false
+        result += '  "' + key + '": ' + Blockly.JavaScript.writeList(dict[key])
+      }
+      result += '\n},\n\n\n'
+      return result
+    }
+
+    Blockly.JavaScript.writeList = function (list) {
+      var result = '['
+      var first = true
+      for (var item in list) {
+        if (!first) {
+          result += ', '
+        }
+        first = false
+        result += '"' + item + '"'
+      }
+      result += ']'
       return result
     }
 
@@ -655,7 +684,7 @@ export default {
       Blockly.JavaScript.variableDB_.reset()
       var output = definitions.join('\n\n') + '\n\n\n'
       // output += Blockly.JavaScript.writeDictionary('tiles', tilesdict)
-      output += Blockly.JavaScript.writeDictionary('tokenVal', tokenVal)
+      output += Blockly.JavaScript.writeListDictionary('tokenVal', tokenVal)
       output += 'initiate: function() {\n'
       output += code
       output += '\n\n'
