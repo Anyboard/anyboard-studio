@@ -141,10 +141,19 @@
         };
 
         // Turns on token led.
-        token.vibrate([100], // Instead of "green" color, on could also use array, e.g. [0, 255, 0]
-          completedFunction,  // function to be executed when token signals
-          errorCallback  // function to be executed in case of failure to send command to token
-        );
+        if(app.tokenVal.hasOwnProperty(token.id)) {
+          if (!(app.tokenVal[token.id].includes('vibrate'))) {
+            token.vibrate([100], // Instead of "green" color, on could also use array, e.g. [0, 255, 0]
+              completedFunction,  // function to be executed when token signals
+              errorCallback  // function to be executed in case of failure to send command to token
+            );
+          }
+        } else {
+          token.vibrate([100], // Instead of "green" color, on could also use array, e.g. [0, 255, 0]
+            completedFunction,  // function to be executed when token signals
+            errorCallback  // function to be executed in case of failure to send command to token
+          );
+        }
       },
 
       next_panel: function () {

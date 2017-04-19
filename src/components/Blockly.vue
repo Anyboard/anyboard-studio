@@ -246,11 +246,6 @@ export default {
       }
     }
 
-    // TODO Autogenerate this list
-    var TOKENS =
-      [['Dragon'],
-       ['Knight']]
-
     Blockly.Blocks['token'] = {
       init: function () {
         this.appendDummyInput()
@@ -624,10 +619,6 @@ export default {
       'key3': 'value3'
     } */
 
-    var tokenVal = {
-      'Dragon': ['vibrate', 'yooo']
-    }
-
     Blockly.JavaScript.writeDictionary = function (name, dict) {
       var result = name
       result += ': {\n'
@@ -666,7 +657,7 @@ export default {
           result += ', '
         }
         first = false
-        result += '"' + item + '"'
+        result += '"' + list[item] + '"'
       }
       result += ']'
       return result
@@ -706,6 +697,12 @@ export default {
     var sectorObject = store.getters.GET_SECTORS
     var sectorNames = toMatrix(Object.keys(sectorObject), 1)  // used tilesnames for dropdown
     var tb = toolbox.getters.GET_TOOLBOX
+
+    var tokenVal = {
+      'Dragon': ['vibrate'],
+      'Knight': ['led']
+    }
+    var TOKENS = toMatrix(Object.keys(tokenVal), 1)
 
     this.workspace = Blockly.inject('blockly-wrapper', {toolbox: tb})
 
