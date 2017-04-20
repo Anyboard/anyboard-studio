@@ -123,8 +123,9 @@
         this.$store.dispatch('changeColor')
       },
       changeColor () {
-        console.log('Color changed')
         this.$store.dispatch('changeColor')
+        this.$store.dispatch('updateActiveObj')
+        this.$store.dispatch('fabricInspector/updateInfo', this.$store.getters.GET_ACTIVEOBJ)
       },
       renameSector () {
         this.$store.dispatch('renameSector', document.getElementById('sectorName').value)
@@ -155,7 +156,7 @@ $icon-size: 50px;
   background: #555;
   border-radius: 2px;
   color: #eae9e1;
-  index:99;
+  z-index:99;
 
   li {
     position: relative;

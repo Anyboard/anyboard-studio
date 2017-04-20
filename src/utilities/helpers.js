@@ -201,9 +201,13 @@ export const renameSector = function (canvas, name) {
     insertIntoDict(sectorDict, newName, selObj['fill'])
     delete sectorDict[oldName]
   }
-  for (var i = 0, l = obj.length; i < l; ++i) {
-    if (obj[i]['fill'] === selObj['fill']) {
-      obj[i]['name'] = newName
+  selObj.name = newName
+  if (selObj['type'] === 'rect' || selObj['type'] === 'polygon' ||
+    selObj['type'] === 'circle') {
+    for (var i = 0, l = obj.length; i < l; ++i) {
+      if (obj[i]['fill'] === selObj['fill']) {
+        obj[i]['name'] = newName
+      }
     }
   }
 }

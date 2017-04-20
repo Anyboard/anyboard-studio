@@ -11,7 +11,9 @@ export default {
     usedSectors: {},
     sectorColor: '#166CA0',
     drawLayer: 'bottom',
-    activeObj: null
+    activeObj: null,
+    minHeight: 200,
+    minWidth: 200
   },
 
   mutations: {
@@ -35,8 +37,8 @@ export default {
         stroke: '#ffd445',
         strokeDashArray: [15, 3],
         strokeWidth: 7,
-        minHeight: 200,
-        minWidth: 200,
+        minHeight: state.minHeight,
+        minWidth: state.minWidth,
         name: state.sectorColor
       })
       layerify(state.canvas)
@@ -50,8 +52,8 @@ export default {
         stroke: '#ffd445',
         strokeDashArray: [15, 3],
         strokeWidth: 7,
-        minHeight: 200,
-        minWidth: 200
+        minHeight: state.minHeight,
+        minWidth: state.minWidth
       })
       layerify(state.canvas)
       renameSameSector(poly, state.canvas)
@@ -60,13 +62,13 @@ export default {
 
     CREATE_CIRCLE (state) {
       const circ = new F.Circle({
-        radius: 100,
+        radius: state.minWidth / 2,
         fill: state.sectorColor,
         stroke: '#ffd445',
         strokeDashArray: [15, 3],
         strokeWidth: 7,
-        minHeight: 200,
-        minWidth: 200,
+        minHeight: state.minHeight,
+        minWidth: state.minWidth,
         name: state.sectorColor
       })
       layerify(state.canvas)
@@ -142,9 +144,11 @@ export default {
     CLONE_OBJECT (state) {
       if (state.canvas.getActiveObject() != null) {
         const obj = state.canvas.getActiveObject()
+        const mWidth = obj.minWidth
+        const mHeight = obj.minHeight
         if (F.util.getKlass(obj.type).async) {
           obj.clone(function (clone) {
-            clone.set({left: obj.left + 15, top: obj.top + 15, name: obj.name})
+            clone.set({left: obj.left + 15, top: obj.top + 15, name: obj.name, minWidth: mWidth, minHeight: mHeight})
             state.canvas.add(clone)
           })
         } else {
@@ -206,7 +210,7 @@ export default {
     // Exporting
     UPDATE_ACTIVEOBJ (state) {
       if (state.canvas.getActiveObject() !== null) {
-        state.activeObj = state.canvas.getActiveObject().toObject(['name', 'minWidth', 'minHeight'])
+        state.activeObj = state.canvas.getActiveObject().toObject(['name', 'pathName', 'minWidth', 'minHeight'])
       } else {
         state.activeObj = null
       }
@@ -222,7 +226,7 @@ export default {
     },
 
     SAVE_STATE (state) {
-      state.canvasState = state.canvas.toDatalessJSON(['name', 'minWidth', 'minHeight'])
+      state.canvasState = state.canvas.toDatalessJSON(['name', 'pathName', 'minWidth', 'minHeight'])
     },
 
     LOAD_STATE (state) {
@@ -378,6 +382,12 @@ export default {
     },
     GET_ACTIVEOBJ: state => {
       return state.activeObj
+    },
+    GET_MINWIDTH: state => {
+      return state.minWidth
+    },
+    GET_MINHEIGHT: state => {
+      return state.minHeight
     }
   }
 }

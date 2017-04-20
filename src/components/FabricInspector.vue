@@ -54,6 +54,7 @@
         console.log(sname)
         if (this.$store.getters.GET_ACTIVEOBJ !== null) {
           this.$store.dispatch('renameSector', sname)
+          this.$store.dispatch('fabricInspector/updateInfo', this.$store.getters.GET_ACTIVEOBJ)
         }
       }
     }
