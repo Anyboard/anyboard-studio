@@ -43,9 +43,11 @@
           }
         }
         this.$store.dispatch('stateHandling')
+        this.$store.dispatch('fabricInspector/updateInfo', this.$store.getters.GET_ACTIVEOBJ)
       })
       cvs.on('path:created', (e) => {
         e.path.set('name', this.$store.getters.GET_DRAW_LAYER)
+        this.$store.dispatch('fabricInspector/updateInfo', this.$store.getters.GET_ACTIVEOBJ)
       })
       cvs.on('object:added', () => {
         this.$store.dispatch('stateHandling')
@@ -53,12 +55,15 @@
       cvs.on('object:modified', () => {
         this.$store.dispatch('stateHandling')
         this.$store.dispatch('updateActiveObj')
+        this.$store.dispatch('fabricInspector/updateInfo', this.$store.getters.GET_ACTIVEOBJ)
       })
       cvs.on('object:selected', () => {
         this.$store.dispatch('updateActiveObj')
+        this.$store.dispatch('fabricInspector/updateInfo', this.$store.getters.GET_ACTIVEOBJ)
       })
       cvs.on('selection:cleared', () => {
         this.$store.dispatch('updateActiveObj')
+        this.$store.dispatch('fabricInspector/updateInfo', this.$store.getters.GET_ACTIVEOBJ)
       })
 
       /* cvs.on('canvas:cleared', () => {

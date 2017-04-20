@@ -15,7 +15,7 @@
     <p>{{strokeWidth}}</p>
 
     <p>Change object name</p>
-    <input type="text" id="sectorName"/>
+    <input type="text" v-model="sectorname"/>
     <a @click="renameSector2">Change name</a>
 
   </div>
@@ -29,7 +29,8 @@
     name: 'FabricInspector',
     data () {
       return {
-        header: 'Properties for selected sector'
+        header: 'Properties for selected sector',
+        sectorname: 'Insert Sector Name'
       }
     },
     computed: {
@@ -46,46 +47,14 @@
     },
     methods: {
       updateSectorInfo () {
-        const activeObj = this.$store.getters.GET_ACTIVEOBJ
-        if (activeObj !== null) {
-          if (activeObj.type === 'rect' || activeObj.type === 'circle' || activeObj.type === 'polygon') {
-            this.$store.dispatch('fabricInspector/setName', 'Name: ' + activeObj.name)
-            this.$store.dispatch('fabricInspector/setType', 'Type: ' + activeObj.type)
-            this.$store.dispatch('fabricInspector/setHeight', 'Height: ' + activeObj.height * activeObj.scaleY)
-            this.$store.dispatch('fabricInspector/setWidth', 'Width: ' + activeObj.width * activeObj.scaleX)
-            this.$store.dispatch('fabricInspector/setFill', 'Color: ' + activeObj.fill)
-            this.$store.dispatch('fabricInspector/setStroke', 'Stroke: ' + activeObj.stroke)
-            this.$store.dispatch('fabricInspector/setStrokeDashArray', 'StrokeDashArray: ' + activeObj.strokeDashArray)
-            this.$store.dispatch('fabricInspector/setStrokeWidth', 'StrokeWidth: ' + activeObj.strokeWidth)
-            this.$store.dispatch('fabricInspector/setMinWidth', 'MinWidth: ' + activeObj.minWidth)
-            this.$store.dispatch('fabricInspector/setMinHeight', 'MinHeight: ' + activeObj.minHeight)
-          } else if (activeObj.type === 'image') {
-            this.$store.dispatch('fabricInspector/setName', 'Name: ' + activeObj.name)
-            this.$store.dispatch('fabricInspector/setType', 'Type: ' + activeObj.type)
-            this.$store.dispatch('fabricInspector/setHeight', 'Height: ' + activeObj.height * activeObj.scaleY)
-            this.$store.dispatch('fabricInspector/setWidth', 'Width: ' + activeObj.width * activeObj.scaleX)
-            this.$store.dispatch('fabricInspector/setFill', 'Color: ')
-            this.$store.dispatch('fabricInspector/setStroke', 'Stroke: ')
-            this.$store.dispatch('fabricInspector/setStrokeDashArray', 'StrokeDashArray: ')
-            this.$store.dispatch('fabricInspector/setStrokeWidth', 'StrokeWidth: ')
-            this.$store.dispatch('fabricInspector/setMinWidth', 'MinWidth: ')
-            this.$store.dispatch('fabricInspector/setMinHeight', 'MinHeight: ')
-          } else if (activeObj.type === 'path') {
-            this.$store.dispatch('fabricInspector/setName', 'Name: ' + activeObj.name)
-            this.$store.dispatch('fabricInspector/setType', 'Type: ' + activeObj.type)
-            this.$store.dispatch('fabricInspector/setFill', 'Color: ' + activeObj.stroke)
-            this.$store.dispatch('fabricInspector/setHeight', 'Height: ')
-            this.$store.dispatch('fabricInspector/setWidth', 'Width: ')
-            this.$store.dispatch('fabricInspector/setStroke', 'Stroke: ')
-            this.$store.dispatch('fabricInspector/setStrokeDashArray', 'StrokeDashArray: ')
-            this.$store.dispatch('fabricInspector/setStrokeWidth', 'StrokeWidth: ')
-            this.$store.dispatch('fabricInspector/setMinWidth', 'MinWidth: ')
-            this.$store.dispatch('fabricInspector/setMinHeight', 'MinHeight: ')
-          }
-        }
+        this.$store.dispatch('fabricInspector/updateInfo', this.$store.getters.GET_ACTIVEOBJ)
       },
       renameSector2 () {
-        this.$store.dispatch('renameSector', document.getElementById('sectorName').value)
+        let sname = this.sectorname
+        console.log(sname)
+        if (this.$store.getters.GET_ACTIVEOBJ !== null) {
+          this.$store.dispatch('renameSector', sname)
+        }
       }
     }
   }

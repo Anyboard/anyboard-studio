@@ -39,6 +39,44 @@ export default {
 
   },
   actions: {
+    updateInfo ({commit}, activeObj) {
+      if (activeObj !== null) {
+        if (activeObj.type === 'rect' || activeObj.type === 'circle' || activeObj.type === 'polygon') {
+          commit('SET_NAME', 'Name: ' + activeObj.name)
+          commit('SET_TYPE', 'Type: ' + activeObj.type)
+          commit('SET_HEIGHT', 'Height: ' + activeObj.height * activeObj.scaleY)
+          commit('SET_WIDTH', 'Width: ' + activeObj.width * activeObj.scaleX)
+          commit('SET_FILL', 'Color: ' + activeObj.fill)
+          commit('SET_STROKE', 'Stroke: ' + activeObj.stroke)
+          commit('SET_STROKE_DASH_ARRAY', 'StrokeDashArray: ' + activeObj.strokeDashArray)
+          commit('SET_STROKE_WIDTH', 'StrokeWidth: ' + activeObj.strokeWidth)
+          commit('SET_MIN_WIDTH', 'MinWidth: ' + activeObj.minWidth)
+          commit('SET_MIN_HEIGHT', 'MinHeight: ' + activeObj.minHeight)
+        } else if (activeObj.type === 'image') {
+          commit('SET_NAME', 'Name: ' + activeObj.name)
+          commit('SET_TYPE', 'Type: ' + activeObj.type)
+          commit('SET_HEIGHT', 'Height: ' + activeObj.height * activeObj.scaleY)
+          commit('SET_WIDTH', 'Width: ' + activeObj.width * activeObj.scaleX)
+          commit('SET_FILL', 'Color: ')
+          commit('SET_STROKE', 'Stroke: ')
+          commit('SET_STROKE_DASH_ARRAY', 'StrokeDashArray: ')
+          commit('SET_WIDTH', 'StrokeWidth: ')
+          commit('SET_MIN_WIDTH', 'MinWidth: ')
+          commit('SET_MIN_HEIGHT', 'MinHeight: ')
+        } else if (activeObj.type === 'path') {
+          commit('SET_NAME', 'Name: ' + activeObj.name)
+          commit('SET_TYPE', 'Type: ' + activeObj.type)
+          commit('SET_FILL', 'Color: ' + activeObj.stroke)
+          commit('SET_HEIGHT', 'Height: ')
+          commit('SET_WIDTH', 'Width: ')
+          commit('SET_STROKE', 'Stroke: ')
+          commit('SET_STROKE_DASH_ARRAY', 'StrokeDashArray: ')
+          commit('SET_STROKE_WIDTH', 'StrokeWidth: ')
+          commit('SET_MIN_WIDTH', 'MinWidth: ')
+          commit('SET_MIN_HEIGHT', 'MinHeight: ')
+        }
+      }
+    },
     setHeight ({commit}, para) {
       commit('SET_HEIGHT', para)
     },
