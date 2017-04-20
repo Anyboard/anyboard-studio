@@ -27,6 +27,22 @@ export default {
   color: #2c3e50;
 }
 
+$sc2: '#166CA0';
+$sc5: '#4194D0';
+$sc7: '#112A95';
+$sc14: '#C047A3';
+$sc15: '#FB50A6';
+$sc16: '#5E1014';
+$sc18: '#9B3235';
+$sc20: '#FF483E';
+$sc21: '#66C889';
+$sc24: '#30A747';
+$sc30: '#31682E';
+$sc31: '#FF9344';
+$sc33: '#D96623';
+$sc36: '#F6EA77';
+$sc37: '#F4E658';
+
 #wrapper {
   display:flex;
   flex-direction: row;
@@ -41,9 +57,7 @@ export default {
   a { color:#f50; }
   a:hover { border-bottom:1px dotted currentColor; }
   p { margin-bottom:1em; }
-
 }
-
 
 #navigation {
   position: fixed;
