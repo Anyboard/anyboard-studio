@@ -35,25 +35,11 @@
         <IconButton @click.native="toggleDraw" icon="fa-pencil" text="Drawing" tooltip="Toggle free drawing"></IconButton>
       </li>
     </ul>
-    <nav id="fabric_toolbar">
-      <a href="#">Colorpicker</a>
-      <a @click="clickImage">Upload Image</a>
-      <input @change="uploadImage"type="file" id="image" style="display: none"/>
-      <a @click="saveBoard">Save Board</a>
-
-      <a @click="changeColor">Change Color</a>
-      <a @click="renameSector">Change name</a>
-      <input type="text" id="sectorName"/>
-      <a @click="jsonDebug">JSON DEBUG</a>
-
-      <input type="range" value="20" min="1" max="100" @change="changeWidth" id="drawLineWidth"/>
-      <a @click="changeDrawLayer">Change draw layer</a>
-      <a @click="clearCanvas">Clear Board</a>
-      <FabricInspector></FabricInspector>
-    </nav>
+    
     <FabricCanvas></FabricCanvas>
+    <FabricInspector></FabricInspector>
+    
 
-    <ChoiceColor :colors='colors' radius='10em' v-on:colorChange='updateColor'></ChoiceColor>
   </div>
 </template>
 
@@ -132,7 +118,9 @@
       updateColor ({ index, color }) {
         this.index = index
         this.color = color
+        console.log('Updatecolor Fired')
         this.$store.dispatch('updateColor', color)
+        this.$store.dispatch('changeColor')
       },
       changeColor () {
         console.log('Color changed')
@@ -167,6 +155,7 @@ $icon-size: 50px;
   background: #555;
   border-radius: 2px;
   color: #eae9e1;
+  index:99;
 
   li {
     position: relative;
@@ -264,6 +253,7 @@ $icon-size: 50px;
   background-color:#fff;
   border:1px solid #000;
   margin:0 1em;
+  overflow: hidden;
 }
 
 .inspector {
