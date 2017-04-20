@@ -1,25 +1,37 @@
 <template>
   <div id="tokenEditor">
-    <div id="token-set-up">
-      <label class="firstview-label">Static name:</label><input class="token-input" type="checkbox"><br>
-      <label class="firstview-label">Token name:</label><input class="token-input" type="text">
-
-      <p>Enabled features:</p>
-      <label class="firstview-label">Vibration:</label><input class="token-input" type="checkbox"><br>
-      <label class="firstview-label">Shaking:</label><input class="token-input" type="checkbox"><br>
-      <label class="firstview-label">LED Light:</label><input class="token-input" type="checkbox"><br>
-      <label class="firstview-label">Top display:</label><input class="token-input" type="checkbox"><br>
-      <label class="firstview-label">placeholder event:</label><input class="token-input" type="checkbox"><br>
-      <label class="firstview-label">placeholder event:</label><input class="token-input" type="checkbox"><br>
-      <label class="firstview-label">placeholder event:</label><input class="token-input" type="checkbox"><br>
-    </div>
+    <button id="addNewToken">Add new token</button>
   </div>
 </template>
 
 <script>
+
+  import $ from 'jquery'
+
   export default {
-    name: 'tokenEditor'
+    name: 'tokenEditor',
+    data () {},
+    mounted () {
+      // var tokenState = 'nameSelect'
+      var tokenFeatures = {}
+
+      $('#addnewtoken').on('click', function () {
+        var dynamicNameButton = document.createElement('button')
+        dynamicNameButton.innerHTML = 'dynamic name'
+        var staticNameButton = document.createElement('button')
+        staticNameButton.innerHTML = 'static name'
+        var nameSelectContainer = document.createElement('div')
+        nameSelectContainer.appendChild(dynamicNameButton)
+        nameSelectContainer.appendChild(staticNameButton)
+
+        this.appendChild(nameSelectContainer)
+        this.style = 'display:none'
+      })
+
+      console.log(tokenFeatures)
+    }
   }
+
 </script>
 
 <style>

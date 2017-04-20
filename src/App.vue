@@ -3,7 +3,7 @@
     <a href="/#/blockly">Blockly</a>
     <a href="/#/">Board Editor</a>
     <a href="/#/tokenEditor">Token</a>
-    <a href="/#displayEditor">display grid</a>
+    <a href="/#/displayEditor">display grid</a>
     <router-view></router-view>
   </div>
 </template>
