@@ -1,7 +1,6 @@
 <template>
   <div>
    <p>Fabric inspector</p>
-    <a @click="updateSectorInfo">Click here to update info about selected sector</a>
     <p>{{header}}</p>
     <p>{{name}}</p>
     <p>{{type}}</p>
@@ -29,8 +28,8 @@
     name: 'FabricInspector',
     data () {
       return {
-        header: 'Properties for selected sector',
-        sectorname: 'Insert Sector Name'
+        header: 'Properties for selected object',
+        sectorname: 'Insert Name'
       }
     },
     computed: {
@@ -46,12 +45,8 @@
       ...mapState('fabricInspector', {minHeight: state => state.minheight})
     },
     methods: {
-      updateSectorInfo () {
-        this.$store.dispatch('fabricInspector/updateInfo', this.$store.getters.GET_ACTIVEOBJ)
-      },
       renameSector2 () {
         let sname = this.sectorname
-        console.log(sname)
         if (this.$store.getters.GET_ACTIVEOBJ !== null) {
           this.$store.dispatch('renameSector', sname)
           this.$store.dispatch('fabricInspector/updateInfo', this.$store.getters.GET_ACTIVEOBJ)
