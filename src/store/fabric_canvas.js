@@ -1,5 +1,6 @@
 import {fabric as F} from 'fabric'
 import FileSaver from 'file-saver'
+// import createObjectURL from 'create-object-url'
 import {createPolyPoints, dataURLtoBlob, layerify, exportSectors, updateSectorList,
         renameSameSector, colorChange, renameSector} from '../utilities/helpers.js'
 
@@ -225,12 +226,24 @@ export default {
       }
     },
 
+    DOWNLOAD_BOARD (state) {
+      if (state.canvas.getObjects().length > 0) {
+        const blob = new Blob([JSON.stringify(state.canvasState)], {type: 'text/plain;charset=utf-8'})
+        FileSaver.saveAs(blob, 'Board.json')
+      }
+    },
+
+    UPLOAD_BOARD (state, payload) {
+      state.canvasState = payload
+    },
+
     SAVE_STATE (state) {
       state.canvasState = state.canvas.toDatalessJSON(['name', 'pathName', 'minWidth', 'minHeight'])
     },
 
     LOAD_STATE (state) {
       if (state.canvasState !== 0) {
+        console.log(state.canvasState)
         state.canvas.loadFromDatalessJSON(state.canvasState)
       }
     },
@@ -359,6 +372,17 @@ export default {
     },
     saveBoard ({commit}, payload) {
       commit('SAVE_BOARD', payload)
+    },
+
+    downloadBoard ({commit}) {
+      commit('DOWNLOAD_BOARD')
+    },
+
+    uploadBoard ({commit}, board) {
+      commit('UPLOAD_BOARD', board)
+      commit('USED_SECTORS')
+      commit('SAVE_SECTORS')
+      commit('LOAD_STATE')
     },
 
     stateHandling ({commit}) {

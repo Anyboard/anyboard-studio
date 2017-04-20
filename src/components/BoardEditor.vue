@@ -16,6 +16,10 @@
         <IconButton @click.native="insertText" icon="fa-i-cursor" text="Text" tooltip="Insert a text element"></IconButton>
       </li>
       <li>
+        <IconButton @click.native="clickImage" icon="fa-image" text="Image" tooltip="Upload an image"></IconButton>
+        <input @change="uploadImage"type="file" id="image" style="display: none"/>
+      </li>
+      <li>
         <IconButton @click.native="cloneObject" icon="fa-clone" text="Clone" tooltip="Make a copy of selected object"></IconButton>
       </li>
       <li>
@@ -33,6 +37,16 @@
       </li>
       <li>
         <IconButton @click.native="toggleDraw" icon="fa-pencil" text="Drawing" tooltip="Toggle free drawing"></IconButton>
+      </li>
+      <li>
+        <IconButton @click.native="saveBoard" icon="fa-file-photo-o" text="Save" tooltip="Save the board as an image"></IconButton>
+      </li>
+      <li>
+        <IconButton @click.native="downloadBoard" icon="fa-download" text="Download" tooltip="Download the board"></IconButton>
+      </li>
+      <li>
+        <IconButton @click.native="clickUpload" icon="fa-upload" text="Upload" tooltip="Upload the board"></IconButton>
+        <input @change="uploadBoard"type="file" id="upload" style="display: none"/>
       </li>
     </ul>
 
@@ -111,6 +125,21 @@
       },
       saveBoard () {
         this.$store.dispatch('saveBoard')
+      },
+      clickUpload () {
+        document.getElementById('upload').click()
+      },
+      uploadBoard () {
+        var reader = new FileReader()
+        reader.readAsText(event.target.files[0])
+        reader.onload = (event) => {
+          var jsonObj = JSON.parse(event.target.result)
+          this.$store.dispatch('uploadBoard', jsonObj)
+        }
+        document.getElementById('upload').value = ''
+      },
+      downloadBoard () {
+        this.$store.dispatch('downloadBoard')
       },
       jsonDebug () {
         this.$store.dispatch('jsonDebug')
