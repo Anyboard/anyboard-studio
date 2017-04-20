@@ -51,13 +51,13 @@ export const layerify = function (cvs) {
   for (var i = 0, l = obj.length; i < l; ++i) {
     if (obj[i]['type'] === 'rect' || obj[i]['type'] === 'polygon' || obj[i]['type'] === 'circle') {
       sectorLayer.push(obj[i])
-    } else if (obj[i]['type'] === 'path' && obj[i]['name'] === 'bottom') {
+    } else if (obj[i]['type'] === 'path' && obj[i]['pathName'] === 'bottom') {
       bPathLayer.push(obj[i])
     } else if (obj[i]['type'] === 'image') {
       imageLayer.push(obj[i])
     } else if (obj[i]['type'] === 'i-text') {
       textLayer.push(obj[i])
-    } else if (obj[i]['type'] === 'path' && obj[i]['name'] === 'top') {
+    } else if (obj[i]['type'] === 'path' && obj[i]['pathName'] === 'top') {
       fPathLayer.push(obj[i])
     }
   }
@@ -122,7 +122,7 @@ export const exportSectors = function (canvas) {
     if (!unique.hasOwnProperty(sectors[i]['fill'])) {
       // Makes sure only rectangles or hexagons get added
       // May want to give all sectors a unique property to allow for more sector types in the future
-      if (sectors[i]['type'] === 'rect' || sectors[i]['type'] === 'polygon') {
+      if (sectors[i]['type'] === 'rect' || sectors[i]['type'] === 'polygon' || sectors[i]['type'] === 'circle') {
         str = sectors[i]['name'].replace(' ', '\u00A0')
         insertIntoDict(sectorTypeObject, str, colourDict[sectors[i]['fill'].toUpperCase()])
         unique[sectors[i]['fill']] = 1

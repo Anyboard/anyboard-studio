@@ -48,8 +48,8 @@ export default {
       const poly = new F.Polygon(createPolyPoints(sides, 100), {
         fill: state.sectorColor,
         stroke: '#ffd445',
-        strokeDashArray: [6, 1.5],
-        strokeWidth: 2,
+        strokeDashArray: [15, 3],
+        strokeWidth: 7,
         minHeight: 200,
         minWidth: 200
       })

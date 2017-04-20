@@ -46,7 +46,8 @@
         this.$store.dispatch('fabricInspector/updateInfo', this.$store.getters.GET_ACTIVEOBJ)
       })
       cvs.on('path:created', (e) => {
-        e.path.set('name', this.$store.getters.GET_DRAW_LAYER)
+        e.path.set('pathName', this.$store.getters.GET_DRAW_LAYER)
+        e.path.set('name', 'Path')
         this.$store.dispatch('fabricInspector/updateInfo', this.$store.getters.GET_ACTIVEOBJ)
       })
       cvs.on('object:added', () => {
