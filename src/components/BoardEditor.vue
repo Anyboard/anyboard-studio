@@ -26,6 +26,9 @@
         <IconButton @click.native="deleteObject" icon="fa-window-close-o" text="Delete" tooltip="Delete selected object"></IconButton>
       </li>
       <li>
+        <IconButton @click.native="clearCanvas" icon="fa-eraser" text="Clear" tooltip="Clear the entire board"></IconButton>
+      </li>
+      <li>
         <li>
         <IconButton icon="fa-exchange" text="Arrange" tooltip=""></IconButton>
         <div class="drop-right">
@@ -37,6 +40,10 @@
       </li>
       <li>
         <IconButton @click.native="toggleDraw" icon="fa-pencil" text="Drawing" tooltip="Toggle free drawing"></IconButton>
+        <div class="drop-right">
+          <IconButton @click.native="changeDrawLayer" icon="fa-repeat" text="Change Layer" tooltip="Change drawing layer between foreground and background"></IconButton>
+          <IconButton @click.native="changeDrawColor" icon="fa-paint-brush" text="Color Change" tooltip="Change the drawing color"></IconButton>
+        </div>
       </li>
       <li>
         <IconButton @click.native="saveBoard" icon="fa-file-photo-o" text="Save" tooltip="Save the board as an image"></IconButton>
@@ -100,6 +107,9 @@
       },
       changeDrawLayer () {
         this.$store.dispatch('changeDrawLayer')
+      },
+      changeDrawColor () {
+        this.$store.dispatch('changeDrawColor', '#45AB00')
       },
       deleteObject () {
         this.$store.dispatch('deleteObject')

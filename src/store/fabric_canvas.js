@@ -119,6 +119,10 @@ export default {
       state.canvas.freeDrawingBrush.width = parseInt(payload || 1)
     },
 
+    CHANGE_DRAW_COLOR (state, payload) {
+      state.canvas.freeDrawingBrush.color = payload
+    },
+
     // Change draw layer
     CHANGE_DRAW_LAYER (state) {
       if (state.drawLayer === 'bottom') {
@@ -243,7 +247,6 @@ export default {
 
     LOAD_STATE (state) {
       if (state.canvasState !== 0) {
-        console.log(state.canvasState)
         state.canvas.loadFromDatalessJSON(state.canvasState)
       }
     },
@@ -323,6 +326,10 @@ export default {
 
     changeDrawLayer ({commit}) {
       commit('CHANGE_DRAW_LAYER')
+    },
+
+    changeDrawColor ({commit}, color) {
+      commit('CHANGE_DRAW_COLOR', color)
     },
 
     // Object manipulation
