@@ -2,30 +2,40 @@
   <div id="board_editor">
     <ul class="fabric_toolbar">
       <li>
-        <IconButton icon="fa-window-restore" text="Add" tooltip="Create new sector"></IconButton>
+        <IconButton icon="fa-window-restore" text="Sector" tooltip="Insert a new sector"></IconButton>
         <div class="drop-right">
-          <IconButton @click="makeShape" id="circle" icon="fa-circle" text="Circle" tooltip="Make a new circle sector"></IconButton>
-          <IconButton @click="makeShape" id="rect"  icon="fa-square" text="Square" tooltip="Make a new square sector"></IconButton>
-          <IconButton @click="makeShape" id="hexagon"  icon="fa-certificate" text="Polygon" tooltip="Make a new polygon sector"></IconButton>
-          <IconButton @click="makeShape" id="triangle"  icon="fa-play" text="Triangle" tooltip="Make a new triangle sector"></IconButton>
+          <IconButton @click.native="makeShape" id="circle" icon="fa-circle" text="Circle" tooltip="Make a new circle sector"></IconButton>
+          <IconButton @click.native="makeShape" id="rect"  icon="fa-square" text="Square" tooltip="Make a new square sector"></IconButton>
+          <IconButton @click.native="makeShape" id="triangle"  icon="fa-play" text="Triangle" tooltip="Make a new triangle sector"></IconButton>
         </div>
       </li>
       <li>
-          <IconButton @click="centerObject" icon="fa-crosshairs" text="Center" tooltip="Center selected object"></IconButton>
+          <IconButton @click.native="centerObject" icon="fa-crosshairs" text="Center" tooltip="Center selected object"></IconButton>
       </li>
-
+      <li>
+        <IconButton @click.native="insertText" icon="fa-i-cursor" text="Text" tooltip="Insert a text element"></IconButton>
+      </li>
+      <li>
+        <IconButton @click.native="cloneObject" icon="fa-clone" text="Clone" tooltip="Make a copy of selected object"></IconButton>
+      </li>
+      <li>
+        <IconButton @click.native="deleteObject" icon="fa-window-close-o" text="Delete" tooltip="Delete selected object"></IconButton>
+      </li>
+      <li>
+        <li>
+        <IconButton icon="fa-exchange" text="Arrange" tooltip=""></IconButton>
+        <div class="drop-right">
+          <IconButton @click.native="arrangeObject" id="forward"  icon="fa-angle-up" text="Forward" tooltip="Bring selected object forward"></IconButton>
+          <IconButton @click.native="arrangeObject" id="front"  icon="fa-angle-double-up" text="Front" tooltip="Bring selected object to the front"></IconButton>
+          <IconButton @click.native="arrangeObject" id="backward"  icon="fa-angle-down" text="Backward" tooltip="Send selected object backwards"></IconButton>
+          <IconButton @click.native="arrangeObject" id="back"  icon="fa-angle-double-down" text="Back" tooltip="Send selected object to the back"></IconButton>
+        </div>
+      </li>
+      <li>
+        <IconButton @click.native="toggleDraw" icon="fa-pencil" text="Drawing" tooltip="Toggle free drawing"></IconButton>
+      </li>
     </ul>
     <nav id="fabric_toolbar">
-      <a @click="makeShape" id="rect">New Sector</a>
-      <a @click="insertText">Insert Text</a>
-      <a @click="toggleDraw">Toggle free drawing</a>
-      <a @click="centerObject">Center Selected Object</a>
-
-      <a @click="cloneObject">Clone Object</a>
-      <a @click="deleteObject">Delete Object</a>
-      <a @click="arrangeObject" id="back">Arrange Object</a>
-      <a href="#">Free Drawing</a>
-
       <a href="#">Colorpicker</a>
       <a @click="clickImage">Upload Image</a>
       <input @change="uploadImage"type="file" id="image" style="display: none"/>
@@ -43,7 +53,7 @@
     </nav>
     <FabricCanvas></FabricCanvas>
 
-    <choiceColor :colors='colors' radius='10em' @updateColor='updateColor'></choiceColor>
+    <ChoiceColor :colors='colors' radius='10em' v-on:colorChange='updateColor'></ChoiceColor>
   </div>
 </template>
 
@@ -77,7 +87,7 @@
     },
     methods: {
       makeShape (event) {
-        this.$store.dispatch('createShape', event.target.id)
+        this.$store.dispatch('createShape', event.target.parentElement.id)
       },
       insertText () {
         this.$store.dispatch('insertText')
@@ -125,6 +135,7 @@
         this.$store.dispatch('updateColor', color)
       },
       changeColor () {
+        console.log('Color changed')
         this.$store.dispatch('changeColor')
       },
       renameSector () {
@@ -136,7 +147,7 @@
       FabricInspector: require('./FabricInspector.vue'),
       FabricCanvas: require('./FabricCanvas.vue'),
       IconButton: require('./IconButton.vue'),
-      choiceColor: choiceColor
+      ChoiceColor: choiceColor
     }
   }
 </script>
@@ -174,7 +185,7 @@ $icon-size: 50px;
     border-radius: 2px;
     border: 1px solid #555;
 
-    span {
+    span.text {
       position: absolute;
       bottom:2px;
       width: $icon-size;
@@ -182,6 +193,19 @@ $icon-size: 50px;
       line-height: 8pt;
       font-size: 7pt;
       text-transform: uppercase;
+    }
+
+    span.tooltip {
+      position:absolute;
+      top:-1em;
+      left:1em;
+      background:#eae9e1;
+      color:#555;
+      width:auto;
+      border:1px dotted #eae9e1;
+      padding:2px;
+      display: none;
+      border-radius:2px;
     }
   }
 
@@ -193,12 +217,16 @@ $icon-size: 50px;
     border-color:#444 #777 #777 #444;
   }
 
+  .icon:hover > .tooltip {
+    display: block;
+  }
+
   .drop-right {
     position: absolute;
     display: none;
     left:$icon-size + 1px ;
-    top:-$icon-size/4;
-    width: 15px + ($icon-size*3);
+    top:-2px;
+    width: 20px + ($icon-size * 2);
     flex-direction: row;
     background: #666;
     border-radius: 4px;
@@ -212,14 +240,13 @@ $icon-size: 50px;
     }
 
     .icon:hover {
-    border-color:#777 #444 #444 #777;
-  }
+      border-color:#777 #444 #444 #777;
+    }
 
     .icon:active {
       border-color:#444 #777 #777 #444;
     }
   }
-
 
   li:hover > .drop-right {
     display: block;

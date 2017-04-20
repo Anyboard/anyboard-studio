@@ -1,7 +1,8 @@
 <template>
-  <span class="icon is-medium" :alt="tooltip">
+  <span class="icon is-medium" :id="id">
     <i :class="'fa ' + icon"></i>
-    <span>{{text}}</span>
+    <span class="text">{{text}}</span>
+    <span v-if="tooltip" class="tooltip">{{tooltip}}</span>
   </span>
 </template>
 
@@ -9,7 +10,7 @@
   export default {
     name: 'IconButton',
     data () { return {} },
-    props: ['icon', 'text', 'tooltip']
+    props: ['icon', 'text', 'tooltip', 'id']
   }
 </script>
 
