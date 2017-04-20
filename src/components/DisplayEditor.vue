@@ -13,7 +13,6 @@
 
   export default {
     name: 'displayEditor',
-    data () {},
     mounted () {
       // Creating grid of led-lights
       var gridParent = document.getElementById('led-grid')
@@ -97,26 +96,31 @@
     height: 20px;
     width: 20px;
 
-    border: 2px solid black;
+    border: 1px solid black;
     border-radius: 50%;
     margin: 1px;
 
   }
   .display-led:hover{
     cursor: pointer;
-    background: radial-gradient(#d7f473, #7a9324, #3e4c0e);
+    background: radial-gradient(#aaf3ff, #86cbd6, #456c72, #9a9a9a);
   }
+  .display-led:active{
+    background: #aaf3ff;
+  }
+
   .inactive-led{
     background-color: black;
   }
   .active-led{
-    background: radial-gradient(#d7f473, #7a9324, #3e4c0e);
+    background: radial-gradient(#aaf3ff, #86cbd6, #456c72, #9a9a9a);
   }
 
   .led-row{
     margin: auto;
     display: flex;
     flex-direction: row;
+    background-color: #242424;
   }
 
 </style>
