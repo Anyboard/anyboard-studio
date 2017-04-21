@@ -2,40 +2,48 @@
   <div class="LEDGridEditor">
     <div>
       <label for="ledGridName">Pattern name:</label>
-      <input id="ledGridName" type="text" />
+      <input id="ledGridName" type="text" v-model="gridName" placeholder="Pattern name"/>
     </div>
     <div id="ledGrid">
-      <span v-for="(n,index) in grid" @click="toggleIndex(index)" :class="">{{  }}</span>
+      <span v-for="(n,index) in grid" @click="toggleIndex(index)" :class="n?'active-led':'false'" :key="index"></span>
     </div>
     <div>
-      <button id="ledGridSubmitButton">Submit</button>
+      <button id="ledGridSubmitButton" @click="submitGrid">Submit</button>
       <button id="ledGridCancelButton">Cancel</button>
     </div>
   </div>
 </template>
 
 <script>
+  import {mapState} from 'vuex'
+
   export default {
     name: 'LEDGridEditor',
     data () {
       return {
-        grid: [
-          false, false, false, false, false, false, false, false,
-          false, false, false, false, false, false, false, false,
-          false, false, false, false, false, false, false, false,
-          false, false, false, false, false, false, false, false,
-          false, false, false, false, false, false, false, false,
-          false, false, false, false, false, false, false, false,
-          false, false, false, false, false, false, false, false,
-          false, false, false, false, false, false, false, false
-        ]
+        gridName: ''
+      }
+    },
+    computed: {
+      ...mapState('ledgrid', {grid: state => state.grid}),
+      gridString: function () {
+        let n = ''
+        for (let i = 0; i < this.grid.length; i++) {
+          n += (this.grid[i] ? '1' : '0')
+        }
+        return n
+      },
+
+      cleanedGridName: function () {
+        return this.gridName.length === 0 ? 'default' : this.gridName.toLowerCase()
       }
     },
     methods: {
       toggleIndex (n) {
-        this.grid[n] = !this.grid[n]
-        console.log(this.grid)
-        console.log(n)
+        this.$store.dispatch('ledgrid/setGrid', n)
+      },
+      submitGrid () {
+        this.$store.dispatch('ledgrid/saveGrid', {name: this.cleanedGridName, str: this.gridString})
       }
     }
   }
