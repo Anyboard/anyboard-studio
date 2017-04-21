@@ -20,8 +20,10 @@
       <h3>Code builder</h3>
       <p>
       This is where you define the logic of your game. The code is represented by blocks, and it’s your job to put these blocks together however you may please to create the logic for your gamerules. The different parts of the logic are sorted in different categories to the left.  For example, if you want a certain token to vibrate on a certain sector, your code block may look something like this:
-      When you are done making the logic for your game, hit the export button in the top right corner. This will you give a HTML file that contains the code for your game. Place the HTML file inside the game folder.
       </p>
+        <img src="../assets/dragonlogic.png" alt="Code logic example">
+        <p>When you are done making the logic for your game, hit the export button in the top right corner. This will you give a HTML file that contains the code for your game. Place the HTML file inside the game folder.
+        </p>
       <h3>EvoThings</h3>
       <p>
       Open EvoThings on the computer and click the Connect tab. Click on the Get Key button to generate a key. Open up the EvoThings application on the smart phone and type in the key. Click connect and wait for a screen that says “Connected”. Go back in to EvoThings on the computer and click on the My Apps tab. Locate the game in the list called AnyboardGameDemo and click on Run. The game is now running on the smartphone in the EvoThings application. Click on Discover bluetooth devices and select the Anypawn. The Anypawn is now connected to the phone which is running the code you created with the code builder.
