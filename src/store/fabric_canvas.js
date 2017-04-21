@@ -14,7 +14,10 @@ export default {
     drawLayer: 'bottom',
     activeObj: null,
     minHeight: 200,
-    minWidth: 200
+    minWidth: 200,
+    gridActive: true,
+    gridAdded: false,
+    gridSize: 50
   },
 
   mutations: {
@@ -247,12 +250,13 @@ export default {
     },
 
     SAVE_STATE (state) {
-      state.canvasState = state.canvas.toDatalessJSON(['name', 'pathName', 'minWidth', 'minHeight'])
+      state.canvasState = state.canvas.toDatalessJSON(['name', 'pathName', 'minWidth', 'minHeight', 'selectable', 'opacity'])
     },
 
     LOAD_STATE (state) {
       if (state.canvasState !== 0) {
         state.canvas.loadFromDatalessJSON(state.canvasState)
+        state.canvas.setBackgroundColor('white')
       }
     },
 
@@ -264,9 +268,53 @@ export default {
       state.usedSectors = updateSectorList(state.canvas)
     },
 
+    CHANGE_GRID_MODE (state) {
+      state.gridActive = !state.gridActive
+      var objs = state.canvas.getObjects()
+      for (var i = 0, l = objs.length; i < l; ++i) {
+        if (objs[i]['type'] === 'line') {
+          objs[i]['opacity'] = state.gridActive
+        }
+      }
+      state.canvas.renderAll()
+    },
+
+    CHANGE_GRID_SIZE (state, payload) {
+      state.gridSize = payload
+    },
+
+    REMOVE_GRID (state) {
+      const objs = state.canvas.getObjects()
+      let toBeRemoved = []
+      for (let i = 0, l = objs.length; i < l; ++i) {
+        if (objs[i]['type'] === 'line') {
+          toBeRemoved.push(objs[i])
+        }
+      }
+      for (let i in toBeRemoved) {
+        state.canvas.remove(toBeRemoved[i])
+      }
+    },
+
+    ADD_GRID (state) {
+      const canvasWidth = state.canvas.width
+      if (!state.gridAdded) {
+        for (let i = 0; i < (canvasWidth / state.gridSize); i++) {
+          state.canvas.add(new F.Line([i * state.gridSize, 0, i * state.gridSize, canvasWidth], { stroke: '#ccc', selectable: false, id: 'grid1' }))
+          state.canvas.add(new F.Line([0, i * state.gridSize, canvasWidth, i * state.gridSize], { stroke: '#ccc', selectable: false, id: 'grid2' }))
+        }
+        state.gridAdded = true
+        state.canvas.renderAll()
+      }
+    },
+
+    UNADD_GRID (state) {
+      state.gridAdded = false
+    },
+
     // Debugging
     JSON_DEBUG (state) {
-      console.log(JSON.stringify(state.canvas))
+      console.log(JSON.stringify(state.canvas.getObjects()))
       console.log(state.usedSectors)
       console.log(state.sectors)
       console.log(state.activeObj)
@@ -281,6 +329,7 @@ export default {
       commit('LOAD_STATE')
       commit('SAVE_STATE')
       commit('LOAD_STATE')
+      commit('ADD_GRID')
       commit('USED_SECTORS')
     },
 
@@ -413,6 +462,22 @@ export default {
       commit('LOAD_STATE')
     },
 
+    changeGridMode ({commit}) {
+      commit('CHANGE_GRID_MODE')
+    },
+
+    updateGridSize ({commit}, size) {
+      commit('CHANGE_GRID_SIZE', size)
+    },
+
+    changeGridSize ({commit}, size) {
+      console.log('Changing Grid Size')
+      commit('UNADD_GRID')
+      commit('REMOVE_GRID')
+      commit('CHANGE_GRID_SIZE', size)
+      commit('ADD_GRID')
+    },
+
     // Debugging
     jsonDebug ({commit}) {
       commit('JSON_DEBUG')
@@ -435,6 +500,15 @@ export default {
     },
     GET_MINHEIGHT: state => {
       return state.minHeight
+    },
+    GET_GRIDMODE: state => {
+      return state.gridActive
+    },
+    GET_GRIDSIZE: state => {
+      return state.gridSize
+    },
+    GET_GRIDADDED: state => {
+      return state.gridAdded
     }
   }
 }

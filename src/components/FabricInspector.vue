@@ -20,6 +20,9 @@
         <p>Change object name</p>
         <input type="text" v-model="sectorname"/>
         <a @click="renameSector2">Change name</a>
+        <br/>
+        <input @change="changeGridSize" type="range" v-model="gridSize" min="25" max="100"/>
+        <a>{{gridSize}}</a>
       </collapse-item>
     </collapse>
   </div>
@@ -56,7 +59,8 @@
         // TODO: Make picker have correct color on load
         colors: colorArray,
         index: 0,
-        color: colorArray[0]
+        color: colorArray[0],
+        gridSize: 50
       }
     },
     computed: {
@@ -85,6 +89,9 @@
         this.$store.dispatch('updateColor', color)
         this.$store.dispatch('updateActiveObj')
         this.$store.dispatch('fabricInspector/updateInfo', this.$store.getters.GET_ACTIVEOBJ)
+      },
+      changeGridSize () {
+        this.$store.dispatch('changeGridSize', this.gridSize)
       }
     },
     components: {
