@@ -4,7 +4,7 @@
 
 export default {
   namespaced: true,
-  state: {height: 'Height: ', width: 'Width: ', type: 'Type: ', fill: 'Color: ', name: 'Name: ', stroke: 'Stroke: ', strokedasharray: 'StrokeDashArray: ', strokewidth: 'StrokeWidth: ', minwidth: 'MinWidth: ', minheight: 'MinHeight'},
+  state: {activeColor: '', height: 'Height: ', width: 'Width: ', type: 'Type: ', fill: 'Color: ', name: 'Name: ', stroke: 'Stroke: ', strokedasharray: 'StrokeDashArray: ', strokewidth: 'StrokeWidth: ', minwidth: 'MinWidth: ', minheight: 'MinHeight'},
   mutations: {
     SET_HEIGHT (state, payload) {
       state.height = payload
@@ -35,10 +35,23 @@ export default {
     },
     SET_MIN_HEIGHT (state, payload) {
       state.minheight = payload
+    },
+    SET_PROPER_COLOR (state, payload) {
+      state.activecolor = payload
+    },
+    COLORCONVERTER () {
+
     }
 
   },
   actions: {
+    colorConverter (activeObj) {
+      if (activeObj !== null) {
+        if (activeObj.fill === '166CA0') {
+          return 'Blue'
+        }
+      }
+    },
     updateInfo ({commit}, activeObj) {
       if (activeObj !== null) {
         if (activeObj.type === 'rect' || activeObj.type === 'circle' || activeObj.type === 'polygon') {
@@ -46,7 +59,7 @@ export default {
           commit('SET_TYPE', 'Type: ' + activeObj.type)
           commit('SET_HEIGHT', 'Height: ' + activeObj.height * activeObj.scaleY)
           commit('SET_WIDTH', 'Width: ' + activeObj.width * activeObj.scaleX)
-          commit('SET_FILL', 'Color: ' + activeObj.fill)
+          commit('SET_FILL', 'Color: ' + actions.colorconve)
           commit('SET_STROKE', 'Stroke: ' + activeObj.stroke)
           commit('SET_STROKE_DASH_ARRAY', 'StrokeDashArray: ' + activeObj.strokeDashArray)
           commit('SET_STROKE_WIDTH', 'StrokeWidth: ' + activeObj.strokeWidth)
