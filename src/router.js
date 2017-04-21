@@ -4,6 +4,7 @@ import Hello from 'components/Hello'
 import BoardEditor from 'components/BoardEditor.vue'
 import Blockly from 'components/Blockly.vue'
 import BlocklyButtons from 'components/BlocklyButtons.vue'
+import Asset from 'components/Asset.vue'
 
 Vue.use(Router)
 
@@ -13,14 +14,21 @@ export default new Router({
       path: '/',
       name: 'Hello',
       components: {
-        main: Hello
+        default: Hello
       }
     },
     {
-      path: '/boardeditor',
+      path: '/board',
       name: 'Board Editor',
       components: {
         default: BoardEditor
+      }
+    },
+    {
+      path: '/assets',
+      name: 'Asset Collection',
+      components: {
+        default: Asset
       }
     },
     {
