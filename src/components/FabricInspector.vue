@@ -1,30 +1,62 @@
 <template>
   <div>
-   <p>Fabric inspector</p>
-    <a @click="updateSectorInfo">Click here to update info about selected sector</a>
-    <p>{{header}}</p>
-    <p>{{name}}</p>
-    <p>{{type}}</p>
-    <p>{{fill}}</p>
-    <p>{{height}}</p>
-    <p>{{width}}</p>
-    <p>{{minHeight}}</p>
-    <p>{{minWidth}}</p>
-    <p>{{stroke}}</p>
-    <p>{{strokeDashArray}}</p>
-    <p>{{strokeWidth}}</p>
-
+    <p>Fabric inspector</p>
+    <collapse accordion>
+      <collapse-item title="Colorpicker">
+        <ChoiceColor :colors='colors' radius='10em' v-on:updateColor='updateColor'></ChoiceColor>
+      </collapse-item>
+      <collapse-item title="Object properties" actived id="objectProps">
+        <p>{{header}}</p>
+        <p>{{name}}</p>
+        <p>{{type}}</p>
+        <p>{{fill}}</p>
+        <p>{{height}}</p>
+        <p>{{width}}</p>
+        <p>{{minHeight}}</p>
+        <p>{{minWidth}}</p>
+        <p>{{stroke}}</p>
+        <p>{{strokeDashArray}}</p>
+        <p>{{strokeWidth}}</p>
+        <p>Change object name</p>
+        <input type="text" v-model="sectorname"/>
+        <a @click="renameSector2">Change name</a>
+      </collapse-item>
+    </collapse>
   </div>
 </template>
 
 
 <script>
   import {mapState} from 'vuex'
+  import {choiceColor} from 'vue-circle-choice'
+
+  const colorArray = [
+    '#166CA0',  // 2
+    '#4194D0',  // 5
+    '#112A95',  // 7
+    '#C047A3',  // 14
+    '#FB50A6',  // 15
+    '#5E1014',  // 16
+    '#9B3235',  // 18
+    '#FF483E',  // 20
+    '#66C889',  // 21
+    '#30A747',  // 24
+    '#31682E',  // 30
+    '#FF9344',  // 31
+    '#D96623',  // 33
+    '#F6EA77',  // 36
+    '#F4E658'   // 37
+  ]
   export default {
     name: 'FabricInspector',
     data () {
       return {
-        header: 'Properties for selected sector'
+        header: 'Properties for selected object',
+        sectorname: 'Insert Name',
+        // TODO: Make picker have correct color on load
+        colors: colorArray,
+        index: 0,
+        color: colorArray[0]
       }
     },
     computed: {
@@ -40,53 +72,32 @@
       ...mapState('fabricInspector', {minHeight: state => state.minheight})
     },
     methods: {
-      updateSectorInfo () {
-        const activeObj = this.$store.getters.GET_ACTIVEOBJ
-        if (activeObj !== null) {
-          if (activeObj.type === 'rect' || activeObj.type === 'circle' || activeObj.type === 'triangle') {
-            this.$store.dispatch('fabricInspector/setName', 'Name: ' + activeObj.name)
-            this.$store.dispatch('fabricInspector/setType', 'Type: ' + activeObj.type)
-            this.$store.dispatch('fabricInspector/setHeight', 'Height: ' + activeObj.height * activeObj.scaleY)
-            this.$store.dispatch('fabricInspector/setWidth', 'Width: ' + activeObj.width * activeObj.scaleX)
-            this.$store.dispatch('fabricInspector/setFill', 'Fill: ' + activeObj.fill)
-            this.$store.dispatch('fabricInspector/setStroke', 'Stroke: ' + activeObj.stroke)
-            this.$store.dispatch('fabricInspector/setStrokeDashArray', 'StrokeDashArray: ' + activeObj.strokeDashArray)
-            this.$store.dispatch('fabricInspector/setStrokeWidth', 'StrokeWidth: ' + activeObj.strokeWidth)
-            this.$store.dispatch('fabricInspector/setMinWidth', 'MinWidth: ' + activeObj.minWidth)
-            this.$store.dispatch('fabricInspector/setMinHeight', 'MinHeight: ' + activeObj.minHeight)
-          }
-          if (activeObj.type === 'image') {
-            this.$store.dispatch('fabricInspector/setName', 'Name: ' + activeObj.name)
-            this.$store.dispatch('fabricInspector/setType', 'Type: ' + activeObj.type)
-            this.$store.dispatch('fabricInspector/setHeight', 'Height: ' + activeObj.height * activeObj.scaleY)
-            this.$store.dispatch('fabricInspector/setWidth', 'Width: ' + activeObj.width * activeObj.scaleX)
-            this.$store.dispatch('fabricInspector/setFill', 'Fill: ')
-            this.$store.dispatch('fabricInspector/setStroke', 'Stroke: ')
-            this.$store.dispatch('fabricInspector/setStrokeDashArray', 'StrokeDashArray: ')
-            this.$store.dispatch('fabricInspector/setStrokeWidth', 'StrokeWidth: ')
-            this.$store.dispatch('fabricInspector/setMinWidth', 'MinWidth: ')
-            this.$store.dispatch('fabricInspector/setMinHeight', 'MinHeight: ')
-          }
-          if (activeObj.type === 'path') {
-            this.$store.dispatch('fabricInspector/setName', 'Name: ' + activeObj.name)
-            this.$store.dispatch('fabricInspector/setType', 'Type: ' + activeObj.type)
-            this.$store.dispatch('fabricInspector/setFill', 'Fill: ' + activeObj.fill)
-            this.$store.dispatch('fabricInspector/setHeight', 'Height: ')
-            this.$store.dispatch('fabricInspector/setWidth', 'Width: ')
-            this.$store.dispatch('fabricInspector/setStroke', 'Stroke: ')
-            this.$store.dispatch('fabricInspector/setStrokeDashArray', 'StrokeDashArray: ')
-            this.$store.dispatch('fabricInspector/setStrokeWidth', 'StrokeWidth: ')
-            this.$store.dispatch('fabricInspector/setMinWidth', 'MinWidth: ')
-            this.$store.dispatch('fabricInspector/setMinHeight', 'MinHeight: ')
-          }
+      renameSector2 () {
+        let sname = this.sectorname
+        if (this.$store.getters.GET_ACTIVEOBJ !== null) {
+          this.$store.dispatch('renameSector', sname)
+          this.$store.dispatch('fabricInspector/updateInfo', this.$store.getters.GET_ACTIVEOBJ)
         }
+      },
+      updateColor ({ index, color }) {
+        this.index = index
+        this.color = color
+        this.$store.dispatch('updateColor', color)
+        this.$store.dispatch('updateActiveObj')
+        this.$store.dispatch('fabricInspector/updateInfo', this.$store.getters.GET_ACTIVEOBJ)
       }
+    },
+    components: {
+      ChoiceColor: choiceColor
     }
   }
 </script>
 
-<style scoped>
- p {
-   color: white;
- }
+<style>
+  #objectProps > p{
+    color: black;
+  }
+  .faux-border {
+    transform: translate(-31%, -41%)!important;
+  }
 </style>

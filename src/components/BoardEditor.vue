@@ -16,10 +16,17 @@
         <IconButton @click.native="insertText" icon="fa-i-cursor" text="Text" tooltip="Insert a text element"></IconButton>
       </li>
       <li>
+        <IconButton @click.native="clickImage" icon="fa-image" text="Image" tooltip="Upload an image"></IconButton>
+        <input @change="uploadImage"type="file" id="image" style="display: none"/>
+      </li>
+      <li>
         <IconButton @click.native="cloneObject" icon="fa-clone" text="Clone" tooltip="Make a copy of selected object"></IconButton>
       </li>
       <li>
         <IconButton @click.native="deleteObject" icon="fa-window-close-o" text="Delete" tooltip="Delete selected object"></IconButton>
+      </li>
+      <li>
+        <IconButton @click.native="clearCanvas" icon="fa-eraser" text="Clear" tooltip="Clear the entire board"></IconButton>
       </li>
       <li>
         <li>
@@ -33,42 +40,38 @@
       </li>
       <li>
         <IconButton @click.native="toggleDraw" icon="fa-pencil" text="Drawing" tooltip="Toggle free drawing"></IconButton>
+        <div class="drop-right">
+          <IconButton @click.native="changeDrawLayer" icon="fa-repeat" text="Change Layer" tooltip="Change drawing layer between foreground and background"></IconButton>
+          <IconButton @click.native="changeDrawColor" icon="fa-paint-brush" text="Color Change" tooltip="Change the drawing color to black"></IconButton>
+        </div>
+      </li>
+      <li>
+        <IconButton @click.native="saveBoard" icon="fa-file-photo-o" text="Save" tooltip="Save the board as an image"></IconButton>
+      </li>
+      <li>
+        <IconButton @click.native="downloadBoard" icon="fa-download" text="Download" tooltip="Download the board"></IconButton>
+      </li>
+      <li>
+        <IconButton @click.native="clickUpload" icon="fa-upload" text="Upload" tooltip="Upload the board"></IconButton>
+        <input @change="uploadBoard"type="file" id="upload" style="display: none"/>
+      </li>
+      <li>
+        <IconButton @click.native="jsonDebug" icon="fa-at" text="DEBUG" tooltip="Log json debug"></IconButton>
       </li>
     </ul>
-    
+
     <FabricCanvas></FabricCanvas>
     <FabricInspector></FabricInspector>
-    
+
 
   </div>
 </template>
 
 <script type="text/javascript">
-  import {choiceColor} from 'vue-circle-choice'
   export default {
     name: 'BoardEditor',
     data () {
       return {
-        // TODO: Make picker have correct color on load
-        colors: [
-          '#166CA0',  // 2
-          '#4194D0',  // 5
-          '#112A95',  // 7
-          '#C047A3',  // 14
-          '#FB50A6',  // 15
-          '#5E1014',  // 16
-          '#9B3235',  // 18
-          '#FF483E',  // 20
-          '#66C889',  // 21
-          '#30A747',  // 24
-          '#31682E',  // 30
-          '#FF9344',  // 31
-          '#D96623',  // 33
-          '#F6EA77',  // 36
-          '#F4E658'   // 37
-        ],
-        index: 0,
-        color: '#166CA0'
       }
     },
     methods: {
@@ -86,6 +89,9 @@
       },
       changeDrawLayer () {
         this.$store.dispatch('changeDrawLayer')
+      },
+      changeDrawColor () {
+        this.$store.dispatch('changeDrawColor', '#000000')
       },
       deleteObject () {
         this.$store.dispatch('deleteObject')
@@ -112,19 +118,23 @@
       saveBoard () {
         this.$store.dispatch('saveBoard')
       },
+      clickUpload () {
+        document.getElementById('upload').click()
+      },
+      uploadBoard () {
+        var reader = new FileReader()
+        reader.readAsText(event.target.files[0])
+        reader.onload = (event) => {
+          var jsonObj = JSON.parse(event.target.result)
+          this.$store.dispatch('uploadBoard', jsonObj)
+        }
+        document.getElementById('upload').value = ''
+      },
+      downloadBoard () {
+        this.$store.dispatch('downloadBoard')
+      },
       jsonDebug () {
         this.$store.dispatch('jsonDebug')
-      },
-      updateColor ({ index, color }) {
-        this.index = index
-        this.color = color
-        console.log('Updatecolor Fired')
-        this.$store.dispatch('updateColor', color)
-        this.$store.dispatch('changeColor')
-      },
-      changeColor () {
-        console.log('Color changed')
-        this.$store.dispatch('changeColor')
       },
       renameSector () {
         this.$store.dispatch('renameSector', document.getElementById('sectorName').value)
@@ -134,8 +144,7 @@
     components: {
       FabricInspector: require('./FabricInspector.vue'),
       FabricCanvas: require('./FabricCanvas.vue'),
-      IconButton: require('./IconButton.vue'),
-      ChoiceColor: choiceColor
+      IconButton: require('./IconButton.vue')
     }
   }
 </script>
@@ -155,7 +164,7 @@ $icon-size: 50px;
   background: #555;
   border-radius: 2px;
   color: #eae9e1;
-  index:99;
+  z-index:99;
 
   li {
     position: relative;

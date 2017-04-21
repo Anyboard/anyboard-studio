@@ -4,7 +4,7 @@
 
 export default {
   namespaced: true,
-  state: {height: 'Height: ', width: 'Width: ', type: 'Type: ', fill: 'Fill: ', name: 'Name: ', stroke: 'Stroke: ', strokedasharray: 'StrokeDashArray: ', strokewidth: 'StrokeWidth: ', minwidth: 'MinWidth: ', minheight: 'MinHeight'},
+  state: {height: 'Height: ', width: 'Width: ', type: 'Type: ', fill: 'Color: ', name: 'Name: ', stroke: 'Stroke: ', strokedasharray: 'StrokeDashArray: ', strokewidth: 'StrokeWidth: ', minwidth: 'MinWidth: ', minheight: 'MinHeight'},
   mutations: {
     SET_HEIGHT (state, payload) {
       state.height = payload
@@ -39,6 +39,55 @@ export default {
 
   },
   actions: {
+    updateInfo ({commit}, activeObj) {
+      if (activeObj !== null) {
+        if (activeObj.type === 'rect' || activeObj.type === 'circle' || activeObj.type === 'polygon') {
+          commit('SET_NAME', 'Name: ' + activeObj.name)
+          commit('SET_TYPE', 'Type: ' + activeObj.type)
+          commit('SET_HEIGHT', 'Height: ' + activeObj.height * activeObj.scaleY)
+          commit('SET_WIDTH', 'Width: ' + activeObj.width * activeObj.scaleX)
+          commit('SET_FILL', 'Color: ' + activeObj.fill)
+          commit('SET_STROKE', 'Stroke: ' + activeObj.stroke)
+          commit('SET_STROKE_DASH_ARRAY', 'StrokeDashArray: ' + activeObj.strokeDashArray)
+          commit('SET_STROKE_WIDTH', 'StrokeWidth: ' + activeObj.strokeWidth)
+          commit('SET_MIN_WIDTH', 'MinWidth: ' + activeObj.minWidth)
+          commit('SET_MIN_HEIGHT', 'MinHeight: ' + activeObj.minHeight)
+        } else if (activeObj.type === 'image') {
+          commit('SET_NAME', 'Name: ' + activeObj.name)
+          commit('SET_TYPE', 'Type: ' + activeObj.type)
+          commit('SET_HEIGHT', 'Height: ' + activeObj.height * activeObj.scaleY)
+          commit('SET_WIDTH', 'Width: ' + activeObj.width * activeObj.scaleX)
+          commit('SET_FILL', '')
+          commit('SET_STROKE', '')
+          commit('SET_STROKE_DASH_ARRAY', '')
+          commit('SET_WIDTH', '')
+          commit('SET_MIN_WIDTH', '')
+          commit('SET_MIN_HEIGHT', '')
+        } else if (activeObj.type === 'path') {
+          commit('SET_NAME', 'Name: ' + activeObj.name)
+          commit('SET_TYPE', 'Type: ' + activeObj.type)
+          commit('SET_FILL', 'Color: ' + activeObj.stroke)
+          commit('SET_HEIGHT', '')
+          commit('SET_WIDTH', '')
+          commit('SET_STROKE', '')
+          commit('SET_STROKE_DASH_ARRAY', '')
+          commit('SET_STROKE_WIDTH', '')
+          commit('SET_MIN_WIDTH', '')
+          commit('SET_MIN_HEIGHT', '')
+        } else if (activeObj.type === 'i-text') {
+          commit('SET_NAME', 'Name: ' + activeObj.text)
+          commit('SET_TYPE', 'Type: ' + activeObj.type)
+          commit('SET_FILL', 'Color: ' + activeObj.fill)
+          commit('SET_HEIGHT', 'Height: ' + activeObj.height * activeObj.scaleY)
+          commit('SET_WIDTH', 'Width: ' + activeObj.width * activeObj.scaleX)
+          commit('SET_STROKE', 'Stroke: ' + activeObj.stroke)
+          commit('SET_STROKE_DASH_ARRAY', '')
+          commit('SET_STROKE_WIDTH', '')
+          commit('SET_MIN_WIDTH', '')
+          commit('SET_MIN_HEIGHT', '')
+        }
+      }
+    },
     setHeight ({commit}, para) {
       commit('SET_HEIGHT', para)
     },

@@ -29,7 +29,7 @@
 
       cvs.on('object:scaling', (e) => {
         const shape = e.target
-        if (shape['type'] === 'rect' || shape['type'] === 'poly' || shape['type'] === 'circle') {
+        if (shape['type'] === 'rect' || shape['type'] === 'polygon' || shape['type'] === 'circle') {
           const minWidth = 200
           const minHeight = 200
           const actualWidth = shape.scaleX * shape.width
@@ -43,22 +43,32 @@
           }
         }
         this.$store.dispatch('stateHandling')
+        this.$store.dispatch('fabricInspector/updateInfo', this.$store.getters.GET_ACTIVEOBJ)
       })
       cvs.on('path:created', (e) => {
-        e.path.set('name', this.$store.getters.GET_DRAW_LAYER)
+        e.path.set('pathName', this.$store.getters.GET_DRAW_LAYER)
+        e.path.set('name', 'Path')
+        this.$store.dispatch('fabricInspector/updateInfo', this.$store.getters.GET_ACTIVEOBJ)
       })
-      cvs.on('object:added', () => {
+      cvs.on('object:added', (e) => {
         this.$store.dispatch('stateHandling')
+        if (e.target['type'] === 'rect' || e.target['type'] === 'polygon' || e.target['type'] === 'circle') {
+          e.target.minWidth = this.$store.getters.GET_MINWIDTH
+          e.target.minHeight = this.$store.getters.GET_MINHEIGHT
+        }
       })
       cvs.on('object:modified', () => {
         this.$store.dispatch('stateHandling')
         this.$store.dispatch('updateActiveObj')
+        this.$store.dispatch('fabricInspector/updateInfo', this.$store.getters.GET_ACTIVEOBJ)
       })
       cvs.on('object:selected', () => {
         this.$store.dispatch('updateActiveObj')
+        this.$store.dispatch('fabricInspector/updateInfo', this.$store.getters.GET_ACTIVEOBJ)
       })
       cvs.on('selection:cleared', () => {
         this.$store.dispatch('updateActiveObj')
+        this.$store.dispatch('fabricInspector/updateInfo', this.$store.getters.GET_ACTIVEOBJ)
       })
 
       /* cvs.on('canvas:cleared', () => {
