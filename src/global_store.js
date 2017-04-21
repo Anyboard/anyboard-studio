@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 
 import fabricInspector from './store/fabric_inspector.js'
 import fabricCanvas from './store/fabric_canvas.js'
+import blockly from './store/blockly.js'
 
 // Setting the root Vue-instance to use Vuex
 Vue.use(Vuex)
@@ -23,6 +24,7 @@ export default new Vuex.Store({
   // Child stores are imported and referenced here
   modules: {
     fabricInspector,
-    fabricCanvas
+    fabricCanvas,
+    blockly
   }
 })

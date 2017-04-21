@@ -425,6 +425,11 @@ export default {
     GET_ACTIVEOBJ: state => {
       return state.activeObj
     },
+
+    GET_SECTORS: state => {
+      return state.sectors
+    },
+
     GET_MINWIDTH: state => {
       return state.minWidth
     },

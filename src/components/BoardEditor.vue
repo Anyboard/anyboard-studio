@@ -1,5 +1,5 @@
 <template>
-  <div id="board_editor">
+  <div>
     <ul class="fabric_toolbar">
       <li>
         <IconButton icon="fa-window-restore" text="Sector" tooltip="Insert a new sector"></IconButton>
