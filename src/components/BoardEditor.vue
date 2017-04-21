@@ -56,6 +56,9 @@
         <input @change="uploadBoard"type="file" id="upload" style="display: none"/>
       </li>
       <li>
+        <IconButton @click.native="changeGridMode" icon="fa-square-o" text="Grid" tooltip="Change grid mode"></IconButton>
+      </li>
+      <li>
         <IconButton @click.native="jsonDebug" icon="fa-at" text="DEBUG" tooltip="Log json debug"></IconButton>
       </li>
     </ul>
@@ -138,6 +141,9 @@
       },
       renameSector () {
         this.$store.dispatch('renameSector', document.getElementById('sectorName').value)
+      },
+      changeGridMode () {
+        this.$store.dispatch('changeGridMode')
       }
     },
 

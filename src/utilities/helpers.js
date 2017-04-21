@@ -42,6 +42,7 @@ export const restoreObjs = function (group, cvs) {
 export const layerify = function (cvs) {
   // Sets up variables for all objects and lists for the types
   var obj = cvs.getObjects()
+  var lineLayer = []
   var textLayer = []
   var sectorLayer = []
   var bPathLayer = []
@@ -59,9 +60,12 @@ export const layerify = function (cvs) {
       textLayer.push(obj[i])
     } else if (obj[i]['type'] === 'path' && obj[i]['pathName'] === 'top') {
       fPathLayer.push(obj[i])
+    } else if (obj[i]['type'] === 'line') {
+      lineLayer.push(obj[i])
     }
   }
   // Adds lists of objects to respective fabric groups
+  var lineGroup = new fabric.Group(lineLayer)
   var textGroup = new fabric.Group(textLayer)
   var sectorGroup = new fabric.Group(sectorLayer)
   var bPathGroup = new fabric.Group(bPathLayer)
@@ -71,12 +75,16 @@ export const layerify = function (cvs) {
   cvs.clear().renderAll()
   cvs.setBackgroundColor('white')
   // Adds groups to canvas
+  console.log('Adding grid')
+  cvs.add(lineGroup)
   cvs.add(imageGroup)
   cvs.add(bPathGroup)
+  console.log('Adding sector')
   cvs.add(sectorGroup)
   cvs.add(fPathGroup)
   cvs.add(textGroup)
   // Restores objects from group to canvas to allow layerify to work multiple times
+  restoreObjs(lineGroup, cvs)
   restoreObjs(imageGroup, cvs)
   restoreObjs(bPathGroup, cvs)
   restoreObjs(sectorGroup, cvs)

@@ -70,6 +70,15 @@
         this.$store.dispatch('updateActiveObj')
         this.$store.dispatch('fabricInspector/updateInfo', this.$store.getters.GET_ACTIVEOBJ)
       })
+      cvs.on('object:moving', (e) => {
+        if (this.$store.getters.GET_GRIDMODE) {
+          let size = this.$store.getters.GET_GRIDSIZE
+          e.target.set({
+            left: Math.round(e.target.left / size) * size,
+            top: Math.round(e.target.top / size) * size
+          })
+        }
+      })
 
       /* cvs.on('canvas:cleared', () => {
         this.$store.dispatch('setCanvas', cvs)

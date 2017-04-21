@@ -14,7 +14,10 @@ export default {
     drawLayer: 'bottom',
     activeObj: null,
     minHeight: 200,
-    minWidth: 200
+    minWidth: 200,
+    gridActive: true,
+    gridAdded: false,
+    gridSize: 50
   },
 
   mutations: {
@@ -247,12 +250,13 @@ export default {
     },
 
     SAVE_STATE (state) {
-      state.canvasState = state.canvas.toDatalessJSON(['name', 'pathName', 'minWidth', 'minHeight'])
+      state.canvasState = state.canvas.toDatalessJSON(['name', 'pathName', 'minWidth', 'minHeight', 'selectable', 'opacity'])
     },
 
     LOAD_STATE (state) {
       if (state.canvasState !== 0) {
         state.canvas.loadFromDatalessJSON(state.canvasState)
+        state.canvas.setBackgroundColor('white')
       }
     },
 
@@ -262,6 +266,28 @@ export default {
 
     USED_SECTORS (state) {
       state.usedSectors = updateSectorList(state.canvas)
+    },
+
+    CHANGE_GRID_MODE (state) {
+      state.gridActive = !state.gridActive
+      var objs = state.canvas.getObjects()
+      for (var i = 0, l = objs.length; i < l; ++i) {
+        if (objs[i]['type'] === 'line') {
+          objs[i]['opacity'] = state.gridActive
+        }
+      }
+      state.canvas.renderAll()
+    },
+
+    ADD_GRID (state) {
+      const canvasWidth = state.canvas.width
+      if (!state.gridAdded) {
+        state.gridAdded = true
+        for (let i = 0; i < (canvasWidth / state.gridSize); i++) {
+          state.canvas.add(new F.Line([i * state.gridSize, 0, i * state.gridSize, canvasWidth], { stroke: '#ccc', selectable: false, id: 'grid1' }))
+          state.canvas.add(new F.Line([0, i * state.gridSize, canvasWidth, i * state.gridSize], { stroke: '#ccc', selectable: false, id: 'grid2' }))
+        }
+      }
     },
 
     // Debugging
@@ -281,6 +307,7 @@ export default {
       commit('LOAD_STATE')
       commit('SAVE_STATE')
       commit('LOAD_STATE')
+      commit('ADD_GRID')
       commit('USED_SECTORS')
     },
 
@@ -413,6 +440,10 @@ export default {
       commit('LOAD_STATE')
     },
 
+    changeGridMode ({commit}) {
+      commit('CHANGE_GRID_MODE')
+    },
+
     // Debugging
     jsonDebug ({commit}) {
       commit('JSON_DEBUG')
@@ -435,6 +466,12 @@ export default {
     },
     GET_MINHEIGHT: state => {
       return state.minHeight
+    },
+    GET_GRIDMODE: state => {
+      return state.gridActive
+    },
+    GET_GRIDSIZE: state => {
+      return state.gridSize
     }
   }
 }
