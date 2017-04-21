@@ -2,7 +2,7 @@ import {fabric as F} from 'fabric'
 import FileSaver from 'file-saver'
 // import createObjectURL from 'create-object-url'
 import {createPolyPoints, dataURLtoBlob, layerify, exportSectors, updateSectorList,
-        renameSameSector, colorChange, renameSector} from '../utilities/helpers.js'
+        renameSameSector, colorChange, renameSector, checkIfSameName} from '../utilities/helpers.js'
 
 export default {
   state: {
@@ -86,7 +86,9 @@ export default {
     },
 
     RENAME_SECTOR (state, payload) {
-      renameSector(state.canvas, payload)
+      if (!checkIfSameName(payload, state.usedSectors, state.activeObj)) {
+        renameSector(state.canvas, payload)
+      }
     },
     // Inserting text
     INSERT_TEXT (state) {
@@ -214,8 +216,9 @@ export default {
 
     // Exporting
     UPDATE_ACTIVEOBJ (state) {
-      if (state.canvas.getActiveObject() !== null) {
-        state.activeObj = state.canvas.getActiveObject().toObject(['name', 'pathName', 'minWidth', 'minHeight'])
+      const obj = state.canvas.getActiveObject()
+      if (obj !== null && typeof obj !== 'undefined') {
+        state.activeObj = obj.toObject(['name', 'pathName', 'minWidth', 'minHeight'])
       } else {
         state.activeObj = null
       }
@@ -293,8 +296,12 @@ export default {
       }
     },
 
-    updateColor ({commit}, color) {
+    updateColor ({commit, getters, dispatch}, color) {
       commit('UPDATE_COLOR', color)
+      const obj = getters.GET_ACTIVEOBJ
+      if (obj !== null && (['rect', 'circle', 'polygon'].indexOf(obj['type'] > -1))) {
+        dispatch('changeColor')
+      }
     },
 
     renameSector ({commit}, name) {

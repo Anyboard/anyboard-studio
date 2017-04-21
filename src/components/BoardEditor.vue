@@ -55,6 +55,9 @@
         <IconButton @click.native="clickUpload" icon="fa-upload" text="Upload" tooltip="Upload the board"></IconButton>
         <input @change="uploadBoard"type="file" id="upload" style="display: none"/>
       </li>
+      <li>
+        <IconButton @click.native="jsonDebug" icon="fa-at" text="DEBUG" tooltip="Log json debug"></IconButton>
+      </li>
     </ul>
 
     <FabricCanvas></FabricCanvas>
@@ -65,31 +68,10 @@
 </template>
 
 <script type="text/javascript">
-  import {choiceColor} from 'vue-circle-choice'
   export default {
     name: 'BoardEditor',
     data () {
       return {
-        // TODO: Make picker have correct color on load
-        colors: [
-          '#166CA0',  // 2
-          '#4194D0',  // 5
-          '#112A95',  // 7
-          '#C047A3',  // 14
-          '#FB50A6',  // 15
-          '#5E1014',  // 16
-          '#9B3235',  // 18
-          '#FF483E',  // 20
-          '#66C889',  // 21
-          '#30A747',  // 24
-          '#31682E',  // 30
-          '#FF9344',  // 31
-          '#D96623',  // 33
-          '#F6EA77',  // 36
-          '#F4E658'   // 37
-        ],
-        index: 0,
-        color: '#166CA0'
       }
     },
     methods: {
@@ -154,18 +136,6 @@
       jsonDebug () {
         this.$store.dispatch('jsonDebug')
       },
-      updateColor ({ index, color }) {
-        this.index = index
-        this.color = color
-        console.log('Updatecolor Fired')
-        this.$store.dispatch('updateColor', color)
-        this.$store.dispatch('changeColor')
-      },
-      changeColor () {
-        this.$store.dispatch('changeColor')
-        this.$store.dispatch('updateActiveObj')
-        this.$store.dispatch('fabricInspector/updateInfo', this.$store.getters.GET_ACTIVEOBJ)
-      },
       renameSector () {
         this.$store.dispatch('renameSector', document.getElementById('sectorName').value)
       }
@@ -174,8 +144,7 @@
     components: {
       FabricInspector: require('./FabricInspector.vue'),
       FabricCanvas: require('./FabricCanvas.vue'),
-      IconButton: require('./IconButton.vue'),
-      ChoiceColor: choiceColor
+      IconButton: require('./IconButton.vue')
     }
   }
 </script>

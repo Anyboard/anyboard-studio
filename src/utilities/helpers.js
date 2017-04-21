@@ -163,6 +163,10 @@ function _isContains (json, value) {
   return contains
 }
 
+export const checkIfSameName = function (name, dict, obj) {
+  return (name in dict && dict[name] !== obj['fill'])
+}
+
 export const renameSameSector = function (obj, canvas) {
   if (obj['type'] === 'rect' || obj['type'] === 'polygon' || obj['type'] === 'circle') {
     const objs = canvas.getObjects()
@@ -181,22 +185,10 @@ export const renameSameSector = function (obj, canvas) {
   }
 }
 
-export const colorChange = function (canvas, sectorColor) {
-  let activeObj = canvas.getActiveObject()
-  if (activeObj != null && (activeObj['type'] === 'rect' || activeObj['type'] === 'polygon' ||
-    activeObj['type'] === 'circle')) {
-    activeObj.set('fill', sectorColor.toUpperCase())
-    activeObj.set('name', activeObj.fill)
-    canvas.renderAll()
-    renameSameSector(activeObj, canvas)
-  }
-}
-
-export const renameSector = function (canvas, name) {
+export const renameSector = function (canvas, newName) {
   let selObj = canvas.getActiveObject()
   const obj = canvas.getObjects()
   const oldName = selObj['name']
-  let newName = name
   if (oldName in sectorDict && oldName !== newName) {
     insertIntoDict(sectorDict, newName, selObj['fill'])
     delete sectorDict[oldName]
@@ -209,5 +201,16 @@ export const renameSector = function (canvas, name) {
         obj[i]['name'] = newName
       }
     }
+  }
+}
+
+export const colorChange = function (canvas, sectorColor) {
+  let activeObj = canvas.getActiveObject()
+  if (activeObj != null && (activeObj['type'] === 'rect' || activeObj['type'] === 'polygon' ||
+    activeObj['type'] === 'circle')) {
+    activeObj.set('fill', sectorColor.toUpperCase())
+    activeObj.set('name', activeObj.fill)
+    canvas.renderAll()
+    renameSameSector(activeObj, canvas)
   }
 }
