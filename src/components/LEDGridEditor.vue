@@ -5,7 +5,7 @@
       <input id="ledGridName" type="text" />
     </div>
     <div id="ledGrid">
-      <span v-for="(n,index) in grid" @click="toggleIndex(index)" :class="">{{  }}</span>
+      <span v-for="(n,index) in grid" @click="toggleIndex(index)" :class="n?'active-led':'false'" :key="index"></span>
     </div>
     <div>
       <button id="ledGridSubmitButton">Submit</button>
@@ -33,9 +33,15 @@
     },
     methods: {
       toggleIndex (n) {
-        this.grid[n] = !this.grid[n]
-        console.log(this.grid)
-        console.log(n)
+        const oldGrid = this.grid
+        const newGrid = []
+
+        for (let i = 0; i < oldGrid.length; i++) {
+          newGrid[i] = oldGrid[i]
+          if (i === n) newGrid[i] = !newGrid[i]
+        }
+
+        this.grid = newGrid
       }
     }
   }
