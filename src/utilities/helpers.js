@@ -193,6 +193,7 @@ export const renameSector = function (canvas, newName) {
   let selObj = canvas.getActiveObject()
   const obj = canvas.getObjects()
   const oldName = selObj['name']
+  console.log('Trying to rename')
   if (selObj['type'] === 'rect' || selObj['type'] === 'polygon' ||
     selObj['type'] === 'circle') {
     if (oldName in sectorDict && oldName !== newName) {
@@ -209,6 +210,8 @@ export const renameSector = function (canvas, newName) {
       }
     }
   } else if (selObj['type'] === 'i-text') {
+    selObj['text'] = newName
+    canvas.renderAll()
   } else {
     selObj.name = newName
   }
