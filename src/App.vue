@@ -1,11 +1,9 @@
 <template>
   <div id="app">
     <nav id="navigation">
-      <a id="logo" href="#">Anyboard Studio</a>
-      
-      <a href="/#/boardeditor">File</a>
-      <a href="#">Edit</a>
-      <a href="#">Game</a>
+      <a href="/#/">Anyboard Studio</a>
+      <a href="/#/board">Board Editor</a>
+      <a href="/#/assets">Game Assets</a>
       <a href="/#/code">Code Builder</a>
       <router-view name="extras"></router-view>
     </nav>
@@ -39,6 +37,7 @@ export default {
   padding:5em 2em;
   height:100%;
   min-height: 100%;
+  justify-content: center;
 
   a { color:#f50; }
   a:hover { border-bottom:1px dotted currentColor; }

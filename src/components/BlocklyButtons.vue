@@ -1,5 +1,5 @@
 <template>
-  <a>Export</a>
+  <a style="float:right">Export</a>
 </template>
 
 <script type="text/javascript">
