@@ -123,7 +123,10 @@ export const exportSectors = function (canvas) {
       // Makes sure only rectangles or hexagons get added
       // May want to give all sectors a unique property to allow for more sector types in the future
       if (sectors[i]['type'] === 'rect' || sectors[i]['type'] === 'polygon' || sectors[i]['type'] === 'circle') {
-        str = sectors[i]['name'].replace(' ', '\u00A0')
+        str = sectors[i]['name']
+        if (typeof str === 'string') {
+          str.replace(' ', '\u00A0')
+        }
         insertIntoDict(sectorTypeObject, str, colourDict[sectors[i]['fill'].toUpperCase()])
         unique[sectors[i]['fill']] = 1
       }

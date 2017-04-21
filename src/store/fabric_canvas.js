@@ -268,6 +268,7 @@ export default {
     JSON_DEBUG (state) {
       console.log(JSON.stringify(state.canvas))
       console.log(state.usedSectors)
+      console.log(state.sectors)
       console.log(state.activeObj)
     }
   },
