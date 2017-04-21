@@ -75,11 +75,9 @@ export const layerify = function (cvs) {
   cvs.clear().renderAll()
   cvs.setBackgroundColor('white')
   // Adds groups to canvas
-  console.log('Adding grid')
   cvs.add(lineGroup)
   cvs.add(imageGroup)
   cvs.add(bPathGroup)
-  console.log('Adding sector')
   cvs.add(sectorGroup)
   cvs.add(fPathGroup)
   cvs.add(textGroup)

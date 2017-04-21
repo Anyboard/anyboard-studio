@@ -51,16 +51,20 @@
         this.$store.dispatch('fabricInspector/updateInfo', this.$store.getters.GET_ACTIVEOBJ)
       })
       cvs.on('object:added', (e) => {
-        this.$store.dispatch('stateHandling')
-        if (e.target['type'] === 'rect' || e.target['type'] === 'polygon' || e.target['type'] === 'circle') {
-          e.target.minWidth = this.$store.getters.GET_MINWIDTH
-          e.target.minHeight = this.$store.getters.GET_MINHEIGHT
+        if (this.$store.getters.GET_GRIDADDED) {
+          this.$store.dispatch('stateHandling')
+          if (e.target['type'] === 'rect' || e.target['type'] === 'polygon' || e.target['type'] === 'circle') {
+            e.target.minWidth = this.$store.getters.GET_MINWIDTH
+            e.target.minHeight = this.$store.getters.GET_MINHEIGHT
+          }
         }
       })
       cvs.on('object:modified', () => {
-        this.$store.dispatch('stateHandling')
-        this.$store.dispatch('updateActiveObj')
-        this.$store.dispatch('fabricInspector/updateInfo', this.$store.getters.GET_ACTIVEOBJ)
+        if (this.$store.getters.GET_GRIDADDED) {
+          this.$store.dispatch('stateHandling')
+          this.$store.dispatch('updateActiveObj')
+          this.$store.dispatch('fabricInspector/updateInfo', this.$store.getters.GET_ACTIVEOBJ)
+        }
       })
       cvs.on('object:selected', () => {
         this.$store.dispatch('updateActiveObj')
