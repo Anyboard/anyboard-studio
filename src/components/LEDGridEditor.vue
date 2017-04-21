@@ -5,7 +5,7 @@
       <input id="ledGridName" type="text" />
     </div>
     <div id="ledGrid">
-      <span v-for="(n,index) in grid" @click="toggleIndex(index)" :class="grid[index]:'active-led'">{{  }}</span>
+      <span v-for="(n,index) in grid" @click="toggleIndex(index)" :class="">{{  }}</span>
     </div>
     <div>
       <button id="ledGridSubmitButton">Submit</button>
