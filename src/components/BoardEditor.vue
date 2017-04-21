@@ -59,6 +59,9 @@
         <IconButton @click.native="changeGridMode" icon="fa-square-o" text="Grid" tooltip="Change grid mode"></IconButton>
       </li>
       <li>
+        <IconButton @click.native="printBoard" icon="fa-print" text="Print" tooltip="Send the board to printer"></IconButton>
+      </li>
+      <li>
         <IconButton @click.native="jsonDebug" icon="fa-at" text="DEBUG" tooltip="Log json debug"></IconButton>
       </li>
     </ul>
@@ -71,6 +74,7 @@
 </template>
 
 <script type="text/javascript">
+
   export default {
     name: 'BoardEditor',
     data () {
@@ -144,6 +148,21 @@
       },
       changeGridMode () {
         this.$store.dispatch('changeGridMode')
+      },
+      printBoard () {
+        this.$store.dispatch('makePrintableBoard')
+
+        const board = this.$store.getters.GET_PRINTABLE_BOARD
+        const windowUrl = 'about:blank'
+        const uniqueName = new Date()
+        const windowName = 'Print' + uniqueName.getTime()
+        const printWindow = window.open(windowUrl, windowName, 'left=50000,top=50000,width=0,height=0')
+
+        printWindow.document.write("<img src='" + board + "'/>")
+        printWindow.document.close()
+        printWindow.focus()
+        printWindow.print()
+        printWindow.close()
       }
     },
 

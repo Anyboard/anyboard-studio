@@ -17,7 +17,8 @@ export default {
     minWidth: 200,
     gridActive: true,
     gridAdded: false,
-    gridSize: 50
+    gridSize: 50,
+    printableBoard: null
   },
 
   mutations: {
@@ -234,7 +235,16 @@ export default {
         state.canvas.deactivateAll().renderAll()
         const img = state.canvas.toDataURL('png')
         const blob = dataURLtoBlob(img)
+        console.log(blob)
         FileSaver.saveAs(blob, 'Board.png')
+      }
+    },
+
+    MAKE_PRINTABLE_BOARD (state) {
+      if (state.canvas.getObjects().length > 0) {
+        layerify(state.canvas)
+        state.canvas.deactivateAll().renderAll()
+        state.printableBoard = state.canvas.toDataURL('png')
       }
     },
 
@@ -305,6 +315,7 @@ export default {
         }
         state.gridAdded = true
         state.canvas.renderAll()
+        layerify(state.canvas)
       }
     },
 
@@ -441,6 +452,10 @@ export default {
       commit('SAVE_BOARD', payload)
     },
 
+    makePrintableBoard ({commit}) {
+      commit('MAKE_PRINTABLE_BOARD')
+    },
+
     downloadBoard ({commit}) {
       commit('DOWNLOAD_BOARD')
     },
@@ -509,6 +524,9 @@ export default {
     },
     GET_GRIDADDED: state => {
       return state.gridAdded
+    },
+    GET_PRINTABLE_BOARD: state => {
+      return state.printableBoard
     }
   }
 }
