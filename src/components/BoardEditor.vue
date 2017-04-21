@@ -159,10 +159,12 @@
         const printWindow = window.open(windowUrl, windowName, 'left=50000,top=50000,width=0,height=0')
 
         printWindow.document.write("<img src='" + board + "'/>")
-        printWindow.document.close()
-        printWindow.focus()
-        printWindow.print()
-        printWindow.close()
+        setTimeout(function () { // Needs to wait for the document to finish writing (yes, just one ms is enough)
+          printWindow.document.close()
+          printWindow.focus()
+          printWindow.print()
+          printWindow.close()
+        }, 1)
       }
     },
 

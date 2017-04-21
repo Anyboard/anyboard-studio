@@ -230,22 +230,54 @@ export default {
       }
     },
     SAVE_BOARD (state) {
+      if (state.gridActive) {
+        const objs = state.canvas.getObjects()
+        for (let i = 0, l = objs.length; i < l; ++i) {
+          if (objs[i]['type'] === 'line') {
+            objs[i]['opacity'] = 0
+          }
+        }
+      }
+
       if (state.canvas.getObjects().length > 0) {
         layerify(state.canvas)
         state.canvas.deactivateAll().renderAll()
         const img = state.canvas.toDataURL('png')
         const blob = dataURLtoBlob(img)
-        console.log(blob)
         FileSaver.saveAs(blob, 'Board.png')
       }
+
+      const objs = state.canvas.getObjects()
+      for (let i = 0, l = objs.length; i < l; ++i) {
+        if (objs[i]['type'] === 'line') {
+          objs[i]['opacity'] = state.gridActive
+        }
+      }
+      state.canvas.renderAll()
     },
 
     MAKE_PRINTABLE_BOARD (state) {
+      if (state.gridActive) {
+        const objs = state.canvas.getObjects()
+        for (let i = 0, l = objs.length; i < l; ++i) {
+          if (objs[i]['type'] === 'line') {
+            objs[i]['opacity'] = 0
+          }
+        }
+      }
+
       if (state.canvas.getObjects().length > 0) {
-        layerify(state.canvas)
         state.canvas.deactivateAll().renderAll()
         state.printableBoard = state.canvas.toDataURL('png')
       }
+
+      const objs = state.canvas.getObjects()
+      for (let i = 0, l = objs.length; i < l; ++i) {
+        if (objs[i]['type'] === 'line') {
+          objs[i]['opacity'] = state.gridActive
+        }
+      }
+      state.canvas.renderAll()
     },
 
     DOWNLOAD_BOARD (state) {
@@ -280,8 +312,8 @@ export default {
 
     CHANGE_GRID_MODE (state) {
       state.gridActive = !state.gridActive
-      var objs = state.canvas.getObjects()
-      for (var i = 0, l = objs.length; i < l; ++i) {
+      const objs = state.canvas.getObjects()
+      for (let i = 0, l = objs.length; i < l; ++i) {
         if (objs[i]['type'] === 'line') {
           objs[i]['opacity'] = state.gridActive
         }
@@ -310,8 +342,10 @@ export default {
       const canvasWidth = state.canvas.width
       if (!state.gridAdded) {
         for (let i = 0; i < (canvasWidth / state.gridSize); i++) {
-          state.canvas.add(new F.Line([i * state.gridSize, 0, i * state.gridSize, canvasWidth], { stroke: '#ccc', selectable: false, id: 'grid1' }))
-          state.canvas.add(new F.Line([0, i * state.gridSize, canvasWidth, i * state.gridSize], { stroke: '#ccc', selectable: false, id: 'grid2' }))
+          state.canvas.add(new F.Line([i * state.gridSize, 0, i * state.gridSize, canvasWidth],
+            { stroke: '#ccc', selectable: false, id: 'grid1' }))
+          state.canvas.add(new F.Line([0, i * state.gridSize, canvasWidth, i * state.gridSize],
+            { stroke: '#ccc', selectable: false, id: 'grid2' }))
         }
         state.gridAdded = true
         state.canvas.renderAll()
@@ -486,7 +520,6 @@ export default {
     },
 
     changeGridSize ({commit}, size) {
-      console.log('Changing Grid Size')
       commit('UNADD_GRID')
       commit('REMOVE_GRID')
       commit('CHANGE_GRID_SIZE', size)
