@@ -1,13 +1,19 @@
 <template>
   <div id="app">
     <nav id="navigation">
-      <a href="/#/">Anyboard Studio</a>
+      <span class="left">
+        <a href="/#/" class="logo">Anyboard Studio</a>
+      </span>
+      
       <a href="/#/board">Board Editor</a>
       <a href="/#/assets">Game Assets</a>
       <a href="/#/code">Code Builder</a>
-      <router-view name="extras"></router-view>
+      
+      <span class="right">
+        <router-view name="extras"></router-view>
+      </span>
     </nav>
-    <!-- test -->
+
     <router-view id="wrapper"></router-view>
   </div>
 </template>
@@ -59,11 +65,25 @@ export default {
   text-align: center;
   box-shadow:1em 0 1em #000;
 
+  span {
+    flex-grow: 2;
+    background: #f90;
+  }
+
+  .left {
+    text-align: left;
+  }
+
+  .right {
+    text-align: right;
+  }
+
   a {
     color:#333;
     text-decoration: none;
     display:inline-block;
     font-family: Tahoma, Geneva, sans-serif;
+    padding:1.25em 2em 0.95em 2em;
   }
 
   a:hover {
@@ -71,15 +91,12 @@ export default {
   }
 
   a:not(#logo) {
-    padding:1.25em 2em 0.95em 2em;
     text-transform: uppercase;
   }
 
-  a#logo {
+  span a#logo {
     display:block;
     font-size:1.5em;
-    position:absolute;
-    padding:.5em 2.5em;
     background-image: url('./assets/logo.svg');
     background-size: 1.5em 1.5em;
     background-position: .5em;
