@@ -42,7 +42,7 @@
         <IconButton @click.native="toggleDraw" icon="fa-pencil" text="Drawing" tooltip="Toggle free drawing"></IconButton>
         <div class="drop-right">
           <IconButton @click.native="changeDrawLayer" icon="fa-repeat" text="Change Layer" tooltip="Change drawing layer between foreground and background"></IconButton>
-          <IconButton @click.native="changeDrawColor" icon="fa-paint-brush" text="Color Change" tooltip="Change the drawing color"></IconButton>
+          <IconButton @click.native="changeDrawColor" icon="fa-paint-brush" text="Color Change" tooltip="Change the drawing color to black"></IconButton>
         </div>
       </li>
       <li>
@@ -91,7 +91,7 @@
         this.$store.dispatch('changeDrawLayer')
       },
       changeDrawColor () {
-        this.$store.dispatch('changeDrawColor', '#45AB00')
+        this.$store.dispatch('changeDrawColor', '#000000')
       },
       deleteObject () {
         this.$store.dispatch('deleteObject')

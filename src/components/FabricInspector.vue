@@ -1,11 +1,11 @@
 <template>
   <div>
-   <p>Fabric inspector</p>
+    <p>Fabric inspector</p>
     <collapse accordion>
       <collapse-item title="Colorpicker">
         <ChoiceColor :colors='colors' radius='10em' v-on:updateColor='updateColor'></ChoiceColor>
       </collapse-item>
-      <collapse-item title="Object properties" actived>
+      <collapse-item title="Object properties" actived id="objectProps">
         <p>{{header}}</p>
         <p>{{name}}</p>
         <p>{{type}}</p>
@@ -17,7 +17,6 @@
         <p>{{stroke}}</p>
         <p>{{strokeDashArray}}</p>
         <p>{{strokeWidth}}</p>
-
         <p>Change object name</p>
         <input type="text" v-model="sectorname"/>
         <a @click="renameSector2">Change name</a>
@@ -31,6 +30,23 @@
   import {mapState} from 'vuex'
   import {choiceColor} from 'vue-circle-choice'
 
+  const colorArray = [
+    '#166CA0',  // 2
+    '#4194D0',  // 5
+    '#112A95',  // 7
+    '#C047A3',  // 14
+    '#FB50A6',  // 15
+    '#5E1014',  // 16
+    '#9B3235',  // 18
+    '#FF483E',  // 20
+    '#66C889',  // 21
+    '#30A747',  // 24
+    '#31682E',  // 30
+    '#FF9344',  // 31
+    '#D96623',  // 33
+    '#F6EA77',  // 36
+    '#F4E658'   // 37
+  ]
   export default {
     name: 'FabricInspector',
     data () {
@@ -38,25 +54,9 @@
         header: 'Properties for selected object',
         sectorname: 'Insert Name',
         // TODO: Make picker have correct color on load
-        colors: [
-          '#166CA0',  // 2
-          '#4194D0',  // 5
-          '#112A95',  // 7
-          '#C047A3',  // 14
-          '#FB50A6',  // 15
-          '#5E1014',  // 16
-          '#9B3235',  // 18
-          '#FF483E',  // 20
-          '#66C889',  // 21
-          '#30A747',  // 24
-          '#31682E',  // 30
-          '#FF9344',  // 31
-          '#D96623',  // 33
-          '#F6EA77',  // 36
-          '#F4E658'   // 37
-        ],
+        colors: colorArray,
         index: 0,
-        color: '#166CA0'
+        color: colorArray[0]
       }
     },
     computed: {
@@ -93,8 +93,11 @@
   }
 </script>
 
-<style scoped>
- p {
-   color: black;
- }
+<style>
+  #objectProps > p{
+    color: black;
+  }
+  .faux-border {
+    transform: translate(-31%, -41%)!important;
+  }
 </style>

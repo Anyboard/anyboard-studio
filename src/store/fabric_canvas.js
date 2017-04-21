@@ -266,7 +266,6 @@ export default {
     JSON_DEBUG (state) {
       console.log(JSON.stringify(state.canvas))
       console.log(state.usedSectors)
-      console.log(state.activeObj.name)
     }
   },
 
@@ -302,6 +301,7 @@ export default {
       if (obj !== null && (['rect', 'circle', 'polygon'].indexOf(obj['type'] > -1))) {
         dispatch('changeColor')
       }
+      commit('CHANGE_DRAW_COLOR', color)
     },
 
     renameSector ({commit}, name) {
