@@ -1,8 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Hello from 'components/Hello'
-import FabricInspector from 'components/FabricInspector.vue'
 import BoardEditor from 'components/BoardEditor.vue'
+import Blockly from 'components/Blockly.vue'
+import BlocklyButtons from 'components/BlocklyButtons.vue'
 
 Vue.use(Router)
 
@@ -11,17 +12,24 @@ export default new Router({
     {
       path: '/',
       name: 'Hello',
-      component: Hello
-    },
-    {
-      path: '/fabricinspector',
-      name: 'FabricInspector',
-      component: FabricInspector
+      components: {
+        main: Hello
+      }
     },
     {
       path: '/boardeditor',
       name: 'Board Editor',
-      component: BoardEditor
+      components: {
+        default: BoardEditor
+      }
+    },
+    {
+      path: '/code',
+      name: 'Blockly Builder',
+      components: {
+        default: Blockly,
+        extras: BlocklyButtons
+      }
     }
   ]
 })
