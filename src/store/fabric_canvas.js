@@ -35,7 +35,7 @@ export default {
         width: 200,
         height: 200,
         fill: state.sectorColor,
-        stroke: '#ffd445',
+        stroke: '#FFD445',
         strokeDashArray: [15, 3],
         strokeWidth: 7,
         minHeight: state.minHeight,
@@ -50,7 +50,7 @@ export default {
     CREATE_POLYGON (state, sides) {
       const poly = new F.Polygon(createPolyPoints(sides, 100), {
         fill: state.sectorColor,
-        stroke: '#ffd445',
+        stroke: '#FFD445',
         strokeDashArray: [15, 3],
         strokeWidth: 7,
         minHeight: state.minHeight,
@@ -65,7 +65,7 @@ export default {
       const circ = new F.Circle({
         radius: state.minWidth / 2,
         fill: state.sectorColor,
-        stroke: '#ffd445',
+        stroke: '#FFD445',
         strokeDashArray: [15, 3],
         strokeWidth: 7,
         minHeight: state.minHeight,
@@ -94,7 +94,7 @@ export default {
     INSERT_TEXT (state) {
       const text = new F.IText('InsertedText',
         {
-          fill: '#ffffff',
+          fill: '#FFFFFF',
           stroke: '#000000',
           strokeWidth: 1,
           fontFamily: 'Arial',
@@ -268,6 +268,7 @@ export default {
     JSON_DEBUG (state) {
       console.log(JSON.stringify(state.canvas))
       console.log(state.usedSectors)
+      console.log(state.activeObj)
     }
   },
 

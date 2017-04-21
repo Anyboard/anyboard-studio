@@ -164,7 +164,11 @@ function _isContains (json, value) {
 }
 
 export const checkIfSameName = function (name, dict, obj) {
-  return (name in dict && dict[name] !== obj['fill'])
+  if (obj['type'] === 'circle' || obj['type'] === 'polygon' || obj['type'] === 'rect') {
+    return (name in dict && dict[name] !== obj['fill'])
+  } else {
+    return false
+  }
 }
 
 export const renameSameSector = function (obj, canvas) {
@@ -189,18 +193,24 @@ export const renameSector = function (canvas, newName) {
   let selObj = canvas.getActiveObject()
   const obj = canvas.getObjects()
   const oldName = selObj['name']
-  if (oldName in sectorDict && oldName !== newName) {
-    insertIntoDict(sectorDict, newName, selObj['fill'])
-    delete sectorDict[oldName]
-  }
-  selObj.name = newName
   if (selObj['type'] === 'rect' || selObj['type'] === 'polygon' ||
     selObj['type'] === 'circle') {
-    for (var i = 0, l = obj.length; i < l; ++i) {
-      if (obj[i]['fill'] === selObj['fill']) {
-        obj[i]['name'] = newName
+    if (oldName in sectorDict && oldName !== newName) {
+      insertIntoDict(sectorDict, newName, selObj['fill'])
+      delete sectorDict[oldName]
+    }
+    selObj.name = newName
+    if (selObj['type'] === 'rect' || selObj['type'] === 'polygon' ||
+      selObj['type'] === 'circle') {
+      for (var i = 0, l = obj.length; i < l; ++i) {
+        if (obj[i]['fill'] === selObj['fill']) {
+          obj[i]['name'] = newName
+        }
       }
     }
+  } else if (selObj['type'] === 'i-text') {
+  } else {
+    selObj.name = newName
   }
 }
 

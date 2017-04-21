@@ -74,6 +74,17 @@ export default {
           commit('SET_STROKE_WIDTH', '')
           commit('SET_MIN_WIDTH', '')
           commit('SET_MIN_HEIGHT', '')
+        } else if (activeObj.type === 'i-text') {
+          commit('SET_NAME', 'Name: ' + activeObj.text)
+          commit('SET_TYPE', 'Type: ' + activeObj.type)
+          commit('SET_FILL', 'Color: ' + activeObj.fill)
+          commit('SET_HEIGHT', 'Height: ' + activeObj.height * activeObj.scaleY)
+          commit('SET_WIDTH', 'Width: ' + activeObj.width * activeObj.scaleX)
+          commit('SET_STROKE', 'Stroke: ' + activeObj.stroke)
+          commit('SET_STROKE_DASH_ARRAY', '')
+          commit('SET_STROKE_WIDTH', '')
+          commit('SET_MIN_WIDTH', '')
+          commit('SET_MIN_HEIGHT', '')
         }
       }
     },
