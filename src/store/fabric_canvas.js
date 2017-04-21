@@ -203,8 +203,10 @@ export default {
       let reader = new FileReader()
       reader.onload = function (f) {
         const data = f.target.result
+        const fileName = file.name.substring(0, file.name.indexOf('.'))
         F.Image.fromURL(data, function (img) {
           const oImg = img.set({angle: 0}).scale(0.5)
+          oImg.name = fileName
           state.canvas.add(oImg).renderAll()
           state.canvas.setActiveObject(oImg)
           state.canvas.toDataURL({format: 'png', quality: 0.8})
