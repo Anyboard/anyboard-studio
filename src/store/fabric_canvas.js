@@ -344,7 +344,6 @@ export default {
     ADD_GRID (state) {
       const canvasWidth = state.canvas.width
       if (!state.gridAdded) {
-        console.log('Adding grid')
         for (let i = 0; i < (canvasWidth / state.gridSize); i++) {
           state.canvas.add(new F.Line([i * state.gridSize, 0, i * state.gridSize, canvasWidth],
             { stroke: '#ccc', selectable: false, id: 'grid1' }))

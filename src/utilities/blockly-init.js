@@ -634,6 +634,11 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
     return result
   }
   Blockly.JavaScript.finish = function (code) {
+    // Sector values to be used for getRandomSector
+    let sectorVals = []
+    for (let i in sectorObject) {
+      sectorVals.push(sectorObject[i])
+    }
     // Convert the definitions dictionary into a list.
     var definitions = []
     for (var name in Blockly.JavaScript.definitions_) {
@@ -645,6 +650,7 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
     Blockly.JavaScript.variableDB_.reset()
     var output = definitions.join('\n\n') + '\n\n\n'
     // output += Blockly.JavaScript.writeDictionary('tiles', tilesdict)
+    output += 'sectorVals: ' + Blockly.JavaScript.writeList(sectorVals) + ',\n\n'
     output += Blockly.JavaScript.writeListDictionary('tokenVal', tokenVal)
     output += 'initiate: function() {\n\n'
     output += code
