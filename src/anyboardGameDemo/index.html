@@ -214,6 +214,10 @@
         var obj_keys = Object.keys(app.devices);
         var ran_key = obj_keys[Math.floor(Math.random() *obj_keys.length)];
         return app.devices[ran_key];
+      },
+
+      getRandomSector: function () {
+        return app.sectorVals[Math.floor(Math.random() * app.sectorVals.length)]
       }
 
     };
