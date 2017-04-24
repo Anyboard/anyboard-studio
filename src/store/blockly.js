@@ -7,7 +7,8 @@ export default {
 
   state: {
     workspace: null,
-    blocklyState: 0
+    blocklyState: 0,
+    exportedCode: null
   },
 
   mutations: {
@@ -16,6 +17,10 @@ export default {
     },
     SAVE_BLOCKLY_STATE: function (state, blocklyState) {
       state.blocklyState = blocklyState
+    },
+    SET_EXPORTED_CODE (state) {
+      state.exportedCode = Blockly.JavaScript.workspaceToCode(state.workspace)
+      console.log(state.exportedCode)
     }
   },
   getters: {
@@ -46,8 +51,8 @@ export default {
       const workspace = Blockly.inject('blockly-wrapper', {toolbox: toolbox})
 
       workspace.addChangeListener(function () {
-        var blocklyXML = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace)
-        var blocklyState = Blockly.Xml.domToPrettyText(blocklyXML)
+        const blocklyXML = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace)
+        const blocklyState = Blockly.Xml.domToPrettyText(blocklyXML)
         commit('SAVE_BLOCKLY_STATE', blocklyState)
       })
 
@@ -66,6 +71,9 @@ export default {
       console.log(context)
 
       loadState()
+    },
+    logCode ({commit}) {
+      commit('SET_EXPORTED_CODE')
     }
   }
 }

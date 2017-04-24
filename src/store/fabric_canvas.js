@@ -312,6 +312,9 @@ export default {
 
     CHANGE_GRID_MODE (state) {
       state.gridActive = !state.gridActive
+    },
+
+    HANDLE_DRAW_GRID (state) {
       const objs = state.canvas.getObjects()
       for (let i = 0, l = objs.length; i < l; ++i) {
         if (objs[i]['type'] === 'line') {
@@ -341,6 +344,7 @@ export default {
     ADD_GRID (state) {
       const canvasWidth = state.canvas.width
       if (!state.gridAdded) {
+        console.log('Adding grid')
         for (let i = 0; i < (canvasWidth / state.gridSize); i++) {
           state.canvas.add(new F.Line([i * state.gridSize, 0, i * state.gridSize, canvasWidth],
             { stroke: '#ccc', selectable: false, id: 'grid1' }))
@@ -375,6 +379,7 @@ export default {
       commit('SAVE_STATE')
       commit('LOAD_STATE')
       commit('ADD_GRID')
+      commit('HANDLE_DRAW_GRID')
       commit('USED_SECTORS')
     },
 
@@ -499,6 +504,7 @@ export default {
       commit('USED_SECTORS')
       commit('SAVE_SECTORS')
       commit('LOAD_STATE')
+      commit('HANDLE_DRAW_GRID')
     },
 
     stateHandling ({commit}) {
@@ -509,10 +515,12 @@ export default {
 
     loadState ({commit}) {
       commit('LOAD_STATE')
+      commit('HANDLE_DRAW_GRID')
     },
 
     changeGridMode ({commit}) {
       commit('CHANGE_GRID_MODE')
+      commit('HANDLE_DRAW_GRID')
     },
 
     updateGridSize ({commit}, size) {

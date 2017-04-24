@@ -129,10 +129,10 @@
         document.getElementById('upload').click()
       },
       uploadBoard () {
-        var reader = new FileReader()
+        const reader = new FileReader()
         reader.readAsText(event.target.files[0])
         reader.onload = (event) => {
-          var jsonObj = JSON.parse(event.target.result)
+          const jsonObj = JSON.parse(event.target.result)
           this.$store.dispatch('uploadBoard', jsonObj)
         }
         document.getElementById('upload').value = ''
