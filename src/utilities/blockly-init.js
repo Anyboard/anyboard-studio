@@ -479,7 +479,7 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
     var stack1 = Blockly.JavaScript.statementToCode(block, 'STACK1')
     var stack2 = Blockly.JavaScript.statementToCode(block, 'STACK2')
     var code = 'var handleTokenTurn = function(currentToken , direction , options) {\n'
-    code += 'if (direction == clockwise) {\n'
+    code += 'if (direction == 1) {\n'
     code += stack1
     code += '} else {\n'
     code += stack2

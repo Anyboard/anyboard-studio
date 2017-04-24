@@ -1,6 +1,8 @@
 import Blockly from 'node-blockly/browser'
 import toolbox from '../utilities/blockly-toolbox.js'
+import htmlTemplate from '../utilities/html-template'
 import blocklyInit from '../utilities/blockly-init.js'
+import FileSaver from 'file-saver'
 
 export default {
   namespaced: true,
@@ -18,9 +20,12 @@ export default {
     SAVE_BLOCKLY_STATE: function (state, blocklyState) {
       state.blocklyState = blocklyState
     },
-    SET_EXPORTED_CODE (state) {
-      state.exportedCode = Blockly.JavaScript.workspaceToCode(state.workspace)
-      console.log(state.exportedCode)
+    EXPORT_CODE (state) {
+      const done = htmlTemplate.replace('//REPLACEMEOKAY//\n', Blockly.JavaScript.workspaceToCode(state.workspace))
+      const blob = new Blob([done], {
+        type: 'text/html'
+      })
+      FileSaver.saveAs(blob, 'index.html')
     }
   },
   getters: {
@@ -72,8 +77,8 @@ export default {
 
       loadState()
     },
-    logCode ({commit}) {
-      commit('SET_EXPORTED_CODE')
+    exportCode ({commit}) {
+      commit('EXPORT_CODE')
     }
   }
 }

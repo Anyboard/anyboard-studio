@@ -12,7 +12,7 @@
     methods: {
       exportCode () {
         // TODO: Actually export to html file instead of console logging
-        this.$store.dispatch('blockly/logCode')
+        this.$store.dispatch('blockly/exportCode')
       }
     }
   }
