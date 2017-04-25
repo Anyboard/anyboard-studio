@@ -236,3 +236,15 @@ export const colorChange = function (canvas, sectorColor) {
     renameSameSector(activeObj, canvas)
   }
 }
+
+export const colorHexToRGB = function (hexCode) {
+  let RGB = [
+    hexCode.slice(1, 3),
+    hexCode.slice(3, 5),
+    hexCode.slice(5, 7)
+  ]
+  for (let i = 0; i < RGB.length; i++) {
+    RGB[i] = parseInt(RGB[i], 16)
+  }
+  return RGB
+}

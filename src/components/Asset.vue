@@ -2,6 +2,7 @@
   <div>
     <h1>I AM INVINCIBLE!</h1>
     <LEDGridEditor></LEDGridEditor>
+    <TokenEditor></TokenEditor>
   </div>
 </template>
 <script type="text/javascript">
@@ -12,7 +13,8 @@ export default {
     }
   },
   components: {
-    LEDGridEditor: require('./LEDGridEditor.vue')
+    LEDGridEditor: require('./LEDGridEditor.vue'),
+    TokenEditor: require('./TokenEditor.vue')
   }
 }
 </script>
