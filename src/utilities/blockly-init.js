@@ -139,6 +139,17 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
       this.setHelpUrl('')
     }
   }
+  Blockly.Blocks['token_token_interaction'] = {
+    init: function () {
+      this.appendDummyInput()
+          .appendField('Move Other Token close to Token')
+      this.appendStatementInput('STACK')
+          .setCheck(null)
+      this.setColour(65)
+      this.setTooltip('')
+      this.setHelpUrl('')
+    }
+  }
   Blockly.Blocks['double_tap'] = {
     init: function () {
       this.appendDummyInput()
@@ -229,6 +240,16 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
     init: function () {
       this.appendDummyInput()
           .appendField('Current Token')
+      this.setOutput(true, 'Token')
+      this.setColour(290)
+      this.setTooltip('')
+      this.setHelpUrl('')
+    }
+  }
+  Blockly.Blocks['other_token'] = {
+    init: function () {
+      this.appendDummyInput()
+          .appendField('Other Token')
       this.setOutput(true, 'Token')
       this.setColour(290)
       this.setTooltip('')
@@ -351,7 +372,6 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
   Blockly.JavaScript['grid'] = function (block) {
     var dropdownGrid = block.getFieldValue('GRID')
     var code = dropdownGrid
-    // TODO: Change ORDER_NONE to the correct strength.
     return [code, Blockly.JavaScript.ORDER_MEMBER]
   }
   Blockly.JavaScript['show_grid'] = function (block) {
@@ -362,7 +382,6 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
   }
   Blockly.JavaScript['random_grid'] = function (block) {
     var code = 'app.getRandomGrid()'
-    // TODO: Change ORDER_NONE to the correct strength.
     return [code, Blockly.JavaScript.ORDER_MEMBER]
   }
   Blockly.JavaScript['get_grid'] = function (block) {
@@ -373,35 +392,33 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
   Blockly.JavaScript['token'] = function (block) {
     var token = block.getFieldValue('TOKEN')
     var code = '\'' + token + '\''
-    // TODO: Change ORDER_NONE to the correct strength.
     return [code, Blockly.JavaScript.ORDER_MEMBER]
   }
   Blockly.JavaScript['current_token'] = function (block) {
     var code = 'currentToken'
-    // TODO: Change ORDER_NONE to the correct strength.
+    return [code, Blockly.JavaScript.ORDER_MEMBER]
+  }
+  Blockly.JavaScript['other_token'] = function (block) {
+    var code = 'otherToken'
     return [code, Blockly.JavaScript.ORDER_MEMBER]
   }
   Blockly.JavaScript['token_test'] = function (block) {
     var token = Blockly.JavaScript.valueToCode(block, 'TOKEN', Blockly.JavaScript.ORDER_EQUALITY)
     var code = 'currentToken.id == ' + token
-    // TODO: Change ORDER_NONE to the correct strength.
     return [code, Blockly.JavaScript.ORDER_EQUALITY]
   }
   Blockly.JavaScript['random_token'] = function (block) {
     var code = 'app.getRandomToken()'
-    // TODO: Change ORDER_NONE to the correct strength.
     return [code, Blockly.JavaScript.ORDER_MEMBER]
   }
   Blockly.JavaScript['sector'] = function (block) {
     var sector = block.getFieldValue('SECTOR')
     var constr = sectorObject[sector]
     var code = constr
-    // TODO: Change ORDER_NONE to the correct strength.
     return [code, Blockly.JavaScript.ORDER_MEMBER]
   }
   Blockly.JavaScript['random_sector'] = function (block) {
     var code = 'app.getRandomSector()'
-    // TODO: Change ORDER_NONE to the correct strength.
     return [code, Blockly.JavaScript.ORDER_MEMBER]
   }
   Blockly.JavaScript['get_sector'] = function (block) {
@@ -467,6 +484,13 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
     code += stack2
     code += '};\n'
     code += 'AnyBoard.TokenManager.onTokenEvent("TURN", handleTokenTurn);\n'
+    return code
+  }
+  Blockly.JavaScript['token_token_interaction'] = function (block) {
+    var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
+    var code = 'var handleTokenTokenInteraction = function(currentToken , otherToken , options) {\n'
+    code += stack + '};\n'
+    code += 'AnyBoard.TokenManager.onTokenEvent("TTE", handleTokenTokenInteraction);\n'
     return code
   }
   Blockly.JavaScript['test_init'] = function (block) {
