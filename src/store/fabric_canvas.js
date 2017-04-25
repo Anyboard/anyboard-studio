@@ -534,6 +534,7 @@ export default {
       commit('REMOVE_GRID')
       commit('CHANGE_GRID_SIZE', size)
       commit('ADD_GRID')
+      commit('HANDLE_DRAW_GRID')
     },
 
     // Debugging
