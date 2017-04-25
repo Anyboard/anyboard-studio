@@ -483,6 +483,7 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
     code += '} else {\n'
     code += stack2
     code += '};\n'
+    code += '};\n'
     code += 'AnyBoard.TokenManager.onTokenEvent("TURN", handleTokenTurn);\n'
     return code
   }
