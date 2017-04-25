@@ -76,7 +76,7 @@ export default {
         let scopedstate = context.getters.GET_BLOCKLY_STATE
         console.log(scopedstate)
         if (scopedstate !== 0) {
-          var textToDom = Blockly.Xml.textToDom(scopedstate)
+          const textToDom = Blockly.Xml.textToDom(scopedstate)
           Blockly.Xml.domToWorkspace(textToDom, Blockly.mainWorkspace)
           Blockly.mainWorkspace.render()
         }
@@ -92,9 +92,16 @@ export default {
     downloadCode ({commit}) {
       commit('DOWNLOAD_CODE')
     },
-    uploadCode ({commit}, code) {
+    addCode ({commit}, code) {
       commit('UPLOAD_CODE', code)
-      var textToDom = Blockly.Xml.textToDom(code)
+      const textToDom = Blockly.Xml.textToDom(code)
+      Blockly.Xml.domToWorkspace(textToDom, Blockly.mainWorkspace)
+      Blockly.mainWorkspace.render()
+    },
+    loadCode ({commit}, code) {
+      Blockly.mainWorkspace.clear()
+      commit('UPLOAD_CODE', code)
+      const textToDom = Blockly.Xml.textToDom(code)
       Blockly.Xml.domToWorkspace(textToDom, Blockly.mainWorkspace)
       Blockly.mainWorkspace.render()
     }
