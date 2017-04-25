@@ -26,6 +26,15 @@ export default {
         type: 'text/html'
       })
       FileSaver.saveAs(blob, 'index.html')
+    },
+    DOWNLOAD_CODE (state) {
+      if (state.blocklyState !== 0) {
+        const blob = new Blob([state.blocklyState], {type: 'text/plain;charset=utf-8'})
+        FileSaver.saveAs(blob, 'code.xml')
+      }
+    },
+    UPLOAD_CODE (state, code) {
+      state.blocklyState = code
     }
   },
   getters: {
@@ -79,6 +88,15 @@ export default {
     },
     exportCode ({commit}) {
       commit('EXPORT_CODE')
+    },
+    downloadCode ({commit}) {
+      commit('DOWNLOAD_CODE')
+    },
+    uploadCode ({commit}, code) {
+      commit('UPLOAD_CODE', code)
+      var textToDom = Blockly.Xml.textToDom(code)
+      Blockly.Xml.domToWorkspace(textToDom, Blockly.mainWorkspace)
+      Blockly.mainWorkspace.render()
     }
   }
 }

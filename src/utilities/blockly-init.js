@@ -423,7 +423,7 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
   }
   Blockly.JavaScript['get_sector'] = function (block) {
     var token = Blockly.JavaScript.valueToCode(block, 'TOKEN', Blockly.JavaScript.ORDER_FUNCTION_CALL)
-    var code = 'app.getSector(' + token + ');\n'
+    var code = 'app.getSector(' + token + ')'
     return [code, Blockly.JavaScript.ORDER_MEMBER]
   }
   Blockly.JavaScript['sector_test'] = function (block) {
