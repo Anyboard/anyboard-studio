@@ -71,20 +71,19 @@
         height: $ledWidth;
         width: $ledWidth;
         border: 1px solid black;
-        border-radius: 50%;
         margin: 1px;
         flex-grow: 1;
         background: black;
       }
       span:hover{
         cursor: pointer;
-        background: radial-gradient(#aaf3ff, #86cbd6, #456c72, #9a9a9a);
+        background: radial-gradient(#aaf3ff, #86cbd6, #456c72);
       }
       span:active{
         background: #aaf3ff !important;
       }
       span.active-led{
-        background: radial-gradient(#aaf3ff, #86cbd6, #456c72, #9a9a9a);
+        background: radial-gradient(#aaf3ff, #86cbd6, #456c72);
       }
     }
   }
