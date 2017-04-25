@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, user-scalable=no
+ initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+
+  <title>AnyboardGameDemo</title>
+
+  <style>
+    @import 'ui/css/evothings-app.css';
+  </style>
+
+  <!-- cordova.js based -->
+  <script src="cordova.js"></script>
+
+  <!-- AnyboardJS libraries -->
+  <script src="dist/anyboard.js"></script>
+
+  <!-- Bluetooth driver and dependencies-->
+  <script src="libs/evothings/evothings.js"></script>
+  <script src="libs/evothings/easyble/easyble.js"></script>
+  <script src="drivers/discovery.evothings.bluetooth.js"></script>
+  <script src="drivers/bean.evothings.bluetooth.js"></script>
+  <script src="drivers/rfduino.evothings.bluetooth.js"></script>
+
+  <!-- We've used jquery for quick development -->
+  <script src="libs/jquery-1.11.3.min.js"></script>
+
+  <script>
+    $(document).ready(function(){
+      $("#summary").show();
+      $("#main").hide();
+      app.initiate();
+    });
+  </script>
+
+  <script>
+    var app;
+    app = {
+      currentColor: "some value",
+      devices: {},
+      currentTile: "white",
+
+      locations: {
+        2: '#166CA0',  // 2
+        5: '#4194D0',  // 5
+        7: '#112A95',  // 7
+        14: '#C047A3',  // 14
+        15: '#FB50A6', // 15
+        16: '#5E1014',  // 16
+        18: '#9B3235',  // 18
+        20: '#FF483E',  // 20
+        21: '#66C889',  // 21
+        24: '#30A747', // 24
+        30: '#31682E',  // 30
+        31: '#FF9344',  // 31
+        33: '#D96623',  // 33
+        36: '#F6EA77',  // 36
+        37: '#F4E658'   // 37
+      },
+
+      //REPLACEMEOKAY//
+
+      // Discover bluetooth tokens in proximity
+      discover: function () {
+        var self = this;
+        AnyBoard.TokenManager.scan(
+          // success function to be executed upon _each_ token that is discovered
+          function (token) {
+            self.addDiscovered(token);
+          },
+          // function to be executed upon failure
+          function (errorCode) {
+            console.log(errorCode)
+          }
+        );
+      },
+
+      // Function to be executed upon having discovered a token
+      addDiscovered: function (token) {
+        if (!this.devices[token.name]) {
+          this.devices[token.name] = token;
+
+          // Add button for token to body
+          //document.body.innerHTML += '<button type="button" id="' + token.name + '" onclick="app.connect(' + "'" + token.name + "'" + ')" class="grey">' + token.name + ' </button><br />';
+          $("#summary").append('<button type="button" id="' + token.name + '" onclick="app.connect(' + "'" + token.name + "'" + ')" class="grey">' + token.name + ' </button><br />');
+
+          // Add listener to be executed if the token connects
+          token.on('connect', function () {
+            document.getElementById(token.name).className = 'green';
+            $("#token_feedback").append('<button type="button" onclick="app.pickRandomColor()"class="indicator3"> Pick random color</button><br />');
+            $("#token_feedback").append('<button type="button" onclick="app.verifyColor(' + "'" + token.name + "'" + ')"class="indicator3"> Verify color</button><br />');
+          });
+
+          // Add listener to be executed if the token disconnects
+          token.on('disconnect', function () {
+            document.getElementById(token.name).className = 'red';
+          });
+        }
+
+      },
+
+      // Attempts to connect to token.
+      connect: function (tokenName) {
+        var token = this.devices[tokenName];
+
+        // If already connecting, stop
+        if (document.getElementById(tokenName).className == 'blue')
+          return;
+
+        // If already connected, attempt to send green led command
+        if (document.getElementById(tokenName).className == 'green') {
+          this.sendVibrationCmd(token);
+          return;
+        }
+
+        // Signal that we're attempting to connect
+        document.getElementById(tokenName).className = 'blue';
+        // Send connect command.
+        token.connect(app.next_panel());
+
+        // Add button for token to body
+        //$("#summary").append('<button type="button" onclick="app.next_panel()" class="black"> Next </button>');
+
+      },
+
+      // Send green led command. Works on every token with a AnyBoard compatible driver and firmware.
+      sendVibrationCmd: function (token) {
+
+        // Function to be executed when LED is successfully turned on
+        var completedFunction = function (data) {
+          hyper.log("We happily send the VIBRATE command");
+          hyper.log(data)
+        };
+
+        // Function to be executed upon failure of LED
+        var errorCallback = function (errorMsg) {
+          hyper.log("Failed to send the VIBRATE command");
+          hyper.log(errorMsg);
+        };
+
+        // Turns on token led.
+        if(app.tokenVal.hasOwnProperty(token.id)) {
+          if (!(app.tokenVal[token.id].includes('vibrate'))) {
+            token.vibrate([100], // Instead of "green" color, on could also use array, e.g. [0, 255, 0]
+              completedFunction,  // function to be executed when token signals
+              errorCallback  // function to be executed in case of failure to send command to token
+            );
+          }
+        } else {
+          token.vibrate([100], // Instead of "green" color, on could also use array, e.g. [0, 255, 0]
+            completedFunction,  // function to be executed when token signals
+            errorCallback  // function to be executed in case of failure to send command to token
+          );
+        }
+      },
+
+      next_panel: function () {
+        $("#summary").hide();
+      },
+
+      pickRandomColor: function () {
+        var currentColor = this.locations[Math.floor(Math.random() *15 + 1)]
+        if (currentColor == this.currentColor) {
+          this.pickRandomColor();
+        }
+        else {
+          this.currentColor = currentColor;
+          $('.wanted_tile').css("background-color", this.currentColor);
+        }
+      },
+
+      sendVibration: function (tokenName) {
+        var token = this.devices[tokenName];
+        this.sendVibrationCmd(token)
+      },
+
+      verifyColor: function (tokenName) {
+        var token = this.devices[tokenName];
+        if (app.tiles[2] == this.currentColor) {
+          this.sendVibrationCmd(token);
+          this.updateScore();
+          document.getElementById("pleaseTilt")
+            .appendChild(
+              document.createTextNode(
+                "Please tilt the pawn to recieve a new color."
+              )
+            );
+        }
+        else {
+          this.downgradeScore();
+        }
+      },
+
+      showScore: function () {
+        $("#message").html("Current score is " + this.score.toString());
+      },
+
+      showCurrentTile: function (color) {
+        $('.current_tile').css("background-color", color);
+      },
+
+      getSector: function (token) {
+        for (var key in this.devices){
+          if (this.devices[key] == token){
+            return this.devices[key].sector;
+          }
+        }
+        return false;
+      },
+
+      getRandomToken: function () {
+        var obj_keys = Object.keys(app.devices);
+        var ran_key = obj_keys[Math.floor(Math.random() *obj_keys.length)];
+        return app.devices[ran_key];
+      },
+
+      getRandomSector: function () {
+        return app.sectorVals[Math.floor(Math.random() * app.sectorVals.length)]
+      }
+
+    };
+  </script>
+</head>
+
+<body ontouchstart="">
+<div id="summary">
+  <h1>AnyboardGameDemo</h1>
+  <button type="button" class="black" onclick="app.discover()">
+    Discover Bluetooth devices
+  </button>
+</div>
+<div id="token_feedback"></div>
+<div id="token_constraint">
+  <h1>Colors</h1>
+  <div id="scorediv">
+    <p id="score">Current score is 0</p>
+  </div>
+
+  <div id="messagediv">
+    <p id="message1"></p>
+    <p id="message2"></p>
+    <p id="message3"></p>
+  </div>
+
+  <div id="numberdiv">
+    <p id="number1"></p>
+    <p id="number2"></p>
+    <p id="number3"></p>
+  </div>
+
+  <div id="tileContainer">
+
+    <div class="tile">
+      <p>Current tile</p>
+      <div id="color" class="current_tile"></div>
+    </div>
+
+    <div class="tile">
+      <p>Wanted tile</p>
+      <div id="color" class="wanted_tile"></div>
+    </div>
+  </div>
+</div>
+</body>
+
+</html>

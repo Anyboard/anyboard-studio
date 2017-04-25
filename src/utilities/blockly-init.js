@@ -127,23 +127,12 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
   Blockly.Blocks['turn'] = {
     init: function () {
       this.appendDummyInput()
-          .appendField('Turn Token')
-      this.appendStatementInput('STACK')
-          .setCheck(null)
-      this.setColour(65)
-      this.setTooltip('')
-      this.setHelpUrl('')
-    }
-  }
-  Blockly.Blocks['turn_option'] = {
-    init: function () {
-      this.appendDummyInput()
           .appendField('Turn Token clockwise')
-      this.appendStatementInput('STACK')
+      this.appendStatementInput('STACK1')
           .setCheck(null)
       this.appendDummyInput()
           .appendField('Turn Token counterclockwise')
-      this.appendStatementInput('STACK')
+      this.appendStatementInput('STACK2')
           .setCheck(null)
       this.setColour(65)
       this.setTooltip('')
@@ -469,17 +458,10 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
     return code
   }
   Blockly.JavaScript['turn'] = function (block) {
-    var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
-    var code = 'var handleTokenTurn = function(currentToken , options) {\n'
-    code += stack + '};\n'
-    code += 'AnyBoard.TokenManager.onTokenEvent("TURN", handleTokenTurn);\n'
-    return code
-  }
-  Blockly.JavaScript['turn_option'] = function (block) {
     var stack1 = Blockly.JavaScript.statementToCode(block, 'STACK1')
     var stack2 = Blockly.JavaScript.statementToCode(block, 'STACK2')
     var code = 'var handleTokenTurn = function(currentToken , direction , options) {\n'
-    code += 'if (direction == clockwise) {\n'
+    code += 'if (direction == 1) {\n'
     code += stack1
     code += '} else {\n'
     code += stack2
@@ -634,6 +616,11 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
     return result
   }
   Blockly.JavaScript.finish = function (code) {
+    // Sector values to be used for getRandomSector
+    let sectorVals = []
+    for (let i in sectorObject) {
+      sectorVals.push(sectorObject[i])
+    }
     // Convert the definitions dictionary into a list.
     var definitions = []
     for (var name in Blockly.JavaScript.definitions_) {
@@ -645,6 +632,7 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
     Blockly.JavaScript.variableDB_.reset()
     var output = definitions.join('\n\n') + '\n\n\n'
     // output += Blockly.JavaScript.writeDictionary('tiles', tilesdict)
+    output += 'sectorVals: ' + Blockly.JavaScript.writeList(sectorVals) + ',\n\n'
     output += Blockly.JavaScript.writeListDictionary('tokenVal', tokenVal)
     output += 'initiate: function() {\n\n'
     output += code

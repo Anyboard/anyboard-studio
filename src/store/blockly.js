@@ -1,13 +1,16 @@
 import Blockly from 'node-blockly/browser'
 import toolbox from '../utilities/blockly-toolbox.js'
+import htmlTemplate from '../utilities/html-template'
 import blocklyInit from '../utilities/blockly-init.js'
+import FileSaver from 'file-saver'
 
 export default {
   namespaced: true,
 
   state: {
     workspace: null,
-    blocklyState: 0
+    blocklyState: 0,
+    exportedCode: null
   },
 
   mutations: {
@@ -16,6 +19,13 @@ export default {
     },
     SAVE_BLOCKLY_STATE: function (state, blocklyState) {
       state.blocklyState = blocklyState
+    },
+    EXPORT_CODE (state) {
+      const done = htmlTemplate.replace('//REPLACEMEOKAY//\n', Blockly.JavaScript.workspaceToCode(state.workspace))
+      const blob = new Blob([done], {
+        type: 'text/html'
+      })
+      FileSaver.saveAs(blob, 'index.html')
     }
   },
   getters: {
@@ -46,8 +56,8 @@ export default {
       const workspace = Blockly.inject('blockly-wrapper', {toolbox: toolbox})
 
       workspace.addChangeListener(function () {
-        var blocklyXML = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace)
-        var blocklyState = Blockly.Xml.domToPrettyText(blocklyXML)
+        const blocklyXML = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace)
+        const blocklyState = Blockly.Xml.domToPrettyText(blocklyXML)
         commit('SAVE_BLOCKLY_STATE', blocklyState)
       })
 
@@ -66,6 +76,9 @@ export default {
       console.log(context)
 
       loadState()
+    },
+    exportCode ({commit}) {
+      commit('EXPORT_CODE')
     }
   }
 }
