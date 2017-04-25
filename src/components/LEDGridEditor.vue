@@ -9,7 +9,7 @@
     </div>
     <div>
       <button id="ledGridSubmitButton" @click="submitGrid">Submit</button>
-      <button id="ledGridCancelButton">Cancel</button>
+      <button id="ledGridCancelButton" @click="clearGrid">Clear</button>
     </div>
   </div>
 </template>
@@ -44,6 +44,9 @@
       },
       submitGrid () {
         this.$store.dispatch('ledgrid/saveGrid', {name: this.cleanedGridName, str: this.gridString})
+      },
+      clearGrid () {
+        this.$store.dispatch('ledgrid/clearGrid')
       }
     }
   }

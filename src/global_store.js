@@ -5,6 +5,7 @@ import fabricInspector from './store/fabric_inspector.js'
 import fabricCanvas from './store/fabric_canvas.js'
 import blockly from './store/blockly.js'
 import ledgrid from './store/ledgrid.js'
+import token from './store/token.js'
 
 // Setting the root Vue-instance to use Vuex
 Vue.use(Vuex)
@@ -27,6 +28,7 @@ export default new Vuex.Store({
     fabricInspector,
     fabricCanvas,
     blockly,
-    ledgrid
+    ledgrid,
+    token
   }
 })

@@ -38,6 +38,18 @@ export default {
     },
     saveGrid ({commit}, payload) {
       commit('PUSH_TO_SAVEDGRIDS', payload)
+    },
+    clearGrid ({commit}) {
+      commit('SET_GRID', [
+        false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false
+      ])
     }
   },
   getters: {}
