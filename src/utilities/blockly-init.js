@@ -484,7 +484,7 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
     code += stack2
     code += '};\n'
     code += '};\n'
-    code += 'AnyBoard.TokenManager.onTokenEvent("TURN", handleTokenTurn);\n'
+    code += 'AnyBoard.TokenManager.onTokenEvent("ROTATE", handleTokenTurn);\n'
     return code
   }
   Blockly.JavaScript['token_token_interaction'] = function (block) {
