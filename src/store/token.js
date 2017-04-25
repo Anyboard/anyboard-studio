@@ -5,7 +5,9 @@
 export default {
   namespaced: true,
   state: {
-    nameType: 'static'
+    savedGrids:{},
+    nameType: 'static',
+    LEDColor: '#00FF00'
   },
   mutations: {
     INVERT_NAME_TYPE (state) {
