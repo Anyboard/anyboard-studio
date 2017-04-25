@@ -46,20 +46,7 @@
         </div>
       </li>
       <li>
-        <IconButton @click.native="saveBoard" icon="fa-file-photo-o" text="Save" tooltip="Save the board as an image"></IconButton>
-      </li>
-      <li>
-        <IconButton @click.native="downloadBoard" icon="fa-download" text="Download" tooltip="Download the board"></IconButton>
-      </li>
-      <li>
-        <IconButton @click.native="clickUpload" icon="fa-upload" text="Upload" tooltip="Upload the board"></IconButton>
-        <input @change="uploadBoard"type="file" id="upload" style="display: none"/>
-      </li>
-      <li>
         <IconButton @click.native="changeGridMode" icon="fa-square-o" text="Grid" tooltip="Change grid mode"></IconButton>
-      </li>
-      <li>
-        <IconButton @click.native="printBoard" icon="fa-print" text="Print" tooltip="Send the board to printer"></IconButton>
       </li>
       <li>
         <IconButton @click.native="jsonDebug" icon="fa-at" text="DEBUG" tooltip="Log json debug"></IconButton>
@@ -122,24 +109,6 @@
         this.$store.dispatch('uploadImage', event.target.files[0])
         document.getElementById('image').value = ''
       },
-      saveBoard () {
-        this.$store.dispatch('saveBoard')
-      },
-      clickUpload () {
-        document.getElementById('upload').click()
-      },
-      uploadBoard () {
-        const reader = new FileReader()
-        reader.readAsText(event.target.files[0])
-        reader.onload = (event) => {
-          const jsonObj = JSON.parse(event.target.result)
-          this.$store.dispatch('uploadBoard', jsonObj)
-        }
-        document.getElementById('upload').value = ''
-      },
-      downloadBoard () {
-        this.$store.dispatch('downloadBoard')
-      },
       jsonDebug () {
         this.$store.dispatch('jsonDebug')
       },
@@ -148,23 +117,6 @@
       },
       changeGridMode () {
         this.$store.dispatch('changeGridMode')
-      },
-      printBoard () {
-        this.$store.dispatch('makePrintableBoard')
-
-        const board = this.$store.getters.GET_PRINTABLE_BOARD
-        const windowUrl = 'about:blank'
-        const uniqueName = new Date()
-        const windowName = 'Print' + uniqueName.getTime()
-        const printWindow = window.open(windowUrl, windowName, 'left=50000,top=50000,width=0,height=0')
-
-        printWindow.document.write("<img src='" + board + "'/>")
-        setTimeout(function () { // Needs to wait for the document to finish writing (yes, just one ms is enough)
-          printWindow.document.close()
-          printWindow.focus()
-          printWindow.print()
-          printWindow.close()
-        }, 1)
       }
     },
 

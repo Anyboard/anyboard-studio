@@ -4,6 +4,7 @@ import Hello from 'components/Hello'
 import BoardEditor from 'components/BoardEditor.vue'
 import Blockly from 'components/Blockly.vue'
 import BlocklyButtons from 'components/BlocklyButtons.vue'
+import BoardButtons from 'components/BoardButtons.vue'
 import Asset from 'components/Asset.vue'
 
 Vue.use(Router)
@@ -21,7 +22,8 @@ export default new Router({
       path: '/board',
       name: 'Board Editor',
       components: {
-        default: BoardEditor
+        default: BoardEditor,
+        extras: BoardButtons
       }
     },
     {

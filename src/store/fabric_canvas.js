@@ -150,6 +150,7 @@ export default {
       state.canvas.clear()
       state.canvas.setBackgroundColor('white')
       state.canvas.renderAll()
+      state.gridAdded = false
     },
 
     CLONE_OBJECT (state) {
@@ -448,6 +449,8 @@ export default {
 
     clearCanvas ({commit}) {
       commit('CLEAR_CANVAS')
+      commit('ADD_GRID')
+      commit('HANDLE_DRAW_GRID')
       commit('SAVE_STATE')
       commit('USED_SECTORS')
       commit('SAVE_SECTORS')
