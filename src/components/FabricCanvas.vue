@@ -29,13 +29,13 @@
 
       cvs.on('object:scaling', (e) => {
         const shape = e.target
+        console.log(shape.type)
         if (shape['type'] === 'rect' || shape['type'] === 'polygon' || shape['type'] === 'circle') {
           const minWidth = 200
           const minHeight = 200
           const actualWidth = shape.scaleX * shape.width
           const actualHeight = shape.scaleY * shape.height
           if (!isNaN(minWidth) && actualWidth <= minWidth) {
-            // dividing minWidth by the shape.width gives us our 'min scale'
             shape.set({ scaleX: minWidth / shape.width })
           }
           if (!isNaN(minHeight) && actualHeight <= minHeight) {
@@ -66,7 +66,12 @@
           this.$store.dispatch('fabricInspector/updateInfo', this.$store.getters.GET_ACTIVEOBJ)
         }
       })
-      cvs.on('object:selected', () => {
+      cvs.on('object:selected', (e) => {
+        const target = e.target
+        if (target.type === 'group') {
+          target.lockScalingX = true
+          target.lockScalingY = true
+        }
         this.$store.dispatch('updateActiveObj')
         this.$store.dispatch('fabricInspector/updateInfo', this.$store.getters.GET_ACTIVEOBJ)
       })
