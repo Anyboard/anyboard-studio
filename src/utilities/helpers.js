@@ -234,5 +234,8 @@ export const colorChange = function (canvas, sectorColor) {
     activeObj.set('name', activeObj.fill)
     canvas.renderAll()
     renameSameSector(activeObj, canvas)
+  } else if (activeObj != null && activeObj['type'] === 'path') {
+    activeObj.stroke = sectorColor
+    canvas.renderAll()
   }
 }
