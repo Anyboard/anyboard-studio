@@ -24,6 +24,11 @@
         <input @change="changeGridSize" type="range" v-model="gridSize" min="25" max="100"/>
         <a>{{gridSize}}</a>
       </collapse-item>
+      <collapse-item title="Predefined sectors">
+        <a @click="setPredefinedSectors">click me u stupid shit ! ^^</a>
+        <p>{{start_sector}}</p>
+      </collapse-item>
+
     </collapse>
   </div>
 </template>
@@ -73,7 +78,8 @@
       ...mapState('fabricInspector', {strokeDashArray: state => state.strokedasharray}),
       ...mapState('fabricInspector', {strokeWidth: state => state.strokewidth}),
       ...mapState('fabricInspector', {minWidth: state => state.minwidth}),
-      ...mapState('fabricInspector', {minHeight: state => state.minheight})
+      ...mapState('fabricInspector', {minHeight: state => state.minheight}),
+      ...mapState('fabricInspector', {start_sector: state => state.start_sector})
     },
     methods: {
       renameSector2 () {
@@ -83,13 +89,16 @@
           this.$store.dispatch('fabricInspector/updateInfo', this.$store.getters.GET_ACTIVEOBJ)
         }
       },
-      updateColor ({ index, color }) {
-        this.index = index
-        this.color = color
-        this.$store.dispatch('updateColor', color)
-        this.$store.dispatch('updateActiveObj')
-        this.$store.dispatch('fabricInspector/updateInfo', this.$store.getters.GET_ACTIVEOBJ)
+      setPredefinedSectors () {
+        this.$store.dispatch('fabricInspector/setPredefinedSectors')
       },
+      //  updateColor ({ index, color }) {
+      //  this.index = index
+      //  this.color = color
+      //  this.$store.dispatch('updateColor', color)
+      //  this.$store.dispatch('updateActiveObj')
+      //  this.$store.dispatch('fabricInspector/updateInfo', this.$store.getters.GET_ACTIVEOBJ)
+      //  },
       changeGridSize () {
         this.$store.dispatch('changeGridSize', this.gridSize)
       }
