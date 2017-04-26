@@ -219,6 +219,12 @@ htmlTemplate += '  </div>\n'
 htmlTemplate += '</div>\n'
 htmlTemplate += '</body>\n'
 htmlTemplate += '\n'
+htmlTemplate += '<style>\n'
+htmlTemplate += '  #messagediv {\n'
+htmlTemplate += '    word-wrap: break-word;\n'
+htmlTemplate += '  }\n'
+htmlTemplate += '</style>\n'
+htmlTemplate += '\n'
 htmlTemplate += '</html>\n'
 
 export default htmlTemplate
