@@ -114,5 +114,6 @@
   #tokenOptions {
     display: flex;
     flex-direction: column;
+    color: #eae9e1;
   }
 </style>
