@@ -1,9 +1,20 @@
 <template>
-  <div>
+  <div class="f_inspector">
     <p>Fabric inspector</p>
     <collapse accordion>
       <collapse-item title="Colorpicker">
-        <ChoiceColor :colors='colors' radius='10em' v-on:updateColor='updateColor'></ChoiceColor>
+        <!--<ChoiceColor :colors='colors' radius='5em' v-on:updateColor='updateColor'></ChoiceColor>-->
+        <div class="activecolor" :style="'background-color:' + colors[index]"></div>
+        
+        <div class="anypicker">
+          <div v-for="(val,idx) in colors" 
+              @click="updateColor(val,idx)" 
+              :style="'background-color:' + val" 
+              :key="idx">
+          </div>
+        </div>
+        
+
       </collapse-item>
       <collapse-item title="Object properties" actived id="objectProps">
         <p>{{header}}</p>
@@ -83,7 +94,7 @@
           this.$store.dispatch('fabricInspector/updateInfo', this.$store.getters.GET_ACTIVEOBJ)
         }
       },
-      updateColor ({ index, color }) {
+      updateColor (color, index) {
         this.index = index
         this.color = color
         this.$store.dispatch('updateColor', color)
@@ -100,11 +111,32 @@
   }
 </script>
 
-<style>
+<style lang="SASS">
+  .f_inspector {
+    position: relative;
+    width:250px;
+  }
+
+  .activecolor {
+      width:50px;
+      height:50px;
+      border:3px solid #222;
+    }
+
+  .anypicker {    
+    div {
+      display: inline-block;
+      width:25px;
+      height: 25px;
+      border:1px solid #fff;
+    }
+  }
+
+
   #objectProps > p{
     color: black;
   }
   .faux-border {
-    transform: translate(-31%, -41%)!important;
+    transform: translate(-15%, -25%)!important;
   }
 </style>
