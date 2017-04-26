@@ -308,8 +308,9 @@ export default {
       state.sectors = exportSectors(state.canvas)
     },
 
-    USED_SECTORS (state) {
+    USED_SECTORS (state, store) {
       state.usedSectors = updateSectorList(state.canvas)
+      this.$store.dispatch('fabricInspector/setPredefinedSectors')
     },
 
     CHANGE_GRID_MODE (state) {

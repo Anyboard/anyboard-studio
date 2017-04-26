@@ -36,7 +36,7 @@
         <a class="inactivelink">{{gridSize}}</a>
       </collapse-item>
       <collapse-item title="Predefined sectors">
-        <a @click="setPredefinedSectors">kom hit da horegutt</a>
+        <a @click="setPredefinedSectors">Click here to update</a>
         <p>{{start_sector}}</p>
         <p>{{mid_sector}}</p>
         <p>{{end_sector}}</p>
