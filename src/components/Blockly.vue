@@ -35,4 +35,10 @@
 .blockly-area, #blockly-wrapper {
   align-items: stretch;
 }
+  div[role=treeitem]{
+    cursor: pointer;
+  }
+  .blocklyTreeLabel{
+    cursor: pointer;
+  }
 </style>
