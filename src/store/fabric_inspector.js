@@ -4,8 +4,21 @@
 
 export default {
   namespaced: true,
-  state: {height: 'Height: ', width: 'Width: ', type: 'Type: ', fill: 'Color: ', name: 'Name: ', stroke: 'Stroke: ', strokedasharray: 'StrokeDashArray: ', strokewidth: 'StrokeWidth: ', minwidth: 'MinWidth: ', minheight: 'MinHeight'},
+  state: {start_sector: 'Start sector:', mid_sector: 'Mid sector:', end_sector: 'End sector: ', activeColor: '', height: 'Height: ', width: 'Width: ', type: 'Type: ', fill: 'Color: ', name: 'Name: ', stroke: 'Stroke: ', strokedasharray: 'StrokeDashArray: ', strokewidth: 'StrokeWidth: ', minwidth: 'MinWidth: ', minheight: 'MinHeight'},
   mutations: {
+    SET_PREDEFINED_SECTORS (state, payload) {
+      state.start_sector = payload
+      var templist = []
+      var templist2 = []
+      for (var key in payload) {
+        templist.push(key)
+        templist2.push(payload[key])
+      }
+      state.start_sector = templist[0] + ': ' + templist2[0]
+      state.mid_sector = templist[1] + ': ' + templist2[1]
+      state.end_sector = templist[2] + ': ' + templist2[2]
+    },
+
     SET_HEIGHT (state, payload) {
       state.height = payload
     },
@@ -35,10 +48,22 @@ export default {
     },
     SET_MIN_HEIGHT (state, payload) {
       state.minheight = payload
+    },
+    SET_PROPER_COLOR (state, payload) {
+      state.activecolor = payload
     }
-
   },
   actions: {
+    setPredefinedSectors ({commit}, keys) {
+      commit('SET_PREDEFINED_SECTORS', keys)
+    },
+    colorConverter (activeObj) {
+      if (activeObj !== null) {
+        if (activeObj.fill === '166CA0') {
+          return 'Blue'
+        }
+      }
+    },
     updateInfo ({commit}, activeObj) {
       if (activeObj !== null) {
         if (activeObj.type === 'rect' || activeObj.type === 'circle' || activeObj.type === 'polygon') {

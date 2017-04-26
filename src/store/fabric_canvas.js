@@ -18,7 +18,8 @@ export default {
     gridActive: true,
     gridAdded: false,
     gridSize: 50,
-    printableBoard: null
+    printableBoard: null,
+    fuckMeInTheAss: null
   },
 
   mutations: {
@@ -307,8 +308,9 @@ export default {
       state.sectors = exportSectors(state.canvas)
     },
 
-    USED_SECTORS (state) {
+    USED_SECTORS (state, store) {
       state.usedSectors = updateSectorList(state.canvas)
+      this.$store.dispatch('fabricInspector/setPredefinedSectors')
     },
 
     CHANGE_GRID_MODE (state) {
@@ -554,6 +556,10 @@ export default {
 
     GET_SECTORS: state => {
       return state.sectors
+    },
+
+    GET_USED_SECTORS: state => {
+      return state.usedSectors
     },
 
     GET_MINWIDTH: state => {

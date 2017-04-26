@@ -35,6 +35,13 @@
         <input @change="changeGridSize" type="range" v-model="gridSize" min="25" max="100"/>
         <a class="inactivelink">{{gridSize}}</a>
       </collapse-item>
+      <collapse-item title="Predefined sectors">
+        <a @click="setPredefinedSectors">Click here to update</a>
+        <p>{{start_sector}}</p>
+        <p>{{mid_sector}}</p>
+        <p>{{end_sector}}</p>
+      </collapse-item>
+
     </collapse>
   </div>
 </template>
@@ -84,7 +91,10 @@
       ...mapState('fabricInspector', {strokeDashArray: state => state.strokedasharray}),
       ...mapState('fabricInspector', {strokeWidth: state => state.strokewidth}),
       ...mapState('fabricInspector', {minWidth: state => state.minwidth}),
-      ...mapState('fabricInspector', {minHeight: state => state.minheight})
+      ...mapState('fabricInspector', {minHeight: state => state.minheight}),
+      ...mapState('fabricInspector', {start_sector: state => state.start_sector}),
+      ...mapState('fabricInspector', {mid_sector: state => state.mid_sector}),
+      ...mapState('fabricInspector', {end_sector: state => state.end_sector})
     },
     methods: {
       renameSector2 () {
@@ -101,6 +111,11 @@
         this.$store.dispatch('updateActiveObj')
         this.$store.dispatch('fabricInspector/updateInfo', this.$store.getters.GET_ACTIVEOBJ)
       },
+      setPredefinedSectors () {
+        var keys = this.$store.getters.GET_USED_SECTORS
+        this.$store.dispatch('fabricInspector/setPredefinedSectors', keys)
+      },
+
       changeGridSize () {
         this.$store.dispatch('changeGridSize', this.gridSize)
       }
