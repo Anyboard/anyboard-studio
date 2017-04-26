@@ -699,6 +699,65 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
     'key2': 'value2',
     'key3': 'value3'
   } */
+  Blockly.JavaScript['procedures_defreturn'] = function (block) {
+    // Define a procedure with a return value.
+    var funcName = Blockly.JavaScript.variableDB_.getName(
+        block.getFieldValue('NAME'), Blockly.Procedures.NAME_TYPE)
+    var branch = Blockly.JavaScript.statementToCode(block, 'STACK')
+    if (Blockly.JavaScript.STATEMENT_PREFIX) {
+      branch = Blockly.JavaScript.prefixLines(
+          Blockly.JavaScript.STATEMENT_PREFIX.replace(/%1/g,
+          '\'' + block.id + '\''), Blockly.JavaScript.INDENT) + branch
+    }
+    if (Blockly.JavaScript.INFINITE_LOOP_TRAP) {
+      branch = Blockly.JavaScript.INFINITE_LOOP_TRAP.replace(/%1/g,
+          '\'' + block.id + '\'') + branch
+    }
+    var returnValue = Blockly.JavaScript.valueToCode(block, 'RETURN',
+        Blockly.JavaScript.ORDER_NONE) || ''
+    if (returnValue) {
+      returnValue = '  return ' + returnValue + ';\n'
+    }
+    var args = ['currentToken']
+    for (var i = 1; i <= block.arguments_.length; i++) {
+      args[i] = Blockly.JavaScript.variableDB_.getName(block.arguments_[i],
+          Blockly.Variables.NAME_TYPE)
+    }
+    var code = funcName + ': function (' + args.join(', ') + ') {\n' +
+        branch + returnValue + '},\n'
+    code = Blockly.JavaScript.scrub_(block, code)
+    // Add % so as not to collide with helper functions in definitions list.
+    Blockly.JavaScript.definitions_['%' + funcName] = code
+    return null
+  }
+  // Defining a procedure without a return value uses the same generator as
+  // a procedure with a return value.
+  Blockly.JavaScript['procedures_defnoreturn'] =
+      Blockly.JavaScript['procedures_defreturn']
+  Blockly.JavaScript['procedures_callreturn'] = function (block) {
+    // Call a procedure with a return value.
+    var funcName = Blockly.JavaScript.variableDB_.getName(
+        block.getFieldValue('NAME'), Blockly.Procedures.NAME_TYPE)
+    var args = ['currentToken']
+    for (var i = 1; i <= block.arguments_.length; i++) {
+      args[i] = Blockly.JavaScript.valueToCode(block, 'ARG' + i,
+          Blockly.JavaScript.ORDER_COMMA) || 'null'
+    }
+    var code = 'app.' + funcName + '(' + args.join(', ') + ')'
+    return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL]
+  }
+  Blockly.JavaScript['procedures_callnoreturn'] = function (block) {
+    // Call a procedure with no return value.
+    var funcName = Blockly.JavaScript.variableDB_.getName(
+        block.getFieldValue('NAME'), Blockly.Procedures.NAME_TYPE)
+    var args = ['currentToken']
+    for (var i = 1; i <= block.arguments_.length; i++) {
+      args[i] = Blockly.JavaScript.valueToCode(block, 'ARG' + i,
+          Blockly.JavaScript.ORDER_COMMA) || 'null'
+    }
+    var code = 'app.' + funcName + '(' + args.join(', ') + ');\n'
+    return code
+  }
   Blockly.JavaScript.writeDictionary = function (name, dict) {
     var result = name
     result += ': {\n'

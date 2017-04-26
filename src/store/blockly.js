@@ -3,6 +3,7 @@ import toolbox from '../utilities/blockly-toolbox.js'
 import htmlTemplate from '../utilities/html-template'
 import blocklyInit from '../utilities/blockly-init.js'
 import FileSaver from 'file-saver'
+// import {makeZip} from '../utilities/helpers.js'
 
 export default {
   namespaced: true,
@@ -21,10 +22,12 @@ export default {
       state.blocklyState = blocklyState
     },
     EXPORT_CODE (state) {
+      // Converts the blockly code on screen to useable javascript code and pushes it into the index.html
       const done = htmlTemplate.replace('//REPLACEMEOKAY//\n', Blockly.JavaScript.workspaceToCode(state.workspace))
-      const blob = new Blob([done], {
+      let blob = new Blob([done], {
         type: 'text/html'
       })
+      // makeZip(blob) // Doesn't download the files from github as exact copies, which causes issues
       FileSaver.saveAs(blob, 'index.html')
     },
     DOWNLOAD_CODE (state) {
