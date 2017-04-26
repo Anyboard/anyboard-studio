@@ -458,7 +458,7 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
   }
   Blockly.JavaScript['current_sector_test'] = function (block) {
     var sector = Blockly.JavaScript.valueToCode(block, 'SECTOR', Blockly.JavaScript.ORDER_EQUALITY)
-    var code = sector + ' == constraint'
+    var code = sector + ' == app.getSector(currentToken)'
     // TODO: Change ORDER_NONE to the correct strength.
     return [code, Blockly.JavaScript.ORDER_NONE]
   }
