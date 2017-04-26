@@ -564,6 +564,63 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
     var code = 'app.mathRandomInt(' + argument0 + ', ' + argument1 + ')'
     return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL]
   }
+  Blockly.JavaScript['math_number_property'] = function (block) {
+    // Check if a number is even, odd, prime, whole, positive, or negative
+    // or if it is divisible by certain number. Returns true or false.
+    var numberToCheck = Blockly.JavaScript.valueToCode(block, 'numberToCheck',
+        Blockly.JavaScript.ORDER_MODULUS) || '0'
+    var dropdownProperty = block.getFieldValue('PROPERTY')
+    var code
+    if (dropdownProperty === 'PRIME') {
+      // Prime is a special case as it is not a one-liner test.
+      var functionName = Blockly.JavaScript.provideFunction_(
+          'mathIsPrime',
+        [Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ + ': function (n) {',
+          '  // https://en.wikipedia.org/wiki/Primality_test#Naive_methods',
+          '  if (n == 2 || n == 3) {',
+          '    return true;',
+          '  }',
+          '  // False if n is NaN, negative, is 1, or not whole.',
+          '  // And false if n is divisible by 2 or 3.',
+          '  if (isNaN(n) || n <= 1 || n % 1 != 0 || n % 2 == 0 ||' +
+          ' n % 3 == 0) {',
+          '    return false;',
+          '  }',
+          '  // Check all the numbers of form 6k +/- 1, up to sqrt(n).',
+          '  for (var x = 6; x <= Math.sqrt(n) + 1; x += 6) {',
+          '    if (n % (x - 1) == 0 || n % (x + 1) == 0) {',
+          '      return false;',
+          '    }',
+          '  }',
+          '  return true;',
+          '},'])
+      code = functionName + '(' + numberToCheck + ')'
+      return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL]
+    }
+    switch (dropdownProperty) {
+      case 'EVEN':
+        code = numberToCheck + ' % 2 == 0'
+        break
+      case 'ODD':
+        code = numberToCheck + ' % 2 == 1'
+        break
+      case 'WHOLE':
+        code = numberToCheck + ' % 1 == 0'
+        break
+      case 'POSITIVE':
+        code = numberToCheck + ' > 0'
+        break
+      case 'NEGATIVE':
+        code = numberToCheck + ' < 0'
+        break
+      case 'DIVISIBLE_BY':
+        var divisor = Blockly.JavaScript.valueToCode(block, 'DIVISOR',
+            Blockly.JavaScript.ORDER_MODULUS) || '0'
+        code = numberToCheck + ' % ' + divisor + ' == 0'
+        break
+    }
+    return [code, Blockly.JavaScript.ORDER_EQUALITY]
+  }
   Blockly.JavaScript['variables_get'] = function (block) {
     // Variable getter.
     var code = 'app.'
