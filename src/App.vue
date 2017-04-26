@@ -5,9 +5,11 @@
         <a href="/#/" class="logo">Anyboard Studio</a>
       </span>
       
-      <a href="/#/board">Board Editor</a>
-      <a href="/#/assets">Game Assets</a>
-      <a href="/#/code">Code Builder</a>
+      <span class="middle">
+        <a href="/#/board">Board Editor</a>
+        <a href="/#/assets">Game Assets</a>
+        <a href="/#/code">Code Builder</a>
+      </span>
       
       <span class="right">
         <router-view name="extras"></router-view>
@@ -49,13 +51,13 @@ export default {
   a:hover { border-bottom:1px dotted currentColor; }
   p { margin-bottom:1em; }
   > * {
-    flex-grow: 1;
     margin:1em;
   }
 }
 
 #navigation {
   position: fixed;
+  display: flex;
   top:0;
   left:0;
   width:100%;
@@ -66,42 +68,41 @@ export default {
   box-shadow:1em 0 1em #000;
 
   span {
-    flex-grow: 2;
-    background: #f90;
+    flex-grow: 1;
   }
 
   .left {
     text-align: left;
   }
 
+
   .right {
     text-align: right;
   }
 
   a {
-    color:#333;
-    text-decoration: none;
     display:inline-block;
+    line-height:18px;
+    padding:10px;
+    font-size:13px;
+    color:#333;
     font-family: Tahoma, Geneva, sans-serif;
-    padding:1.25em 2em 0.95em 2em;
+    text-transform: uppercase;
   }
 
   a:hover {
     background:#cdcdcd;
   }
 
-  a:not(#logo) {
-    text-transform: uppercase;
-  }
 
-  span a#logo {
-    display:block;
-    font-size:1.5em;
+  span a.logo {
     background-image: url('./assets/logo.svg');
-    background-size: 1.5em 1.5em;
-    background-position: .5em;
+    background-size: 25px 25px;
+    background-position: 5px;
     background-repeat: no-repeat;
-    letter-spacing: .1em;
+    text-transform: none;
+    padding-left:35px;
+    font-size:16px;
   }
 }
 

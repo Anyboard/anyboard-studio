@@ -17,7 +17,8 @@ export default {
     minWidth: 200,
     gridActive: true,
     gridAdded: false,
-    gridSize: 50
+    gridSize: 50,
+    printableBoard: null
   },
 
   mutations: {
@@ -149,6 +150,7 @@ export default {
       state.canvas.clear()
       state.canvas.setBackgroundColor('white')
       state.canvas.renderAll()
+      state.gridAdded = false
     },
 
     CLONE_OBJECT (state) {
@@ -229,6 +231,15 @@ export default {
       }
     },
     SAVE_BOARD (state) {
+      if (state.gridActive) {
+        const objs = state.canvas.getObjects()
+        for (let i = 0, l = objs.length; i < l; ++i) {
+          if (objs[i]['type'] === 'line') {
+            objs[i]['opacity'] = 0
+          }
+        }
+      }
+
       if (state.canvas.getObjects().length > 0) {
         layerify(state.canvas)
         state.canvas.deactivateAll().renderAll()
@@ -236,12 +247,44 @@ export default {
         const blob = dataURLtoBlob(img)
         FileSaver.saveAs(blob, 'Board.png')
       }
+
+      const objs = state.canvas.getObjects()
+      for (let i = 0, l = objs.length; i < l; ++i) {
+        if (objs[i]['type'] === 'line') {
+          objs[i]['opacity'] = state.gridActive
+        }
+      }
+      state.canvas.renderAll()
+    },
+
+    MAKE_PRINTABLE_BOARD (state) {
+      if (state.gridActive) {
+        const objs = state.canvas.getObjects()
+        for (let i = 0, l = objs.length; i < l; ++i) {
+          if (objs[i]['type'] === 'line') {
+            objs[i]['opacity'] = 0
+          }
+        }
+      }
+
+      if (state.canvas.getObjects().length > 0) {
+        state.canvas.deactivateAll().renderAll()
+        state.printableBoard = state.canvas.toDataURL('png')
+      }
+
+      const objs = state.canvas.getObjects()
+      for (let i = 0, l = objs.length; i < l; ++i) {
+        if (objs[i]['type'] === 'line') {
+          objs[i]['opacity'] = state.gridActive
+        }
+      }
+      state.canvas.renderAll()
     },
 
     DOWNLOAD_BOARD (state) {
       if (state.canvas.getObjects().length > 0) {
         const blob = new Blob([JSON.stringify(state.canvasState)], {type: 'text/plain;charset=utf-8'})
-        FileSaver.saveAs(blob, 'Board.json')
+        FileSaver.saveAs(blob, 'BFoard.json')
       }
     },
 
@@ -270,8 +313,11 @@ export default {
 
     CHANGE_GRID_MODE (state) {
       state.gridActive = !state.gridActive
-      var objs = state.canvas.getObjects()
-      for (var i = 0, l = objs.length; i < l; ++i) {
+    },
+
+    HANDLE_DRAW_GRID (state) {
+      const objs = state.canvas.getObjects()
+      for (let i = 0, l = objs.length; i < l; ++i) {
         if (objs[i]['type'] === 'line') {
           objs[i]['opacity'] = state.gridActive
         }
@@ -300,11 +346,14 @@ export default {
       const canvasWidth = state.canvas.width
       if (!state.gridAdded) {
         for (let i = 0; i < (canvasWidth / state.gridSize); i++) {
-          state.canvas.add(new F.Line([i * state.gridSize, 0, i * state.gridSize, canvasWidth], { stroke: '#ccc', selectable: false, id: 'grid1' }))
-          state.canvas.add(new F.Line([0, i * state.gridSize, canvasWidth, i * state.gridSize], { stroke: '#ccc', selectable: false, id: 'grid2' }))
+          state.canvas.add(new F.Line([i * state.gridSize, 0, i * state.gridSize, canvasWidth],
+            { stroke: '#ccc', selectable: false, id: 'grid1' }))
+          state.canvas.add(new F.Line([0, i * state.gridSize, canvasWidth, i * state.gridSize],
+            { stroke: '#ccc', selectable: false, id: 'grid2' }))
         }
         state.gridAdded = true
         state.canvas.renderAll()
+        layerify(state.canvas)
       }
     },
 
@@ -330,6 +379,7 @@ export default {
       commit('SAVE_STATE')
       commit('LOAD_STATE')
       commit('ADD_GRID')
+      commit('HANDLE_DRAW_GRID')
       commit('USED_SECTORS')
     },
 
@@ -351,7 +401,8 @@ export default {
     updateColor ({commit, getters, dispatch}, color) {
       commit('UPDATE_COLOR', color)
       const obj = getters.GET_ACTIVEOBJ
-      if (obj !== null && (['rect', 'circle', 'polygon'].indexOf(obj['type'] > -1))) {
+      if (obj !== null && (obj['type'] === 'rect' || obj['type'] === 'polygon' ||
+        obj['type'] === 'circle' || obj['type'] === 'path')) {
         dispatch('changeColor')
       }
       commit('CHANGE_DRAW_COLOR', color)
@@ -367,6 +418,7 @@ export default {
     changeColor ({commit}) {
       commit('CHANGE_COLOR')
       commit('SAVE_STATE')
+      commit('LOAD_STATE')
       commit('USED_SECTORS')
       commit('SAVE_SECTORS')
     },
@@ -399,6 +451,8 @@ export default {
 
     clearCanvas ({commit}) {
       commit('CLEAR_CANVAS')
+      commit('ADD_GRID')
+      commit('HANDLE_DRAW_GRID')
       commit('SAVE_STATE')
       commit('USED_SECTORS')
       commit('SAVE_SECTORS')
@@ -441,6 +495,10 @@ export default {
       commit('SAVE_BOARD', payload)
     },
 
+    makePrintableBoard ({commit}) {
+      commit('MAKE_PRINTABLE_BOARD')
+    },
+
     downloadBoard ({commit}) {
       commit('DOWNLOAD_BOARD')
     },
@@ -450,6 +508,7 @@ export default {
       commit('USED_SECTORS')
       commit('SAVE_SECTORS')
       commit('LOAD_STATE')
+      commit('HANDLE_DRAW_GRID')
     },
 
     stateHandling ({commit}) {
@@ -460,10 +519,12 @@ export default {
 
     loadState ({commit}) {
       commit('LOAD_STATE')
+      commit('HANDLE_DRAW_GRID')
     },
 
     changeGridMode ({commit}) {
       commit('CHANGE_GRID_MODE')
+      commit('HANDLE_DRAW_GRID')
     },
 
     updateGridSize ({commit}, size) {
@@ -471,11 +532,11 @@ export default {
     },
 
     changeGridSize ({commit}, size) {
-      console.log('Changing Grid Size')
       commit('UNADD_GRID')
       commit('REMOVE_GRID')
       commit('CHANGE_GRID_SIZE', size)
       commit('ADD_GRID')
+      commit('HANDLE_DRAW_GRID')
     },
 
     // Debugging
@@ -509,6 +570,9 @@ export default {
     },
     GET_GRIDADDED: state => {
       return state.gridAdded
+    },
+    GET_PRINTABLE_BOARD: state => {
+      return state.printableBoard
     }
   }
 }

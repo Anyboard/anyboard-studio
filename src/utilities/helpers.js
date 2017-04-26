@@ -1,4 +1,6 @@
 import {fabric} from 'fabric'
+import JSZip from 'jszip'
+import FileSaver from 'file-saver'
 
 export const createPolyPoints = function (sideCount, radius) {
   var sweep = Math.PI * 2 / sideCount
@@ -202,7 +204,6 @@ export const renameSector = function (canvas, newName) {
   let selObj = canvas.getActiveObject()
   const obj = canvas.getObjects()
   const oldName = selObj['name']
-  console.log('Trying to rename')
   if (selObj['type'] === 'rect' || selObj['type'] === 'polygon' ||
     selObj['type'] === 'circle') {
     if (oldName in sectorDict && oldName !== newName) {
@@ -234,7 +235,126 @@ export const colorChange = function (canvas, sectorColor) {
     activeObj.set('name', activeObj.fill)
     canvas.renderAll()
     renameSameSector(activeObj, canvas)
+  } else if (activeObj != null && activeObj['type'] === 'path') {
+    activeObj.stroke = sectorColor
+    canvas.renderAll()
   }
+}
+
+function getFile (url, callback) {
+  const xmlhttp = new XMLHttpRequest()
+  xmlhttp.open('GET', url, false) // Must use false to properly get the files even if it's sync
+  xmlhttp.onreadystatechange = function () {
+    if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+      callback(xmlhttp.response)
+    }
+  }
+  xmlhttp.send()
+}
+
+export const makeZip = function (blob) {
+  let zip = new JSZip()
+  // dist folder
+  let dist = zip.folder('dist')
+  getFile('https://raw.githubusercontent.com/simonem/anyboard/master/games/demo-anyDeck/dist/anyboard.js',
+    function (gameFile) {
+      dist.file('anyboard.js', gameFile)
+      console.log(gameFile)
+    })
+
+  // drivers folder
+  let drivers = zip.folder('drivers')
+  getFile('https://raw.githubusercontent.com/simonem/anyboard/master/games/demo-anyPawn/drivers/bean.evothings.bluetooth.js',
+    function (gameFile) {
+      drivers.file('bean.evothings.bluetooth.js', gameFile)
+    })
+
+  getFile('https://raw.githubusercontent.com/simonem/anyboard/master/games/demo-anyPawn/drivers/discovery.evothings.bluetooth.js',
+    function (gameFile) {
+      drivers.file('discovery.evothings.bluetooth.js', gameFile)
+    })
+
+  getFile('https://raw.githubusercontent.com/simonem/anyboard/master/games/demo-anyPawn/drivers/rfduino.evothings.bluetooth.js',
+    function (gameFile) {
+      drivers.file('rfduino.evothings.bluetooth.js', gameFile)
+    })
+
+  // firmware
+  let firmware = zip.folder('firmware')
+  let rfduinoToken = firmware.folder('RFduino_token')
+  getFile('https://raw.githubusercontent.com/simonem/anyboard/master/games/demo-anyPawn/firmware/RFduino_token/RFduino_token.ino',
+    function (gameFile) {
+      rfduinoToken.file('RFduino_token.ino', gameFile)
+    })
+
+  // libs
+  let libs = zip.folder('libs')
+  let evothings = libs.folder('evothings')
+  let easyble = evothings.folder('easyble')
+  let util = evothings.folder('util')
+  getFile('https://raw.githubusercontent.com/simonem/anyboard/master/games/demo-anyPawn/libs/jquery-1.11.3.min.js',
+    function (gameFile) {
+      libs.file('jquery-1.11.3.min.js', gameFile)
+    })
+  getFile('https://raw.githubusercontent.com/simonem/anyboard/master/games/demo-anyPawn/libs/evothings/evothings.js',
+    function (gameFile) {
+      evothings.file('evothings.js', gameFile)
+    })
+  getFile('https://raw.githubusercontent.com/simonem/anyboard/master/games/demo-anyPawn/libs/evothings/easyble/easyble.js',
+    function (gameFile) {
+      easyble.file('easyble.js', gameFile)
+    })
+  getFile('https://raw.githubusercontent.com/simonem/anyboard/master/games/demo-anyPawn/libs/evothings/util/util.js',
+    function (gameFile) {
+      util.file('util.js', gameFile)
+    })
+
+  // ui
+  let ui = zip.folder('ui')
+  let css = ui.folder('css')
+  // let fonts = ui.folder('fonts')
+  let images = ui.folder('images')
+  getFile('https://raw.githubusercontent.com/simonem/anyboard/master/games/demo-anyPawn/ui/perso.css',
+    function (gameFile) {
+      ui.file('perso.css', gameFile)
+    })
+  getFile('https://raw.githubusercontent.com/simonem/anyboard/master/games/demo-anyPawn/ui/css/evothings-app.css',
+    function (gameFile) {
+      css.file('evothings-app.css', gameFile)
+    })
+
+  // ui/images
+  getFile('https://raw.githubusercontent.com/simonem/anyboard/master/games/demo-anyPawn/ui/images/arrow-left.svg',
+    function (gameFile) {
+      images.file('arrow-left.svg', gameFile)
+    })
+  getFile('https://raw.githubusercontent.com/simonem/anyboard/master/games/demo-anyPawn/ui/images/arrow-right.svg',
+    function (gameFile) {
+      images.file('arrow-right.svg', gameFile)
+    })
+  getFile('https://raw.githubusercontent.com/simonem/anyboard/master/games/demo-anyPawn/ui/images/logo.svg',
+    function (gameFile) {
+      images.file('logo.svg', gameFile)
+    })
+  getFile('https://raw.githubusercontent.com/simonem/anyboard/master/games/demo-anyPawn/ui/images/menu.svg',
+    function (gameFile) {
+      images.file('menu.svg', gameFile)
+    })
+
+  // root folder
+  getFile('https://raw.githubusercontent.com/simonem/anyboard/master/games/demo-anyPawn/README.md',
+    function (gameFile) {
+      zip.file('README.md', gameFile)
+    })
+  getFile('https://raw.githubusercontent.com/simonem/anyboard/master/games/demo-anyPawn/evothings.json',
+    function (gameFile) {
+      zip.file('evothings.json', gameFile)
+    })
+
+  zip.file('index.html', blob) // Adds the index.html to zip
+  zip.generateAsync({type: 'blob'}).then(function (content) {
+    FileSaver.saveAs(content, 'game.zip')
+  })
 }
 
 export const colorHexToRGB = function (hexCode) {

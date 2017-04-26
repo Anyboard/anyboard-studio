@@ -1,13 +1,17 @@
 import Blockly from 'node-blockly/browser'
 import toolbox from '../utilities/blockly-toolbox.js'
+import htmlTemplate from '../utilities/html-template'
 import blocklyInit from '../utilities/blockly-init.js'
+import FileSaver from 'file-saver'
+import {makeZip} from '../utilities/helpers.js'
 
 export default {
   namespaced: true,
 
   state: {
     workspace: null,
-    blocklyState: 0
+    blocklyState: 0,
+    exportedCode: null
   },
 
   mutations: {
@@ -16,6 +20,24 @@ export default {
     },
     SAVE_BLOCKLY_STATE: function (state, blocklyState) {
       state.blocklyState = blocklyState
+    },
+    EXPORT_CODE (state) {
+      // Converts the blockly code on screen to useable javascript code and pushes it into the index.html
+      const done = htmlTemplate.replace('//REPLACEMEOKAY//\n', Blockly.JavaScript.workspaceToCode(state.workspace))
+      let blob = new Blob([done], {
+        type: 'text/html'
+      })
+      makeZip(blob) // Doesn't download the files from github as exact copies, which causes issues
+      // FileSaver.saveAs(blob, 'index.html')
+    },
+    DOWNLOAD_CODE (state) {
+      if (state.blocklyState !== 0) {
+        const blob = new Blob([state.blocklyState], {type: 'text/plain;charset=utf-8'})
+        FileSaver.saveAs(blob, 'code.xml')
+      }
+    },
+    UPLOAD_CODE (state, code) {
+      state.blocklyState = code
     }
   },
   getters: {
@@ -46,8 +68,8 @@ export default {
       const workspace = Blockly.inject('blockly-wrapper', {toolbox: toolbox})
 
       workspace.addChangeListener(function () {
-        var blocklyXML = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace)
-        var blocklyState = Blockly.Xml.domToPrettyText(blocklyXML)
+        const blocklyXML = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace)
+        const blocklyState = Blockly.Xml.domToPrettyText(blocklyXML)
         commit('SAVE_BLOCKLY_STATE', blocklyState)
       })
 
@@ -57,7 +79,7 @@ export default {
         let scopedstate = context.getters.GET_BLOCKLY_STATE
         console.log(scopedstate)
         if (scopedstate !== 0) {
-          var textToDom = Blockly.Xml.textToDom(scopedstate)
+          const textToDom = Blockly.Xml.textToDom(scopedstate)
           Blockly.Xml.domToWorkspace(textToDom, Blockly.mainWorkspace)
           Blockly.mainWorkspace.render()
         }
@@ -66,6 +88,25 @@ export default {
       console.log(context)
 
       loadState()
+    },
+    exportCode ({commit}) {
+      commit('EXPORT_CODE')
+    },
+    downloadCode ({commit}) {
+      commit('DOWNLOAD_CODE')
+    },
+    addCode ({commit}, code) {
+      commit('UPLOAD_CODE', code)
+      const textToDom = Blockly.Xml.textToDom(code)
+      Blockly.Xml.domToWorkspace(textToDom, Blockly.mainWorkspace)
+      Blockly.mainWorkspace.render()
+    },
+    loadCode ({commit}, code) {
+      Blockly.mainWorkspace.clear()
+      commit('UPLOAD_CODE', code)
+      const textToDom = Blockly.Xml.textToDom(code)
+      Blockly.Xml.domToWorkspace(textToDom, Blockly.mainWorkspace)
+      Blockly.mainWorkspace.render()
     }
   }
 }

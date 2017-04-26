@@ -26,25 +26,6 @@
         isDrawingMode: false,
         backgroundColor: 'white'
       })
-
-      cvs.on('object:scaling', (e) => {
-        const shape = e.target
-        if (shape['type'] === 'rect' || shape['type'] === 'polygon' || shape['type'] === 'circle') {
-          const minWidth = 200
-          const minHeight = 200
-          const actualWidth = shape.scaleX * shape.width
-          const actualHeight = shape.scaleY * shape.height
-          if (!isNaN(minWidth) && actualWidth <= minWidth) {
-            // dividing minWidth by the shape.width gives us our 'min scale'
-            shape.set({ scaleX: minWidth / shape.width })
-          }
-          if (!isNaN(minHeight) && actualHeight <= minHeight) {
-            shape.set({ scaleY: minHeight / shape.height })
-          }
-        }
-        this.$store.dispatch('stateHandling')
-        this.$store.dispatch('fabricInspector/updateInfo', this.$store.getters.GET_ACTIVEOBJ)
-      })
       cvs.on('path:created', (e) => {
         e.path.set('pathName', this.$store.getters.GET_DRAW_LAYER)
         e.path.set('name', 'Path')
@@ -56,6 +37,7 @@
           if (e.target['type'] === 'rect' || e.target['type'] === 'polygon' || e.target['type'] === 'circle') {
             e.target.minWidth = this.$store.getters.GET_MINWIDTH
             e.target.minHeight = this.$store.getters.GET_MINHEIGHT
+            e.target.minScaleLimit = 1
           }
         }
       })
@@ -66,7 +48,12 @@
           this.$store.dispatch('fabricInspector/updateInfo', this.$store.getters.GET_ACTIVEOBJ)
         }
       })
-      cvs.on('object:selected', () => {
+      cvs.on('object:selected', (e) => {
+        const target = e.target
+        if (target.type === 'group') {
+          target.lockScalingX = true
+          target.lockScalingY = true
+        }
         this.$store.dispatch('updateActiveObj')
         this.$store.dispatch('fabricInspector/updateInfo', this.$store.getters.GET_ACTIVEOBJ)
       })

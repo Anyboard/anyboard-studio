@@ -46,16 +46,6 @@
         </div>
       </li>
       <li>
-        <IconButton @click.native="saveBoard" icon="fa-file-photo-o" text="Save" tooltip="Save the board as an image"></IconButton>
-      </li>
-      <li>
-        <IconButton @click.native="downloadBoard" icon="fa-download" text="Download" tooltip="Download the board"></IconButton>
-      </li>
-      <li>
-        <IconButton @click.native="clickUpload" icon="fa-upload" text="Upload" tooltip="Upload the board"></IconButton>
-        <input @change="uploadBoard"type="file" id="upload" style="display: none"/>
-      </li>
-      <li>
         <IconButton @click.native="changeGridMode" icon="fa-square-o" text="Grid" tooltip="Change grid mode"></IconButton>
       </li>
       <li>
@@ -71,6 +61,7 @@
 </template>
 
 <script type="text/javascript">
+
   export default {
     name: 'BoardEditor',
     data () {
@@ -118,24 +109,6 @@
         this.$store.dispatch('uploadImage', event.target.files[0])
         document.getElementById('image').value = ''
       },
-      saveBoard () {
-        this.$store.dispatch('saveBoard')
-      },
-      clickUpload () {
-        document.getElementById('upload').click()
-      },
-      uploadBoard () {
-        var reader = new FileReader()
-        reader.readAsText(event.target.files[0])
-        reader.onload = (event) => {
-          var jsonObj = JSON.parse(event.target.result)
-          this.$store.dispatch('uploadBoard', jsonObj)
-        }
-        document.getElementById('upload').value = ''
-      },
-      downloadBoard () {
-        this.$store.dispatch('downloadBoard')
-      },
       jsonDebug () {
         this.$store.dispatch('jsonDebug')
       },
@@ -144,6 +117,23 @@
       },
       changeGridMode () {
         this.$store.dispatch('changeGridMode')
+      },
+      printBoard () {
+        this.$store.dispatch('makePrintableBoard')
+
+        const board = this.$store.getters.GET_PRINTABLE_BOARD
+        const windowUrl = 'about:blank'
+        const uniqueName = new Date()
+        const windowName = 'Print' + uniqueName.getTime()
+        const printWindow = window.open(windowUrl, windowName, 'left=50000,top=50000,width=0,height=0')
+
+        printWindow.document.write("<img src='" + board + "'/>")
+        setTimeout(function () { // Needs to wait for the document to finish writing (yes, just one ms is enough)
+          printWindow.document.close()
+          printWindow.focus()
+          printWindow.print()
+          printWindow.close()
+        }, 1)
       }
     },
 
@@ -163,14 +153,14 @@ $icon-size: 50px;
 
 .fabric_toolbar {
   font-size:2em;
-  display: flex;
-  flex-direction: column;
+  display: block;
   list-style-type: none;
   padding:2px;
   background: #555;
   border-radius: 2px;
   color: #eae9e1;
   z-index:99;
+  width:$icon-size + 4 ;
 
   li {
     position: relative;
@@ -231,7 +221,6 @@ $icon-size: 50px;
     left:$icon-size + 1px ;
     top:-2px;
     width: 20px + ($icon-size * 2);
-    flex-direction: row;
     background: #666;
     border-radius: 4px;
     padding:4px;
@@ -258,10 +247,7 @@ $icon-size: 50px;
 
 }
 
-/**
-* CONTENT
-*/
-.content, .canvas_container {
+.canvas_container {
   flex-grow:10;
   min-width: 580px;
   min-height: 300px;
