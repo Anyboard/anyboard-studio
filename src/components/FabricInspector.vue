@@ -1,9 +1,20 @@
 <template>
-  <div>
+  <div class="f_inspector">
     <p>Fabric inspector</p>
     <collapse accordion>
       <collapse-item title="Colorpicker">
-        <ChoiceColor :colors='colors' radius='10em' v-on:updateColor='updateColor'></ChoiceColor>
+        <!--<ChoiceColor :colors='colors' radius='5em' v-on:updateColor='updateColor'></ChoiceColor>-->
+        <div class="activecolor" :style="'background-color:' + colors[index]"></div>
+
+        <div class="anypicker">
+          <div v-for="(val,idx) in colors"
+              @click="updateColor(val,idx)"
+              :style="'background-color:' + val"
+              :key="idx">
+          </div>
+        </div>
+
+
       </collapse-item>
       <collapse-item title="Object properties" actived id="objectProps">
         <p>{{header}}</p>
@@ -22,7 +33,7 @@
         <a @click="renameSector2">Change name</a>
         <br/>
         <input @change="changeGridSize" type="range" v-model="gridSize" min="25" max="100"/>
-        <a>{{gridSize}}</a>
+        <a class="inactivelink">{{gridSize}}</a>
       </collapse-item>
       <collapse-item title="Predefined sectors">
         <p>{{start_sector}}</p>
@@ -40,21 +51,21 @@
   import {choiceColor} from 'vue-circle-choice'
 
   const colorArray = [
-    '#166CA0',  // 2 blue
-    '#4194D0',  // 5 lightBlue
-    '#112A95',  // 7 darkBlue
-    '#C047A3',  // 14 purple
-    '#FB50A6',  // 15 pink
-    '#5E1014',  // 16 darkBrown
-    '#9B3235',  // 18 lightBrown
-    '#FF483E',  // 20 red
-    '#66C889',  // 21 lightGreen
-    '#30A747',  // 24 green
-    '#31682E',  // 30 darkGreen
-    '#FF9344',  // 31 sandyBrown
-    '#D96623',  // 33 brown
-    '#F6EA77',  // 36 lemonYellow
-    '#F4E658'   // 37 yellow
+    '#166CA0',  // 2
+    '#4194D0',  // 5
+    '#112A95',  // 7
+    '#C047A3',  // 14
+    '#FB50A6',  // 15
+    '#5E1014',  // 16
+    '#9B3235',  // 18
+    '#FF483E',  // 20
+    '#66C889',  // 21
+    '#30A747',  // 24
+    '#31682E',  // 30
+    '#FF9344',  // 31
+    '#D96623',  // 33
+    '#F6EA77',  // 36
+    '#F4E658'   // 37
   ]
   export default {
     name: 'FabricInspector',
@@ -92,10 +103,18 @@
           this.$store.dispatch('fabricInspector/updateInfo', this.$store.getters.GET_ACTIVEOBJ)
         }
       },
-      setPredefinedSectors () {
+      updateColor (color, index) {
+        this.index = index
+        this.color = color
+        this.$store.dispatch('updateColor', color)
+        this.$store.dispatch('updateActiveObj')
+        this.$store.dispatch('fabricInspector/updateInfo', this.$store.getters.GET_ACTIVEOBJ)
+      },
+        setPredefinedSectors () {
         var keys = this.$store.getters.GET_USED_SECTORS
         this.$store.dispatch('fabricInspector/setPredefinedSectors', keys)
       },
+
       changeGridSize () {
         this.$store.dispatch('changeGridSize', this.gridSize)
       }
@@ -106,11 +125,51 @@
   }
 </script>
 
-<style>
-  #objectProps > p{
-    color: black;
+<style lang="SASS">
+  .f_inspector {
+    position: relative;
+    width:250px;
+    background: #555;
+    color: #eae9e1;
+  }
+
+  .activecolor {
+      width:50px;
+      height:50px;
+      border:3px solid #222;
+    }
+
+  .anypicker {
+    div {
+      display: inline-block;
+      width:25px;
+      height: 25px;
+      border:1px solid #000;
+    }
+  }
+
+  .inactivelink {
+    pointer-events: none;
+    cursor: default;
+    text-decoration: none;
+    color: #eae9e1;
+  }
+
+  .card-header {
+    background: #555;
+    color: #eae9e1;
+  }
+
+  .card-header-title {
+    color: #eae9e1!important;
+  }
+  .card-content {
+    background: #555;
+  }
+  .content {
+    color: #eae9e1!important;
   }
   .faux-border {
-    transform: translate(-31%, -41%)!important;
+    transform: translate(-15%, -25%)!important;
   }
 </style>

@@ -26,6 +26,15 @@ export default {
         type: 'text/html'
       })
       FileSaver.saveAs(blob, 'index.html')
+    },
+    DOWNLOAD_CODE (state) {
+      if (state.blocklyState !== 0) {
+        const blob = new Blob([state.blocklyState], {type: 'text/plain;charset=utf-8'})
+        FileSaver.saveAs(blob, 'code.xml')
+      }
+    },
+    UPLOAD_CODE (state, code) {
+      state.blocklyState = code
     }
   },
   getters: {
@@ -67,7 +76,7 @@ export default {
         let scopedstate = context.getters.GET_BLOCKLY_STATE
         console.log(scopedstate)
         if (scopedstate !== 0) {
-          var textToDom = Blockly.Xml.textToDom(scopedstate)
+          const textToDom = Blockly.Xml.textToDom(scopedstate)
           Blockly.Xml.domToWorkspace(textToDom, Blockly.mainWorkspace)
           Blockly.mainWorkspace.render()
         }
@@ -79,6 +88,22 @@ export default {
     },
     exportCode ({commit}) {
       commit('EXPORT_CODE')
+    },
+    downloadCode ({commit}) {
+      commit('DOWNLOAD_CODE')
+    },
+    addCode ({commit}, code) {
+      commit('UPLOAD_CODE', code)
+      const textToDom = Blockly.Xml.textToDom(code)
+      Blockly.Xml.domToWorkspace(textToDom, Blockly.mainWorkspace)
+      Blockly.mainWorkspace.render()
+    },
+    loadCode ({commit}, code) {
+      Blockly.mainWorkspace.clear()
+      commit('UPLOAD_CODE', code)
+      const textToDom = Blockly.Xml.textToDom(code)
+      Blockly.Xml.domToWorkspace(textToDom, Blockly.mainWorkspace)
+      Blockly.mainWorkspace.render()
     }
   }
 }

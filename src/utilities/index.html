@@ -42,24 +42,6 @@
       devices: {},
       currentTile: "white",
 
-      locations: {
-        2: '#166CA0',  // 2
-        5: '#4194D0',  // 5
-        7: '#112A95',  // 7
-        14: '#C047A3',  // 14
-        15: '#FB50A6', // 15
-        16: '#5E1014',  // 16
-        18: '#9B3235',  // 18
-        20: '#FF483E',  // 20
-        21: '#66C889',  // 21
-        24: '#30A747', // 24
-        30: '#31682E',  // 30
-        31: '#FF9344',  // 31
-        33: '#D96623',  // 33
-        36: '#F6EA77',  // 36
-        37: '#F4E658'   // 37
-      },
-
       //REPLACEMEOKAY//
 
       // Discover bluetooth tokens in proximity
@@ -84,13 +66,13 @@
 
           // Add button for token to body
           //document.body.innerHTML += '<button type="button" id="' + token.name + '" onclick="app.connect(' + "'" + token.name + "'" + ')" class="grey">' + token.name + ' </button><br />';
-          $("#summary").append('<button type="button" id="' + token.name + '" onclick="app.connect(' + "'" + token.name + "'" + ')" class="grey">' + token.name + ' </button><br />');
+          $("#tokens").append('<button type="button" id="' + token.name + '" onclick="app.connect(' + "'" + token.name + "'" + ')" class="grey">' + token.name + ' </button><br />');
 
           // Add listener to be executed if the token connects
           token.on('connect', function () {
             document.getElementById(token.name).className = 'green';
-            $("#token_feedback").append('<button type="button" onclick="app.pickRandomColor()"class="indicator3"> Pick random color</button><br />');
-            $("#token_feedback").append('<button type="button" onclick="app.verifyColor(' + "'" + token.name + "'" + ')"class="indicator3"> Verify color</button><br />');
+            $('#next').show()
+            //$("#token_feedback").append('<button type="button" onclick="app.verifyColor(' + "'" + token.name + "'" + ')"class="indicator3"> Verify color</button><br />');
           });
 
           // Add listener to be executed if the token disconnects
@@ -118,7 +100,7 @@
         // Signal that we're attempting to connect
         document.getElementById(tokenName).className = 'blue';
         // Send connect command.
-        token.connect(app.next_panel());
+        token.connect();
 
         // Add button for token to body
         //$("#summary").append('<button type="button" onclick="app.next_panel()" class="black"> Next </button>');
@@ -160,47 +142,6 @@
         $("#summary").hide();
       },
 
-      pickRandomColor: function () {
-        var currentColor = this.locations[Math.floor(Math.random() *15 + 1)]
-        if (currentColor == this.currentColor) {
-          this.pickRandomColor();
-        }
-        else {
-          this.currentColor = currentColor;
-          $('.wanted_tile').css("background-color", this.currentColor);
-        }
-      },
-
-      sendVibration: function (tokenName) {
-        var token = this.devices[tokenName];
-        this.sendVibrationCmd(token)
-      },
-
-      verifyColor: function (tokenName) {
-        var token = this.devices[tokenName];
-        if (app.tiles[2] == this.currentColor) {
-          this.sendVibrationCmd(token);
-          this.updateScore();
-          document.getElementById("pleaseTilt")
-            .appendChild(
-              document.createTextNode(
-                "Please tilt the pawn to recieve a new color."
-              )
-            );
-        }
-        else {
-          this.downgradeScore();
-        }
-      },
-
-      showScore: function () {
-        $("#message").html("Current score is " + this.score.toString());
-      },
-
-      showCurrentTile: function (color) {
-        $('.current_tile').css("background-color", color);
-      },
-
       getSector: function (token) {
         for (var key in this.devices){
           if (this.devices[key] == token){
@@ -218,6 +159,26 @@
 
       getRandomSector: function () {
         return app.sectorVals[Math.floor(Math.random() * app.sectorVals.length)]
+      },
+
+      showTextPrompt: function (value) {
+        $('#promptField').html(value)
+        $('#textprompt').show()
+      },
+
+      mathRandomInt: function (a, b) {
+        if (a > b) {
+          // Swap a and b to ensure a is smaller.
+          var c = a;
+          a = b;
+          b = c;
+        }
+        return Math.floor(Math.random() * (b - a + 1) + a);
+      },
+
+      getTextPrompt: function () {
+        return $('#promptField').value
+        $('#textprompt').hide()
       }
 
     };
@@ -226,17 +187,16 @@
 
 <body ontouchstart="">
 <div id="summary">
-  <h1>AnyboardGameDemo</h1>
   <button type="button" class="black" onclick="app.discover()">
     Discover Bluetooth devices
   </button>
+  <div id="tokens"></div>
+  <button type="button" onclick="app.next_panel()" class="black" id="next" style="display: none;"> Next </button>
 </div>
-<div id="token_feedback"></div>
+<div id="connected"></div>
 <div id="token_constraint">
-  <h1>Colors</h1>
-  <div id="scorediv">
-    <p id="score">Current score is 0</p>
-  </div>
+  <h1 id="title">Game Title</h1>
+  <h1>Messages</h1>
 
   <div id="messagediv">
     <p id="message1"></p>
@@ -250,19 +210,17 @@
     <p id="number3"></p>
   </div>
 
-  <div id="tileContainer">
-
-    <div class="tile">
-      <p>Current tile</p>
-      <div id="color" class="current_tile"></div>
-    </div>
-
-    <div class="tile">
-      <p>Wanted tile</p>
-      <div id="color" class="wanted_tile"></div>
-    </div>
+  <div id="textprompt" style="display: none">
+    <input type="text" value="Input here!" id="promptField"/>
+    <button id="promptButton" onclick="app.getTextPrompt()">OK!</button>
   </div>
 </div>
 </body>
+
+<style>
+  #messagediv {
+    word-wrap: break-word;
+  }
+</style>
 
 </html>

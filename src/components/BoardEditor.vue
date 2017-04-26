@@ -46,20 +46,7 @@
         </div>
       </li>
       <li>
-        <IconButton @click.native="saveBoard" icon="fa-file-photo-o" text="Save" tooltip="Save the board as an image"></IconButton>
-      </li>
-      <li>
-        <IconButton @click.native="downloadBoard" icon="fa-download" text="Download" tooltip="Download the board"></IconButton>
-      </li>
-      <li>
-        <IconButton @click.native="clickUpload" icon="fa-upload" text="Upload" tooltip="Upload the board"></IconButton>
-        <input @change="uploadBoard"type="file" id="upload" style="display: none"/>
-      </li>
-      <li>
         <IconButton @click.native="changeGridMode" icon="fa-square-o" text="Grid" tooltip="Change grid mode"></IconButton>
-      </li>
-      <li>
-        <IconButton @click.native="printBoard" icon="fa-print" text="Print" tooltip="Send the board to printer"></IconButton>
       </li>
       <li>
         <IconButton @click.native="jsonDebug" icon="fa-at" text="DEBUG" tooltip="Log json debug"></IconButton>
@@ -122,24 +109,6 @@
         this.$store.dispatch('uploadImage', event.target.files[0])
         document.getElementById('image').value = ''
       },
-      saveBoard () {
-        this.$store.dispatch('saveBoard')
-      },
-      clickUpload () {
-        document.getElementById('upload').click()
-      },
-      uploadBoard () {
-        const reader = new FileReader()
-        reader.readAsText(event.target.files[0])
-        reader.onload = (event) => {
-          const jsonObj = JSON.parse(event.target.result)
-          this.$store.dispatch('uploadBoard', jsonObj)
-        }
-        document.getElementById('upload').value = ''
-      },
-      downloadBoard () {
-        this.$store.dispatch('downloadBoard')
-      },
       jsonDebug () {
         this.$store.dispatch('jsonDebug')
       },
@@ -184,14 +153,14 @@ $icon-size: 50px;
 
 .fabric_toolbar {
   font-size:2em;
-  display: flex;
-  flex-direction: column;
+  display: block;
   list-style-type: none;
   padding:2px;
   background: #555;
   border-radius: 2px;
   color: #eae9e1;
   z-index:99;
+  width:$icon-size + 4 ;
 
   li {
     position: relative;
@@ -252,7 +221,6 @@ $icon-size: 50px;
     left:$icon-size + 1px ;
     top:-2px;
     width: 20px + ($icon-size * 2);
-    flex-direction: row;
     background: #666;
     border-radius: 4px;
     padding:4px;
@@ -279,10 +247,7 @@ $icon-size: 50px;
 
 }
 
-/**
-* CONTENT
-*/
-.content, .canvas_container {
+.canvas_container {
   flex-grow:10;
   min-width: 580px;
   min-height: 300px;

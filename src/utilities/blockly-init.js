@@ -79,6 +79,18 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
       this.setHelpUrl('')
     }
   }
+  Blockly.Blocks['set_title'] = {
+    init: function () {
+      this.appendValueInput('TEXT')
+          .setCheck('String')
+          .appendField('Set Game Title to')
+      this.setPreviousStatement(true, null)
+      this.setNextStatement(true, null)
+      this.setColour(255)
+      this.setTooltip('')
+      this.setHelpUrl('')
+    }
+  }
   Blockly.Blocks['move'] = {
     init: function () {
       this.appendDummyInput()
@@ -133,6 +145,28 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
       this.appendDummyInput()
           .appendField('Turn Token counterclockwise')
       this.appendStatementInput('STACK2')
+          .setCheck(null)
+      this.setColour(65)
+      this.setTooltip('')
+      this.setHelpUrl('')
+    }
+  }
+  Blockly.Blocks['shake'] = {
+    init: function () {
+      this.appendDummyInput()
+          .appendField('Shake Token')
+      this.appendStatementInput('STACK')
+          .setCheck(null)
+      this.setColour(65)
+      this.setTooltip('')
+      this.setHelpUrl('')
+    }
+  }
+  Blockly.Blocks['token_token_interaction'] = {
+    init: function () {
+      this.appendDummyInput()
+          .appendField('Move Other Token close to Token')
+      this.appendStatementInput('STACK')
           .setCheck(null)
       this.setColour(65)
       this.setTooltip('')
@@ -229,6 +263,16 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
     init: function () {
       this.appendDummyInput()
           .appendField('Current Token')
+      this.setOutput(true, 'Token')
+      this.setColour(290)
+      this.setTooltip('')
+      this.setHelpUrl('')
+    }
+  }
+  Blockly.Blocks['other_token'] = {
+    init: function () {
+      this.appendDummyInput()
+          .appendField('Other Token')
       this.setOutput(true, 'Token')
       this.setColour(290)
       this.setTooltip('')
@@ -351,7 +395,6 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
   Blockly.JavaScript['grid'] = function (block) {
     var dropdownGrid = block.getFieldValue('GRID')
     var code = dropdownGrid
-    // TODO: Change ORDER_NONE to the correct strength.
     return [code, Blockly.JavaScript.ORDER_MEMBER]
   }
   Blockly.JavaScript['show_grid'] = function (block) {
@@ -362,7 +405,6 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
   }
   Blockly.JavaScript['random_grid'] = function (block) {
     var code = 'app.getRandomGrid()'
-    // TODO: Change ORDER_NONE to the correct strength.
     return [code, Blockly.JavaScript.ORDER_MEMBER]
   }
   Blockly.JavaScript['get_grid'] = function (block) {
@@ -373,40 +415,38 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
   Blockly.JavaScript['token'] = function (block) {
     var token = block.getFieldValue('TOKEN')
     var code = '\'' + token + '\''
-    // TODO: Change ORDER_NONE to the correct strength.
     return [code, Blockly.JavaScript.ORDER_MEMBER]
   }
   Blockly.JavaScript['current_token'] = function (block) {
     var code = 'currentToken'
-    // TODO: Change ORDER_NONE to the correct strength.
+    return [code, Blockly.JavaScript.ORDER_MEMBER]
+  }
+  Blockly.JavaScript['other_token'] = function (block) {
+    var code = 'otherToken'
     return [code, Blockly.JavaScript.ORDER_MEMBER]
   }
   Blockly.JavaScript['token_test'] = function (block) {
     var token = Blockly.JavaScript.valueToCode(block, 'TOKEN', Blockly.JavaScript.ORDER_EQUALITY)
     var code = 'currentToken.id == ' + token
-    // TODO: Change ORDER_NONE to the correct strength.
     return [code, Blockly.JavaScript.ORDER_EQUALITY]
   }
   Blockly.JavaScript['random_token'] = function (block) {
     var code = 'app.getRandomToken()'
-    // TODO: Change ORDER_NONE to the correct strength.
     return [code, Blockly.JavaScript.ORDER_MEMBER]
   }
   Blockly.JavaScript['sector'] = function (block) {
     var sector = block.getFieldValue('SECTOR')
     var constr = sectorObject[sector]
     var code = constr
-    // TODO: Change ORDER_NONE to the correct strength.
     return [code, Blockly.JavaScript.ORDER_MEMBER]
   }
   Blockly.JavaScript['random_sector'] = function (block) {
     var code = 'app.getRandomSector()'
-    // TODO: Change ORDER_NONE to the correct strength.
     return [code, Blockly.JavaScript.ORDER_MEMBER]
   }
   Blockly.JavaScript['get_sector'] = function (block) {
     var token = Blockly.JavaScript.valueToCode(block, 'TOKEN', Blockly.JavaScript.ORDER_FUNCTION_CALL)
-    var code = 'app.getSector(' + token + ');\n'
+    var code = 'app.getSector(' + token + ')'
     return [code, Blockly.JavaScript.ORDER_MEMBER]
   }
   Blockly.JavaScript['sector_test'] = function (block) {
@@ -418,7 +458,7 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
   }
   Blockly.JavaScript['current_sector_test'] = function (block) {
     var sector = Blockly.JavaScript.valueToCode(block, 'SECTOR', Blockly.JavaScript.ORDER_EQUALITY)
-    var code = sector + ' == constraint'
+    var code = sector + ' == app.getSector(currentToken)'
     // TODO: Change ORDER_NONE to the correct strength.
     return [code, Blockly.JavaScript.ORDER_NONE]
   }
@@ -466,7 +506,22 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
     code += '} else {\n'
     code += stack2
     code += '};\n'
-    code += 'AnyBoard.TokenManager.onTokenEvent("TURN", handleTokenTurn);\n'
+    code += '};\n'
+    code += 'AnyBoard.TokenManager.onTokenEvent("ROTATE", handleTokenTurn);\n'
+    return code
+  }
+  Blockly.JavaScript['shake'] = function (block) {
+    var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
+    var code = 'var handleTokenShake = function(currentToken , options) {\n'
+    code += stack + '};\n'
+    code += 'AnyBoard.TokenManager.onTokenEvent("SHAKE", handleTokenShake);\n'
+    return code
+  }
+  Blockly.JavaScript['token_token_interaction'] = function (block) {
+    var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
+    var code = 'var handleTokenTokenInteraction = function(currentToken , otherToken , options) {\n'
+    code += stack + '};\n'
+    code += 'AnyBoard.TokenManager.onTokenEvent("TTE", handleTokenTokenInteraction);\n'
     return code
   }
   Blockly.JavaScript['test_init'] = function (block) {
@@ -493,6 +548,10 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
     code += stack
     code += '}, ' + milliseconds + ');\n'
     return code
+  }
+  Blockly.JavaScript['set_title'] = function (block) {
+    var msg = Blockly.JavaScript.valueToCode(block, 'TEXT', Blockly.JavaScript.ORDER_NONE) || '\'\''
+    return '$(\'#title\').html(' + msg + ');\n'
   }
   Blockly.JavaScript['show_text'] = function (block) {
     var msg = Blockly.JavaScript.valueToCode(block, 'TEXT', Blockly.JavaScript.ORDER_NONE) || '\'\''
@@ -529,6 +588,72 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
     var token = block.getFieldValue('TOKEN')
     var code = 'currentToken.id = (\'' + token + '\')\n'
     return code
+  }
+  Blockly.JavaScript['math_random_int'] = function (block) {
+    // Random integer between [X] and [Y].
+    var argument0 = Blockly.JavaScript.valueToCode(block, 'FROM',
+        Blockly.JavaScript.ORDER_COMMA) || '0'
+    var argument1 = Blockly.JavaScript.valueToCode(block, 'TO',
+        Blockly.JavaScript.ORDER_COMMA) || '0'
+    var code = 'app.mathRandomInt(' + argument0 + ', ' + argument1 + ')'
+    return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL]
+  }
+  Blockly.JavaScript['math_number_property'] = function (block) {
+    // Check if a number is even, odd, prime, whole, positive, or negative
+    // or if it is divisible by certain number. Returns true or false.
+    var numberToCheck = Blockly.JavaScript.valueToCode(block, 'numberToCheck',
+        Blockly.JavaScript.ORDER_MODULUS) || '0'
+    var dropdownProperty = block.getFieldValue('PROPERTY')
+    var code
+    if (dropdownProperty === 'PRIME') {
+      // Prime is a special case as it is not a one-liner test.
+      var functionName = Blockly.JavaScript.provideFunction_(
+          'mathIsPrime',
+        [Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ + ': function (n) {',
+          '  // https://en.wikipedia.org/wiki/Primality_test#Naive_methods',
+          '  if (n == 2 || n == 3) {',
+          '    return true;',
+          '  }',
+          '  // False if n is NaN, negative, is 1, or not whole.',
+          '  // And false if n is divisible by 2 or 3.',
+          '  if (isNaN(n) || n <= 1 || n % 1 != 0 || n % 2 == 0 ||' +
+          ' n % 3 == 0) {',
+          '    return false;',
+          '  }',
+          '  // Check all the numbers of form 6k +/- 1, up to sqrt(n).',
+          '  for (var x = 6; x <= Math.sqrt(n) + 1; x += 6) {',
+          '    if (n % (x - 1) == 0 || n % (x + 1) == 0) {',
+          '      return false;',
+          '    }',
+          '  }',
+          '  return true;',
+          '},'])
+      code = functionName + '(' + numberToCheck + ')'
+      return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL]
+    }
+    switch (dropdownProperty) {
+      case 'EVEN':
+        code = numberToCheck + ' % 2 == 0'
+        break
+      case 'ODD':
+        code = numberToCheck + ' % 2 == 1'
+        break
+      case 'WHOLE':
+        code = numberToCheck + ' % 1 == 0'
+        break
+      case 'POSITIVE':
+        code = numberToCheck + ' > 0'
+        break
+      case 'NEGATIVE':
+        code = numberToCheck + ' < 0'
+        break
+      case 'DIVISIBLE_BY':
+        var divisor = Blockly.JavaScript.valueToCode(block, 'DIVISOR',
+            Blockly.JavaScript.ORDER_MODULUS) || '0'
+        code = numberToCheck + ' % ' + divisor + ' == 0'
+        break
+    }
+    return [code, Blockly.JavaScript.ORDER_EQUALITY]
   }
   Blockly.JavaScript['variables_get'] = function (block) {
     // Variable getter.

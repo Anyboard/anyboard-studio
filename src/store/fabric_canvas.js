@@ -151,6 +151,7 @@ export default {
       state.canvas.clear()
       state.canvas.setBackgroundColor('white')
       state.canvas.renderAll()
+      state.gridAdded = false
     },
 
     CLONE_OBJECT (state) {
@@ -284,7 +285,7 @@ export default {
     DOWNLOAD_BOARD (state) {
       if (state.canvas.getObjects().length > 0) {
         const blob = new Blob([JSON.stringify(state.canvasState)], {type: 'text/plain;charset=utf-8'})
-        FileSaver.saveAs(blob, 'Board.json')
+        FileSaver.saveAs(blob, 'BFoard.json')
       }
     },
 
@@ -401,7 +402,8 @@ export default {
     updateColor ({commit, getters, dispatch}, color) {
       commit('UPDATE_COLOR', color)
       const obj = getters.GET_ACTIVEOBJ
-      if (obj !== null && (['rect', 'circle', 'polygon'].indexOf(obj['type'] > -1))) {
+      if (obj !== null && (obj['type'] === 'rect' || obj['type'] === 'polygon' ||
+        obj['type'] === 'circle' || obj['type'] === 'path')) {
         dispatch('changeColor')
       }
       commit('CHANGE_DRAW_COLOR', color)
@@ -417,6 +419,7 @@ export default {
     changeColor ({commit}) {
       commit('CHANGE_COLOR')
       commit('SAVE_STATE')
+      commit('LOAD_STATE')
       commit('USED_SECTORS')
       commit('SAVE_SECTORS')
     },
@@ -449,6 +452,8 @@ export default {
 
     clearCanvas ({commit}) {
       commit('CLEAR_CANVAS')
+      commit('ADD_GRID')
+      commit('HANDLE_DRAW_GRID')
       commit('SAVE_STATE')
       commit('USED_SECTORS')
       commit('SAVE_SECTORS')
@@ -532,6 +537,7 @@ export default {
       commit('REMOVE_GRID')
       commit('CHANGE_GRID_SIZE', size)
       commit('ADD_GRID')
+      commit('HANDLE_DRAW_GRID')
     },
 
     // Debugging
