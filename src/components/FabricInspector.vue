@@ -5,15 +5,15 @@
       <collapse-item title="Colorpicker">
         <!--<ChoiceColor :colors='colors' radius='5em' v-on:updateColor='updateColor'></ChoiceColor>-->
         <div class="activecolor" :style="'background-color:' + colors[index]"></div>
-        
+
         <div class="anypicker">
-          <div v-for="(val,idx) in colors" 
-              @click="updateColor(val,idx)" 
-              :style="'background-color:' + val" 
+          <div v-for="(val,idx) in colors"
+              @click="updateColor(val,idx)"
+              :style="'background-color:' + val"
               :key="idx">
           </div>
         </div>
-        
+
 
       </collapse-item>
       <collapse-item title="Object properties" actived id="objectProps">
@@ -33,7 +33,7 @@
         <a @click="renameSector2">Change name</a>
         <br/>
         <input @change="changeGridSize" type="range" v-model="gridSize" min="25" max="100"/>
-        <a>{{gridSize}}</a>
+        <a class="inactivelink">{{gridSize}}</a>
       </collapse-item>
     </collapse>
   </div>
@@ -115,6 +115,8 @@
   .f_inspector {
     position: relative;
     width:250px;
+    background: #555;
+    color: #eae9e1;
   }
 
   .activecolor {
@@ -123,18 +125,35 @@
       border:3px solid #222;
     }
 
-  .anypicker {    
+  .anypicker {
     div {
       display: inline-block;
       width:25px;
       height: 25px;
-      border:1px solid #fff;
+      border:1px solid #000;
     }
   }
 
+  .inactivelink {
+    pointer-events: none;
+    cursor: default;
+    text-decoration: none;
+    color: #eae9e1;
+  }
 
-  #objectProps > p{
-    color: black;
+  .card-header {
+    background: #555;
+    color: #eae9e1;
+  }
+
+  .card-header-title {
+    color: #eae9e1!important;
+  }
+  .card-content {
+    background: #555;
+  }
+  .content {
+    color: #eae9e1!important;
   }
   .faux-border {
     transform: translate(-15%, -25%)!important;

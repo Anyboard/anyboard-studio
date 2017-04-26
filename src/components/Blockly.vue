@@ -1,6 +1,6 @@
 <template>
   <div class="blockly-area">
-    <div id="blockly-wrapper" style="height:100%; width:400px"></div>
+    <div id="blockly-wrapper" style="height:100%; width:95%"></div>
   </div>
 </template>
 
