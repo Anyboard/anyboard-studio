@@ -153,14 +153,14 @@ $icon-size: 50px;
 
 .fabric_toolbar {
   font-size:2em;
-  display: flex;
-  flex-direction: column;
+  display: block;
   list-style-type: none;
   padding:2px;
   background: #555;
   border-radius: 2px;
   color: #eae9e1;
   z-index:99;
+  width:$icon-size + 4 ;
 
   li {
     position: relative;
@@ -221,7 +221,6 @@ $icon-size: 50px;
     left:$icon-size + 1px ;
     top:-2px;
     width: 20px + ($icon-size * 2);
-    flex-direction: row;
     background: #666;
     border-radius: 4px;
     padding:4px;
@@ -248,10 +247,7 @@ $icon-size: 50px;
 
 }
 
-/**
-* CONTENT
-*/
-.content, .canvas_container {
+.canvas_container {
   flex-grow:10;
   min-width: 580px;
   min-height: 300px;
