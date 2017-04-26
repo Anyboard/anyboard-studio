@@ -30,6 +30,8 @@
         e.path.set('pathName', this.$store.getters.GET_DRAW_LAYER)
         e.path.set('name', 'Path')
         this.$store.dispatch('fabricInspector/updateInfo', this.$store.getters.GET_ACTIVEOBJ)
+        var keys = this.$store.getters.GET_USED_SECTORS
+        this.$store.dispatch('fabricInspector/setPredefinedSectors', keys)
       })
       cvs.on('object:added', (e) => {
         if (this.$store.getters.GET_GRIDADDED) {
@@ -40,12 +42,18 @@
             e.target.minScaleLimit = 1
           }
         }
+        this.$store.dispatch('stateHandling')
+        this.$store.dispatch('fabricInspector/updateInfo', this.$store.getters.GET_ACTIVEOBJ)
+        var keys = this.$store.getters.GET_USED_SECTORS
+        this.$store.dispatch('fabricInspector/setPredefinedSectors', keys)
       })
       cvs.on('object:modified', () => {
         if (this.$store.getters.GET_GRIDADDED) {
           this.$store.dispatch('stateHandling')
           this.$store.dispatch('updateActiveObj')
           this.$store.dispatch('fabricInspector/updateInfo', this.$store.getters.GET_ACTIVEOBJ)
+          var keys = this.$store.getters.GET_USED_SECTORS
+          this.$store.dispatch('fabricInspector/setPredefinedSectors', keys)
         }
       })
       cvs.on('object:selected', (e) => {
@@ -56,10 +64,14 @@
         }
         this.$store.dispatch('updateActiveObj')
         this.$store.dispatch('fabricInspector/updateInfo', this.$store.getters.GET_ACTIVEOBJ)
+        var keys = this.$store.getters.GET_USED_SECTORS
+        this.$store.dispatch('fabricInspector/setPredefinedSectors', keys)
       })
       cvs.on('selection:cleared', () => {
         this.$store.dispatch('updateActiveObj')
         this.$store.dispatch('fabricInspector/updateInfo', this.$store.getters.GET_ACTIVEOBJ)
+        var keys = this.$store.getters.GET_USED_SECTORS
+        this.$store.dispatch('fabricInspector/setPredefinedSectors', keys)
       })
       cvs.on('object:moving', (e) => {
         if (this.$store.getters.GET_GRIDMODE) {

@@ -35,7 +35,7 @@
         <input @change="changeGridSize" type="range" v-model="gridSize" min="25" max="100"/>
         <a class="inactivelink">{{gridSize}}</a>
       </collapse-item>
-      <collapse-item title="Predefined sectors">
+      <collapse-item title="Sectorlist">
         <a @click="setPredefinedSectors">Click here to update</a>
         <p>{{start_sector}}</p>
         <p>{{mid_sector}}</p>
@@ -102,6 +102,9 @@
         if (this.$store.getters.GET_ACTIVEOBJ !== null) {
           this.$store.dispatch('renameSector', sname)
           this.$store.dispatch('fabricInspector/updateInfo', this.$store.getters.GET_ACTIVEOBJ)
+          this.$store.dispatch('stateHandling')
+          var keys = this.$store.getters.GET_USED_SECTORS
+          this.$store.dispatch('fabricInspector/setPredefinedSectors', keys)
         }
       },
       updateColor (color, index) {
@@ -110,10 +113,12 @@
         this.$store.dispatch('updateColor', color)
         this.$store.dispatch('updateActiveObj')
         this.$store.dispatch('fabricInspector/updateInfo', this.$store.getters.GET_ACTIVEOBJ)
-      },
-      setPredefinedSectors () {
+        this.$store.dispatch('stateHandling')
         var keys = this.$store.getters.GET_USED_SECTORS
         this.$store.dispatch('fabricInspector/setPredefinedSectors', keys)
+      },
+      setPredefinedSectors () {
+
       },
 
       changeGridSize () {
