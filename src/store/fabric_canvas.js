@@ -2,7 +2,7 @@ import {fabric as F} from 'fabric'
 import FileSaver from 'file-saver'
 // import createObjectURL from 'create-object-url'
 import {createPolyPoints, dataURLtoBlob, layerify, exportSectors, updateSectorList,
-        renameSameSector, colorChange, renameSector, checkIfSameName, updateSectorFuck} from '../utilities/helpers.js'
+        renameSameSector, colorChange, renameSector, checkIfSameName} from '../utilities/helpers.js'
 
 export default {
   state: {
@@ -309,7 +309,6 @@ export default {
 
     USED_SECTORS (state) {
       state.usedSectors = updateSectorList(state.canvas)
-      state.fuckMeInTheAss = updateSectorFuck(state.canvas)
     },
 
     CHANGE_GRID_MODE (state) {
@@ -550,6 +549,10 @@ export default {
 
     GET_SECTORS: state => {
       return state.sectors
+    },
+
+    GET_USED_SECTORS: state => {
+      return state.usedSectors
     },
 
     GET_MINWIDTH: state => {

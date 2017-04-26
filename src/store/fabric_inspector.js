@@ -4,10 +4,12 @@
 
 export default {
   namespaced: true,
-  state: {start_sector: 'Start sector:', activeColor: '', height: 'Height: ', width: 'Width: ', type: 'Type: ', fill: 'Color: ', name: 'Name: ', stroke: 'Stroke: ', strokedasharray: 'StrokeDashArray: ', strokewidth: 'StrokeWidth: ', minwidth: 'MinWidth: ', minheight: 'MinHeight'},
+  state: {faentadeg: '', start_sector: 'Start sector:', mid_sector: 'Mid sector:', end_sector: 'End sector: ', activeColor: '', height: 'Height: ', width: 'Width: ', type: 'Type: ', fill: 'Color: ', name: 'Name: ', stroke: 'Stroke: ', strokedasharray: 'StrokeDashArray: ', strokewidth: 'StrokeWidth: ', minwidth: 'MinWidth: ', minheight: 'MinHeight'},
   mutations: {
     SET_PREDEFINED_SECTORS (state, payload) {
-      state.start_sector = payload
+      state.start_sector = 'Start sector: ' + payload['Start Sector']
+      state.mid_sector = 'Mid sector: ' + payload['Mid Sector']
+      state.end_sector = 'End sector: ' + payload['End Sector']
     },
     SET_HEIGHT (state, payload) {
       state.height = payload
@@ -42,13 +44,10 @@ export default {
     SET_PROPER_COLOR (state, payload) {
       state.activecolor = payload
     }
-    //  COLORCONVERTER () {
-    //
-    //  }
   },
   actions: {
-    setPredefinedSectors ({commit}) {
-      commit('SET_PREDEFINED_SECTORS', this.$store.state.fuckMeInTheAss[0])
+    setPredefinedSectors ({commit}, keys) {
+      commit('SET_PREDEFINED_SECTORS', keys)
     },
     colorConverter (activeObj) {
       if (activeObj !== null) {
