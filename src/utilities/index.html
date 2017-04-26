@@ -140,7 +140,6 @@
 
       next_panel: function () {
         $("#summary").hide();
-        $("#connected").append('<button type="button" class="indicator3">Good to play!</button><br />');
       },
 
       getSector: function (token) {
@@ -188,7 +187,6 @@
 
 <body ontouchstart="">
 <div id="summary">
-  <h1 id="title">AnyboardGameDemo</h1>
   <button type="button" class="black" onclick="app.discover()">
     Discover Bluetooth devices
   </button>
@@ -197,6 +195,7 @@
 </div>
 <div id="connected"></div>
 <div id="token_constraint">
+  <h1 id="title">Game Title</h1>
   <h1>Messages</h1>
 
   <div id="messagediv">
