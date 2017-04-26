@@ -163,6 +163,21 @@ export const updateSectorList = function (canvas) {
   return usedColours
 }
 
+export const updateSectorFuck = function (canvas) {
+  const obj = canvas.getObjects()
+  let usedColours = {}
+  sectorList = Object.keys(sectorDict)
+  for (let i = 0; i < sectorList.length; i++) {
+    insertIntoDict(usedColours, sectorList[i], sectorDict[sectorList[i]])
+  }
+  for (let z = 0, y = obj.length; z < y; ++z) {
+    if (obj[z]['type'] === 'rect' || obj[z]['type'] === 'polygon' || obj[z]['type'] === 'circle') {
+      insertIntoDict(usedColours, obj[z]['name'], obj[z]['fill'])
+    }
+  }
+  return sectorList
+}
+
 function _isContains (json, value) {
   let contains = false
   Object.keys(json).some(key => {

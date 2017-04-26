@@ -48,7 +48,7 @@ export default {
   },
   actions: {
     setPredefinedSectors ({commit}) {
-      commit('SET_PREDEFINED_SECTORS', this.$store.state.usedSectors)
+      commit('SET_PREDEFINED_SECTORS', this.$store.state.fuckMeInTheAss[0])
     },
     colorConverter (activeObj) {
       if (activeObj !== null) {
