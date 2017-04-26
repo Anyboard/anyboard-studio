@@ -4,13 +4,21 @@
 
 export default {
   namespaced: true,
-  state: {faentadeg: '', start_sector: 'Start sector:', mid_sector: 'Mid sector:', end_sector: 'End sector: ', activeColor: '', height: 'Height: ', width: 'Width: ', type: 'Type: ', fill: 'Color: ', name: 'Name: ', stroke: 'Stroke: ', strokedasharray: 'StrokeDashArray: ', strokewidth: 'StrokeWidth: ', minwidth: 'MinWidth: ', minheight: 'MinHeight'},
+  state: {start_sector: 'Start sector:', mid_sector: 'Mid sector:', end_sector: 'End sector: ', activeColor: '', height: 'Height: ', width: 'Width: ', type: 'Type: ', fill: 'Color: ', name: 'Name: ', stroke: 'Stroke: ', strokedasharray: 'StrokeDashArray: ', strokewidth: 'StrokeWidth: ', minwidth: 'MinWidth: ', minheight: 'MinHeight'},
   mutations: {
     SET_PREDEFINED_SECTORS (state, payload) {
-      state.start_sector = 'Start sector: ' + payload['Start Sector']
-      state.mid_sector = 'Mid sector: ' + payload['Mid Sector']
-      state.end_sector = 'End sector: ' + payload['End Sector']
+      state.start_sector = payload
+      var templist = []
+      var templist2 = []
+      for (var key in payload) {
+        templist.push(key)
+        templist2.push(payload[key])
+      }
+      state.start_sector = templist[0] + ': ' + templist2[0]
+      state.mid_sector = templist[1] + ': ' + templist2[1]
+      state.end_sector = templist[2] + ': ' + templist2[2]
     },
+
     SET_HEIGHT (state, payload) {
       state.height = payload
     },

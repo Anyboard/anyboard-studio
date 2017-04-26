@@ -36,6 +36,7 @@
         <a class="inactivelink">{{gridSize}}</a>
       </collapse-item>
       <collapse-item title="Predefined sectors">
+        <a @click="setPredefinedSectors">kom hit da horegutt</a>
         <p>{{start_sector}}</p>
         <p>{{mid_sector}}</p>
         <p>{{end_sector}}</p>
@@ -110,7 +111,7 @@
         this.$store.dispatch('updateActiveObj')
         this.$store.dispatch('fabricInspector/updateInfo', this.$store.getters.GET_ACTIVEOBJ)
       },
-        setPredefinedSectors () {
+      setPredefinedSectors () {
         var keys = this.$store.getters.GET_USED_SECTORS
         this.$store.dispatch('fabricInspector/setPredefinedSectors', keys)
       },
