@@ -246,7 +246,7 @@ function getFile (url, callback) {
   xmlhttp.open('GET', url, false) // Must use false to properly get the files even if it's sync
   xmlhttp.onreadystatechange = function () {
     if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-      callback(xmlhttp.responseText)
+      callback(xmlhttp.response)
     }
   }
   xmlhttp.send()
@@ -290,7 +290,7 @@ export const makeZip = function (blob) {
   // libs
   let libs = zip.folder('libs')
   let evothings = libs.folder('evothings')
-  let easyable = evothings.folder('easyable')
+  let easyble = evothings.folder('easyble')
   let util = evothings.folder('util')
   getFile('https://raw.githubusercontent.com/simonem/anyboard/master/games/demo-anyPawn/libs/jquery-1.11.3.min.js',
     function (gameFile) {
@@ -302,7 +302,7 @@ export const makeZip = function (blob) {
     })
   getFile('https://raw.githubusercontent.com/simonem/anyboard/master/games/demo-anyPawn/libs/evothings/easyble/easyble.js',
     function (gameFile) {
-      easyable.file('easyable.js', gameFile)
+      easyble.file('easyble.js', gameFile)
     })
   getFile('https://raw.githubusercontent.com/simonem/anyboard/master/games/demo-anyPawn/libs/evothings/util/util.js',
     function (gameFile) {

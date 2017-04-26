@@ -3,7 +3,7 @@ import toolbox from '../utilities/blockly-toolbox.js'
 import htmlTemplate from '../utilities/html-template'
 import blocklyInit from '../utilities/blockly-init.js'
 import FileSaver from 'file-saver'
-// import {makeZip} from '../utilities/helpers.js'
+import {makeZip} from '../utilities/helpers.js'
 
 export default {
   namespaced: true,
@@ -27,8 +27,8 @@ export default {
       let blob = new Blob([done], {
         type: 'text/html'
       })
-      // makeZip(blob) // Doesn't download the files from github as exact copies, which causes issues
-      FileSaver.saveAs(blob, 'index.html')
+      makeZip(blob) // Doesn't download the files from github as exact copies, which causes issues
+      // FileSaver.saveAs(blob, 'index.html')
     },
     DOWNLOAD_CODE (state) {
       if (state.blocklyState !== 0) {
