@@ -91,7 +91,7 @@ export const layerify = function (cvs) {
 }
 
 // Helping function for inserting sectors into json object
-function insertIntoDict (dict, key, value) {
+export const insertIntoDict = function (dict, key, value) {
   // If key is not initialized or some bad structure
   if (!(key in dict)) {
     dict[key] = value
