@@ -102,6 +102,9 @@
         if (this.$store.getters.GET_ACTIVEOBJ !== null) {
           this.$store.dispatch('renameSector', sname)
           this.$store.dispatch('fabricInspector/updateInfo', this.$store.getters.GET_ACTIVEOBJ)
+          this.$store.dispatch('stateHandling')
+          var keys = this.$store.getters.GET_USED_SECTORS
+          this.$store.dispatch('fabricInspector/setPredefinedSectors', keys)
         }
       },
       updateColor (color, index) {
@@ -110,6 +113,9 @@
         this.$store.dispatch('updateColor', color)
         this.$store.dispatch('updateActiveObj')
         this.$store.dispatch('fabricInspector/updateInfo', this.$store.getters.GET_ACTIVEOBJ)
+        this.$store.dispatch('stateHandling')
+        var keys = this.$store.getters.GET_USED_SECTORS
+        this.$store.dispatch('fabricInspector/setPredefinedSectors', keys)
       },
       setPredefinedSectors () {
 
