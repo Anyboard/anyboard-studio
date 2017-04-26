@@ -11,7 +11,6 @@ Vue.use(Vuex)
 
 // Initiating a new Store
 export default new Vuex.Store({
-
   // The state object holds all the data that needs to be globally accessible, but should never be directly referenced.
   state: {},
 
