@@ -151,6 +151,17 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
       this.setHelpUrl('')
     }
   }
+  Blockly.Blocks['shake'] = {
+    init: function () {
+      this.appendDummyInput()
+          .appendField('Shake Token')
+      this.appendStatementInput('STACK')
+          .setCheck(null)
+      this.setColour(65)
+      this.setTooltip('')
+      this.setHelpUrl('')
+    }
+  }
   Blockly.Blocks['token_token_interaction'] = {
     init: function () {
       this.appendDummyInput()
@@ -447,7 +458,7 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
   }
   Blockly.JavaScript['current_sector_test'] = function (block) {
     var sector = Blockly.JavaScript.valueToCode(block, 'SECTOR', Blockly.JavaScript.ORDER_EQUALITY)
-    var code = sector + ' == constraint'
+    var code = sector + ' == app.getSector(currentToken)'
     // TODO: Change ORDER_NONE to the correct strength.
     return [code, Blockly.JavaScript.ORDER_NONE]
   }
@@ -497,6 +508,13 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
     code += '};\n'
     code += '};\n'
     code += 'AnyBoard.TokenManager.onTokenEvent("ROTATE", handleTokenTurn);\n'
+    return code
+  }
+  Blockly.JavaScript['shake'] = function (block) {
+    var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
+    var code = 'var handleTokenShake = function(currentToken , options) {\n'
+    code += stack + '};\n'
+    code += 'AnyBoard.TokenManager.onTokenEvent("SHAKE", handleTokenShake);\n'
     return code
   }
   Blockly.JavaScript['token_token_interaction'] = function (block) {
