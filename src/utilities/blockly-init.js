@@ -79,6 +79,18 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
       this.setHelpUrl('')
     }
   }
+  Blockly.Blocks['set_title'] = {
+    init: function () {
+      this.appendValueInput('TEXT')
+          .setCheck('String')
+          .appendField('Set Game Title to')
+      this.setPreviousStatement(true, null)
+      this.setNextStatement(true, null)
+      this.setColour(255)
+      this.setTooltip('')
+      this.setHelpUrl('')
+    }
+  }
   Blockly.Blocks['move'] = {
     init: function () {
       this.appendDummyInput()
@@ -518,6 +530,10 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
     code += stack
     code += '}, ' + milliseconds + ');\n'
     return code
+  }
+  Blockly.JavaScript['set_title'] = function (block) {
+    var msg = Blockly.JavaScript.valueToCode(block, 'TEXT', Blockly.JavaScript.ORDER_NONE) || '\'\''
+    return '$(\'#title\').html(' + msg + ');\n'
   }
   Blockly.JavaScript['show_text'] = function (block) {
     var msg = Blockly.JavaScript.valueToCode(block, 'TEXT', Blockly.JavaScript.ORDER_NONE) || '\'\''
