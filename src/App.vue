@@ -65,6 +65,7 @@ export default {
   border-bottom:1px solid #000;
   text-align: center;
   box-shadow:1em 0 1em #000;
+  z-index: 100;
 
   span {
     flex-grow: 1;
