@@ -190,7 +190,7 @@
         }
       },
 
-      sendLedBlinkCmd: function (token, time, frequency) {
+      sendLedBlinkCmd: function (token, time, period) {
 
         var completedFunction = function (data) {
           hyper.log("We happily send the LEDBLINK command");
@@ -204,40 +204,67 @@
 
         if(app.tokenVal.hasOwnProperty(token.id)) {
           if (!(app.tokenVal[token.id].includes('ledblink'))) {
-            token.ledBlink(time, frequency,
+            token.ledBlink(time, period,
               completedFunction,  // function to be executed when token signals
               errorCallback  // function to be executed in case of failure to send command to token
             );
           }
         } else {
-          token.ledBlink(time, frequency,
+          token.ledBlink(time, period,
             completedFunction,  // function to be executed when token signals
             errorCallback  // function to be executed in case of failure to send command to token
           );
         }
       },
 
-      sendMatrixCmd: function (token, grid, time) {
+      sendLedOffCmd: function (token) {
 
         var completedFunction = function (data) {
-          hyper.log("We happily send the MATRIX command");
+          hyper.log("We happily send the LEDOFF command");
           hyper.log(data)
         };
 
         var errorCallback = function (errorMsg) {
-          hyper.log("Failed to send the MATRIX command");
+          hyper.log("Failed to send the LEDOFF command");
           hyper.log(errorMsg);
         };
 
         if(app.tokenVal.hasOwnProperty(token.id)) {
-          if (!(app.tokenVal[token.id].includes('matrix'))) {
-            token.matrix(grid, time,
+          if (!(app.tokenVal[token.id].includes('ledoff'))) {
+            token.ledOff(ledArray,
               completedFunction,  // function to be executed when token signals
               errorCallback  // function to be executed in case of failure to send command to token
             );
           }
         } else {
-          token.matrix(grid, time,
+          token.ledOff(ledArray,
+            completedFunction,  // function to be executed when token signals
+            errorCallback  // function to be executed in case of failure to send command to token
+          );
+        }
+      },
+
+      sendDisplayPatternCmd: function (token, pattern) {
+
+        var completedFunction = function (data) {
+          hyper.log("We happily send the DISPLAYPATTERN command");
+          hyper.log(data)
+        };
+
+        var errorCallback = function (errorMsg) {
+          hyper.log("Failed to send the DISPLAYPATTERN command");
+          hyper.log(errorMsg);
+        };
+
+        if(app.tokenVal.hasOwnProperty(token.id)) {
+          if (!(app.tokenVal[token.id].includes('matrix'))) {
+            token.displayPattern(pattern,
+              completedFunction,  // function to be executed when token signals
+              errorCallback  // function to be executed in case of failure to send command to token
+            );
+          }
+        } else {
+          token.displayPattern(pattern,
             completedFunction,  // function to be executed when token signals
             errorCallback  // function to be executed in case of failure to send command to token
           );

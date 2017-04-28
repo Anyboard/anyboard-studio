@@ -272,7 +272,7 @@ export const makeZip = function (blob) {
   let zip = new JSZip()
   // dist folder
   let dist = zip.folder('dist')
-  getFile('https://raw.githubusercontent.com/simonem/anyboard/master/games/demo-anyDeck/dist/anyboard.js',
+  getFile('https://raw.githubusercontent.com/simonem/anyboard/firmwareWork/games/demo-anyPawn/dist/anyboard.js',
     function (gameFile) {
       dist.file('anyboard.js', gameFile)
     })
