@@ -1,5 +1,5 @@
 <template>
-  <canvas id="fabric_canvas" width="700" height="450"></canvas>
+  <canvas id="fabric_canvas" :width="fullWidth - 325" :height="fullHeight * 0.9"></canvas>
 </template>
 
 <script>
@@ -11,7 +11,8 @@
 
     data () {
       return {
-        test: 'nothing'
+        fullHeight: 0,
+        fullWidth: 0
       }
     },
 
@@ -21,11 +22,28 @@
       )
     },
 
+    methods: {
+      handleResize () {
+        this.fullHeight = document.documentElement.clientHeight
+        this.fullWidth = document.documentElement.clientWidth
+      }
+    },
+
+    beforeMount () {
+      this.fullHeight = document.documentElement.clientHeight
+      this.fullWidth = document.documentElement.clientWidth
+    },
+
+    ready () {
+      window.addEventListener('resize', this.handleResize)
+    },
+
     mounted () {
       const cvs = new fabric.Canvas('fabric_canvas', {
         isDrawingMode: false,
         backgroundColor: 'white'
       })
+
       cvs.on('path:created', (e) => {
         e.path.set('pathName', this.$store.getters.GET_DRAW_LAYER)
         e.path.set('name', 'Path')
@@ -33,6 +51,7 @@
         var keys = this.$store.getters.GET_USED_SECTORS
         this.$store.dispatch('fabricInspector/setPredefinedSectors', keys)
       })
+
       cvs.on('object:added', (e) => {
         if (this.$store.getters.GET_GRIDADDED) {
           this.$store.dispatch('stateHandling')
@@ -47,6 +66,7 @@
         var keys = this.$store.getters.GET_USED_SECTORS
         this.$store.dispatch('fabricInspector/setPredefinedSectors', keys)
       })
+
       cvs.on('object:modified', () => {
         if (this.$store.getters.GET_GRIDADDED) {
           this.$store.dispatch('stateHandling')
@@ -56,6 +76,7 @@
           this.$store.dispatch('fabricInspector/setPredefinedSectors', keys)
         }
       })
+
       cvs.on('object:selected', (e) => {
         const target = e.target
         if (target.type === 'group') {
@@ -67,12 +88,14 @@
         var keys = this.$store.getters.GET_USED_SECTORS
         this.$store.dispatch('fabricInspector/setPredefinedSectors', keys)
       })
+
       cvs.on('selection:cleared', () => {
         this.$store.dispatch('updateActiveObj')
         this.$store.dispatch('fabricInspector/updateInfo', this.$store.getters.GET_ACTIVEOBJ)
         var keys = this.$store.getters.GET_USED_SECTORS
         this.$store.dispatch('fabricInspector/setPredefinedSectors', keys)
       })
+
       cvs.on('object:moving', (e) => {
         if (this.$store.getters.GET_GRIDMODE) {
           let size = this.$store.getters.GET_GRIDSIZE
@@ -83,9 +106,6 @@
         }
       })
 
-      /* cvs.on('canvas:cleared', () => {
-        this.$store.dispatch('setCanvas', cvs)
-      }) */
       this.$store.dispatch('setCanvas', cvs)
     }
   }

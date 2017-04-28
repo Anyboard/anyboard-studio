@@ -38,6 +38,9 @@ export default {
     },
     UPLOAD_CODE (state, code) {
       state.blocklyState = code
+    },
+    LOG_CODE (state) {
+      console.log(Blockly.JavaScript.workspaceToCode(state.workspace))
     }
   },
   getters: {
@@ -58,10 +61,7 @@ export default {
       console.log(sectorObject)
       var sectorNames = toMatrix(Object.keys(sectorObject), 1)  // used tilesnames for dropdown
 
-      var tokenVal = {
-        'Dragon': ['vibrate'],
-        'Knight': ['led']
-      }
+      let tokenVal = rootGetters['token/GET_SAVEDTOKENS']
 
       var TOKENS = toMatrix(Object.keys(tokenVal), 1)
       blocklyInit(Blockly, TOKENS, sectorObject, sectorNames, tokenVal)
@@ -107,6 +107,9 @@ export default {
       const textToDom = Blockly.Xml.textToDom(code)
       Blockly.Xml.domToWorkspace(textToDom, Blockly.mainWorkspace)
       Blockly.mainWorkspace.render()
+    },
+    logCode ({commit}) {
+      commit('LOG_CODE')
     }
   }
 }

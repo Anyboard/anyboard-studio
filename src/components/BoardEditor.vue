@@ -149,7 +149,7 @@
 /**
 * TOOLBAR
 */
-$icon-size: 50px;
+$icon-size: 45px;
 
 .fabric_toolbar {
   font-size:2em;
