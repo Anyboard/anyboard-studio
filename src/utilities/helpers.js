@@ -289,7 +289,7 @@ export const makeZip = function (blob) {
       drivers.file('discovery.evothings.bluetooth.js', gameFile)
     })
 
-  getFile('https://raw.githubusercontent.com/simonem/anyboard/master/games/demo-anyPawn/drivers/rfduino.evothings.bluetooth.js',
+  getFile('https://raw.githubusercontent.com/simonem/anyboard/firmwareWork/games/demo-anyPawn/drivers/rfduino.evothings.bluetooth.js',
     function (gameFile) {
       drivers.file('rfduino.evothings.bluetooth.js', gameFile)
     })

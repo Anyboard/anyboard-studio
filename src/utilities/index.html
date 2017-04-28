@@ -257,7 +257,7 @@
         };
 
         if(app.tokenVal.hasOwnProperty(token.id)) {
-          if (!(app.tokenVal[token.id].includes('matrix'))) {
+          if (!(app.tokenVal[token.id].includes('displayPattern'))) {
             token.displayPattern(pattern,
               completedFunction,  // function to be executed when token signals
               errorCallback  // function to be executed in case of failure to send command to token
@@ -271,7 +271,7 @@
         }
       },
 
-      sendMatrixTextCmd: function (token, text, time) {
+      sendDisplayTextCmd: function (token, text) {
 
         var completedFunction = function (data) {
           hyper.log("We happily send the MATRIXTEXT command");
@@ -284,14 +284,14 @@
         };
 
         if(app.tokenVal.hasOwnProperty(token.id)) {
-          if (!(app.tokenVal[token.id].includes('matrixText'))) {
-            token.matrixText(text, time,
+          if (!(app.tokenVal[token.id].includes('displayText'))) {
+            token.displayText(text, time,
               completedFunction,  // function to be executed when token signals
               errorCallback  // function to be executed in case of failure to send command to token
             );
           }
         } else {
-          token.matrixText(text, time,
+          token.displayText(text,
             completedFunction,  // function to be executed when token signals
             errorCallback  // function to be executed in case of failure to send command to token
           );
