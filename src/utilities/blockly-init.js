@@ -605,6 +605,12 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
     var code = 'app.sendVibrationCmd(' + token + ');\n'
     return code
   }
+  Blockly.JavaScript['vibrate_pattern'] = function (block) {
+    var token = Blockly.JavaScript.valueToCode(block, 'TOKEN', Blockly.JavaScript.ORDER_FUNCTION_CALL)
+    var pattern = block.getFieldValue('PATTERN')
+    var code = 'app.sendVibrationPatternCmd(' + token + ', ' + pattern + ');\n'
+    return code
+  }
   Blockly.JavaScript['led_on'] = function (block) {
     var token = Blockly.JavaScript.valueToCode(block, 'TOKEN', Blockly.JavaScript.ORDER_FUNCTION_CALL)
     var color = block.getFieldValue('COLOR')
