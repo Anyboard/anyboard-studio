@@ -864,6 +864,7 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
     // output += Blockly.JavaScript.writeDictionary('tiles', tilesdict)
     output += 'sectorVals: ' + Blockly.JavaScript.writeList(sectorVals) + ',\n\n'
     output += Blockly.JavaScript.writeListDictionary('tokenVal', tokenVal)
+    output += 'requiredPlayers: [null, null],\n'
     output += 'initiate: function() {\n\n'
     output += code
     if (!Blockly.JavaScript.hasMoveBlock) {
