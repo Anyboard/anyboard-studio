@@ -35,8 +35,8 @@
         <input @change="changeGridSize" type="range" v-model="gridSize" min="25" max="100"/>
         <a class="inactivelink">{{gridSize}}</a>
       </collapse-item>
-      <collapse-item title="Sectorlist">
-        <p v-for="sector in sectors">{{sector}}</p>
+      <collapse-item title="Sectorlist" class="sector_list">
+        <p v-for="(sector, key) in sectors">{{key}} <span :style="'background-color:' + sector"></span> {{sector}}</p>
       </collapse-item>
 
     </collapse>
@@ -169,5 +169,10 @@
   }
   .faux-border {
     transform: translate(-15%, -25%)!important;
+  }
+
+  .sector_list p > span {
+    display:inline-block;
+    padding:5px;
   }
 </style>

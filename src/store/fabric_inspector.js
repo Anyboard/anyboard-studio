@@ -4,15 +4,11 @@
 
 export default {
   namespaced: true,
-  state: {sectors: [], activeColor: '', height: 'Height: ', width: 'Width: ', type: 'Type: ', fill: 'Color: ', name: 'Name: ', stroke: 'Stroke: ', strokedasharray: 'StrokeDashArray: ', strokewidth: 'StrokeWidth: ', minwidth: 'MinWidth: ', minheight: 'MinHeight'},
+  state: {sectors: {}, activeColor: '', height: 'Height: ', width: 'Width: ', type: 'Type: ', fill: 'Color: ', name: 'Name: ', stroke: 'Stroke: ', strokedasharray: 'StrokeDashArray: ', strokewidth: 'StrokeWidth: ', minwidth: 'MinWidth: ', minheight: 'MinHeight'},
   mutations: {
     SET_PREDEFINED_SECTORS (state, payload) {
-      state.sectors = []
-      for (var key in payload) {
-        state.sectors.push(key + payload[key])
-      }
+      state.sectors = payload
     },
-
     SET_HEIGHT (state, payload) {
       state.height = payload
     },
