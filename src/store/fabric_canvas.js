@@ -385,6 +385,7 @@ export default {
 
     // Sector creation
     createShape ({commit, state}, type) {
+      console.log(type)
       switch (type) {
         case 'rect':
           commit('CREATE_RECT', state.sectorColor.toUpperCase())

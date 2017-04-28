@@ -36,8 +36,14 @@
         <a class="inactivelink">{{gridSize}}</a>
       </collapse-item>
       <collapse-item title="Sectorlist" class="sector_list">
-        <p v-for="(sector, key) in sectors">{{key}} <span :style="'background-color:' + sector"></span> {{sector}}<button type="button" id="circle" @click?>Create circle</button>
-          <button type="button" id="rectangle" @click?>Create rectangle</button><button type="button" id="triangle" @click?>Create triangle</button></p>
+        <p v-for="(sector, key) in sectors" @click="test(key)" :class="clicked === key ? 'is_clicked' : ''">
+          {{key}} <span :style="'background-color:' + sector"></span> {{sector}}
+          <span class="dropdown">
+            <a @click="makeShape('rect',sector)">Make a rectangle</a>
+            <a @click="makeShape('circle',sector)">Make a circle</a>
+            <a @click="makeShape('triangle',sector)">Make a triangle</a>
+          </span>
+        </p>
       </collapse-item>
 
     </collapse>
@@ -46,7 +52,7 @@
 
 
 <script>
-  import {mapState} from 'vuex'
+  import {mapState, mapActions} from 'vuex'
   import {choiceColor} from 'vue-circle-choice'
 
   const colorArray = [
@@ -76,7 +82,8 @@
         colors: colorArray,
         index: 0,
         color: colorArray[0],
-        gridSize: 50
+        gridSize: 50,
+        clicked: false
       }
     },
     computed: {
@@ -90,9 +97,26 @@
       ...mapState('fabricInspector', {strokeWidth: state => state.strokewidth}),
       ...mapState('fabricInspector', {minWidth: state => state.minwidth}),
       ...mapState('fabricInspector', {minHeight: state => state.minheight}),
-      ...mapState('fabricInspector', {sectors: state => state.sectors})
+      ...mapState('fabricInspector', {sectors: state => state.sectors}),
+
+      ...mapActions(['createShape', 'updateColor'])
+    },
+
+    selected: {
+      currentColor: ''
     },
     methods: {
+      test (something) {
+        this.clicked = something
+        console.log(something)
+      },
+
+      makeShape (type, color) {
+        console.log(type)
+        console.log(color)
+        this.$store.dispatch('updateColor', color)
+        this.$store.dispatch('createShape', type)
+      },
 
       // createIt () {
       //  this.$store.dispatch('CreateFromSectorList', state)
@@ -176,8 +200,25 @@
     transform: translate(-15%, -25%)!important;
   }
 
+  .sector_list p {
+    position: relative;
+  }
   .sector_list p > span {
     display:inline-block;
     padding:5px;
+  }
+
+  .sector_list p .dropdown {
+    position: absolute;
+    display:none;
+    left:-100%;
+    top:0;
+    width:50px;
+    height:50px;
+    background:#fff;
+  }
+
+  .sector_list p.is_clicked .dropdown {
+    display: block;
   }
 </style>
