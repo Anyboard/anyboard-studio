@@ -36,10 +36,7 @@
         <a class="inactivelink">{{gridSize}}</a>
       </collapse-item>
       <collapse-item title="Sectorlist">
-        <a @click="setPredefinedSectors">Click here to update</a>
-        <p>{{start_sector}}</p>
-        <p>{{mid_sector}}</p>
-        <p>{{end_sector}}</p>
+        <p v-for="sector in sectors">{{sector}}</p>
       </collapse-item>
 
     </collapse>
@@ -92,9 +89,7 @@
       ...mapState('fabricInspector', {strokeWidth: state => state.strokewidth}),
       ...mapState('fabricInspector', {minWidth: state => state.minwidth}),
       ...mapState('fabricInspector', {minHeight: state => state.minheight}),
-      ...mapState('fabricInspector', {start_sector: state => state.start_sector}),
-      ...mapState('fabricInspector', {mid_sector: state => state.mid_sector}),
-      ...mapState('fabricInspector', {end_sector: state => state.end_sector})
+      ...mapState('fabricInspector', {sectors: state => state.sectors})
     },
     methods: {
       renameSector2 () {
@@ -116,9 +111,6 @@
         this.$store.dispatch('stateHandling')
         var keys = this.$store.getters.GET_USED_SECTORS
         this.$store.dispatch('fabricInspector/setPredefinedSectors', keys)
-      },
-      setPredefinedSectors () {
-
       },
 
       changeGridSize () {
