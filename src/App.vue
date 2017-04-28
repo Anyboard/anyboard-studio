@@ -32,7 +32,6 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  height: 100vh;
 }
 
 #wrapper {
@@ -41,17 +40,17 @@ export default {
   align-items: flex-start;
   align-content: stretch;
   font-size:11pt;
-  overflow:hidden;
-  padding:5em 2em;
+  padding:3em .5em;
   height:100%;
   min-height: 100%;
+  height: auto !important;
   justify-content: center;
 
   a { color:#f50; }
   a:hover { border-bottom:1px dotted currentColor; }
   p { margin-bottom:1em; }
   > * {
-    margin:1em;
+    margin:2px;
   }
 }
 
@@ -66,6 +65,7 @@ export default {
   border-bottom:1px solid #000;
   text-align: center;
   box-shadow:1em 0 1em #000;
+  z-index: 100;
 
   span {
     flex-grow: 1;
