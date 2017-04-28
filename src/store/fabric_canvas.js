@@ -34,11 +34,11 @@ export default {
     },
 
     // Creating Sectors
-    CREATE_RECT (state) {
+    CREATE_RECT (state, color) {
       const rect = new F.Rect({
         width: 200,
         height: 200,
-        fill: state.sectorColor,
+        fill: color,
         stroke: '#FFD445',
         strokeDashArray: [15, 3],
         strokeWidth: 7,
@@ -51,9 +51,9 @@ export default {
       state.canvas.add(rect).setActiveObject(rect)
     },
 
-    CREATE_POLYGON (state, sides) {
+    CREATE_POLYGON (state, sides, color) {
       const poly = new F.Polygon(createPolyPoints(sides, 100), {
-        fill: state.sectorColor,
+        fill: color,
         stroke: '#FFD445',
         strokeDashArray: [15, 3],
         strokeWidth: 7,
@@ -65,10 +65,10 @@ export default {
       state.canvas.add(poly).setActiveObject(poly)
     },
 
-    CREATE_CIRCLE (state) {
+    CREATE_CIRCLE (state, color) {
       const circ = new F.Circle({
         radius: state.minWidth / 2,
-        fill: state.sectorColor,
+        fill: color,
         stroke: '#FFD445',
         strokeDashArray: [15, 3],
         strokeWidth: 7,
@@ -384,16 +384,16 @@ export default {
     },
 
     // Sector creation
-    createShape ({commit}, type) {
+    createShape ({commit, state}, type) {
       switch (type) {
         case 'rect':
-          commit('CREATE_RECT')
+          commit('CREATE_RECT', state.sectorColor.toUpperCase())
           break
         case 'triangle':
-          commit('CREATE_POLYGON', 3)
+          commit('CREATE_POLYGON', 3, state.sectorColor.toUpperCase())
           break
         case 'circle':
-          commit('CREATE_CIRCLE')
+          commit('CREATE_CIRCLE', state.sectorColor.toUpperCase())
           break
       }
     },
