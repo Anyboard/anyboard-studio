@@ -24,7 +24,7 @@ export default {
       state.grid = grid
     },
     PUSH_TO_SAVEDGRIDS (state, payload) {
-      if (payload.length) {
+      if (payload.length === 64) {
         state.savedGrids[payload.name] = binaryToHex(payload.str)
       }
     }
