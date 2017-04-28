@@ -58,10 +58,7 @@ export default {
       console.log(sectorObject)
       var sectorNames = toMatrix(Object.keys(sectorObject), 1)  // used tilesnames for dropdown
 
-      var tokenVal = {
-        'Dragon': ['vibrate'],
-        'Knight': ['led']
-      }
+      let tokenVal = rootGetters['token/GET_SAVEDTOKENS']
 
       var TOKENS = toMatrix(Object.keys(tokenVal), 1)
       blocklyInit(Blockly, TOKENS, sectorObject, sectorNames, tokenVal)

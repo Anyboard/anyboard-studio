@@ -18,8 +18,7 @@ export default {
     gridActive: true,
     gridAdded: false,
     gridSize: 50,
-    printableBoard: null,
-    fuckMeInTheAss: null
+    printableBoard: null
   },
 
   mutations: {

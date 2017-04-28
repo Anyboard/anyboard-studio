@@ -32,7 +32,6 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  height: 100vh;
 }
 
 #wrapper {
@@ -41,10 +40,10 @@ export default {
   align-items: flex-start;
   align-content: stretch;
   font-size:11pt;
-  overflow:hidden;
   padding:5em 2em;
   height:100%;
   min-height: 100%;
+  height: auto !important;
   justify-content: center;
 
   a { color:#f50; }
