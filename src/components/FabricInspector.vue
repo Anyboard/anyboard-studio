@@ -36,7 +36,8 @@
         <a class="inactivelink">{{gridSize}}</a>
       </collapse-item>
       <collapse-item title="Sectorlist" class="sector_list">
-        <p v-for="(sector, key) in sectors">{{key}} <span :style="'background-color:' + sector"></span> {{sector}}</p>
+        <p v-for="(sector, key) in sectors">{{key}} <span :style="'background-color:' + sector"></span> {{sector}}<button type="button" id="circle" @click?>Create circle</button>
+          <button type="button" id="rectangle" @click?>Create rectangle</button><button type="button" id="triangle" @click?>Create triangle</button></p>
       </collapse-item>
 
     </collapse>
@@ -92,6 +93,10 @@
       ...mapState('fabricInspector', {sectors: state => state.sectors})
     },
     methods: {
+
+      // createIt () {
+      //  this.$store.dispatch('CreateFromSectorList', state)
+    // },
       renameSector2 () {
         let sname = this.sectorname
         if (this.$store.getters.GET_ACTIVEOBJ !== null) {

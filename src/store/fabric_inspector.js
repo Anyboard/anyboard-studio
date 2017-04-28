@@ -44,6 +44,11 @@ export default {
     }
   },
   actions: {
+
+    // createFromSectorList ({commit}, state) {
+    //   state.currentColor
+    // },
+
     setPredefinedSectors ({commit}, keys) {
       commit('SET_PREDEFINED_SECTORS', keys)
     },
