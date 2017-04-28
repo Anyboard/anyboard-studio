@@ -148,6 +148,25 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
       this.setHelpUrl('')
     }
   }
+  Blockly.Blocks['led_blink'] = {
+    init: function () {
+      this.appendValueInput('TOKEN')
+          .setCheck('Token')
+          .appendField('Blink the light on')
+      this.appendValueInput('TIME')
+          .setCheck('Number')
+          .appendField(new Blockly.FieldDropdown([['fast', 'FAST'], ['slow', 'SLOW']]), 'SPEED')
+         .appendField('for')
+      this.appendDummyInput()
+          .appendField('seconds')
+      this.setInputsInline(true)
+      this.setPreviousStatement(true, null)
+      this.setNextStatement(true, null)
+      this.setColour(255)
+      this.setTooltip('')
+      this.setHelpUrl('')
+    }
+  }
   Blockly.Blocks['tap'] = {
     init: function () {
       this.appendDummyInput()
@@ -239,12 +258,6 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
           .setCheck('Token')
           .setAlign(Blockly.ALIGN_CENTRE)
           .appendField('On')
-      this.appendValueInput('TIME')
-          .setCheck('Number')
-          .setAlign(Blockly.ALIGN_CENTRE)
-          .appendField('For')
-      this.appendDummyInput()
-        .appendField('Seconds')
       this.setInputsInline(true)
       this.setPreviousStatement(true, null)
       this.setNextStatement(true, null)
@@ -323,7 +336,7 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
   Blockly.Blocks['random_grid'] = {
     init: function () {
       this.appendDummyInput()
-          .appendField('Random Grid')
+          .appendField('Random Pattern')
       this.setOutput(true, 'Grid')
       this.setColour(120)
       this.setTooltip('')
@@ -485,22 +498,22 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
     }
   }
   Blockly.JavaScript['grid'] = function (block) {
-    var dropdownGrid = block.getFieldValue('GRID')
-    var code = dropdownGrid
+    // var dropdownGrid = block.getFieldValue('GRID')
+    var code = '[0x00, 0x24, 0x24, 0x24, 0, 0x42, 0x3C, 0]'
     return [code, Blockly.JavaScript.ORDER_MEMBER]
   }
   Blockly.JavaScript['show_grid'] = function (block) {
     var grid = Blockly.JavaScript.valueToCode(block, 'GRID', Blockly.JavaScript.ORDER_COMMA)
     var token = Blockly.JavaScript.valueToCode(block, 'TOKEN', Blockly.JavaScript.ORDER_COMMA)
-    var time = Blockly.JavaScript.valueToCode(block, 'TIME', Blockly.JavaScript.ORDER_COMMA)
-    var code = 'app.sendMatrixCmd(' + token + ', ' + grid + ', ' + time + ');\n'
+    var code = 'app.sendDisplayPatternCmd(' + token + ', ' + grid + ');\n'
     return code
   }
   Blockly.JavaScript['show_grid_text'] = function (block) {
     var string = Blockly.JavaScript.valueToCode(block, 'TEXT', Blockly.JavaScript.ORDER_COMMA)
     var token = Blockly.JavaScript.valueToCode(block, 'TOKEN', Blockly.JavaScript.ORDER_COMMA)
     var time = Blockly.JavaScript.valueToCode(block, 'TIME', Blockly.JavaScript.ORDER_COMMA)
-    var code = 'app.sendMatrixTextCmd(' + token + ', ' + string + ', ' + time + ');\n'
+    var seconds = time * 1000
+    var code = 'app.sendMatrixTextCmd(' + token + ', ' + string + ', ' + seconds + ');\n'
     return code
   }
   Blockly.JavaScript['show_grid_count'] = function (block) {
@@ -508,7 +521,8 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
     var time = Blockly.JavaScript.valueToCode(block, 'TIME', Blockly.JavaScript.ORDER_COMMA)
     var start = Blockly.JavaScript.valueToCode(block, 'START', Blockly.JavaScript.ORDER_COMMA)
     var stop = Blockly.JavaScript.valueToCode(block, 'STOP', Blockly.JavaScript.ORDER_COMMA)
-    var code = 'app.sendCountCmd(' + token + ', ' + start + ', ' + stop + ', ' + time + ');\n'
+    var seconds = time * 1000
+    var code = 'app.sendCountCmd(' + token + ', ' + start + ', ' + stop + ', ' + seconds + ');\n'
     return code
   }
   Blockly.JavaScript['random_grid'] = function (block) {
@@ -585,6 +599,20 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
   Blockly.JavaScript['led_off'] = function (block) {
     var token = Blockly.JavaScript.valueToCode(block, 'TOKEN', Blockly.JavaScript.ORDER_FUNCTION_CALL)
     var code = 'app.sendLedOnCmd(' + token + ', [0, 0, 0]);\n'
+    return code
+  }
+  Blockly.JavaScript['led_blink'] = function (block) {
+    var token = Blockly.JavaScript.valueToCode(block, 'TOKEN', Blockly.JavaScript.ORDER_FUNCTION_CALL)
+    var time = Blockly.JavaScript.valueToCode(block, 'TIME', Blockly.JavaScript.ORDER_COMMA)
+    var seconds = time * 1000
+    var speed = block.getFieldValue('SPEED')
+    var period = 1000
+    if (speed === 'fast') {
+      period = 50
+    } else if (speed === 'slow') {
+      period = 100
+    }
+    var code = 'app.sendLedBlinkCmd(' + token + ', ' + seconds + ', ' + period + ');\n'
     return code
   }
   Blockly.JavaScript['move'] = function (block) {
