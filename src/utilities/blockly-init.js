@@ -155,7 +155,7 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
           .appendField('Blink the light on')
       this.appendValueInput('TIME')
           .setCheck('Number')
-          .appendField(new Blockly.FieldDropdown([['fast', 'FAST'], ['slow', 'SLOW']]), 'SPEED')
+          .appendField(new Blockly.FieldDropdown([['very fast', 'XFAST'], ['fast', 'FAST'], ['slow', 'SLOW'], ['very slow', 'XSLOW']]), 'SPEED')
          .appendField('for')
       this.appendDummyInput()
           .appendField('seconds')
@@ -276,12 +276,6 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
           .setCheck('Token')
           .setAlign(Blockly.ALIGN_CENTRE)
           .appendField('On')
-      this.appendValueInput('TIME')
-          .setCheck('Number')
-          .setAlign(Blockly.ALIGN_CENTRE)
-          .appendField('For')
-      this.appendDummyInput()
-        .appendField('Seconds')
       this.setInputsInline(true)
       this.setPreviousStatement(true, null)
       this.setNextStatement(true, null)
@@ -511,9 +505,7 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
   Blockly.JavaScript['show_grid_text'] = function (block) {
     var string = Blockly.JavaScript.valueToCode(block, 'TEXT', Blockly.JavaScript.ORDER_COMMA)
     var token = Blockly.JavaScript.valueToCode(block, 'TOKEN', Blockly.JavaScript.ORDER_COMMA)
-    var time = Blockly.JavaScript.valueToCode(block, 'TIME', Blockly.JavaScript.ORDER_COMMA)
-    var seconds = time * 1000
-    var code = 'app.sendMatrixTextCmd(' + token + ', ' + string + ', ' + seconds + ');\n'
+    var code = 'app.sendMatrixTextCmd(' + token + ', ' + string + ');\n'
     return code
   }
   Blockly.JavaScript['show_grid_count'] = function (block) {
@@ -604,15 +596,18 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
   Blockly.JavaScript['led_blink'] = function (block) {
     var token = Blockly.JavaScript.valueToCode(block, 'TOKEN', Blockly.JavaScript.ORDER_FUNCTION_CALL)
     var time = Blockly.JavaScript.valueToCode(block, 'TIME', Blockly.JavaScript.ORDER_COMMA)
-    var seconds = time * 1000
     var speed = block.getFieldValue('SPEED')
-    var period = 1000
-    if (speed === 'fast') {
-      period = 50
-    } else if (speed === 'slow') {
-      period = 100
+    var period = 10
+    if (speed === 'XFAST') {
+      period = 10
+    } else if (speed === 'FAST') {
+      period = 20
+    } else if (speed === 'SLOW') {
+      period = 75
+    } else if (speed === 'XSLOW') {
+      period = 200
     }
-    var code = 'app.sendLedBlinkCmd(' + token + ', ' + seconds + ', ' + period + ');\n'
+    var code = 'app.sendLedBlinkCmd(' + token + ', ' + time + ', ' + period + ');\n'
     return code
   }
   Blockly.JavaScript['move'] = function (block) {
