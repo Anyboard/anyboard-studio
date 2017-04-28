@@ -114,6 +114,23 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
       this.setHelpUrl('')
     }
   }
+  Blockly.Blocks['led_on'] = {
+    init: function () {
+      this.appendValueInput('TOKEN')
+          .setCheck('Token')
+          .setAlign(Blockly.ALIGN_CENTRE)
+          .appendField('Change light color for')
+      this.appendDummyInput()
+          .appendField('To')
+          .appendField(new Blockly.FieldColour('#ff0000'), 'COLOR')
+      this.setInputsInline(true)
+      this.setPreviousStatement(true, null)
+      this.setNextStatement(true, null)
+      this.setColour(255)
+      this.setTooltip('')
+      this.setHelpUrl('')
+    }
+  }
   Blockly.Blocks['tap'] = {
     init: function () {
       this.appendDummyInput()
