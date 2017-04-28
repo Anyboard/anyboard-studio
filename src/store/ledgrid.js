@@ -2,6 +2,8 @@
  * Created by KristAN Angelica on 05-Apr-17.
  */
 
+import {binaryToHex} from '../utilities/helpers'
+
 export default {
   namespaced: true,
   state: {
@@ -22,7 +24,9 @@ export default {
       state.grid = grid
     },
     PUSH_TO_SAVEDGRIDS (state, payload) {
-      state.savedGrids[payload.name] = payload.str
+      if (payload.length) {
+        state.savedGrids[payload.name] = binaryToHex(payload.str)
+      }
     }
   },
   actions: {
