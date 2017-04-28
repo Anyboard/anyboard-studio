@@ -1,3 +1,5 @@
+import {colorHexToRGB} from './helpers.js'
+
 const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenVal) {
   console.log(Blockly)
   Blockly.Blocks['math_change'] = {
@@ -107,6 +109,23 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
       this.appendValueInput('TOKEN')
           .setCheck('Token')
           .appendField('Vibrate')
+      this.setPreviousStatement(true, null)
+      this.setNextStatement(true, null)
+      this.setColour(255)
+      this.setTooltip('')
+      this.setHelpUrl('')
+    }
+  }
+  Blockly.Blocks['led_on'] = {
+    init: function () {
+      this.appendValueInput('TOKEN')
+          .setCheck('Token')
+          .setAlign(Blockly.ALIGN_CENTRE)
+          .appendField('Change light color for')
+      this.appendDummyInput()
+          .appendField('To')
+          .appendField(new Blockly.FieldColour('#ff0000'), 'COLOR')
+      this.setInputsInline(true)
       this.setPreviousStatement(true, null)
       this.setNextStatement(true, null)
       this.setColour(255)
@@ -465,6 +484,13 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
   Blockly.JavaScript['vibrate'] = function (block) {
     var token = Blockly.JavaScript.valueToCode(block, 'TOKEN', Blockly.JavaScript.ORDER_FUNCTION_CALL)
     var code = 'app.sendVibrationCmd(' + token + ');\n'
+    return code
+  }
+  Blockly.JavaScript['led_on'] = function (block) {
+    var token = Blockly.JavaScript.valueToCode(block, 'TOKEN', Blockly.JavaScript.ORDER_FUNCTION_CALL)
+    var color = block.getFieldValue('COLOR')
+    var led = colorHexToRGB(color)
+    var code = 'app.sendLedOnCmd(' + token + ', [' + led + ']);\n'
     return code
   }
   Blockly.JavaScript['move'] = function (block) {
