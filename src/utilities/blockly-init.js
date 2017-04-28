@@ -1,6 +1,8 @@
 import {colorHexToRGB} from './helpers.js'
 
 const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenVal) {
+  Blockly.FieldColour.COLOURS = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ffffff']
+  Blockly.FieldColour.COLUMNS = 7
   console.log(Blockly)
   Blockly.Blocks['math_change'] = {
     init: function () {
@@ -125,6 +127,19 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
       this.appendDummyInput()
           .appendField('To')
           .appendField(new Blockly.FieldColour('#ff0000'), 'COLOR')
+      this.setInputsInline(true)
+      this.setPreviousStatement(true, null)
+      this.setNextStatement(true, null)
+      this.setColour(255)
+      this.setTooltip('')
+      this.setHelpUrl('')
+    }
+  }
+  Blockly.Blocks['led_off'] = {
+    init: function () {
+      this.appendValueInput('TOKEN')
+          .setCheck('Token')
+          .appendField('Turn light off for')
       this.setInputsInline(true)
       this.setPreviousStatement(true, null)
       this.setNextStatement(true, null)
@@ -491,6 +506,11 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
     var color = block.getFieldValue('COLOR')
     var led = colorHexToRGB(color)
     var code = 'app.sendLedOnCmd(' + token + ', [' + led + ']);\n'
+    return code
+  }
+  Blockly.JavaScript['led_off'] = function (block) {
+    var token = Blockly.JavaScript.valueToCode(block, 'TOKEN', Blockly.JavaScript.ORDER_FUNCTION_CALL)
+    var code = 'app.sendLedOnCmd(' + token + ', [0, 0, 0]);\n'
     return code
   }
   Blockly.JavaScript['move'] = function (block) {
