@@ -31,7 +31,6 @@
     $(document).ready(function(){
       $("#summary").show();
       $("#main").hide();
-      app.initiate();
     });
   </script>
 
@@ -316,6 +315,7 @@
 
       next_panel: function () {
         $("#summary").hide();
+        app.initiate();
       },
 
       getSector: function (token) {
