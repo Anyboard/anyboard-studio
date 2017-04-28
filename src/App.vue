@@ -40,7 +40,7 @@ export default {
   align-items: flex-start;
   align-content: stretch;
   font-size:11pt;
-  padding:5em 2em;
+  padding:3em .5em;
   height:100%;
   min-height: 100%;
   height: auto !important;
@@ -50,7 +50,7 @@ export default {
   a:hover { border-bottom:1px dotted currentColor; }
   p { margin-bottom:1em; }
   > * {
-    margin:1em;
+    margin:2px;
   }
 }
 
