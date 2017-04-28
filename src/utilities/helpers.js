@@ -101,21 +101,37 @@ export const insertIntoDict = function (dict, key, value) {
 }
 
 const colourDict = {
-  '#166CA0': 2,
   '#4194D0': 5,
+  '#166CA0': 2,
   '#112A95': 7,
   '#C047A3': 14,
-  '#FB50A6': 15,
   '#5E1014': 16,
   '#9B3235': 18,
-  '#FF483E': 20,
   '#66C889': 21,
   '#30A747': 24,
   '#31682E': 30,
   '#FF9344': 31,
   '#D96623': 33,
-  '#F6EA77': 36,
   '#F4E658': 37
+}
+
+const colourNames = {
+  '#4194D0': 'Light Blue',
+  '#166CA0': 'Blue',
+  '#112A95': 'Dark Blue',
+  '#C047A3': 'Purple',
+  '#5E1014': 'Dark Red',
+  '#9B3235': 'Red',
+  '#66C889': 'Light Green',
+  '#30A747': 'Green',
+  '#31682E': 'Dark Green',
+  '#FF9344': 'Orange',
+  '#D96623': 'Dark Orange',
+  '#F4E658': 'Yellow'
+}
+
+export const getColorName = function (color) {
+  return colourNames[color]
 }
 
 export const exportSectors = function (canvas) {
@@ -144,7 +160,7 @@ export const exportSectors = function (canvas) {
 }
 
 var sectorDict = {
-  'Start Sector': '#FB50A6',
+  'Start Sector': '#C047A3',
   'Mid Sector': '#F4E658',
   'End Sector': '#30A747'
 }
@@ -193,7 +209,7 @@ export const renameSameSector = function (obj, canvas) {
           obj['name'] = objs[i]['name']
           break
         } else {
-          obj['name'] = obj['fill']
+          obj['name'] = getColorName(obj['fill'])
         }
       }
     }
@@ -232,7 +248,7 @@ export const colorChange = function (canvas, sectorColor) {
   if (activeObj != null && (activeObj['type'] === 'rect' || activeObj['type'] === 'polygon' ||
     activeObj['type'] === 'circle')) {
     activeObj.set('fill', sectorColor.toUpperCase())
-    activeObj.set('name', activeObj.fill)
+    activeObj.set('name', getColorName(activeObj.fill))
     canvas.renderAll()
     renameSameSector(activeObj, canvas)
   } else if (activeObj != null && activeObj['type'] === 'path') {
@@ -256,7 +272,7 @@ export const makeZip = function (blob) {
   let zip = new JSZip()
   // dist folder
   let dist = zip.folder('dist')
-  getFile('https://raw.githubusercontent.com/simonem/anyboard/master/games/demo-anyDeck/dist/anyboard.js',
+  getFile('https://raw.githubusercontent.com/simonem/anyboard/firmwareWork/games/demo-anyPawn/dist/anyboard.js',
     function (gameFile) {
       dist.file('anyboard.js', gameFile)
     })
