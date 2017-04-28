@@ -34,6 +34,8 @@
 <style lang="SASS">
 .blockly-area, #blockly-wrapper {
   align-items: stretch;
+  height: 100vh!important;
+  width: 95vw!important;
 }
   div[role=treeitem]{
     cursor: pointer;

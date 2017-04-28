@@ -6,6 +6,7 @@
     <input @change="addCodeUpload"type="file" id="add" style="display: none"/>
     <a @click="loadCode" style="float:right">Load code</a>
     <input @change="loadCodeUpload"type="file" id="upload" style="display: none"/>
+    <a @click="logCode" style="float:right">Debug Log Code</a>
   </div>
 </template>
 
@@ -46,6 +47,9 @@
           this.$store.dispatch('blockly/loadCode', xmlObj)
         }
         document.getElementById('upload').value = ''
+      },
+      logCode () {
+        this.$store.dispatch('blockly/logCode')
       }
     }
   }

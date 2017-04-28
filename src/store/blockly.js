@@ -38,6 +38,9 @@ export default {
     },
     UPLOAD_CODE (state, code) {
       state.blocklyState = code
+    },
+    LOG_CODE (state) {
+      console.log(Blockly.JavaScript.workspaceToCode(state.workspace))
     }
   },
   getters: {
@@ -104,6 +107,9 @@ export default {
       const textToDom = Blockly.Xml.textToDom(code)
       Blockly.Xml.domToWorkspace(textToDom, Blockly.mainWorkspace)
       Blockly.mainWorkspace.render()
+    },
+    logCode ({commit}) {
+      commit('LOG_CODE')
     }
   }
 }
