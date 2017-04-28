@@ -239,6 +239,64 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
           .setCheck('Token')
           .setAlign(Blockly.ALIGN_CENTRE)
           .appendField('On')
+      this.appendValueInput('TIME')
+          .setCheck('Number')
+          .setAlign(Blockly.ALIGN_CENTRE)
+          .appendField('For')
+      this.appendDummyInput()
+        .appendField('Seconds')
+      this.setInputsInline(true)
+      this.setPreviousStatement(true, null)
+      this.setNextStatement(true, null)
+      this.setColour(120)
+      this.setTooltip('')
+      this.setHelpUrl('')
+    }
+  }
+  Blockly.Blocks['show_grid_text'] = {
+    init: function () {
+      this.appendValueInput('TEXT')
+          .setCheck('String')
+          .setAlign(Blockly.ALIGN_CENTRE)
+          .appendField('Show')
+      this.appendValueInput('TOKEN')
+          .setCheck('Token')
+          .setAlign(Blockly.ALIGN_CENTRE)
+          .appendField('On')
+      this.appendValueInput('TIME')
+          .setCheck('Number')
+          .setAlign(Blockly.ALIGN_CENTRE)
+          .appendField('For')
+      this.appendDummyInput()
+        .appendField('Seconds')
+      this.setInputsInline(true)
+      this.setPreviousStatement(true, null)
+      this.setNextStatement(true, null)
+      this.setColour(120)
+      this.setTooltip('')
+      this.setHelpUrl('')
+    }
+  }
+  Blockly.Blocks['show_grid_count'] = {
+    init: function () {
+      this.appendValueInput('TOKEN')
+          .setCheck('Token')
+          .setAlign(Blockly.ALIGN_CENTRE)
+          .appendField('Count On')
+      this.appendValueInput('START')
+          .setCheck('Number')
+          .setAlign(Blockly.ALIGN_CENTRE)
+          .appendField('From')
+      this.appendValueInput('STOP')
+          .setCheck('Number')
+          .setAlign(Blockly.ALIGN_CENTRE)
+          .appendField('To')
+      this.appendValueInput('TIME')
+          .setCheck('Number')
+          .setAlign(Blockly.ALIGN_CENTRE)
+          .appendField('With')
+      this.appendDummyInput()
+        .appendField('Seconds each number')
       this.setInputsInline(true)
       this.setPreviousStatement(true, null)
       this.setNextStatement(true, null)
@@ -434,7 +492,23 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
   Blockly.JavaScript['show_grid'] = function (block) {
     var grid = Blockly.JavaScript.valueToCode(block, 'GRID', Blockly.JavaScript.ORDER_COMMA)
     var token = Blockly.JavaScript.valueToCode(block, 'TOKEN', Blockly.JavaScript.ORDER_COMMA)
-    var code = 'app.show_grid(' + token + ', ' + grid + ');\n'
+    var time = Blockly.JavaScript.valueToCode(block, 'TIME', Blockly.JavaScript.ORDER_COMMA)
+    var code = 'app.sendMatrixCmd(' + token + ', ' + grid + ', ' + time + ');\n'
+    return code
+  }
+  Blockly.JavaScript['show_grid_text'] = function (block) {
+    var string = Blockly.JavaScript.valueToCode(block, 'TEXT', Blockly.JavaScript.ORDER_COMMA)
+    var token = Blockly.JavaScript.valueToCode(block, 'TOKEN', Blockly.JavaScript.ORDER_COMMA)
+    var time = Blockly.JavaScript.valueToCode(block, 'TIME', Blockly.JavaScript.ORDER_COMMA)
+    var code = 'app.sendMatrixTextCmd(' + token + ', ' + string + ', ' + time + ');\n'
+    return code
+  }
+  Blockly.JavaScript['show_grid_count'] = function (block) {
+    var token = Blockly.JavaScript.valueToCode(block, 'TOKEN', Blockly.JavaScript.ORDER_COMMA)
+    var time = Blockly.JavaScript.valueToCode(block, 'TIME', Blockly.JavaScript.ORDER_COMMA)
+    var start = Blockly.JavaScript.valueToCode(block, 'START', Blockly.JavaScript.ORDER_COMMA)
+    var stop = Blockly.JavaScript.valueToCode(block, 'STOP', Blockly.JavaScript.ORDER_COMMA)
+    var code = 'app.sendCountCmd(' + token + ', ' + start + ', ' + stop + ', ' + time + ');\n'
     return code
   }
   Blockly.JavaScript['random_grid'] = function (block) {
