@@ -22,20 +22,9 @@
       )
     },
 
-    methods: {
-      handleResize () {
-        this.fullHeight = document.documentElement.clientHeight
-        this.fullWidth = document.documentElement.clientWidth
-      }
-    },
-
     beforeMount () {
-      this.fullHeight = document.documentElement.clientHeight
       this.fullWidth = document.documentElement.clientWidth
-    },
-
-    ready () {
-      window.addEventListener('resize', this.handleResize)
+      this.fullHeight = document.documentElement.clientHeight
     },
 
     mounted () {

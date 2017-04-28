@@ -2,7 +2,7 @@ import {fabric as F} from 'fabric'
 import FileSaver from 'file-saver'
 // import createObjectURL from 'create-object-url'
 import {createPolyPoints, dataURLtoBlob, layerify, exportSectors, updateSectorList,
-        renameSameSector, colorChange, renameSector, checkIfSameName} from '../utilities/helpers.js'
+        renameSameSector, colorChange, renameSector, checkIfSameName, getColorName} from '../utilities/helpers.js'
 
 export default {
   state: {
@@ -44,21 +44,22 @@ export default {
         strokeWidth: 7,
         minHeight: state.minHeight,
         minWidth: state.minWidth,
-        name: state.sectorColor
+        name: getColorName(color)
       })
       layerify(state.canvas)
       renameSameSector(rect, state.canvas)
       state.canvas.add(rect).setActiveObject(rect)
     },
 
-    CREATE_POLYGON (state, sides, color) {
-      const poly = new F.Polygon(createPolyPoints(sides, 100), {
-        fill: color,
+    CREATE_POLYGON (state, properties) {
+      const poly = new F.Polygon(createPolyPoints(properties.sides, 100), {
+        fill: properties.color,
         stroke: '#FFD445',
         strokeDashArray: [15, 3],
         strokeWidth: 7,
         minHeight: state.minHeight,
-        minWidth: state.minWidth
+        minWidth: state.minWidth,
+        name: getColorName(properties.color)
       })
       layerify(state.canvas)
       renameSameSector(poly, state.canvas)
@@ -74,7 +75,7 @@ export default {
         strokeWidth: 7,
         minHeight: state.minHeight,
         minWidth: state.minWidth,
-        name: state.sectorColor
+        name: getColorName(color)
       })
       layerify(state.canvas)
       renameSameSector(circ, state.canvas)
@@ -391,7 +392,7 @@ export default {
           commit('CREATE_RECT', state.sectorColor.toUpperCase())
           break
         case 'triangle':
-          commit('CREATE_POLYGON', 3, state.sectorColor.toUpperCase())
+          commit('CREATE_POLYGON', {color: state.sectorColor.toUpperCase(), sides: 3})
           break
         case 'circle':
           commit('CREATE_CIRCLE', state.sectorColor.toUpperCase())
