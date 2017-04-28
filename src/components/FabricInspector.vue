@@ -111,7 +111,7 @@
       makeShape (type, color) {
         console.log(type)
         console.log(color)
-        this.$store.dispatch('updateColor', color)
+        this.$store.dispatch('updateColorSectorList', color)
         this.$store.dispatch('createShape', type)
       },
 

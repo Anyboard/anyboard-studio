@@ -225,6 +225,7 @@ export default {
     // Exporting
     UPDATE_ACTIVEOBJ (state) {
       const obj = state.canvas.getActiveObject()
+      state.activeObj = null
       if (obj !== null && typeof obj !== 'undefined') {
         state.activeObj = obj.toObject(['name', 'pathName', 'minWidth', 'minHeight'])
       } else {
@@ -408,6 +409,10 @@ export default {
         dispatch('changeColor')
       }
       commit('CHANGE_DRAW_COLOR', color)
+    },
+
+    updateColorSectorList ({commit}, color) {
+      commit('UPDATE_COLOR', color)
     },
 
     renameSector ({commit}, name) {
