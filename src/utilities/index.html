@@ -186,7 +186,7 @@
             );
           }
         } else {
-          token.vibrate(ledArray,
+          token.ledOn(ledArray,
             completedFunction,  // function to be executed when token signals
             errorCallback  // function to be executed in case of failure to send command to token
           );
@@ -216,7 +216,7 @@
             );
           }
         } else {
-          token.vibrate(time, frequency,
+          token.ledBlink(time, frequency,
             completedFunction,  // function to be executed when token signals
             errorCallback  // function to be executed in case of failure to send command to token
           );
