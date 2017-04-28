@@ -105,19 +105,16 @@
       // Feedback commands
       sendVibrationCmd: function (token) {
 
-        // Function to be executed when LED is successfully turned on
         var completedFunction = function (data) {
           hyper.log("We happily send the VIBRATE command");
           hyper.log(data)
         };
 
-        // Function to be executed upon failure of LED
         var errorCallback = function (errorMsg) {
           hyper.log("Failed to send the VIBRATE command");
           hyper.log(errorMsg);
         };
 
-        // Turns on token led.
         if(app.tokenVal.hasOwnProperty(token.id)) {
           if (!(app.tokenVal[token.id].includes('vibrate'))) {
             token.vibrate([100],
@@ -135,28 +132,25 @@
 
       sendVibrationPatternCmd: function (token, pattern) {
 
-        // Function to be executed when LED is successfully turned on
         var completedFunction = function (data) {
           hyper.log("We happily send the VIBRATEPATTERN command");
           hyper.log(data)
         };
 
-        // Function to be executed upon failure of LED
         var errorCallback = function (errorMsg) {
           hyper.log("Failed to send the VIBRATEPATTERN command");
           hyper.log(errorMsg);
         };
 
-        // Turns on token led.
         if(app.tokenVal.hasOwnProperty(token.id)) {
           if (!(app.tokenVal[token.id].includes('vibratePattern'))) {
-            token.vibratePattern([100],
+            token.vibratePattern(pattern,
               completedFunction,  // function to be executed when token signals
               errorCallback  // function to be executed in case of failure to send command to token
             );
           }
         } else {
-          token.vibratePattern([100],
+          token.vibratePattern(pattern,
             completedFunction,  // function to be executed when token signals
             errorCallback  // function to be executed in case of failure to send command to token
           );
@@ -165,19 +159,16 @@
 
       sendLedOnCmd: function (token, ledArray) {
 
-        // Function to be executed when LED is successfully turned on
         var completedFunction = function (data) {
           hyper.log("We happily send the LEDON command");
           hyper.log(data)
         };
 
-        // Function to be executed upon failure of LED
         var errorCallback = function (errorMsg) {
           hyper.log("Failed to send the LEDON command");
           hyper.log(errorMsg);
         };
 
-        // Turns on token led.
         if(app.tokenVal.hasOwnProperty(token.id)) {
           if (!(app.tokenVal[token.id].includes('ledon'))) {
             token.ledOn(ledArray,
@@ -186,7 +177,7 @@
             );
           }
         } else {
-          token.vibrate(ledArray,
+          token.ledOn(ledArray,
             completedFunction,  // function to be executed when token signals
             errorCallback  // function to be executed in case of failure to send command to token
           );
@@ -195,19 +186,16 @@
 
       sendLedBlinkCmd: function (token, time, frequency) {
 
-        // Function to be executed when LED is successfully turned on
         var completedFunction = function (data) {
           hyper.log("We happily send the LEDBLINK command");
           hyper.log(data)
         };
 
-        // Function to be executed upon failure of LED
         var errorCallback = function (errorMsg) {
           hyper.log("Failed to send the LEDBLINK command");
           hyper.log(errorMsg);
         };
 
-        // Turns on token led.
         if(app.tokenVal.hasOwnProperty(token.id)) {
           if (!(app.tokenVal[token.id].includes('ledblink'))) {
             token.ledBlink(time, frequency,
@@ -216,7 +204,7 @@
             );
           }
         } else {
-          token.vibrate(time, frequency,
+          token.ledBlink(time, frequency,
             completedFunction,  // function to be executed when token signals
             errorCallback  // function to be executed in case of failure to send command to token
           );
@@ -225,19 +213,16 @@
 
       sendMatrixCmd: function (token, grid, time) {
 
-        // Function to be executed when LED is successfully turned on
         var completedFunction = function (data) {
           hyper.log("We happily send the MATRIX command");
           hyper.log(data)
         };
 
-        // Function to be executed upon failure of LED
         var errorCallback = function (errorMsg) {
           hyper.log("Failed to send the MATRIX command");
           hyper.log(errorMsg);
         };
 
-        // Turns on token led.
         if(app.tokenVal.hasOwnProperty(token.id)) {
           if (!(app.tokenVal[token.id].includes('matrix'))) {
             token.matrix(grid, time,
@@ -255,19 +240,16 @@
 
       sendMatrixTextCmd: function (token, text, time) {
 
-        // Function to be executed when LED is successfully turned on
         var completedFunction = function (data) {
           hyper.log("We happily send the MATRIXTEXT command");
           hyper.log(data)
         };
 
-        // Function to be executed upon failure of LED
         var errorCallback = function (errorMsg) {
           hyper.log("Failed to send the MATRIXTEXT command");
           hyper.log(errorMsg);
         };
 
-        // Turns on token led.
         if(app.tokenVal.hasOwnProperty(token.id)) {
           if (!(app.tokenVal[token.id].includes('matrixText'))) {
             token.matrixText(text, time,
@@ -285,19 +267,16 @@
 
       sendCountCmd: function (token, num1, num2, time) {
 
-        // Function to be executed when LED is successfully turned on
         var completedFunction = function (data) {
           hyper.log("We happily send the COUNT command");
           hyper.log(data)
         };
 
-        // Function to be executed upon failure of LED
         var errorCallback = function (errorMsg) {
           hyper.log("Failed to send the COUNT command");
           hyper.log(errorMsg);
         };
 
-        // Turns on token led.
         if(app.tokenVal.hasOwnProperty(token.id)) {
           if (!(app.tokenVal[token.id].includes('count'))) {
             token.count(num1, num2, time,
