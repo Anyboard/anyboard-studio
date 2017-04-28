@@ -40,6 +40,7 @@
       currentColor: "some value",
       devices: {},
       currentTile: "white",
+      requiredPlayers: [null, null],
 
       //REPLACEMEOKAY//
 
@@ -70,7 +71,10 @@
           // Add listener to be executed if the token connects
           token.on('connect', function () {
             document.getElementById(token.name).className = 'green';
-            $('#next').show()
+            if (app.requiredPlayers[0] === null || ((Object.keys(app.devices).length >= app.requiredPlayers[0])
+              && (Object.keys(app.devices).length <= app.requiredPlayers[1]))) {
+              $('#next').show()
+            }
             //$("#token_feedback").append('<button type="button" onclick="app.verifyColor(' + "'" + token.name + "'" + ')"class="indicator3"> Verify color</button><br />');
           });
 

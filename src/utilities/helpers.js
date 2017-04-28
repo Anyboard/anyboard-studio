@@ -128,7 +128,7 @@ export const exportSectors = function (canvas) {
   // Loops through all sectors and adds unique to a list
   for (var i = 0, l = sectors.length; i < l; ++i) {
     if (!unique.hasOwnProperty(sectors[i]['fill'])) {
-      // Makes sure only rectangles or hexagons get added
+      // Makes sure only sectors get added
       // May want to give all sectors a unique property to allow for more sector types in the future
       if (sectors[i]['type'] === 'rect' || sectors[i]['type'] === 'polygon' || sectors[i]['type'] === 'circle') {
         str = sectors[i]['name']
@@ -259,7 +259,6 @@ export const makeZip = function (blob) {
   getFile('https://raw.githubusercontent.com/simonem/anyboard/master/games/demo-anyDeck/dist/anyboard.js',
     function (gameFile) {
       dist.file('anyboard.js', gameFile)
-      console.log(gameFile)
     })
 
   // drivers folder
