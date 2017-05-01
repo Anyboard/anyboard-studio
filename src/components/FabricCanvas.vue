@@ -22,20 +22,9 @@
       )
     },
 
-    methods: {
-      handleResize () {
-        this.fullHeight = document.documentElement.clientHeight
-        this.fullWidth = document.documentElement.clientWidth
-      }
-    },
-
     beforeMount () {
-      this.fullHeight = document.documentElement.clientHeight
       this.fullWidth = document.documentElement.clientWidth
-    },
-
-    ready () {
-      window.addEventListener('resize', this.handleResize)
+      this.fullHeight = document.documentElement.clientHeight
     },
 
     mounted () {
@@ -56,8 +45,6 @@
         if (this.$store.getters.GET_GRIDADDED) {
           this.$store.dispatch('stateHandling')
           if (e.target['type'] === 'rect' || e.target['type'] === 'polygon' || e.target['type'] === 'circle') {
-            e.target.minWidth = this.$store.getters.GET_MINWIDTH
-            e.target.minHeight = this.$store.getters.GET_MINHEIGHT
             e.target.minScaleLimit = 1
           }
         }

@@ -23,8 +23,6 @@
         <p>{{fill}}</p>
         <p>{{height}}</p>
         <p>{{width}}</p>
-        <p>{{minHeight}}</p>
-        <p>{{minWidth}}</p>
         <p>{{stroke}}</p>
         <p>{{strokeDashArray}}</p>
         <p>{{strokeWidth}}</p>
@@ -52,20 +50,17 @@
   import {choiceColor} from 'vue-circle-choice'
 
   const colorArray = [
-    '#166CA0',  // 2
     '#4194D0',  // 5
+    '#166CA0',  // 2
     '#112A95',  // 7
     '#C047A3',  // 14
-    '#FB50A6',  // 15
     '#5E1014',  // 16
     '#9B3235',  // 18
-    '#FF483E',  // 20
     '#66C889',  // 21
     '#30A747',  // 24
     '#31682E',  // 30
     '#FF9344',  // 31
     '#D96623',  // 33
-    '#F6EA77',  // 36
     '#F4E658'   // 37
   ]
   export default {
@@ -90,8 +85,6 @@
       ...mapState('fabricInspector', {stroke: state => state.stroke}),
       ...mapState('fabricInspector', {strokeDashArray: state => state.strokedasharray}),
       ...mapState('fabricInspector', {strokeWidth: state => state.strokewidth}),
-      ...mapState('fabricInspector', {minWidth: state => state.minwidth}),
-      ...mapState('fabricInspector', {minHeight: state => state.minheight}),
       ...mapState('fabricInspector', {start_sector: state => state.start_sector}),
       ...mapState('fabricInspector', {mid_sector: state => state.mid_sector}),
       ...mapState('fabricInspector', {end_sector: state => state.end_sector})

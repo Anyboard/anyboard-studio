@@ -2,7 +2,7 @@ import {fabric as F} from 'fabric'
 import FileSaver from 'file-saver'
 // import createObjectURL from 'create-object-url'
 import {createPolyPoints, dataURLtoBlob, layerify, exportSectors, updateSectorList,
-        renameSameSector, colorChange, renameSector, checkIfSameName} from '../utilities/helpers.js'
+        renameSameSector, colorChange, renameSector, checkIfSameName, getColorName} from '../utilities/helpers.js'
 
 export default {
   state: {
@@ -12,9 +12,8 @@ export default {
     usedSectors: {},
     sectorColor: '#166CA0',
     drawLayer: 'bottom',
+    minSize: 200,
     activeObj: null,
-    minHeight: 200,
-    minWidth: 200,
     gridActive: true,
     gridAdded: false,
     gridSize: 50,
@@ -34,47 +33,42 @@ export default {
     },
 
     // Creating Sectors
-    CREATE_RECT (state) {
+    CREATE_RECT (state, color) {
       const rect = new F.Rect({
-        width: 200,
-        height: 200,
-        fill: state.sectorColor,
+        width: state.minSize,
+        height: state.minSize,
+        fill: color,
         stroke: '#FFD445',
         strokeDashArray: [15, 3],
         strokeWidth: 7,
-        minHeight: state.minHeight,
-        minWidth: state.minWidth,
-        name: state.sectorColor
+        name: getColorName(color)
       })
       layerify(state.canvas)
       renameSameSector(rect, state.canvas)
       state.canvas.add(rect).setActiveObject(rect)
     },
 
-    CREATE_POLYGON (state, sides) {
-      const poly = new F.Polygon(createPolyPoints(sides, 100), {
-        fill: state.sectorColor,
+    CREATE_POLYGON (state, properties) {
+      const poly = new F.Polygon(createPolyPoints(properties.sides, state.minSize / 2), {
+        fill: properties.color,
         stroke: '#FFD445',
         strokeDashArray: [15, 3],
         strokeWidth: 7,
-        minHeight: state.minHeight,
-        minWidth: state.minWidth
+        name: getColorName(properties.color)
       })
       layerify(state.canvas)
       renameSameSector(poly, state.canvas)
       state.canvas.add(poly).setActiveObject(poly)
     },
 
-    CREATE_CIRCLE (state) {
+    CREATE_CIRCLE (state, color) {
       const circ = new F.Circle({
-        radius: state.minWidth / 2,
-        fill: state.sectorColor,
+        radius: state.minSize / 2,
+        fill: color,
         stroke: '#FFD445',
         strokeDashArray: [15, 3],
         strokeWidth: 7,
-        minHeight: state.minHeight,
-        minWidth: state.minWidth,
-        name: state.sectorColor
+        name: getColorName(color)
       })
       layerify(state.canvas)
       renameSameSector(circ, state.canvas)
@@ -156,11 +150,9 @@ export default {
     CLONE_OBJECT (state) {
       if (state.canvas.getActiveObject() != null) {
         const obj = state.canvas.getActiveObject()
-        const mWidth = obj.minWidth
-        const mHeight = obj.minHeight
         if (F.util.getKlass(obj.type).async) {
           obj.clone(function (clone) {
-            clone.set({left: obj.left + 15, top: obj.top + 15, name: obj.name, minWidth: mWidth, minHeight: mHeight})
+            clone.set({left: obj.left + 15, top: obj.top + 15, name: obj.name})
             state.canvas.add(clone)
           })
         } else {
@@ -225,7 +217,7 @@ export default {
     UPDATE_ACTIVEOBJ (state) {
       const obj = state.canvas.getActiveObject()
       if (obj !== null && typeof obj !== 'undefined') {
-        state.activeObj = obj.toObject(['name', 'pathName', 'minWidth', 'minHeight'])
+        state.activeObj = obj.toObject(['name', 'pathName'])
       } else {
         state.activeObj = null
       }
@@ -293,7 +285,7 @@ export default {
     },
 
     SAVE_STATE (state) {
-      state.canvasState = state.canvas.toDatalessJSON(['name', 'pathName', 'minWidth', 'minHeight', 'selectable', 'opacity'])
+      state.canvasState = state.canvas.toDatalessJSON(['name', 'pathName', 'selectable', 'opacity'])
     },
 
     LOAD_STATE (state) {
@@ -307,7 +299,7 @@ export default {
       state.sectors = exportSectors(state.canvas)
     },
 
-    USED_SECTORS (state, store) {
+    USED_SECTORS (state) {
       state.usedSectors = updateSectorList(state.canvas)
     },
 
@@ -364,9 +356,6 @@ export default {
     // Debugging
     JSON_DEBUG (state) {
       console.log(JSON.stringify(state.canvas.getObjects()))
-      console.log(state.usedSectors)
-      console.log(state.sectors)
-      console.log(state.activeObj)
     }
   },
 
@@ -384,16 +373,16 @@ export default {
     },
 
     // Sector creation
-    createShape ({commit}, type) {
+    createShape ({commit, state}, type) {
       switch (type) {
         case 'rect':
-          commit('CREATE_RECT')
+          commit('CREATE_RECT', state.sectorColor.toUpperCase())
           break
         case 'triangle':
-          commit('CREATE_POLYGON', 3)
+          commit('CREATE_POLYGON', {color: state.sectorColor.toUpperCase(), sides: 3})
           break
         case 'circle':
-          commit('CREATE_CIRCLE')
+          commit('CREATE_CIRCLE', state.sectorColor.toUpperCase())
           break
       }
     },
@@ -401,8 +390,7 @@ export default {
     updateColor ({commit, getters, dispatch}, color) {
       commit('UPDATE_COLOR', color)
       const obj = getters.GET_ACTIVEOBJ
-      if (obj !== null && (obj['type'] === 'rect' || obj['type'] === 'polygon' ||
-        obj['type'] === 'circle' || obj['type'] === 'path')) {
+      if (obj !== null && (['rect', 'polygon', 'circle', 'path'].includes(obj.type))) {
         dispatch('changeColor')
       }
       commit('CHANGE_DRAW_COLOR', color)
@@ -558,13 +546,6 @@ export default {
 
     GET_USED_SECTORS: state => {
       return state.usedSectors
-    },
-
-    GET_MINWIDTH: state => {
-      return state.minWidth
-    },
-    GET_MINHEIGHT: state => {
-      return state.minHeight
     },
     GET_GRIDMODE: state => {
       return state.gridActive

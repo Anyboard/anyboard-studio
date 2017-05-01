@@ -2,53 +2,62 @@
   <div>
     <div id="tokenOptions">
       <p>Token Editor</p>
-      <label class="switch">
-        Static name:
-        <input type="checkbox" id="dynamicName" v-model="useDynamicName"/>
+      <label class="switch" @click="updateNameType()">
+        Dynamic name:
+        <input type="checkbox" id="dynamicName"/>
         <div class="slider round"></div>
       </label>
-      <label id="nameInput" v-if="useDynamicName">
+      <label id="nameInput">
         Name:
-        <input type="text" id="tokenName" v-model="staticName" placeholder="Write a token name"/>
+        <input type="text" id="tokenName"/>
       </label>
       <label>
         LED Color:
-        <input id="tokenColor" type="color" v-model="defaultLEDColor"/>
+        <input id="tokenColor" type="color" value="#00ff00" list="colors"/>
+        <datalist id=colors>
+          <option>#ff0000</option>
+          <option>#00ff00</option>
+          <option>#0000ff</option>
+          <option>#ffff00</option>
+          <option>#ff00ff</option>
+          <option>#00ffff</option>
+          <option>#ffffff</option>
+        </datalist>
       </label>
       <p>Allowed actions:</p>
       <label>
         LED Change:
-        <input type="checkbox" v-model="allowLEDChange">
+        <input type="checkbox" @click="updateLEDAllowed">
       </label>
       <label>
         Vibrate:
-        <input type="checkbox" v-model="allowVibrate">
+        <input type="checkbox" @click="updateVibrate">
       </label>
       <label>
         Tap:
-        <input type="checkbox" v-model="allowTap">
+        <input type="checkbox" @click="updateTap">
       </label>
       <label>
         Double-tap:
-        <input type="checkbox" v-model="allowDoubleTap">
+        <input type="checkbox" @click="updateDtap">
       </label>
       <label>
         Shake:
-        <input type="checkbox" v-model="allowShake">
+        <input type="checkbox" @click="updateShake">
       </label>
       <label>
         Tilt:
-        <input type="checkbox" v-model="allowTilt">
+        <input type="checkbox" @click="updateTilt">
       </label>
       <label>
         Turn:
-        <input type="checkbox" v-model="allowTurn">
+        <input type="checkbox" @click="updateTurn">
       </label>
       <label>
         Token-token:
-        <input type="checkbox" v-model="allowTokenToken">
+        <input type="checkbox" @click="updateTokentoken">
       </label>
-      <button @click="createToken" :disabled="disableButton">Create token</button>
+      <button @click="setTokenValues()">Create token</button>
     </div>
   </div>
 </template>
@@ -61,68 +70,50 @@
     name: 'TokenEditor',
     data () {
       return {
-        useDynamicName: true,
-        staticName: '',
-        defaultLEDColor: '#00ff00',
-        allowLEDChange: true,
-        allowVibrate: true,
-        allowTap: true,
-        allowDoubleTap: true,
-        allowShake: true,
-        allowTilt: true,
-        allowTurn: true,
-        allowTokenToken: true,
-        disableButton: true
+        nothing: null
       }
     },
-    watch: {
-      useDynamicName (val) {
-        if (!val) {
-          this.disableButton = false
-        } else if (val && this.staticName === '') {
-          this.disableButton = true
-        }
-      },
-      staticName (val) {
-        console.log('TeSTING IAM HERE')
-        if (val !== '') {
-          this.disableButton = false
-        } else {
-          this.disableButton = true
-        }
-      }
-    },
+    computed: {},
     methods: {
-      createToken () {
-        let illegalActions = []
-        if (!this.allowLEDChange) {
-          illegalActions.push('ledchange')
+      updateNameType () {
+        if (document.getElementById('dynamicName').checked) {
+          document.getElementById('nameInput').style = 'display: none'
+        } else {
+          document.getElementById('nameInput').style = 'display: block'
         }
-        if (!this.allowVibrate) {
-          illegalActions.push('vibrate')
-        }
-        if (!this.allowTap) {
-          illegalActions.push('tap')
-        }
-        if (!this.allowShake) {
-          illegalActions.push('doubleTap')
-        }
-        if (!this.allowTilt) {
-          illegalActions.push('tilt')
-        }
-        if (!this.allowTurn) {
-          illegalActions.push('turn')
-        }
-        if (!this.allowTokenToken) {
-          illegalActions.push('tokenToken')
-        }
-        let payload = {
-          dynamicName: this.useDynamicName,
-          name: this.staticName,
-          LEDColor: this.defaultLEDColor,
-          illegalActions: illegalActions
-        }
-        this.$store.dispatch('token/saveToken', payload)
+        this.$store.dispatch('token/updateNameType')
+      },
+      updateLEDAllowed () {
+        this.$store.dispatch('token/updateLEDAllowed')
+      },
+      updateVibrate () {
+        this.$store.dispatch('token/updateVibrate')
+      },
+      updateTap () {
+        this.$store.dispatch('token/updateTap')
+      },
+      updateDtap () {
+        this.$store.dispatch('token/updateDtap')
+      },
+      updateShake () {
+        this.$store.dispatch('token/updateShake')
+      },
+      updateTilt () {
+        this.$store.dispatch('token/updateTilt')
+      },
+      updateTurn () {
+        this.$store.dispatch('token/updateTurn')
+      },
+      updateTokentoken () {
+        this.$store.dispatch('token/updateTokentoken')
+      },
+      setTokenValues () {
+        console.log(document.getElementById('tokenColor').value)
+        let data = [
+          document.getElementById('tokenColor').value,
+          document.getElementById('tokenName').value
+        ]
+        this.$store.dispatch('token/submitToken', data)
       }
     }
   }

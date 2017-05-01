@@ -52,7 +52,7 @@ export const layerify = function (cvs) {
   var imageLayer = []
   // Adds each relevant object to their respective list
   for (var i = 0, l = obj.length; i < l; ++i) {
-    if (obj[i]['type'] === 'rect' || obj[i]['type'] === 'polygon' || obj[i]['type'] === 'circle') {
+    if (['rect', 'polygon', 'circle'].includes(obj[i]['type'])) {
       sectorLayer.push(obj[i])
     } else if (obj[i]['type'] === 'path' && obj[i]['pathName'] === 'bottom') {
       bPathLayer.push(obj[i])
@@ -101,21 +101,37 @@ export const insertIntoDict = function (dict, key, value) {
 }
 
 const colourDict = {
-  '#166CA0': 2,
-  '#4194D0': 5,
-  '#112A95': 7,
-  '#C047A3': 14,
-  '#FB50A6': 15,
-  '#5E1014': 16,
-  '#9B3235': 18,
-  '#FF483E': 20,
-  '#66C889': 21,
-  '#30A747': 24,
-  '#31682E': 30,
-  '#FF9344': 31,
-  '#D96623': 33,
-  '#F6EA77': 36,
-  '#F4E658': 37
+  '#4194D0': 5, // Light Blue
+  '#166CA0': 2, // Blue
+  '#112A95': 7, // Dark Blue
+  '#C047A3': 14, // Purple
+  '#5E1014': 16, // Dark Red
+  '#9B3235': 18, // Red
+  '#66C889': 21, // Light Green
+  '#30A747': 24, // Green
+  '#31682E': 30, // Dark Green
+  '#FF9344': 31, // Orange
+  '#D96623': 33, // Dark Orange
+  '#F4E658': 37 // Yellow
+}
+
+const colourNames = {
+  '#4194D0': 'Light Blue',
+  '#166CA0': 'Blue',
+  '#112A95': 'Dark Blue',
+  '#C047A3': 'Purple',
+  '#5E1014': 'Dark Red',
+  '#9B3235': 'Red',
+  '#66C889': 'Light Green',
+  '#30A747': 'Green',
+  '#31682E': 'Dark Green',
+  '#FF9344': 'Orange',
+  '#D96623': 'Dark Orange',
+  '#F4E658': 'Yellow'
+}
+
+export const getColorName = function (color) {
+  return colourNames[color]
 }
 
 export const exportSectors = function (canvas) {
@@ -128,9 +144,9 @@ export const exportSectors = function (canvas) {
   // Loops through all sectors and adds unique to a list
   for (var i = 0, l = sectors.length; i < l; ++i) {
     if (!unique.hasOwnProperty(sectors[i]['fill'])) {
-      // Makes sure only rectangles or hexagons get added
+      // Makes sure only sectors get added
       // May want to give all sectors a unique property to allow for more sector types in the future
-      if (sectors[i]['type'] === 'rect' || sectors[i]['type'] === 'polygon' || sectors[i]['type'] === 'circle') {
+      if (['rect', 'polygon', 'circle'].includes(sectors[i]['type'])) {
         str = sectors[i]['name']
         if (typeof str === 'string') {
           str.replace(' ', '\u00A0')
@@ -144,7 +160,7 @@ export const exportSectors = function (canvas) {
 }
 
 var sectorDict = {
-  'Start Sector': '#FB50A6',
+  'Start Sector': '#C047A3',
   'Mid Sector': '#F4E658',
   'End Sector': '#30A747'
 }
@@ -158,7 +174,7 @@ export const updateSectorList = function (canvas) {
     insertIntoDict(usedColours, sectorList[i], sectorDict[sectorList[i]])
   }
   for (let z = 0, y = obj.length; z < y; ++z) {
-    if (obj[z]['type'] === 'rect' || obj[z]['type'] === 'polygon' || obj[z]['type'] === 'circle') {
+    if (['rect', 'polygon', 'circle'].includes(obj[z]['type'])) {
       insertIntoDict(usedColours, obj[z]['name'], obj[z]['fill'])
     }
   }
@@ -175,7 +191,7 @@ function _isContains (json, value) {
 }
 
 export const checkIfSameName = function (name, dict, obj) {
-  if (obj['type'] === 'circle' || obj['type'] === 'polygon' || obj['type'] === 'rect') {
+  if (['rect', 'polygon', 'circle'].includes(obj['type'])) {
     return (name in dict && dict[name] !== obj['fill'])
   } else {
     return false
@@ -183,7 +199,7 @@ export const checkIfSameName = function (name, dict, obj) {
 }
 
 export const renameSameSector = function (obj, canvas) {
-  if (obj['type'] === 'rect' || obj['type'] === 'polygon' || obj['type'] === 'circle') {
+  if (['rect', 'polygon', 'circle'].includes(obj['type'])) {
     const objs = canvas.getObjects()
     if (_isContains(sectorDict, obj['fill'])) {
       obj['name'] = Object.keys(sectorDict)[Object.values(sectorDict).indexOf(obj['fill'])]
@@ -193,7 +209,7 @@ export const renameSameSector = function (obj, canvas) {
           obj['name'] = objs[i]['name']
           break
         } else {
-          obj['name'] = obj['fill']
+          obj['name'] = getColorName(obj['fill'])
         }
       }
     }
@@ -204,15 +220,13 @@ export const renameSector = function (canvas, newName) {
   let selObj = canvas.getActiveObject()
   const obj = canvas.getObjects()
   const oldName = selObj['name']
-  if (selObj['type'] === 'rect' || selObj['type'] === 'polygon' ||
-    selObj['type'] === 'circle') {
+  if (['rect', 'polygon', 'circle'].includes(selObj['type'])) {
     if (oldName in sectorDict && oldName !== newName) {
       insertIntoDict(sectorDict, newName, selObj['fill'])
       delete sectorDict[oldName]
     }
     selObj.name = newName
-    if (selObj['type'] === 'rect' || selObj['type'] === 'polygon' ||
-      selObj['type'] === 'circle') {
+    if (['rect', 'polygon', 'circle'].includes(selObj['type'])) {
       for (var i = 0, l = obj.length; i < l; ++i) {
         if (obj[i]['fill'] === selObj['fill']) {
           obj[i]['name'] = newName
@@ -229,10 +243,9 @@ export const renameSector = function (canvas, newName) {
 
 export const colorChange = function (canvas, sectorColor) {
   let activeObj = canvas.getActiveObject()
-  if (activeObj != null && (activeObj['type'] === 'rect' || activeObj['type'] === 'polygon' ||
-    activeObj['type'] === 'circle')) {
+  if (activeObj != null && (['rect', 'polygon', 'circle'].includes(activeObj.type))) {
     activeObj.set('fill', sectorColor.toUpperCase())
-    activeObj.set('name', activeObj.fill)
+    activeObj.set('name', getColorName(activeObj.fill))
     canvas.renderAll()
     renameSameSector(activeObj, canvas)
   } else if (activeObj != null && activeObj['type'] === 'path') {
@@ -256,10 +269,9 @@ export const makeZip = function (blob) {
   let zip = new JSZip()
   // dist folder
   let dist = zip.folder('dist')
-  getFile('https://raw.githubusercontent.com/simonem/anyboard/master/games/demo-anyDeck/dist/anyboard.js',
+  getFile('https://raw.githubusercontent.com/simonem/anyboard/firmwareWork/games/demo-anyPawn/dist/anyboard.js',
     function (gameFile) {
       dist.file('anyboard.js', gameFile)
-      console.log(gameFile)
     })
 
   // drivers folder
@@ -274,7 +286,7 @@ export const makeZip = function (blob) {
       drivers.file('discovery.evothings.bluetooth.js', gameFile)
     })
 
-  getFile('https://raw.githubusercontent.com/simonem/anyboard/master/games/demo-anyPawn/drivers/rfduino.evothings.bluetooth.js',
+  getFile('https://raw.githubusercontent.com/simonem/anyboard/firmwareWork/games/demo-anyPawn/drivers/rfduino.evothings.bluetooth.js',
     function (gameFile) {
       drivers.file('rfduino.evothings.bluetooth.js', gameFile)
     })
