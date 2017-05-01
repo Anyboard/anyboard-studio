@@ -1,6 +1,6 @@
 import {colorHexToRGB} from './helpers.js'
 
-const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenVal) {
+const blocklyInit = function (Blockly, TOKENS, GRIDS, sectorObject, sectorNames, tokenVal, ledGrids) {
   Blockly.FieldColour.COLOURS = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ffffff']
   Blockly.FieldColour.COLUMNS = 7
   console.log(Blockly)
@@ -350,10 +350,12 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
     }
   }
   // TODO Autogenerate this list
+  /*
   var GRIDS =
     [[{'src': '../assets/smiley.png', 'width': 16, 'height': 16, 'alt': '*'}, 'SMILEY'],
      [{'src': '../assets/x.png', 'width': 16, 'height': 16, 'alt': '*'}, 'X'],
      [{'src': '../assets/square.png', 'width': 16, 'height': 16, 'alt': '*'}, 'SQUARE']]
+  */
   Blockly.Blocks['grid'] = {
     init: function () {
       this.appendDummyInput()
@@ -529,13 +531,22 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
     }
   }
   Blockly.JavaScript['grid'] = function (block) {
-    // var dropdownGrid = block.getFieldValue('GRID')
-    var code = '[0x00, 0x24, 0x24, 0x24, 0, 0x42, 0x3C, 0]'
+    var dropdownGrid = block.getFieldValue('GRID')
+    var grid = ledGrids[dropdownGrid]
+    var code = '['
+    for (var i = 0; i < 8; i++) {
+      if (i > 0) {
+        code += ', '
+      }
+      code += '0x'
+      code += grid.substr(i * 2, 2)
+    }
+    code += ']'
     return [code, Blockly.JavaScript.ORDER_MEMBER]
   }
   Blockly.JavaScript['grid_off'] = function (block) {
     var token = Blockly.JavaScript.valueToCode(block, 'TOKEN', Blockly.JavaScript.ORDER_COMMA)
-    var code = 'app.sendDisplayPatternCmd(' + token + '[0, 0, 0, 0, 0, 0, 0, 0]);\n'
+    var code = 'app.sendDisplayPatternCmd(' + token + '[0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]);\n'
     return code
   }
   Blockly.JavaScript['show_grid'] = function (block) {
@@ -967,7 +978,7 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
     result += '\n},\n\n\n'
     return result
   }
-  Blockly.JavaScript.writeList = function (list) {
+  Blockly.JavaScript.writeList = function (list, isStrings) {
     var result = '['
     var first = true
     for (var item in list) {
@@ -975,10 +986,27 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
         result += ', '
       }
       first = false
-      result += '"' + list[item] + '"'
+      if (isStrings) {
+        result += '"' + list[item] + '"'
+      } else {
+        result += list[item]
+      }
     }
     result += ']'
     return result
+  }
+  Blockly.JavaScript.writeGridList = function () {
+    var list = []
+    for (var key in ledGrids) {
+      var grid = ledGrids[key]
+      console.log(ledGrids[grid])
+      var gridlist = []
+      for (var i = 0; i < 8; i++) {
+        gridlist.push('0x' + grid.substr(i * 2, 2))
+      }
+      list.push(Blockly.JavaScript.writeList(gridlist, false))
+    }
+    return Blockly.JavaScript.writeList(list, false)
   }
   Blockly.JavaScript.finish = function (code) {
     // Sector values to be used for getRandomSector
@@ -997,7 +1025,8 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
     Blockly.JavaScript.variableDB_.reset()
     var output = definitions.join('\n\n') + '\n\n\n'
     // output += Blockly.JavaScript.writeDictionary('tiles', tilesdict)
-    output += 'sectorVals: ' + Blockly.JavaScript.writeList(sectorVals) + ',\n\n'
+    output += 'grids: ' + Blockly.JavaScript.writeGridList() + ',\n\n'
+    output += 'sectorVals: ' + Blockly.JavaScript.writeList(sectorVals, true) + ',\n\n'
     output += Blockly.JavaScript.writeListDictionary('tokenVal', tokenVal)
     output += 'requiredPlayers: [null, null],\n'
     output += 'initiate: function() {\n\n'

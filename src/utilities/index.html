@@ -367,6 +367,11 @@
         return app.sectorVals[Math.floor(Math.random() * app.sectorVals.length)]
       },
 
+
+      getRandomGrid: function () {
+        return app.grids[Math.floor(Math.random() * app.grids.length)]
+      },
+
       showTextPrompt: function (value) {
         $('#promptField').html(value)
         $('#textprompt').show()
