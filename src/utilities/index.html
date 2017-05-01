@@ -364,9 +364,12 @@
         return Math.floor(Math.random() * (b - a + 1) + a);
       },
 
-      getTextPrompt: function () {
-        return $('#promptField').value
-        $('#textprompt').hide()
+      getToken: function (id) {
+        for (let key in this.devices) {
+          if (this.devices[key].id == id) {
+            return (this.devices[key])
+          }
+        }
       }
 
     };

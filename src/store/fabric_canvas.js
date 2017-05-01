@@ -308,7 +308,7 @@ export default {
       state.sectors = exportSectors(state.canvas)
     },
 
-    USED_SECTORS (state, store) {
+    USED_SECTORS (state) {
       state.usedSectors = updateSectorList(state.canvas)
     },
 
@@ -365,9 +365,6 @@ export default {
     // Debugging
     JSON_DEBUG (state) {
       console.log(JSON.stringify(state.canvas.getObjects()))
-      console.log(state.usedSectors)
-      console.log(state.sectors)
-      console.log(state.activeObj)
     }
   },
 
@@ -402,8 +399,7 @@ export default {
     updateColor ({commit, getters, dispatch}, color) {
       commit('UPDATE_COLOR', color)
       const obj = getters.GET_ACTIVEOBJ
-      if (obj !== null && (obj['type'] === 'rect' || obj['type'] === 'polygon' ||
-        obj['type'] === 'circle' || obj['type'] === 'path')) {
+      if (obj !== null && (['rect', 'polygon', 'circle', 'path'].includes(obj.type))) {
         dispatch('changeColor')
       }
       commit('CHANGE_DRAW_COLOR', color)
