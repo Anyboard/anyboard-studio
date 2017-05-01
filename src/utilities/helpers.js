@@ -265,6 +265,9 @@ function getFile (url, callback) {
   xmlhttp.send()
 }
 
+// Downloads the relevant files to be able to run the game from github. Change the urls if the file location is updated.
+// Currently fonts are not downloaded as they can't be accessed in the raw format as the other files.
+// If fonts want to be added, add them in a similar fashion as under in ui/fonts
 export const makeZip = function (blob) {
   let zip = new JSZip()
   // dist folder
