@@ -13,7 +13,16 @@
       </label>
       <label>
         LED Color:
-        <input id="tokenColor" type="color" value="#00ff00"/>
+        <input id="tokenColor" type="color" value="#00ff00" list="colors"/>
+        <datalist id=colors>
+          <option>#ff0000</option>
+          <option>#00ff00</option>
+          <option>#0000ff</option>
+          <option>#ffff00</option>
+          <option>#ff00ff</option>
+          <option>#00ffff</option>
+          <option>#ffffff</option>
+        </datalist>
       </label>
       <p>Allowed actions:</p>
       <label>
