@@ -325,6 +325,24 @@
         }
       },
 
+      // Command for calibrating token to printer type
+      sendPaperSelectCmd: function (token, paperType) {
+        var completedFunction = function (data) {
+          hyper.log("We happily send the PAPAERSELECT command");
+          hyper.log(data)
+        };
+
+        var errorCallback = function (errorMsg) {
+          hyper.log("Failed to send the PAPAERSELECT command");
+          hyper.log(errorMsg);
+        };
+
+        token.paperSelect(paperType,
+          completedFunction,  // function to be executed when token signals
+          errorCallback  // function to be executed in case of failure to send command to token
+        );
+      },
+
       next_panel: function () {
         $("#summary").hide();
         app.initiate();

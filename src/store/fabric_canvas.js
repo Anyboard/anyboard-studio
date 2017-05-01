@@ -12,9 +12,8 @@ export default {
     usedSectors: {},
     sectorColor: '#166CA0',
     drawLayer: 'bottom',
+    minSize: 200,
     activeObj: null,
-    minHeight: 200,
-    minWidth: 200,
     gridActive: true,
     gridAdded: false,
     gridSize: 50,
@@ -36,14 +35,12 @@ export default {
     // Creating Sectors
     CREATE_RECT (state, color) {
       const rect = new F.Rect({
-        width: 200,
-        height: 200,
+        width: state.minSize,
+        height: state.minSize,
         fill: color,
         stroke: '#FFD445',
         strokeDashArray: [15, 3],
         strokeWidth: 7,
-        minHeight: state.minHeight,
-        minWidth: state.minWidth,
         name: getColorName(color)
       })
       layerify(state.canvas)
@@ -52,13 +49,11 @@ export default {
     },
 
     CREATE_POLYGON (state, properties) {
-      const poly = new F.Polygon(createPolyPoints(properties.sides, 100), {
+      const poly = new F.Polygon(createPolyPoints(properties.sides, state.minSize / 2), {
         fill: properties.color,
         stroke: '#FFD445',
         strokeDashArray: [15, 3],
         strokeWidth: 7,
-        minHeight: state.minHeight,
-        minWidth: state.minWidth,
         name: getColorName(properties.color)
       })
       layerify(state.canvas)
@@ -68,13 +63,11 @@ export default {
 
     CREATE_CIRCLE (state, color) {
       const circ = new F.Circle({
-        radius: state.minWidth / 2,
+        radius: state.minSize / 2,
         fill: color,
         stroke: '#FFD445',
         strokeDashArray: [15, 3],
         strokeWidth: 7,
-        minHeight: state.minHeight,
-        minWidth: state.minWidth,
         name: getColorName(color)
       })
       layerify(state.canvas)
@@ -157,11 +150,9 @@ export default {
     CLONE_OBJECT (state) {
       if (state.canvas.getActiveObject() != null) {
         const obj = state.canvas.getActiveObject()
-        const mWidth = obj.minWidth
-        const mHeight = obj.minHeight
         if (F.util.getKlass(obj.type).async) {
           obj.clone(function (clone) {
-            clone.set({left: obj.left + 15, top: obj.top + 15, name: obj.name, minWidth: mWidth, minHeight: mHeight})
+            clone.set({left: obj.left + 15, top: obj.top + 15, name: obj.name})
             state.canvas.add(clone)
           })
         } else {
@@ -226,7 +217,7 @@ export default {
     UPDATE_ACTIVEOBJ (state) {
       const obj = state.canvas.getActiveObject()
       if (obj !== null && typeof obj !== 'undefined') {
-        state.activeObj = obj.toObject(['name', 'pathName', 'minWidth', 'minHeight'])
+        state.activeObj = obj.toObject(['name', 'pathName'])
       } else {
         state.activeObj = null
       }
@@ -294,7 +285,7 @@ export default {
     },
 
     SAVE_STATE (state) {
-      state.canvasState = state.canvas.toDatalessJSON(['name', 'pathName', 'minWidth', 'minHeight', 'selectable', 'opacity'])
+      state.canvasState = state.canvas.toDatalessJSON(['name', 'pathName', 'selectable', 'opacity'])
     },
 
     LOAD_STATE (state) {
@@ -555,13 +546,6 @@ export default {
 
     GET_USED_SECTORS: state => {
       return state.usedSectors
-    },
-
-    GET_MINWIDTH: state => {
-      return state.minWidth
-    },
-    GET_MINHEIGHT: state => {
-      return state.minHeight
     },
     GET_GRIDMODE: state => {
       return state.gridActive
