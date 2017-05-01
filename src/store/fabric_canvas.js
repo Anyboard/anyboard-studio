@@ -366,7 +366,6 @@ export default {
       commit('INIT_DRAW')
       commit('LOAD_STATE')
       commit('SAVE_STATE')
-      commit('LOAD_STATE')
       commit('ADD_GRID')
       commit('HANDLE_DRAW_GRID')
       commit('USED_SECTORS')
@@ -411,8 +410,8 @@ export default {
       commit('SAVE_SECTORS')
     },
     // Text
-    insertText ({commit}, payload) {
-      commit('INSERT_TEXT', payload)
+    insertText ({commit}) {
+      commit('INSERT_TEXT')
     },
 
     // Free drawing
@@ -433,8 +432,8 @@ export default {
     },
 
     // Object manipulation
-    deleteObject ({commit}, payload) {
-      commit('DELETE_OBJECT', payload)
+    deleteObject ({commit}) {
+      commit('DELETE_OBJECT')
     },
 
     clearCanvas ({commit}) {
@@ -447,11 +446,11 @@ export default {
       commit('LOAD_STATE')
     },
 
-    cloneObject ({commit}, payload) {
-      commit('CLONE_OBJECT', payload)
+    cloneObject ({commit}) {
+      commit('CLONE_OBJECT')
     },
-    centerObject ({commit}, payload) {
-      commit('CENTER_OBJECT', payload)
+    centerObject ({commit}) {
+      commit('CENTER_OBJECT')
     },
     arrangeObject ({commit}, type) {
       switch (type) {
@@ -479,8 +478,8 @@ export default {
     updateActiveObj ({commit}) {
       commit('UPDATE_ACTIVEOBJ')
     },
-    saveBoard ({commit}, payload) {
-      commit('SAVE_BOARD', payload)
+    saveBoard ({commit}) {
+      commit('SAVE_BOARD')
     },
 
     makePrintableBoard ({commit}) {
