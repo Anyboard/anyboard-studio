@@ -23,7 +23,7 @@ export default {
       }
       // handling whether token will be created with a static name or a generic name.
       let name = 'token'
-      if (payload.dynamicName) {
+      if (!payload.dynamicName) {
         name += state.numberOfDynamicTokens
         state.numberOfDynamicTokens += 1
       } else {

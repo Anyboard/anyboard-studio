@@ -1,9 +1,8 @@
 <template>
   <div>
-    <button @click="synchronizeTokenStore()">CLICK ME</button>
     <div id="tokenOptions">
       <p>Token Editor</p>
-      <label class="switch" @click="updateNameType()">
+      <label class="switch">
         Static name:
         <input type="checkbox" id="dynamicName" v-model="useDynamicName"/>
         <div class="slider round"></div>
@@ -62,10 +61,9 @@
     name: 'TokenEditor',
     data () {
       return {
-        useDynamicName: false,
+        useDynamicName: true,
         staticName: '',
         defaultLEDColor: '#00ff00',
-        disableButton: true,
         allowLEDChange: true,
         allowVibrate: true,
         allowTap: true,
@@ -73,18 +71,16 @@
         allowShake: true,
         allowTilt: true,
         allowTurn: true,
-        allowTokenToken: true
+        allowTokenToken: true,
+        disableButton: true
       }
     },
-    computed: {},
     watch: {
       useDynamicName (val) {
         if (!val) {
           this.disableButton = false
-        } else if (this.staticName === '') {
+        } else if (val && this.staticName === '') {
           this.disableButton = true
-        } else {
-          this.disableButton = false
         }
       },
       staticName (val) {
@@ -108,9 +104,6 @@
         if (!this.allowTap) {
           illegalActions.push('tap')
         }
-        if (!this.allowDoubleTap) {
-          illegalActions.push('tap')
-        }
         if (!this.allowShake) {
           illegalActions.push('doubleTap')
         }
@@ -124,7 +117,7 @@
           illegalActions.push('tokenToken')
         }
         let payload = {
-          dynamicName: this.allowDynamicName,
+          dynamicName: this.useDynamicName,
           name: this.staticName,
           LEDColor: this.defaultLEDColor,
           illegalActions: illegalActions
