@@ -39,8 +39,8 @@ export default {
     }
   },
   getters: {
-    GET_NAMETYPE: state => {
-      return state.nameType
+    GET_SAVEDTOKENS: state => {
+      return state.savedTokens
     }
   }
 }

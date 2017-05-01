@@ -26,6 +26,10 @@ export default {
     PUSH_TO_SAVEDGRIDS (state, payload) {
       let data = binaryToHex(payload.str)
       if (data.valid) {
+        let hexList = []
+        for (let i = 0; i < 7; i++) {
+          hexList.push(data.result)
+        }
         state.savedGrids[payload.name] = data.result
       }
     }
