@@ -23,8 +23,6 @@
         <p>{{fill}}</p>
         <p>{{height}}</p>
         <p>{{width}}</p>
-        <p>{{minHeight}}</p>
-        <p>{{minWidth}}</p>
         <p>{{stroke}}</p>
         <p>{{strokeDashArray}}</p>
         <p>{{strokeWidth}}</p>
@@ -87,8 +85,6 @@
       ...mapState('fabricInspector', {stroke: state => state.stroke}),
       ...mapState('fabricInspector', {strokeDashArray: state => state.strokedasharray}),
       ...mapState('fabricInspector', {strokeWidth: state => state.strokewidth}),
-      ...mapState('fabricInspector', {minWidth: state => state.minwidth}),
-      ...mapState('fabricInspector', {minHeight: state => state.minheight}),
       ...mapState('fabricInspector', {start_sector: state => state.start_sector}),
       ...mapState('fabricInspector', {mid_sector: state => state.mid_sector}),
       ...mapState('fabricInspector', {end_sector: state => state.end_sector})
