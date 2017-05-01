@@ -61,5 +61,9 @@ export default {
       ])
     }
   },
-  getters: {}
+  getters: {
+    GET_SAVEDLEDGRIDS: state => {
+      return state.savedGrids
+    }
+  }
 }
