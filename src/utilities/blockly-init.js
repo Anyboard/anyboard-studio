@@ -552,7 +552,7 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
   }
   Blockly.JavaScript['token'] = function (block) {
     var token = block.getFieldValue('TOKEN')
-    var code = '\'' + token + '\''
+    var code = 'app.getToken("' + token + '")'
     return [code, Blockly.JavaScript.ORDER_MEMBER]
   }
   Blockly.JavaScript['current_token'] = function (block) {
