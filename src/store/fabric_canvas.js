@@ -374,16 +374,17 @@ export default {
 
     // Sector creation
     createShape ({commit, state}, type) {
-      console.log(type)
+      let shapeColor = ''
+      shapeColor = state.sectorColor
       switch (type) {
         case 'rect':
-          commit('CREATE_RECT', state.sectorColor.toUpperCase())
+          commit('CREATE_RECT', shapeColor.toUpperCase())
           break
         case 'triangle':
-          commit('CREATE_POLYGON', {color: state.sectorColor.toUpperCase(), sides: 3})
+          commit('CREATE_POLYGON', {color: shapeColor.toUpperCase(), sides: 3})
           break
         case 'circle':
-          commit('CREATE_CIRCLE', state.sectorColor.toUpperCase())
+          commit('CREATE_CIRCLE', shapeColor.toUpperCase())
           break
       }
     },

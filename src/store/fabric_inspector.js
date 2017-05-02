@@ -45,20 +45,10 @@ export default {
   },
   actions: {
 
-    // createFromSectorList ({commit}, state) {
-    //   state.currentColor
-    // },
-
     setPredefinedSectors ({commit}, keys) {
       commit('SET_PREDEFINED_SECTORS', keys)
     },
-    colorConverter (activeObj) {
-      if (activeObj !== null) {
-        if (activeObj.fill === '166CA0') {
-          return 'Blue'
-        }
-      }
-    },
+
     updateInfo ({commit}, activeObj) {
       if (activeObj !== null) {
         if (activeObj.type === 'rect' || activeObj.type === 'circle' || activeObj.type === 'polygon') {

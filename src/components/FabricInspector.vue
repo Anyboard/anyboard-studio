@@ -8,7 +8,7 @@
 
         <div class="anypicker">
           <div v-for="(val,idx) in colors"
-              @click="updateColor(val,idx)"
+              @click="updateColorFabricVue(val,idx)"
               :style="'background-color:' + val"
               :key="idx">
           </div>
@@ -28,13 +28,13 @@
         <p>{{strokeWidth}}</p>
         <p>Change object name</p>
         <input type="text" v-model="sectorname"/>
-        <a @click="renameSector2">Change name</a>
+        <a @click="renameSectorFabricInspector">Change name</a>
         <br/>
         <input @change="changeGridSize" type="range" v-model="gridSize" min="25" max="100"/>
         <a class="inactivelink">{{gridSize}}</a>
       </collapse-item>
       <collapse-item title="Sectorlist" class="sector_list">
-        <p v-for="(sector, key) in sectors" @click="test(key)" :class="clicked === key ? 'is_clicked' : ''">
+        <p v-for="(sector, key) in sectors" @click="spanMake(key)" :class="clicked === key ? 'is_clicked' : ''">
           {{key}} <span :style="'background-color:' + sector"></span> {{sector}}
           <span class="dropdown">
             <a @click="makeShape('rect',sector)">Make a rectangle</a>
@@ -101,14 +101,11 @@
       currentColor: ''
     },
     methods: {
-      test (something) {
-        this.clicked = something
-        console.log(something)
+      spanMake (condition) {
+        this.clicked = condition
       },
 
       makeShape (type, color) {
-        console.log(type)
-        console.log(color)
         this.$store.dispatch('updateColorSectorList', color)
         this.$store.dispatch('createShape', type)
       },
@@ -116,7 +113,7 @@
       // createIt () {
       //  this.$store.dispatch('CreateFromSectorList', state)
     // },
-      renameSector2 () {
+      renameSectorFabricInspector () {
         let sname = this.sectorname
         if (this.$store.getters.GET_ACTIVEOBJ !== null) {
           this.$store.dispatch('renameSector', sname)
@@ -126,7 +123,7 @@
           this.$store.dispatch('fabricInspector/setPredefinedSectors', keys)
         }
       },
-      updateColor (color, index) {
+      updateColorFabricVue (color, index) {
         this.index = index
         this.color = color
         this.$store.dispatch('updateColor', color)
@@ -208,6 +205,7 @@
     display:none;
     left:-100%;
     top:0;
+    right:0;
     width:50px;
     height:50px;
     background:#fff;
