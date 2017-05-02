@@ -245,6 +245,7 @@
       },
 
       sendDisplayPatternCmd: function (token, pattern) {
+        token.grid = pattern
 
         var completedFunction = function (data) {
           hyper.log("We happily send the DISPLAYPATTERN command");
@@ -298,7 +299,7 @@
         }
       },
 
-      sendCountCmd: function (token, num1, num2, time) {
+      sendCountCmd: function (token, num) {
 
         var completedFunction = function (data) {
           hyper.log("We happily send the COUNT command");
@@ -312,13 +313,13 @@
 
         if(app.tokenVal.hasOwnProperty(token.id)) {
           if (!(app.tokenVal[token.id].includes('count'))) {
-            token.count(num1, num2, time,
+            token.count(num,
               completedFunction,  // function to be executed when token signals
               errorCallback  // function to be executed in case of failure to send command to token
             );
           }
         } else {
-          token.count(num1, num2, time,
+          token.count(num,
             completedFunction,  // function to be executed when token signals
             errorCallback  // function to be executed in case of failure to send command to token
           );
@@ -367,9 +368,9 @@
         return app.sectorVals[Math.floor(Math.random() * app.sectorVals.length)]
       },
 
-      showTextPrompt: function (value) {
-        $('#promptField').html(value)
-        $('#textprompt').show()
+
+      getRandomGrid: function () {
+        return app.grids[Math.floor(Math.random() * app.grids.length)]
       },
 
       mathRandomInt: function (a, b) {
@@ -388,7 +389,11 @@
             return (this.devices[key])
           }
         }
-      }
+      },
+
+      getGrid: function (token) {
+        return token.grid
+      },
 
     };
   </script>

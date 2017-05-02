@@ -8,7 +8,7 @@
 
         <div class="anypicker">
           <div v-for="(val,idx) in colors"
-              @click="updateColor(val,idx)"
+              @click="updateColorFabricVue(val,idx)"
               :style="'background-color:' + val"
               :key="idx">
           </div>
@@ -28,16 +28,20 @@
         <p>{{strokeWidth}}</p>
         <p>Change object name</p>
         <input type="text" v-model="sectorname"/>
-        <a @click="renameSector2">Change name</a>
+        <a @click="renameSectorFabricInspector">Change name</a>
         <br/>
         <input @change="changeGridSize" type="range" v-model="gridSize" min="25" max="100"/>
         <a class="inactivelink">{{gridSize}}</a>
       </collapse-item>
-      <collapse-item title="Sectorlist">
-        <a @click="setPredefinedSectors">Click here to update</a>
-        <p>{{start_sector}}</p>
-        <p>{{mid_sector}}</p>
-        <p>{{end_sector}}</p>
+      <collapse-item title="Sectorlist" class="sector_list">
+        <p v-for="(sector, key) in sectors" @click="spanMake(key)" :class="clicked === key ? 'is_clicked' : ''">
+          {{key}} <span :style="'background-color:' + sector"></span> {{sector}}
+          <span class="dropdown">
+            <a @click="makeShape('rect',sector)">Make a rectangle</a>
+            <a @click="makeShape('circle',sector)">Make a circle</a>
+            <a @click="makeShape('triangle',sector)">Make a triangle</a>
+          </span>
+        </p>
       </collapse-item>
 
     </collapse>
@@ -46,7 +50,7 @@
 
 
 <script>
-  import {mapState} from 'vuex'
+  import {mapState, mapActions} from 'vuex'
   import {choiceColor} from 'vue-circle-choice'
 
   const colorArray = [
@@ -73,7 +77,8 @@
         colors: colorArray,
         index: 0,
         color: colorArray[0],
-        gridSize: 50
+        gridSize: 50,
+        clicked: false
       }
     },
     computed: {
@@ -85,12 +90,30 @@
       ...mapState('fabricInspector', {stroke: state => state.stroke}),
       ...mapState('fabricInspector', {strokeDashArray: state => state.strokedasharray}),
       ...mapState('fabricInspector', {strokeWidth: state => state.strokewidth}),
-      ...mapState('fabricInspector', {start_sector: state => state.start_sector}),
-      ...mapState('fabricInspector', {mid_sector: state => state.mid_sector}),
-      ...mapState('fabricInspector', {end_sector: state => state.end_sector})
+      ...mapState('fabricInspector', {minWidth: state => state.minwidth}),
+      ...mapState('fabricInspector', {minHeight: state => state.minheight}),
+      ...mapState('fabricInspector', {sectors: state => state.sectors}),
+
+      ...mapActions(['createShape', 'updateColor'])
+    },
+
+    selected: {
+      currentColor: ''
     },
     methods: {
-      renameSector2 () {
+      spanMake (condition) {
+        this.clicked = condition
+      },
+
+      makeShape (type, color) {
+        this.$store.dispatch('updateColorSectorList', color)
+        this.$store.dispatch('createShape', type)
+      },
+
+      // createIt () {
+      //  this.$store.dispatch('CreateFromSectorList', state)
+    // },
+      renameSectorFabricInspector () {
         let sname = this.sectorname
         if (this.$store.getters.GET_ACTIVEOBJ !== null) {
           this.$store.dispatch('renameSector', sname)
@@ -100,7 +123,7 @@
           this.$store.dispatch('fabricInspector/setPredefinedSectors', keys)
         }
       },
-      updateColor (color, index) {
+      updateColorFabricVue (color, index) {
         this.index = index
         this.color = color
         this.$store.dispatch('updateColor', color)
@@ -109,9 +132,6 @@
         this.$store.dispatch('stateHandling')
         var keys = this.$store.getters.GET_USED_SECTORS
         this.$store.dispatch('fabricInspector/setPredefinedSectors', keys)
-      },
-      setPredefinedSectors () {
-
       },
 
       changeGridSize () {
@@ -170,5 +190,28 @@
   }
   .faux-border {
     transform: translate(-15%, -25%)!important;
+  }
+
+  .sector_list p {
+    position: relative;
+  }
+  .sector_list p > span {
+    display:inline-block;
+    padding:5px;
+  }
+
+  .sector_list p .dropdown {
+    position: absolute;
+    display:none;
+    left:-100%;
+    top:0;
+    right:0;
+    width:50px;
+    height:50px;
+    background:#fff;
+  }
+
+  .sector_list p.is_clicked .dropdown {
+    display: block;
   }
 </style>

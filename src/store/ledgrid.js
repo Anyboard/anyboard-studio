@@ -64,5 +64,9 @@ export default {
       commit('CLEAR_GRID')
     }
   },
-  getters: {}
+  getters: {
+    GET_SAVEDLEDGRIDS: state => {
+      return state.savedGrids
+    }
+  }
 }
