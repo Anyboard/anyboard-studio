@@ -261,10 +261,19 @@ const blocklyInit = function (Blockly, TOKENS, GRIDS, sectorObject, sectorNames,
       this.setHelpUrl('')
     }
   }
-  Blockly.Blocks['test_init'] = {
+  var PLAYERNUM = []
+  for (var i = 1; i < 7; i++) {
+    PLAYERNUM.push([i.toString()])
+  }
+  Blockly.Blocks['game_init'] = {
     init: function () {
       this.appendDummyInput()
         .appendField('Set up before game')
+      this.appendDummyInput()
+        .appendField('Set player number between')
+        .appendField(new Blockly.FieldDropdown(PLAYERNUM), 'MIN')
+        .appendField('and')
+        .appendField(new Blockly.FieldDropdown(PLAYERNUM), 'MAX')
       this.appendStatementInput('STACK')
         .setCheck(null)
       this.setColour(65)
@@ -716,7 +725,25 @@ const blocklyInit = function (Blockly, TOKENS, GRIDS, sectorObject, sectorNames,
     code += 'AnyBoard.TokenManager.onTokenEvent("TTE", handleTokenTokenInteraction);\n'
     return code
   }
-  Blockly.JavaScript['test_init'] = function (block) {
+  Blockly.JavaScript['game_init'] = function (block) {
+    var minPlayers = block.getFieldValue('MIN')
+    var maxPlayers = block.getFieldValue('MAX')
+    if (minPlayers === '' && maxPlayers === '') {
+      Blockly.JavaScript.min_players = null
+      Blockly.JavaScript.max_players = null
+    } else if (minPlayers === '') {
+      Blockly.JavaScript.min_players = maxPlayers
+      Blockly.JavaScript.max_players = maxPlayers
+    } else if (maxPlayers === '') {
+      Blockly.JavaScript.min_players = minPlayers
+      Blockly.JavaScript.max_players = minPlayers
+    } else if (minPlayers < maxPlayers) {
+      Blockly.JavaScript.min_players = minPlayers
+      Blockly.JavaScript.max_players = maxPlayers
+    } else {
+      Blockly.JavaScript.min_players = maxPlayers
+      Blockly.JavaScript.max_players = minPlayers
+    }
     var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
     var code = '\n'
     code += stack + '\n'
@@ -863,6 +890,8 @@ const blocklyInit = function (Blockly, TOKENS, GRIDS, sectorObject, sectorNames,
     return 'app.' + varName + ' = ' + argument0 + ';\n'
   }
   Blockly.JavaScript.init = function (workspace) {
+    Blockly.JavaScript.min_players = null
+    Blockly.JavaScript.max_players = null
     Blockly.JavaScript.hasMoveBlock = false
     // Create a dictionary of definitions to be printed before the code.
     Blockly.JavaScript.definitions_ = Object.create(null)
@@ -1009,7 +1038,7 @@ const blocklyInit = function (Blockly, TOKENS, GRIDS, sectorObject, sectorNames,
     return Blockly.JavaScript.writeList(list, false)
   }
   Blockly.JavaScript.writeTokenVal = function () {
-    var newDict = JSON.parse(JSON.stringify(tokenVal)) // clone tokenVal
+    var newDict = JSON.parse(JSON.stringify(tokenVal)) // clone tokenVal. Need this workaround because native cloning does not exist in JS
     for (var key in newDict) {
       newDict[key][0] = Blockly.JavaScript.writeList(newDict[key][0], false)
     }
@@ -1032,6 +1061,7 @@ const blocklyInit = function (Blockly, TOKENS, GRIDS, sectorObject, sectorNames,
     Blockly.JavaScript.variableDB_.reset()
     var output = definitions.join('\n\n') + '\n\n\n'
     // output += Blockly.JavaScript.writeDictionary('tiles', tilesdict)
+    output += 'requiredPlayers: [' + Blockly.JavaScript.min_players + ', ' + Blockly.JavaScript.max_players + ']\n\n'
     output += 'grids: ' + Blockly.JavaScript.writeGridList() + ',\n\n'
     output += 'sectorVals: ' + Blockly.JavaScript.writeList(sectorVals, true) + ',\n\n'
     output += Blockly.JavaScript.writeTokenVal()
