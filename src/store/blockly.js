@@ -57,15 +57,22 @@ export default {
       arr.reduce((rows, key, index) => (index % width === -0 ? rows.push([key])
         : rows[rows.length - 1].push(key)) && rows, [])
 
-      var sectorObject = rootGetters.GET_SECTORS
-      console.log(sectorObject)
-      var sectorNames = toMatrix(Object.keys(sectorObject), 1)  // used tilesnames for dropdown
-
+      let sectorObject = rootGetters.GET_SECTORS
       let tokenVal = rootGetters['token/GET_SAVEDTOKENS']
       let ledGrids = rootGetters['ledgrid/GET_SAVEDLEDGRIDS']
 
-      var TOKENS = toMatrix(Object.keys(tokenVal), 1)
-      var GRIDS = toMatrix(Object.keys(ledGrids), 1)
+      let sectorNames = toMatrix(Object.keys(sectorObject), 1)  // used tilesnames for dropdown
+      if (sectorNames.length === 0) {
+        sectorNames = [[]]
+      }
+      let TOKENS = toMatrix(Object.keys(tokenVal), 1)
+      if (TOKENS.length === 0) {
+        TOKENS = [[]]
+      }
+      let GRIDS = toMatrix(Object.keys(ledGrids), 1)
+      if (GRIDS.length === 0) {
+        GRIDS = [[]]
+      }
       blocklyInit(Blockly, TOKENS, GRIDS, sectorObject, sectorNames, tokenVal, ledGrids)
       const workspace = Blockly.inject('blockly-wrapper', {toolbox: toolbox})
 
