@@ -1008,6 +1008,13 @@ const blocklyInit = function (Blockly, TOKENS, GRIDS, sectorObject, sectorNames,
     }
     return Blockly.JavaScript.writeList(list, false)
   }
+  Blockly.JavaScript.writeTokenVal = function () {
+    var newDict = JSON.parse(JSON.stringify(tokenVal)) // clone tokenVal
+    for (var key in newDict) {
+      newDict[key][0] = Blockly.JavaScript.writeList(newDict[key][0], false)
+    }
+    return Blockly.JavaScript.writeListDictionary('tokenVal', newDict)
+  }
   Blockly.JavaScript.finish = function (code) {
     // Sector values to be used for getRandomSector
     let sectorVals = []
@@ -1027,7 +1034,7 @@ const blocklyInit = function (Blockly, TOKENS, GRIDS, sectorObject, sectorNames,
     // output += Blockly.JavaScript.writeDictionary('tiles', tilesdict)
     output += 'grids: ' + Blockly.JavaScript.writeGridList() + ',\n\n'
     output += 'sectorVals: ' + Blockly.JavaScript.writeList(sectorVals, true) + ',\n\n'
-    output += Blockly.JavaScript.writeListDictionary('tokenVal', tokenVal)
+    output += Blockly.JavaScript.writeTokenVal()
     output += 'requiredPlayers: [null, null],\n'
     output += 'initiate: function() {\n\n'
     output += code
