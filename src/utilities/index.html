@@ -245,6 +245,7 @@
       },
 
       sendDisplayPatternCmd: function (token, pattern) {
+        token.grid = pattern
 
         var completedFunction = function (data) {
           hyper.log("We happily send the DISPLAYPATTERN command");
@@ -372,11 +373,6 @@
         return app.grids[Math.floor(Math.random() * app.grids.length)]
       },
 
-      showTextPrompt: function (value) {
-        $('#promptField').html(value)
-        $('#textprompt').show()
-      },
-
       mathRandomInt: function (a, b) {
         if (a > b) {
           // Swap a and b to ensure a is smaller.
@@ -393,7 +389,11 @@
             return (this.devices[key])
           }
         }
-      }
+      },
+
+      getGrid: function (token) {
+        return token.grid
+      },
 
     };
   </script>
