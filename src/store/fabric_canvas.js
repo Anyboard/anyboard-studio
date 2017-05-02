@@ -216,6 +216,7 @@ export default {
     // Exporting
     UPDATE_ACTIVEOBJ (state) {
       const obj = state.canvas.getActiveObject()
+      state.activeObj = null
       if (obj !== null && typeof obj !== 'undefined') {
         state.activeObj = obj.toObject(['name', 'pathName'])
       } else {
@@ -373,15 +374,17 @@ export default {
 
     // Sector creation
     createShape ({commit, state}, type) {
+      let shapeColor = ''
+      shapeColor = state.sectorColor
       switch (type) {
         case 'rect':
-          commit('CREATE_RECT', state.sectorColor.toUpperCase())
+          commit('CREATE_RECT', shapeColor.toUpperCase())
           break
         case 'triangle':
-          commit('CREATE_POLYGON', {color: state.sectorColor.toUpperCase(), sides: 3})
+          commit('CREATE_POLYGON', {color: shapeColor.toUpperCase(), sides: 3})
           break
         case 'circle':
-          commit('CREATE_CIRCLE', state.sectorColor.toUpperCase())
+          commit('CREATE_CIRCLE', shapeColor.toUpperCase())
           break
       }
     },
@@ -393,6 +396,10 @@ export default {
         dispatch('changeColor')
       }
       commit('CHANGE_DRAW_COLOR', color)
+    },
+
+    updateColorSectorList ({commit}, color) {
+      commit('UPDATE_COLOR', color)
     },
 
     renameSector ({commit}, name) {
