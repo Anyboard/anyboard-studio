@@ -23,8 +23,6 @@
         <p>{{fill}}</p>
         <p>{{height}}</p>
         <p>{{width}}</p>
-        <p>{{minHeight}}</p>
-        <p>{{minWidth}}</p>
         <p>{{stroke}}</p>
         <p>{{strokeDashArray}}</p>
         <p>{{strokeWidth}}</p>

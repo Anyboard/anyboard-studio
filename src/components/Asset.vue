@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h1>I AM INVINCIBLE!</h1>
     <LEDGridEditor></LEDGridEditor>
     <TokenEditor></TokenEditor>
   </div>

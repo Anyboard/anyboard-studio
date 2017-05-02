@@ -45,8 +45,6 @@
         if (this.$store.getters.GET_GRIDADDED) {
           this.$store.dispatch('stateHandling')
           if (e.target['type'] === 'rect' || e.target['type'] === 'polygon' || e.target['type'] === 'circle') {
-            e.target.minWidth = this.$store.getters.GET_MINWIDTH
-            e.target.minHeight = this.$store.getters.GET_MINHEIGHT
             e.target.minScaleLimit = 1
           }
         }

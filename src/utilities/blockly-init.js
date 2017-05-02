@@ -1,6 +1,6 @@
 import {colorHexToRGB} from './helpers.js'
 
-const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenVal) {
+const blocklyInit = function (Blockly, TOKENS, GRIDS, sectorObject, sectorNames, tokenVal, ledGrids) {
   Blockly.FieldColour.COLOURS = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ffffff']
   Blockly.FieldColour.COLUMNS = 7
   console.log(Blockly)
@@ -15,7 +15,7 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
       this.setPreviousStatement(true, null)
       this.setNextStatement(true, null)
       this.setColour(330)
-      this.setTooltip('')
+      this.setTooltip('Increases or decreases the selected variable by the provided amount.')
       this.setHelpUrl('')
     }
   }
@@ -32,7 +32,7 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
       this.setPreviousStatement(true, null)
       this.setNextStatement(true, null)
       this.setColour(255)
-      this.setTooltip('')
+      this.setTooltip('Shows or hides the selected numberfield on the phone screen.')
       this.setHelpUrl('')
     }
   }
@@ -47,7 +47,7 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
       this.setPreviousStatement(true, null)
       this.setNextStatement(true, null)
       this.setColour(255)
-      this.setTooltip('')
+      this.setTooltip('Shows the provided number on the selected numberfield on the phone screen.')
       this.setHelpUrl('')
     }
   }
@@ -64,7 +64,7 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
       this.setPreviousStatement(true, null)
       this.setNextStatement(true, null)
       this.setColour(255)
-      this.setTooltip('')
+      this.setTooltip('Shows or hides the selected textfield on the phone screen.')
       this.setHelpUrl('')
     }
   }
@@ -79,7 +79,7 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
       this.setPreviousStatement(true, null)
       this.setNextStatement(true, null)
       this.setColour(255)
-      this.setTooltip('')
+      this.setTooltip('Shows the provided number on the selected numberfield on the phone screen.')
       this.setHelpUrl('')
     }
   }
@@ -91,7 +91,7 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
       this.setPreviousStatement(true, null)
       this.setNextStatement(true, null)
       this.setColour(255)
-      this.setTooltip('')
+      this.setTooltip('Sets the game title on the phone screen.')
       this.setHelpUrl('')
     }
   }
@@ -102,7 +102,7 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
       this.appendStatementInput('STACK')
           .setCheck(null)
       this.setColour(65)
-      this.setTooltip('')
+      this.setTooltip('Triggered when a token is moved to a different sector.')
       this.setHelpUrl('')
     }
   }
@@ -114,7 +114,7 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
       this.setPreviousStatement(true, null)
       this.setNextStatement(true, null)
       this.setColour(255)
-      this.setTooltip('')
+      this.setTooltip('Vibrates a token.')
       this.setHelpUrl('')
     }
   }
@@ -133,7 +133,7 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
       this.setPreviousStatement(true, null)
       this.setNextStatement(true, null)
       this.setColour(255)
-      this.setTooltip('')
+      this.setTooltip('Vibrates a token in the selected pattern.')
       this.setHelpUrl('')
     }
   }
@@ -150,7 +150,7 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
       this.setPreviousStatement(true, null)
       this.setNextStatement(true, null)
       this.setColour(255)
-      this.setTooltip('')
+      this.setTooltip('Sets the led color for the selected token.')
       this.setHelpUrl('')
     }
   }
@@ -163,7 +163,7 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
       this.setPreviousStatement(true, null)
       this.setNextStatement(true, null)
       this.setColour(255)
-      this.setTooltip('')
+      this.setTooltip('Turns off the led for the selected token.')
       this.setHelpUrl('')
     }
   }
@@ -187,7 +187,7 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
       this.setPreviousStatement(true, null)
       this.setNextStatement(true, null)
       this.setColour(255)
-      this.setTooltip('')
+      this.setTooltip('Blinks the led for the token at the selected speed.')
       this.setHelpUrl('')
     }
   }
@@ -198,7 +198,7 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
       this.appendStatementInput('STACK')
           .setCheck(null)
       this.setColour(65)
-      this.setTooltip('')
+      this.setTooltip('Triggered when a token is tapped.')
       this.setHelpUrl('')
     }
   }
@@ -209,7 +209,7 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
       this.appendStatementInput('STACK')
           .setCheck(null)
       this.setColour(65)
-      this.setTooltip('')
+      this.setTooltip('Triggered when a token is tilted.')
       this.setHelpUrl('')
     }
   }
@@ -224,7 +224,7 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
       this.appendStatementInput('STACK2')
           .setCheck(null)
       this.setColour(65)
-      this.setTooltip('')
+      this.setTooltip('Triggered when a token turned.')
       this.setHelpUrl('')
     }
   }
@@ -235,7 +235,7 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
       this.appendStatementInput('STACK')
           .setCheck(null)
       this.setColour(65)
-      this.setTooltip('')
+      this.setTooltip('Triggered when a token is shaken.')
       this.setHelpUrl('')
     }
   }
@@ -246,7 +246,7 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
       this.appendStatementInput('STACK')
           .setCheck(null)
       this.setColour(65)
-      this.setTooltip('')
+      this.setTooltip('Triggered when a token is moved next to another token.')
       this.setHelpUrl('')
     }
   }
@@ -257,7 +257,7 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
       this.appendStatementInput('STACK')
           .setCheck(null)
       this.setColour(65)
-      this.setTooltip('')
+      this.setTooltip('Triggered when a token is doubletapped.')
       this.setHelpUrl('')
     }
   }
@@ -268,7 +268,20 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
       this.appendStatementInput('STACK')
         .setCheck(null)
       this.setColour(65)
-      this.setTooltip('')
+      this.setTooltip('This runs at the start of the game. Do not include any currentToken blocks here.')
+      this.setHelpUrl('')
+    }
+  }
+  Blockly.Blocks['grid_off'] = {
+    init: function () {
+      this.appendValueInput('TOKEN')
+          .setCheck('Token')
+          .setAlign(Blockly.ALIGN_CENTRE)
+          .appendField('Show nothing on')
+      this.setPreviousStatement(true, null)
+      this.setNextStatement(true, null)
+      this.setColour(120)
+      this.setTooltip('Resets the grid for the token, showing nothing.')
       this.setHelpUrl('')
     }
   }
@@ -286,7 +299,7 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
       this.setPreviousStatement(true, null)
       this.setNextStatement(true, null)
       this.setColour(120)
-      this.setTooltip('')
+      this.setTooltip('Shows the selected grid.')
       this.setHelpUrl('')
     }
   }
@@ -304,7 +317,7 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
       this.setPreviousStatement(true, null)
       this.setNextStatement(true, null)
       this.setColour(120)
-      this.setTooltip('')
+      this.setTooltip('Scrolls through the first 29 letters of the provided text.')
       this.setHelpUrl('')
     }
   }
@@ -332,32 +345,34 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
       this.setPreviousStatement(true, null)
       this.setNextStatement(true, null)
       this.setColour(120)
-      this.setTooltip('')
+      this.setTooltip('Counts on a token.')
       this.setHelpUrl('')
     }
   }
   // TODO Autogenerate this list
+  /*
   var GRIDS =
     [[{'src': '../assets/smiley.png', 'width': 16, 'height': 16, 'alt': '*'}, 'SMILEY'],
      [{'src': '../assets/x.png', 'width': 16, 'height': 16, 'alt': '*'}, 'X'],
      [{'src': '../assets/square.png', 'width': 16, 'height': 16, 'alt': '*'}, 'SQUARE']]
+  */
   Blockly.Blocks['grid'] = {
     init: function () {
       this.appendDummyInput()
           .appendField(new Blockly.FieldDropdown(GRIDS), 'GRID')
       this.setOutput(true, 'Grid')
       this.setColour(120)
-      this.setTooltip('')
+      this.setTooltip('A grid that can be shown on a token.')
       this.setHelpUrl('')
     }
   }
   Blockly.Blocks['random_grid'] = {
     init: function () {
       this.appendDummyInput()
-          .appendField('Random Pattern')
+          .appendField('Random Grid')
       this.setOutput(true, 'Grid')
       this.setColour(120)
-      this.setTooltip('')
+      this.setTooltip('Selects a random grid from the ones built in the Token Editor.')
       this.setHelpUrl('')
     }
   }
@@ -368,7 +383,7 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
           .appendField('Whatever is displayed on')
       this.setOutput(true, 'Grid')
       this.setColour(120)
-      this.setTooltip('')
+      this.setTooltip('Returns the Grid currently displayed on a specific token.')
       this.setHelpUrl('')
     }
   }
@@ -378,7 +393,7 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
           .appendField(new Blockly.FieldDropdown(TOKENS), 'TOKEN')
       this.setOutput(true, 'Token')
       this.setColour(290)
-      this.setTooltip('')
+      this.setTooltip('A token, define more in the Token Editor.')
       this.setHelpUrl('')
     }
   }
@@ -388,7 +403,7 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
           .appendField('Current Token')
       this.setOutput(true, 'Token')
       this.setColour(290)
-      this.setTooltip('')
+      this.setTooltip('The token that who triggered the current event. Do not use in Set Up the Game.')
       this.setHelpUrl('')
     }
   }
@@ -398,7 +413,7 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
           .appendField('Other Token')
       this.setOutput(true, 'Token')
       this.setColour(290)
-      this.setTooltip('')
+      this.setTooltip('ONLY USE THIS IN Move Token Close to Other Token! The token that was moved close to the current token.')
       this.setHelpUrl('')
     }
   }
@@ -408,7 +423,7 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
           .appendField('Random Token')
       this.setOutput(true, 'Token')
       this.setColour(290)
-      this.setTooltip('')
+      this.setTooltip('Randomly selects one of the connected tokens.')
       this.setHelpUrl('')
     }
   }
@@ -419,7 +434,7 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
           .appendField('Current Token is ')
       this.setOutput(true, 'Boolean')
       this.setColour(290)
-      this.setTooltip('')
+      this.setTooltip('Checks whether the current token is a specific token.')
       this.setHelpUrl('')
     }
   }
@@ -431,7 +446,7 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
       this.setPreviousStatement(true, null)
       this.setNextStatement(true, null)
       this.setColour(290)
-      this.setTooltip('')
+      this.setTooltip('Sets the token name to one of the ones provided in the Token Editor.')
       this.setHelpUrl('')
     }
   }
@@ -447,7 +462,7 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
           .appendField(new Blockly.FieldDropdown(sectorNames), 'SECTOR')
       this.setOutput(true, 'Sector')
       this.setColour(20)
-      this.setTooltip('')
+      this.setTooltip('A sector on the board.')
       this.setHelpUrl('')
     }
   }
@@ -457,7 +472,7 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
           .appendField('Random Sector')
       this.setOutput(true, 'Sector')
       this.setColour(20)
-      this.setTooltip('')
+      this.setTooltip('A random sector from the ones used in the Board Editor.')
       this.setHelpUrl('')
     }
   }
@@ -470,7 +485,7 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
           .appendField('is standing on')
       this.setOutput(true, 'Sector')
       this.setColour(20)
-      this.setTooltip('')
+      this.setTooltip('Returns the sector that a token is currently at.')
       this.setHelpUrl('')
     }
   }
@@ -484,7 +499,7 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
       this.setInputsInline(true)
       this.setOutput(true, 'Boolean')
       this.setColour(20)
-      this.setTooltip('')
+      this.setTooltip('Checks whether a token is standing on a specific sector.')
       this.setHelpUrl('')
     }
   }
@@ -496,7 +511,7 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
       this.setInputsInline(true)
       this.setOutput(true, 'Boolean')
       this.setColour(20)
-      this.setTooltip('')
+      this.setTooltip('Checks whether the current token is standing on a specific sector.')
       this.setHelpUrl('')
     }
   }
@@ -511,14 +526,28 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
           .setCheck(null)
       this.setPreviousStatement(true, null)
       this.setColour(255)
-      this.setTooltip('')
+      this.setTooltip('Waits for the specified time, then runs the blocks inside this one.')
       this.setHelpUrl('')
     }
   }
   Blockly.JavaScript['grid'] = function (block) {
-    // var dropdownGrid = block.getFieldValue('GRID')
-    var code = '[0x00, 0x24, 0x24, 0x24, 0, 0x42, 0x3C, 0]'
+    var dropdownGrid = block.getFieldValue('GRID')
+    var grid = ledGrids[dropdownGrid]
+    var code = '['
+    for (var i = 0; i < 8; i++) {
+      if (i > 0) {
+        code += ', '
+      }
+      code += '0x'
+      code += grid.substr(i * 2, 2)
+    }
+    code += ']'
     return [code, Blockly.JavaScript.ORDER_MEMBER]
+  }
+  Blockly.JavaScript['grid_off'] = function (block) {
+    var token = Blockly.JavaScript.valueToCode(block, 'TOKEN', Blockly.JavaScript.ORDER_COMMA)
+    var code = 'app.sendDisplayPatternCmd(' + token + '[0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]);\n'
+    return code
   }
   Blockly.JavaScript['show_grid'] = function (block) {
     var grid = Blockly.JavaScript.valueToCode(block, 'GRID', Blockly.JavaScript.ORDER_COMMA)
@@ -552,7 +581,7 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
   }
   Blockly.JavaScript['token'] = function (block) {
     var token = block.getFieldValue('TOKEN')
-    var code = '\'' + token + '\''
+    var code = 'app.getToken("' + token + '")'
     return [code, Blockly.JavaScript.ORDER_MEMBER]
   }
   Blockly.JavaScript['current_token'] = function (block) {
@@ -603,6 +632,12 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
   Blockly.JavaScript['vibrate'] = function (block) {
     var token = Blockly.JavaScript.valueToCode(block, 'TOKEN', Blockly.JavaScript.ORDER_FUNCTION_CALL)
     var code = 'app.sendVibrationCmd(' + token + ');\n'
+    return code
+  }
+  Blockly.JavaScript['vibrate_pattern'] = function (block) {
+    var token = Blockly.JavaScript.valueToCode(block, 'TOKEN', Blockly.JavaScript.ORDER_FUNCTION_CALL)
+    var pattern = block.getFieldValue('PATTERN')
+    var code = 'app.sendVibrationPatternCmd(' + token + ', ' + pattern + ');\n'
     return code
   }
   Blockly.JavaScript['led_on'] = function (block) {
@@ -943,7 +978,7 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
     result += '\n},\n\n\n'
     return result
   }
-  Blockly.JavaScript.writeList = function (list) {
+  Blockly.JavaScript.writeList = function (list, isStrings) {
     var result = '['
     var first = true
     for (var item in list) {
@@ -951,10 +986,27 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
         result += ', '
       }
       first = false
-      result += '"' + list[item] + '"'
+      if (isStrings) {
+        result += '"' + list[item] + '"'
+      } else {
+        result += list[item]
+      }
     }
     result += ']'
     return result
+  }
+  Blockly.JavaScript.writeGridList = function () {
+    var list = []
+    for (var key in ledGrids) {
+      var grid = ledGrids[key]
+      console.log(ledGrids[grid])
+      var gridlist = []
+      for (var i = 0; i < 8; i++) {
+        gridlist.push('0x' + grid.substr(i * 2, 2))
+      }
+      list.push(Blockly.JavaScript.writeList(gridlist, false))
+    }
+    return Blockly.JavaScript.writeList(list, false)
   }
   Blockly.JavaScript.finish = function (code) {
     // Sector values to be used for getRandomSector
@@ -973,7 +1025,8 @@ const blocklyInit = function (Blockly, TOKENS, sectorObject, sectorNames, tokenV
     Blockly.JavaScript.variableDB_.reset()
     var output = definitions.join('\n\n') + '\n\n\n'
     // output += Blockly.JavaScript.writeDictionary('tiles', tilesdict)
-    output += 'sectorVals: ' + Blockly.JavaScript.writeList(sectorVals) + ',\n\n'
+    output += 'grids: ' + Blockly.JavaScript.writeGridList() + ',\n\n'
+    output += 'sectorVals: ' + Blockly.JavaScript.writeList(sectorVals, true) + ',\n\n'
     output += Blockly.JavaScript.writeListDictionary('tokenVal', tokenVal)
     output += 'requiredPlayers: [null, null],\n'
     output += 'initiate: function() {\n\n'

@@ -298,7 +298,7 @@
         }
       },
 
-      sendCountCmd: function (token, num1, num2, time) {
+      sendCountCmd: function (token, num) {
 
         var completedFunction = function (data) {
           hyper.log("We happily send the COUNT command");
@@ -312,17 +312,35 @@
 
         if(app.tokenVal.hasOwnProperty(token.id)) {
           if (!(app.tokenVal[token.id].includes('count'))) {
-            token.count(num1, num2, time,
+            token.count(num,
               completedFunction,  // function to be executed when token signals
               errorCallback  // function to be executed in case of failure to send command to token
             );
           }
         } else {
-          token.count(num1, num2, time,
+          token.count(num,
             completedFunction,  // function to be executed when token signals
             errorCallback  // function to be executed in case of failure to send command to token
           );
         }
+      },
+
+      // Command for calibrating token to printer type
+      sendPaperSelectCmd: function (token, paperType) {
+        var completedFunction = function (data) {
+          hyper.log("We happily send the PAPAERSELECT command");
+          hyper.log(data)
+        };
+
+        var errorCallback = function (errorMsg) {
+          hyper.log("Failed to send the PAPAERSELECT command");
+          hyper.log(errorMsg);
+        };
+
+        token.paperSelect(paperType,
+          completedFunction,  // function to be executed when token signals
+          errorCallback  // function to be executed in case of failure to send command to token
+        );
       },
 
       next_panel: function () {
@@ -349,6 +367,11 @@
         return app.sectorVals[Math.floor(Math.random() * app.sectorVals.length)]
       },
 
+
+      getRandomGrid: function () {
+        return app.grids[Math.floor(Math.random() * app.grids.length)]
+      },
+
       showTextPrompt: function (value) {
         $('#promptField').html(value)
         $('#textprompt').show()
@@ -364,9 +387,12 @@
         return Math.floor(Math.random() * (b - a + 1) + a);
       },
 
-      getTextPrompt: function () {
-        return $('#promptField').value
-        $('#textprompt').hide()
+      getToken: function (id) {
+        for (let key in this.devices) {
+          if (this.devices[key].id == id) {
+            return (this.devices[key])
+          }
+        }
       }
 
     };

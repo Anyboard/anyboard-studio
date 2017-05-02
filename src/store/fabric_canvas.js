@@ -12,9 +12,8 @@ export default {
     usedSectors: {},
     sectorColor: '#166CA0',
     drawLayer: 'bottom',
+    minSize: 200,
     activeObj: null,
-    minHeight: 200,
-    minWidth: 200,
     gridActive: true,
     gridAdded: false,
     gridSize: 50,
@@ -36,14 +35,12 @@ export default {
     // Creating Sectors
     CREATE_RECT (state, color) {
       const rect = new F.Rect({
-        width: 200,
-        height: 200,
+        width: state.minSize,
+        height: state.minSize,
         fill: color,
         stroke: '#FFD445',
         strokeDashArray: [15, 3],
         strokeWidth: 7,
-        minHeight: state.minHeight,
-        minWidth: state.minWidth,
         name: getColorName(color)
       })
       layerify(state.canvas)
@@ -52,13 +49,11 @@ export default {
     },
 
     CREATE_POLYGON (state, properties) {
-      const poly = new F.Polygon(createPolyPoints(properties.sides, 100), {
+      const poly = new F.Polygon(createPolyPoints(properties.sides, state.minSize / 2), {
         fill: properties.color,
         stroke: '#FFD445',
         strokeDashArray: [15, 3],
         strokeWidth: 7,
-        minHeight: state.minHeight,
-        minWidth: state.minWidth,
         name: getColorName(properties.color)
       })
       layerify(state.canvas)
@@ -68,13 +63,11 @@ export default {
 
     CREATE_CIRCLE (state, color) {
       const circ = new F.Circle({
-        radius: state.minWidth / 2,
+        radius: state.minSize / 2,
         fill: color,
         stroke: '#FFD445',
         strokeDashArray: [15, 3],
         strokeWidth: 7,
-        minHeight: state.minHeight,
-        minWidth: state.minWidth,
         name: getColorName(color)
       })
       layerify(state.canvas)
@@ -157,11 +150,9 @@ export default {
     CLONE_OBJECT (state) {
       if (state.canvas.getActiveObject() != null) {
         const obj = state.canvas.getActiveObject()
-        const mWidth = obj.minWidth
-        const mHeight = obj.minHeight
         if (F.util.getKlass(obj.type).async) {
           obj.clone(function (clone) {
-            clone.set({left: obj.left + 15, top: obj.top + 15, name: obj.name, minWidth: mWidth, minHeight: mHeight})
+            clone.set({left: obj.left + 15, top: obj.top + 15, name: obj.name})
             state.canvas.add(clone)
           })
         } else {
@@ -227,7 +218,7 @@ export default {
       const obj = state.canvas.getActiveObject()
       state.activeObj = null
       if (obj !== null && typeof obj !== 'undefined') {
-        state.activeObj = obj.toObject(['name', 'pathName', 'minWidth', 'minHeight'])
+        state.activeObj = obj.toObject(['name', 'pathName'])
       } else {
         state.activeObj = null
       }
@@ -295,7 +286,7 @@ export default {
     },
 
     SAVE_STATE (state) {
-      state.canvasState = state.canvas.toDatalessJSON(['name', 'pathName', 'minWidth', 'minHeight', 'selectable', 'opacity'])
+      state.canvasState = state.canvas.toDatalessJSON(['name', 'pathName', 'selectable', 'opacity'])
     },
 
     LOAD_STATE (state) {
@@ -309,7 +300,7 @@ export default {
       state.sectors = exportSectors(state.canvas)
     },
 
-    USED_SECTORS (state, store) {
+    USED_SECTORS (state) {
       state.usedSectors = updateSectorList(state.canvas)
     },
 
@@ -366,9 +357,6 @@ export default {
     // Debugging
     JSON_DEBUG (state) {
       console.log(JSON.stringify(state.canvas.getObjects()))
-      console.log(state.usedSectors)
-      console.log(state.sectors)
-      console.log(state.activeObj)
     }
   },
 
@@ -379,7 +367,6 @@ export default {
       commit('INIT_DRAW')
       commit('LOAD_STATE')
       commit('SAVE_STATE')
-      commit('LOAD_STATE')
       commit('ADD_GRID')
       commit('HANDLE_DRAW_GRID')
       commit('USED_SECTORS')
@@ -404,8 +391,7 @@ export default {
     updateColor ({commit, getters, dispatch}, color) {
       commit('UPDATE_COLOR', color)
       const obj = getters.GET_ACTIVEOBJ
-      if (obj !== null && (obj['type'] === 'rect' || obj['type'] === 'polygon' ||
-        obj['type'] === 'circle' || obj['type'] === 'path')) {
+      if (obj !== null && (['rect', 'polygon', 'circle', 'path'].includes(obj.type))) {
         dispatch('changeColor')
       }
       commit('CHANGE_DRAW_COLOR', color)
@@ -430,8 +416,8 @@ export default {
       commit('SAVE_SECTORS')
     },
     // Text
-    insertText ({commit}, payload) {
-      commit('INSERT_TEXT', payload)
+    insertText ({commit}) {
+      commit('INSERT_TEXT')
     },
 
     // Free drawing
@@ -452,8 +438,8 @@ export default {
     },
 
     // Object manipulation
-    deleteObject ({commit}, payload) {
-      commit('DELETE_OBJECT', payload)
+    deleteObject ({commit}) {
+      commit('DELETE_OBJECT')
     },
 
     clearCanvas ({commit}) {
@@ -466,11 +452,11 @@ export default {
       commit('LOAD_STATE')
     },
 
-    cloneObject ({commit}, payload) {
-      commit('CLONE_OBJECT', payload)
+    cloneObject ({commit}) {
+      commit('CLONE_OBJECT')
     },
-    centerObject ({commit}, payload) {
-      commit('CENTER_OBJECT', payload)
+    centerObject ({commit}) {
+      commit('CENTER_OBJECT')
     },
     arrangeObject ({commit}, type) {
       switch (type) {
@@ -498,8 +484,8 @@ export default {
     updateActiveObj ({commit}) {
       commit('UPDATE_ACTIVEOBJ')
     },
-    saveBoard ({commit}, payload) {
-      commit('SAVE_BOARD', payload)
+    saveBoard ({commit}) {
+      commit('SAVE_BOARD')
     },
 
     makePrintableBoard ({commit}) {
@@ -565,13 +551,6 @@ export default {
 
     GET_USED_SECTORS: state => {
       return state.usedSectors
-    },
-
-    GET_MINWIDTH: state => {
-      return state.minWidth
-    },
-    GET_MINHEIGHT: state => {
-      return state.minHeight
     },
     GET_GRIDMODE: state => {
       return state.gridActive
