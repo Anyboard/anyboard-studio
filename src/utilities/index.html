@@ -351,7 +351,7 @@
 
       setId: function (token, id) {
         token.id = id
-        // app.sendLedOnCmd(token, tokenVal[token.id][0]) // uncomment once blockly exports tokenVal properly
+        app.sendLedOnCmd(token, tokenVal[token.id][0])
       },
 
       getSector: function (token) {
