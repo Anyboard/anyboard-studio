@@ -17,11 +17,26 @@ export default {
       false, false, false, false, false, false, false, false,
       false, false, false, false, false, false, false, false
     ],
-    savedGrids: {}
+    savedGrids: {
+      smile: '0024242400423C00',
+      frown: '00242424003C4200'
+    }
   },
   mutations: {
     SET_GRID (state, grid) {
       state.grid = grid
+    },
+    CLEAR_GRID (state) {
+      state.grid = [
+        false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false
+      ]
     },
     PUSH_TO_SAVEDGRIDS (state, payload) {
       let data = binaryToHex(payload.str)
@@ -43,18 +58,10 @@ export default {
     },
     saveGrid ({commit}, payload) {
       commit('PUSH_TO_SAVEDGRIDS', payload)
+      commit('CLEAR_GRID')
     },
     clearGrid ({commit}) {
-      commit('SET_GRID', [
-        false, false, false, false, false, false, false, false,
-        false, false, false, false, false, false, false, false,
-        false, false, false, false, false, false, false, false,
-        false, false, false, false, false, false, false, false,
-        false, false, false, false, false, false, false, false,
-        false, false, false, false, false, false, false, false,
-        false, false, false, false, false, false, false, false,
-        false, false, false, false, false, false, false, false
-      ])
+      commit('CLEAR_GRID')
     }
   },
   getters: {}

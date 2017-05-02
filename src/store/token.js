@@ -6,7 +6,10 @@ import {insertIntoDict, colorHexToRGB} from '../utilities/helpers.js'
 export default {
   namespaced: true,
   state: {
-    savedTokens: {},
+    savedTokens: {
+      Dragon: [[0, 255, 0], 'vibrate', 'tap'],
+      Human: [[255, 0, 0], 'shake']
+    },
     numberOfDynamicTokens: 0
   },
   mutations: {
