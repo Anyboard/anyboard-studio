@@ -71,6 +71,7 @@ htmlTemplate += '          $("#tokens").append(\'<button type="button" id="\' + 
 htmlTemplate += '\n'
 htmlTemplate += '          // Add listener to be executed if the token connects\n'
 htmlTemplate += '          token.on(\'connect\', function () {\n'
+htmlTemplate += '            this.sendPaperSelectCmd(token, this.paperType)\n'
 htmlTemplate += '            this.connectedPlayers += 1;\n'
 htmlTemplate += '            document.getElementById(token.name).className = \'green\';\n'
 htmlTemplate += '            if (app.requiredPlayers[0] === null || ((this.connectedPlayers >= app.requiredPlayers[0])\n'
