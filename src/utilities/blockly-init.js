@@ -282,6 +282,9 @@ const blocklyInit = function (Blockly, TOKENS, GRIDS, sectorObject, sectorNames,
         .appendField(new Blockly.FieldDropdown(PLAYERNUM), 'MIN')
         .appendField('and')
         .appendField(new Blockly.FieldDropdown(PLAYERNUM), 'MAX')
+      this.appendDummyInput()
+        .appendField('Set paper type to')
+        .appendField(new Blockly.FieldDropdown([['Laserprinter', '1'], ['Inkjet', '2']]), 'PAPER')
       this.appendStatementInput('STACK')
         .setCheck(null)
       this.setColour(65)
@@ -753,6 +756,7 @@ const blocklyInit = function (Blockly, TOKENS, GRIDS, sectorObject, sectorNames,
       Blockly.JavaScript.min_players = maxPlayers
       Blockly.JavaScript.max_players = minPlayers
     }
+    Blockly.JavaScript.paper_type = block.getFieldValue('PAPER')
     var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
     var code = '\n'
     code += stack + '\n'
@@ -901,6 +905,7 @@ const blocklyInit = function (Blockly, TOKENS, GRIDS, sectorObject, sectorNames,
   Blockly.JavaScript.init = function (workspace) {
     Blockly.JavaScript.min_players = null
     Blockly.JavaScript.max_players = null
+    Blockly.JavaScript.paper_type = '1'
     Blockly.JavaScript.hasMoveBlock = false
     // Create a dictionary of definitions to be printed before the code.
     Blockly.JavaScript.definitions_ = Object.create(null)
@@ -1073,6 +1078,7 @@ const blocklyInit = function (Blockly, TOKENS, GRIDS, sectorObject, sectorNames,
     Blockly.JavaScript.variableDB_.reset()
     var output = definitions.join('\n\n') + '\n\n\n'
     // output += Blockly.JavaScript.writeDictionary('tiles', tilesdict)
+    output += 'paperType: ' + Blockly.JavaScript.paper_type + ',\n\n'
     output += 'requiredPlayers: [' + Blockly.JavaScript.min_players + ', ' + Blockly.JavaScript.max_players + '],\n\n'
     output += 'grids: ' + Blockly.JavaScript.writeGridList() + ',\n\n'
     output += 'sectorVals: ' + Blockly.JavaScript.writeList(sectorVals, true) + ',\n\n'
