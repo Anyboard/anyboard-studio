@@ -70,6 +70,7 @@
 
           // Add listener to be executed if the token connects
           token.on('connect', function () {
+            this.sendPaperSelectCmd(token, this.paperType)
             this.connectedPlayers += 1;
             document.getElementById(token.name).className = 'green';
             if (app.requiredPlayers[0] === null || ((this.connectedPlayers >= app.requiredPlayers[0])
