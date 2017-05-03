@@ -10,7 +10,7 @@ export default {
     canvasState: 0,
     sectors: {},
     usedSectors: {},
-    sectorColor: '#166CA0',
+    sectorColor: '#4194D0',
     drawLayer: 'bottom',
     minSize: 200,
     activeObj: null,
