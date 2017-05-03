@@ -109,7 +109,7 @@
       },
 
       // Feedback commands
-      sendVibrationCmd: function (token) {
+      sendVibrationCmd: function (token, length) {
 
         var completedFunction = function (data) {
           hyper.log("We happily send the VIBRATE command");
@@ -123,13 +123,13 @@
 
         if(app.tokenVal.hasOwnProperty(token.id)) {
           if (!(app.tokenVal[token.id].includes('vibrate'))) {
-            token.vibrate([100],
+            token.vibrate([length],
               completedFunction,  // function to be executed when token signals
               errorCallback  // function to be executed in case of failure to send command to token
             );
           }
         } else {
-          token.vibrate([100],
+          token.vibrate([length],
             completedFunction,  // function to be executed when token signals
             errorCallback  // function to be executed in case of failure to send command to token
           );

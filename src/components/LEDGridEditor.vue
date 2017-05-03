@@ -2,7 +2,7 @@
   <div class="LEDGridEditor">
     <div>
       <label for="ledGridName">Pattern name:</label>
-      <input id="ledGridName" type="text" v-model="gridName" placeholder="Pattern name"/>
+      <input id="ledGridName" class="normalinput" type="text" v-model="gridName" placeholder="Pattern name"/>
     </div>
     <div id="ledGrid">
       <span v-for="(n,index) in grid" @click="toggleIndex(index)" :class="n?'active-led':'false'" :key="index"></span>
@@ -33,9 +33,17 @@
         }
         return n
       },
-
       cleanedGridName: function () {
         return this.gridName.length === 0 ? 'default' : this.gridName.toLowerCase()
+      },
+      validName: function () {
+        if (this.gridName === '') {
+          console.log('HEY???')
+          return false
+        } else {
+          console.log('grid has a name')
+          return true
+        }
       }
     },
     methods: {
@@ -43,7 +51,15 @@
         this.$store.dispatch('ledgrid/setGrid', n)
       },
       submitGrid () {
-        this.$store.dispatch('ledgrid/saveGrid', {name: this.cleanedGridName, str: this.gridString})
+        if (this.validName) {
+          this.$store.dispatch('ledgrid/saveGrid', {name: this.cleanedGridName, str: this.gridString})
+          this.gridName = ''
+        } else {
+          document.getElementById('ledGridName').className = 'redflash'
+          setTimeout(function () {
+            document.getElementById('ledGridName').className = 'normalinput'
+          }, 200)
+        }
       },
       clearGrid () {
         this.$store.dispatch('ledgrid/clearGrid')
@@ -80,14 +96,21 @@
       }
       span:hover{
         cursor: pointer;
-        background: radial-gradient(#aaf3ff, #86cbd6, #456c72);
+        background: radial-gradient(#E5FFD0, #96F050, #5EDA00);
       }
       span:active{
-        background: #aaf3ff !important;
+        background: #96F050 !important;
       }
       span.active-led{
-        background: radial-gradient(#aaf3ff, #86cbd6, #456c72);
+        background: radial-gradient(#E5FFD0, #96F050, #5EDA00);
       }
     }
+  }
+  .redflash{
+    background-color: red;
+  }
+  .normalinput {
+    background-color: white;
+    transition: background-color 1s ease-in;
   }
 </style>
