@@ -36,7 +36,7 @@
       <collapse-item title="Sectorlist" class="sector_list">
         <p v-for="(sector, key) in sectors" @click="spanMake(key)" :class="clicked === key ? 'is_clicked' : ''">
           {{key}} <span :style="'background-color:' + sector"></span> {{sector}}
-          <span class="dropdown">
+          <span class="dropdown" v-for="index in colors">
             <a @click="makeShape('rect',sector)">Make a rectangle</a>
             <a @click="makeShape('circle',sector)">Make a circle</a>
             <a @click="makeShape('triangle',sector)">Make a triangle</a>
@@ -108,11 +108,9 @@
       makeShape (type, color) {
         this.$store.dispatch('updateColorSectorList', color)
         this.$store.dispatch('createShape', type)
+        this.$store.dispatch('updateColorSectorList', this.color)
       },
 
-      // createIt () {
-      //  this.$store.dispatch('CreateFromSectorList', state)
-    // },
       renameSectorFabricInspector () {
         let sname = this.sectorname
         if (this.$store.getters.GET_ACTIVEOBJ !== null) {
