@@ -106,15 +106,23 @@ const blocklyInit = function (Blockly, TOKENS, GRIDS, sectorObject, sectorNames,
       this.setHelpUrl('')
     }
   }
+  var VIBRATIONLENGTHS =
+    [['long', '100'],
+     ['medium', '30'],
+     ['short', '10']]
   Blockly.Blocks['vibrate'] = {
     init: function () {
       this.appendValueInput('TOKEN')
           .setCheck('Token')
           .appendField('Vibrate')
+      this.appendDummyInput()
+          .appendField('for a')
+          .appendField(new Blockly.FieldDropdown(VIBRATIONLENGTHS), 'LENGTH')
+          .appendField('time')
       this.setPreviousStatement(true, null)
       this.setNextStatement(true, null)
       this.setColour(255)
-      this.setTooltip('Vibrates a token.')
+      this.setTooltip('Vibrates a token for the indicated duration.')
       this.setHelpUrl('')
     }
   }
@@ -640,7 +648,8 @@ const blocklyInit = function (Blockly, TOKENS, GRIDS, sectorObject, sectorNames,
   }
   Blockly.JavaScript['vibrate'] = function (block) {
     var token = Blockly.JavaScript.valueToCode(block, 'TOKEN', Blockly.JavaScript.ORDER_FUNCTION_CALL)
-    var code = 'app.sendVibrationCmd(' + token + ');\n'
+    var length = block.getFieldValue('LENGTH')
+    var code = 'app.sendVibrationCmd(' + token + ', ' + length + ');\n'
     return code
   }
   Blockly.JavaScript['vibrate_pattern'] = function (block) {
