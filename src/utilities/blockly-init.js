@@ -1078,6 +1078,7 @@ const blocklyInit = function (Blockly, TOKENS, GRIDS, sectorObject, sectorNames,
     output += 'sectorVals: ' + Blockly.JavaScript.writeList(sectorVals, true) + ',\n\n'
     output += Blockly.JavaScript.writeTokenVal()
     output += 'requiredPlayers: [null, null],\n'
+    output += 'paperType: 1,\n'
     output += 'initiate: function() {\n\n'
     output += code
     if (!Blockly.JavaScript.hasMoveBlock) {
