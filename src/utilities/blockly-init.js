@@ -1050,6 +1050,9 @@ const blocklyInit = function (Blockly, TOKENS, GRIDS, sectorObject, sectorNames,
     var newDict = JSON.parse(JSON.stringify(tokenVal)) // clone tokenVal. Need this workaround because native cloning does not exist in JS
     for (var key in newDict) {
       newDict[key][0] = Blockly.JavaScript.writeList(newDict[key][0], false)
+      for (var i = 1; i < newDict[key].length; i++) {
+        newDict[key][i] = "'" + newDict[key][i] + "'"
+      }
     }
     return Blockly.JavaScript.writeListDictionary('tokenVal', newDict)
   }
@@ -1070,7 +1073,7 @@ const blocklyInit = function (Blockly, TOKENS, GRIDS, sectorObject, sectorNames,
     Blockly.JavaScript.variableDB_.reset()
     var output = definitions.join('\n\n') + '\n\n\n'
     // output += Blockly.JavaScript.writeDictionary('tiles', tilesdict)
-    output += 'requiredPlayers: [' + Blockly.JavaScript.min_players + ', ' + Blockly.JavaScript.max_players + ']\n\n'
+    output += 'requiredPlayers: [' + Blockly.JavaScript.min_players + ', ' + Blockly.JavaScript.max_players + '],\n\n'
     output += 'grids: ' + Blockly.JavaScript.writeGridList() + ',\n\n'
     output += 'sectorVals: ' + Blockly.JavaScript.writeList(sectorVals, true) + ',\n\n'
     output += Blockly.JavaScript.writeTokenVal()
