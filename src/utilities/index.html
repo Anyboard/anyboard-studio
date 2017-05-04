@@ -30,16 +30,13 @@
   <script>
     $(document).ready(function(){
       $("#summary").show();
-      $("#main").hide();
     });
   </script>
 
   <script>
     var app;
     app = {
-      currentColor: "some value",
       devices: {},
-      currentTile: "white",
       connectedPlayers: 0,
 
       //REPLACEMEOKAY//
@@ -54,7 +51,7 @@
           },
           // function to be executed upon failure
           function (errorCode) {
-            console.log(errorCode)
+            hyper.log(errorCode)
           }
         );
       },
@@ -98,7 +95,7 @@
 
         // If already connected, attempt to send green led command
         if (document.getElementById(tokenName).className == 'green') {
-          this.sendVibrationCmd(token);
+          this.sendVibrationCmd(token, 30);
           return;
         }
 
@@ -344,6 +341,7 @@
         );
       },
 
+      // Other methods
       next_panel: function () {
         $("#summary").hide();
         app.initiate();
@@ -412,8 +410,7 @@
   <div id="tokens"></div>
   <button type="button" onclick="app.next_panel()" class="black" id="next" style="display: none;"> Next </button>
 </div>
-<div id="connected"></div>
-<div id="token_constraint">
+<div id="main">
   <h1 id="title">Game Title</h1>
   <h1>Messages</h1>
 
