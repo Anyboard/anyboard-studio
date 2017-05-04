@@ -96,7 +96,6 @@
         }
       },
       staticName (val) {
-        console.log('TeSTING IAM HERE')
         if (val !== '') {
           this.disableButton = false
         } else {

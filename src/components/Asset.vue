@@ -1,17 +1,19 @@
 <template>
   <div>
     <div id="assetWrapper">
-      <div id="assetTabWrapper">
+      <div id="assetTabWrapper" class="assetSection">
         <div id="tokenTab" class="assetTab">
           <IconButton icon="fa-caret-right" text="Token"></IconButton>
         </div>
-        <button @click="showToken">Token</button>
+        <button @click="printTokens">Token</button>
+
         <div id="ledgridTab" class="assetTab">
           <IconButton icon="fa-caret-right" text="Led Grid"></IconButton>
         </div>
-        <button @click="showLedgrid">Ledgrid</button>
+        <button @click="printGrids">Ledgrid</button>
       </div>
-      <div id="assetEditorWrapper">
+
+      <div id="assetEditorWrapper" class="assetSection">
         <LEDGridEditor></LEDGridEditor>
         <TokenEditor></TokenEditor>
       </div>
@@ -22,8 +24,16 @@
 export default {
   data () {
     return {
-      tokenTabClosed: true,
-      ledgridTabClosed: true
+      ledgrids: this.$store.getters.GET_SAVEDLEDGRIDS,
+      tokens: this.$store.getters.GET_SAVEDTOKENS
+    }
+  },
+  watch: {
+    ledgrids (val) {
+      let hook = document.getElementById('ledgridTab')
+      for (let key in val) {
+        hook.appendChild.document.createTextNode(key)
+      }
     }
   },
   components: {
@@ -32,18 +42,31 @@ export default {
     IconButton: require('./IconButton.vue')
   },
   methods: {
-    showToken () {
-      console.log('11pressed')
+    printTokens (context) {
+      console.log(this.$store.getters.GET_SAVEDTOKENS)
+      console.log(context)
     },
-    showLedgrid () {
-      console.log('222pressed')
+    printGrids (context) {
+      console.log(this.$store.getters.GET_SAVEDLEDGRIDS)
+      console.log(context.rootGetters)
+    }
+  },
+  mounted () {
+    let hook = document.getElementById('ledgridTab')
+    for (let key in this.ledgrids) {
+      hook.appendChild.document.createTextNode(key)
     }
   }
 }
 </script>
 <style lang="SASS" scoped>
+  .assetSection {
+    margin-left: -1px;
+    width: 40vw;
+    border: 1px solid black;
+    padding: 5px;
+  }
   .assetTab{
-    width: 200px;
     border: 1px solid #2d2d2d;
     background-color: #3f3f3f;
     margin-bottom: -1px;

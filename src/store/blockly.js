@@ -60,7 +60,7 @@ export default {
       let sectorObject = rootGetters.GET_SECTORS
       let tokenVal = rootGetters['token/GET_SAVEDTOKENS']
       let ledGrids = rootGetters['ledgrid/GET_SAVEDLEDGRIDS']
-
+      console.log(tokenVal, ledGrids)
       let sectorNames = toMatrix(Object.keys(sectorObject), 1)  // used tilesnames for dropdown
       if (sectorNames.length === 0) {
         sectorNames = [[]]
