@@ -40,7 +40,7 @@
       currentColor: "some value",
       devices: {},
       currentTile: "white",
-      requiredPlayers: [null, null],
+      connectedPlayers: 0,
 
       //REPLACEMEOKAY//
 
@@ -70,9 +70,11 @@
 
           // Add listener to be executed if the token connects
           token.on('connect', function () {
+            this.sendPaperSelectCmd(token, app.paperType)
+            this.connectedPlayers += 1;
             document.getElementById(token.name).className = 'green';
-            if (app.requiredPlayers[0] === null || ((Object.keys(app.devices).length >= app.requiredPlayers[0])
-              && (Object.keys(app.devices).length <= app.requiredPlayers[1]))) {
+            if (app.requiredPlayers[0] === null || ((this.connectedPlayers >= app.requiredPlayers[0])
+              && (this.connectedPlayers <= app.requiredPlayers[1]))) {
               $('#next').show()
             }
             //$("#token_feedback").append('<button type="button" onclick="app.verifyColor(' + "'" + token.name + "'" + ')"class="indicator3"> Verify color</button><br />');
@@ -107,7 +109,7 @@
       },
 
       // Feedback commands
-      sendVibrationCmd: function (token) {
+      sendVibrationCmd: function (token, length) {
 
         var completedFunction = function (data) {
           hyper.log("We happily send the VIBRATE command");
@@ -121,13 +123,13 @@
 
         if(app.tokenVal.hasOwnProperty(token.id)) {
           if (!(app.tokenVal[token.id].includes('vibrate'))) {
-            token.vibrate([100],
+            token.vibrate([length],
               completedFunction,  // function to be executed when token signals
               errorCallback  // function to be executed in case of failure to send command to token
             );
           }
         } else {
-          token.vibrate([100],
+          token.vibrate([length],
             completedFunction,  // function to be executed when token signals
             errorCallback  // function to be executed in case of failure to send command to token
           );
@@ -188,7 +190,7 @@
         }
       },
 
-      sendLedBlinkCmd: function (token, time, frequency) {
+      sendLedBlinkCmd: function (token, time, period) {
 
         var completedFunction = function (data) {
           hyper.log("We happily send the LEDBLINK command");
@@ -202,47 +204,75 @@
 
         if(app.tokenVal.hasOwnProperty(token.id)) {
           if (!(app.tokenVal[token.id].includes('ledblink'))) {
-            token.ledBlink(time, frequency,
+            token.ledBlink(time, period,
               completedFunction,  // function to be executed when token signals
               errorCallback  // function to be executed in case of failure to send command to token
             );
           }
         } else {
-          token.ledBlink(time, frequency,
+          token.ledBlink(time, period,
             completedFunction,  // function to be executed when token signals
             errorCallback  // function to be executed in case of failure to send command to token
           );
         }
       },
 
-      sendMatrixCmd: function (token, grid, time) {
+      sendLedOffCmd: function (token) {
 
         var completedFunction = function (data) {
-          hyper.log("We happily send the MATRIX command");
+          hyper.log("We happily send the LEDOFF command");
           hyper.log(data)
         };
 
         var errorCallback = function (errorMsg) {
-          hyper.log("Failed to send the MATRIX command");
+          hyper.log("Failed to send the LEDOFF command");
           hyper.log(errorMsg);
         };
 
         if(app.tokenVal.hasOwnProperty(token.id)) {
-          if (!(app.tokenVal[token.id].includes('matrix'))) {
-            token.matrix(grid, time,
+          if (!(app.tokenVal[token.id].includes('ledoff'))) {
+            token.ledOff(ledArray,
               completedFunction,  // function to be executed when token signals
               errorCallback  // function to be executed in case of failure to send command to token
             );
           }
         } else {
-          token.matrix(grid, time,
+          token.ledOff(ledArray,
             completedFunction,  // function to be executed when token signals
             errorCallback  // function to be executed in case of failure to send command to token
           );
         }
       },
 
-      sendMatrixTextCmd: function (token, text, time) {
+      sendDisplayPatternCmd: function (token, pattern) {
+        token.grid = pattern
+
+        var completedFunction = function (data) {
+          hyper.log("We happily send the DISPLAYPATTERN command");
+          hyper.log(data)
+        };
+
+        var errorCallback = function (errorMsg) {
+          hyper.log("Failed to send the DISPLAYPATTERN command");
+          hyper.log(errorMsg);
+        };
+
+        if(app.tokenVal.hasOwnProperty(token.id)) {
+          if (!(app.tokenVal[token.id].includes('displayPattern'))) {
+            token.displayPattern(pattern,
+              completedFunction,  // function to be executed when token signals
+              errorCallback  // function to be executed in case of failure to send command to token
+            );
+          }
+        } else {
+          token.displayPattern(pattern,
+            completedFunction,  // function to be executed when token signals
+            errorCallback  // function to be executed in case of failure to send command to token
+          );
+        }
+      },
+
+      sendDisplayTextCmd: function (token, text) {
 
         var completedFunction = function (data) {
           hyper.log("We happily send the MATRIXTEXT command");
@@ -255,21 +285,21 @@
         };
 
         if(app.tokenVal.hasOwnProperty(token.id)) {
-          if (!(app.tokenVal[token.id].includes('matrixText'))) {
-            token.matrixText(text, time,
+          if (!(app.tokenVal[token.id].includes('displayText'))) {
+            token.displayText(text, time,
               completedFunction,  // function to be executed when token signals
               errorCallback  // function to be executed in case of failure to send command to token
             );
           }
         } else {
-          token.matrixText(text, time,
+          token.displayText(text,
             completedFunction,  // function to be executed when token signals
             errorCallback  // function to be executed in case of failure to send command to token
           );
         }
       },
 
-      sendCountCmd: function (token, num1, num2, time) {
+      sendCountCmd: function (token, num) {
 
         var completedFunction = function (data) {
           hyper.log("We happily send the COUNT command");
@@ -283,22 +313,45 @@
 
         if(app.tokenVal.hasOwnProperty(token.id)) {
           if (!(app.tokenVal[token.id].includes('count'))) {
-            token.count(num1, num2, time,
+            token.count(num,
               completedFunction,  // function to be executed when token signals
               errorCallback  // function to be executed in case of failure to send command to token
             );
           }
         } else {
-          token.count(num1, num2, time,
+          token.count(num,
             completedFunction,  // function to be executed when token signals
             errorCallback  // function to be executed in case of failure to send command to token
           );
         }
       },
 
+      // Command for calibrating token to printer type
+      sendPaperSelectCmd: function (token, paperType) {
+        var completedFunction = function (data) {
+          hyper.log("We happily send the PAPAERSELECT command");
+          hyper.log(data)
+        };
+
+        var errorCallback = function (errorMsg) {
+          hyper.log("Failed to send the PAPAERSELECT command");
+          hyper.log(errorMsg);
+        };
+
+        token.paperSelect(paperType,
+          completedFunction,  // function to be executed when token signals
+          errorCallback  // function to be executed in case of failure to send command to token
+        );
+      },
+
       next_panel: function () {
         $("#summary").hide();
         app.initiate();
+      },
+
+      setId: function (token, id) {
+        token.id = id
+        app.sendLedOnCmd(token, tokenVal[token.id][0])
       },
 
       getSector: function (token) {
@@ -320,9 +373,9 @@
         return app.sectorVals[Math.floor(Math.random() * app.sectorVals.length)]
       },
 
-      showTextPrompt: function (value) {
-        $('#promptField').html(value)
-        $('#textprompt').show()
+
+      getRandomGrid: function () {
+        return app.grids[Math.floor(Math.random() * app.grids.length)]
       },
 
       mathRandomInt: function (a, b) {
@@ -335,10 +388,17 @@
         return Math.floor(Math.random() * (b - a + 1) + a);
       },
 
-      getTextPrompt: function () {
-        return $('#promptField').value
-        $('#textprompt').hide()
-      }
+      getToken: function (id) {
+        for (let key in this.devices) {
+          if (this.devices[key].id == id) {
+            return (this.devices[key])
+          }
+        }
+      },
+
+      getGrid: function (token) {
+        return token.grid
+      },
 
     };
   </script>

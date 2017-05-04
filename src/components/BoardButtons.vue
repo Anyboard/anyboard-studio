@@ -1,8 +1,8 @@
 <template>
   <div style="display: inline">
-    <a @click="saveBoard" style="float:right">Save</a>
+    <a @click="downloadBoard" style="float:right">Save</a>
     <a @click="loadBoard" style="float:right">Load</a>
-    <a @click="downloadBoard" style="float:right">Download Image</a>
+    <a @click="saveBoard" style="float:right">Download Image</a>
     <a @click="printBoard" style="float:right">Print</a>
     <input @change="uploadBoard"type="file" id="upload" style="display: none"/>
   </div>
@@ -16,7 +16,7 @@
       }
     },
     methods: {
-      saveBoard () {
+      downloadBoard () {
         this.$store.dispatch('downloadBoard')
       },
       loadBoard () {
@@ -31,7 +31,7 @@
         }
         document.getElementById('upload').value = ''
       },
-      downloadBoard () {
+      saveBoard () {
         this.$store.dispatch('saveBoard')
       },
       printBoard () {
