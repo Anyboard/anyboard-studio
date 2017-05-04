@@ -14,7 +14,7 @@
       <label>
         LED Color:
         <input id="tokenColor" value="#00ff00" type="color" list="colors" v-model="defaultLEDColor"/>
-        <datalist id=colors>
+        <datalist id="colors">
           <option>#ff0000</option>
           <option>#00ff00</option>
           <option>#0000ff</option>
@@ -66,7 +66,7 @@
 </template>
 
 <script>
-  // import {mapState} from 'vuex'
+  import {mapState} from 'vuex'
   // import {colorHexToRGB} from '../utilities/helpers.js'
 
   export default {
@@ -104,6 +104,12 @@
         }
       }
     },
+    computed: {
+      ...mapState('token', {
+        selectedToken: state => state.selectedToken
+      })
+    },
+
     methods: {
       createToken () {
         let illegalActions = []
