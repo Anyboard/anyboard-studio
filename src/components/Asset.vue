@@ -18,15 +18,14 @@
     </div>
   </div>
 </template>
+
 <script type="text/javascript">
 import {mapState} from 'vuex'
 
 export default {
   data () {
     return {
-      asset_type: 'led',
-      tokenTabClosed: true,
-      ledgridTabClosed: true
+      asset_type: 'led'
     }
   },
 

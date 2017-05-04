@@ -43,12 +43,6 @@ export default {
       if (data.valid) {
         state.savedGrids[payload.name] = data.result
       }
-    },
-    UPDATE_ASSETS_LEDGRID (state) {
-      let hook = document.getElementById('ledgridTab')
-      for (let key in state.savedGrids) {
-        hook.appendChild(document.createTextNode(key))
-      }
     }
   },
   actions: {
@@ -65,7 +59,6 @@ export default {
     saveGrid ({commit}, payload) {
       commit('PUSH_TO_SAVEDGRIDS', payload)
       commit('CLEAR_GRID')
-      commit('UPDATE_ASSETS_LEDGRID')
     },
     clearGrid ({commit}) {
       commit('CLEAR_GRID')
