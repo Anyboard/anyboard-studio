@@ -30,18 +30,14 @@
   <script>
     $(document).ready(function(){
       $("#summary").show();
-      $("#main").hide();
     });
   </script>
 
   <script>
     var app;
     app = {
-      currentColor: "some value",
       devices: {},
-      currentTile: "white",
       connectedPlayers: 0,
-      requiredPlayers: [null, null],
 
       //REPLACEMEOKAY//
 
@@ -55,7 +51,7 @@
           },
           // function to be executed upon failure
           function (errorCode) {
-            console.log(errorCode)
+            hyper.log(errorCode)
           }
         );
       },
@@ -71,6 +67,7 @@
 
           // Add listener to be executed if the token connects
           token.on('connect', function () {
+            this.sendPaperSelectCmd(token, app.paperType)
             this.connectedPlayers += 1;
             document.getElementById(token.name).className = 'green';
             if (app.requiredPlayers[0] === null || ((this.connectedPlayers >= app.requiredPlayers[0])
@@ -98,7 +95,7 @@
 
         // If already connected, attempt to send green led command
         if (document.getElementById(tokenName).className == 'green') {
-          this.sendVibrationCmd(token);
+          this.sendVibrationCmd(token, 30);
           return;
         }
 
@@ -109,7 +106,7 @@
       },
 
       // Feedback commands
-      sendVibrationCmd: function (token) {
+      sendVibrationCmd: function (token, length) {
 
         var completedFunction = function (data) {
           hyper.log("We happily send the VIBRATE command");
@@ -123,13 +120,13 @@
 
         if(app.tokenVal.hasOwnProperty(token.id)) {
           if (!(app.tokenVal[token.id].includes('vibrate'))) {
-            token.vibrate([100],
+            token.vibrate([length],
               completedFunction,  // function to be executed when token signals
               errorCallback  // function to be executed in case of failure to send command to token
             );
           }
         } else {
-          token.vibrate([100],
+          token.vibrate([length],
             completedFunction,  // function to be executed when token signals
             errorCallback  // function to be executed in case of failure to send command to token
           );
@@ -344,9 +341,15 @@
         );
       },
 
+      // Other methods
       next_panel: function () {
         $("#summary").hide();
         app.initiate();
+      },
+
+      setId: function (token, id) {
+        token.id = id
+        app.sendLedOnCmd(token, tokenVal[token.id][0])
       },
 
       getSector: function (token) {
@@ -407,8 +410,7 @@
   <div id="tokens"></div>
   <button type="button" onclick="app.next_panel()" class="black" id="next" style="display: none;"> Next </button>
 </div>
-<div id="connected"></div>
-<div id="token_constraint">
+<div id="main">
   <h1 id="title">Game Title</h1>
   <h1>Messages</h1>
 

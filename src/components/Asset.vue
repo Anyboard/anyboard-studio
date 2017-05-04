@@ -1,40 +1,41 @@
 <template>
   <div>
-    <div id="assetWrapper">
-      <div id="assetTabWrapper" class="assetSection">
-        <div id="tokenTab" class="assetTab">
-          <IconButton icon="fa-caret-right" text="Token"></IconButton>
-        </div>
-        <button @click="printTokens">Token</button>
+    <div id="asset-listing">
+      <collapse accordion>
+        <collapse-item title="Tokens">
+          <div class="asset-item" v-for="(token, key) in savedTokens" @click="showToken() + selectAsset('token',key)">{{key}}</div>
+        </collapse-item>
+        <collapse-item title="LED Grids">
+          <div class="asset-item" v-for="grid in savedGrids" @click="showLedgrid"></div>
+        </collapse-item>
+      </collapse>
+    </div>
 
-        <div id="ledgridTab" class="assetTab">
-          <IconButton icon="fa-caret-right" text="Led Grid"></IconButton>
-        </div>
-        <button @click="printGrids">Ledgrid</button>
-      </div>
-
-      <div id="assetEditorWrapper" class="assetSection">
-        <LEDGridEditor></LEDGridEditor>
-        <TokenEditor></TokenEditor>
-      </div>
+    <div id="asset_inspector">
+      <p style="color:#fff; font-size:2em;"> Inspector: </br> {{selectedToken}}</p>
+      <LEDGridEditor v-if="asset_type === 'led'"></LEDGridEditor>
+      <TokenEditor v-if="asset_type === 'token'" chosen="chosenAsset"></TokenEditor>
     </div>
   </div>
 </template>
 <script type="text/javascript">
+import {mapState} from 'vuex'
+
 export default {
   data () {
     return {
-      ledgrids: this.$store.getters.GET_SAVEDLEDGRIDS,
-      tokens: this.$store.getters.GET_SAVEDTOKENS
+      asset_type: 'led',
+      tokenTabClosed: true,
+      ledgridTabClosed: true
     }
   },
-  watch: {
-    ledgrids (val) {
-      let hook = document.getElementById('ledgridTab')
-      for (let key in val) {
-        hook.appendChild.document.createTextNode(key)
-      }
-    }
+
+  computed: {
+    ...mapState('ledgrid', {savedGrids: state => state.savedGrids}),
+    ...mapState('token', {
+      savedTokens: state => state.savedTokens,
+      selectedToken: state => state.selectedToken
+    })
   },
   components: {
     LEDGridEditor: require('./LEDGridEditor.vue'),
@@ -42,51 +43,68 @@ export default {
     IconButton: require('./IconButton.vue')
   },
   methods: {
-    printTokens (context) {
-      console.log(this.$store.getters.GET_SAVEDTOKENS)
-      console.log(context)
+    showToken () {
+      this.asset_type = 'token'
     },
-    printGrids (context) {
-      console.log(this.$store.getters.GET_SAVEDLEDGRIDS)
-      console.log(context.rootGetters)
-    }
-  },
-  mounted () {
-    let hook = document.getElementById('ledgridTab')
-    for (let key in this.ledgrids) {
-      hook.appendChild.document.createTextNode(key)
+    showLedgrid () {
+      this.asset_type = 'led'
+    },
+    selectAsset (type, key) {
+      console.log(key)
+      this.$store.dispatch('token/selectToken', key)
+      this.type = type
     }
   }
 }
 </script>
-<style lang="SASS" scoped>
-  .assetSection {
-    margin-left: -1px;
-    width: 40vw;
-    border: 1px solid black;
-    padding: 5px;
+
+<style lang="SASS">
+#asset-listing {
+  width:70vw;
+  background:#383;
+
+  .collapse-wrap {
+    width:100%;
   }
-  .assetTab{
-    border: 1px solid #2d2d2d;
-    background-color: #3f3f3f;
-    margin-bottom: -1px;
+
+  .asset-item {
+    display: inline-block;
+    width:5em;
+    height: 5em;
+    border-radius: 5px;
+    padding:1em;
+    background:#fff;
+    margin:2px;
   }
-  .assetTab:hover{
-    cursor: pointer;
-    background-color: #2d2d2d;
-  }
-  #assetWrapper{
-    color: white;
-    display: flex;
-    align-items: stretch;
-    flex-direction: row;
-  }
-  #assetTabWrapper {
-    display: flex;
-    align-items: stretch;
-    flex-direction: column;
-  }
-  .icon.is-medium, .icon.is-small{
-    display: inline !important;
-  }
+}
+
+#asset-inspector {
+  width:30vw;
+  background:#f90;
+}
+
+.assetTab{
+  width: 200px;
+  border: 1px solid #2d2d2d;
+  background-color: #3f3f3f;
+  margin-bottom: -1px;
+}
+.assetTab:hover{
+  cursor: pointer;
+  background-color: #2d2d2d;
+}
+#assetWrapper{
+  color: white;
+  display: flex;
+  align-items: stretch;
+  flex-direction: row;
+}
+#assetTabWrapper {
+  display: flex;
+  align-items: stretch;
+  flex-direction: column;
+}
+.icon.is-medium, .icon.is-small{
+  display: inline !important;
+}
 </style>

@@ -5,13 +5,16 @@ import {insertIntoDict, colorHexToRGB} from '../utilities/helpers.js'
 
 export default {
   namespaced: true,
+
   state: {
     savedTokens: {
       Dragon: [[0, 255, 0], 'vibrate', 'tap'],
       Human: [[255, 0, 0], 'shake']
     },
-    numberOfDynamicTokens: 0
+    numberOfDynamicTokens: 0,
+    selectedToken: 'Dragon'
   },
+
   mutations: {
     SUBMIT_TOKEN (state, payload) {
       insertIntoDict(state.savedTokens, state.name, payload)
@@ -34,13 +37,26 @@ export default {
       }
 
       insertIntoDict(state.savedTokens, name, tokenData)
+    },
+
+    SELECT_TOKEN (state, tokenName) {
+      state.selectedToken = tokenName
     }
   },
+
   actions: {
     saveToken ({commit}, payload) {
       commit('ADD_NEW_TOKEN', payload)
+    },
+
+    // Selects a token for viewing/editing
+    selectToken ({commit}, tokenName) {
+      console.log('I am here!')
+      console.log(tokenName)
+      commit('SELECT_TOKEN', tokenName)
     }
   },
+
   getters: {
     GET_SAVEDTOKENS: state => {
       return state.savedTokens

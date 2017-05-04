@@ -106,15 +106,23 @@ const blocklyInit = function (Blockly, TOKENS, GRIDS, sectorObject, sectorNames,
       this.setHelpUrl('')
     }
   }
+  var VIBRATIONLENGTHS =
+    [['long', '100'],
+     ['medium', '30'],
+     ['short', '10']]
   Blockly.Blocks['vibrate'] = {
     init: function () {
       this.appendValueInput('TOKEN')
           .setCheck('Token')
           .appendField('Vibrate')
+      this.appendDummyInput()
+          .appendField('for a')
+          .appendField(new Blockly.FieldDropdown(VIBRATIONLENGTHS), 'LENGTH')
+          .appendField('time')
       this.setPreviousStatement(true, null)
       this.setNextStatement(true, null)
       this.setColour(255)
-      this.setTooltip('Vibrates a token.')
+      this.setTooltip('Vibrates a token for the indicated duration.')
       this.setHelpUrl('')
     }
   }
@@ -274,6 +282,9 @@ const blocklyInit = function (Blockly, TOKENS, GRIDS, sectorObject, sectorNames,
         .appendField(new Blockly.FieldDropdown(PLAYERNUM), 'MIN')
         .appendField('and')
         .appendField(new Blockly.FieldDropdown(PLAYERNUM), 'MAX')
+      this.appendDummyInput()
+        .appendField('Set paper type to')
+        .appendField(new Blockly.FieldDropdown([['Laserprinter', '1'], ['Inkjet', '2']]), 'PAPER')
       this.appendStatementInput('STACK')
         .setCheck(null)
       this.setColour(65)
@@ -640,7 +651,8 @@ const blocklyInit = function (Blockly, TOKENS, GRIDS, sectorObject, sectorNames,
   }
   Blockly.JavaScript['vibrate'] = function (block) {
     var token = Blockly.JavaScript.valueToCode(block, 'TOKEN', Blockly.JavaScript.ORDER_FUNCTION_CALL)
-    var code = 'app.sendVibrationCmd(' + token + ');\n'
+    var length = block.getFieldValue('LENGTH')
+    var code = 'app.sendVibrationCmd(' + token + ', ' + length + ');\n'
     return code
   }
   Blockly.JavaScript['vibrate_pattern'] = function (block) {
@@ -744,6 +756,7 @@ const blocklyInit = function (Blockly, TOKENS, GRIDS, sectorObject, sectorNames,
       Blockly.JavaScript.min_players = maxPlayers
       Blockly.JavaScript.max_players = minPlayers
     }
+    Blockly.JavaScript.paper_type = block.getFieldValue('PAPER')
     var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
     var code = '\n'
     code += stack + '\n'
@@ -892,6 +905,7 @@ const blocklyInit = function (Blockly, TOKENS, GRIDS, sectorObject, sectorNames,
   Blockly.JavaScript.init = function (workspace) {
     Blockly.JavaScript.min_players = null
     Blockly.JavaScript.max_players = null
+    Blockly.JavaScript.paper_type = '1'
     Blockly.JavaScript.hasMoveBlock = false
     // Create a dictionary of definitions to be printed before the code.
     Blockly.JavaScript.definitions_ = Object.create(null)
@@ -1041,6 +1055,9 @@ const blocklyInit = function (Blockly, TOKENS, GRIDS, sectorObject, sectorNames,
     var newDict = JSON.parse(JSON.stringify(tokenVal)) // clone tokenVal. Need this workaround because native cloning does not exist in JS
     for (var key in newDict) {
       newDict[key][0] = Blockly.JavaScript.writeList(newDict[key][0], false)
+      for (var i = 1; i < newDict[key].length; i++) {
+        newDict[key][i] = "'" + newDict[key][i] + "'"
+      }
     }
     return Blockly.JavaScript.writeListDictionary('tokenVal', newDict)
   }
@@ -1061,7 +1078,8 @@ const blocklyInit = function (Blockly, TOKENS, GRIDS, sectorObject, sectorNames,
     Blockly.JavaScript.variableDB_.reset()
     var output = definitions.join('\n\n') + '\n\n\n'
     // output += Blockly.JavaScript.writeDictionary('tiles', tilesdict)
-    output += 'requiredPlayers: [' + Blockly.JavaScript.min_players + ', ' + Blockly.JavaScript.max_players + ']\n\n'
+    output += 'paperType: ' + Blockly.JavaScript.paper_type + ',\n\n'
+    output += 'requiredPlayers: [' + Blockly.JavaScript.min_players + ', ' + Blockly.JavaScript.max_players + '],\n\n'
     output += 'grids: ' + Blockly.JavaScript.writeGridList() + ',\n\n'
     output += 'sectorVals: ' + Blockly.JavaScript.writeList(sectorVals, true) + ',\n\n'
     output += Blockly.JavaScript.writeTokenVal()

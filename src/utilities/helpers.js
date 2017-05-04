@@ -2,6 +2,44 @@ import {fabric} from 'fabric'
 import JSZip from 'jszip'
 import FileSaver from 'file-saver'
 
+const colourDict = {
+  '#4194D0': 5, // Light Blue
+  '#166CA0': 2, // Blue
+  '#112A95': 7, // Dark Blue
+  '#C047A3': 14, // Purple
+  '#5E1014': 16, // Dark Red
+  '#9B3235': 18, // Red
+  '#66C889': 21, // Light Green
+  '#30A747': 24, // Green
+  '#31682E': 30, // Dark Green
+  '#FF9344': 31, // Orange
+  '#D96623': 33, // Dark Orange
+  '#F4E658': 37 // Yellow
+}
+
+const colourNames = {
+  '#4194D0': 'Light Blue',
+  '#166CA0': 'Blue',
+  '#112A95': 'Dark Blue',
+  '#C047A3': 'Purple',
+  '#5E1014': 'Dark Red',
+  '#9B3235': 'Red',
+  '#66C889': 'Light Green',
+  '#30A747': 'Green',
+  '#31682E': 'Dark Green',
+  '#FF9344': 'Orange',
+  '#D96623': 'Dark Orange',
+  '#F4E658': 'Yellow'
+}
+
+let sectorDict = {
+  'Start Sector': '#C047A3',
+  'Mid Sector': '#F4E658',
+  'End Sector': '#30A747'
+}
+
+let sectorList = Object.keys(sectorDict)
+
 export const createPolyPoints = function (sideCount, radius) {
   var sweep = Math.PI * 2 / sideCount
   var cx = radius
@@ -40,7 +78,7 @@ export const restoreObjs = function (group, cvs) {
     cvs.add(items[i])
   }
 }
-// Layers types of objects, text > rects > paths > images
+// Layers types of objects, text > top paths > sectors > bottom paths > images > grid
 export const layerify = function (cvs) {
   // Sets up variables for all objects and lists for the types
   var obj = cvs.getObjects()
@@ -100,36 +138,6 @@ export const insertIntoDict = function (dict, key, value) {
   }
 }
 
-const colourDict = {
-  '#4194D0': 5, // Light Blue
-  '#166CA0': 2, // Blue
-  '#112A95': 7, // Dark Blue
-  '#C047A3': 14, // Purple
-  '#5E1014': 16, // Dark Red
-  '#9B3235': 18, // Red
-  '#66C889': 21, // Light Green
-  '#30A747': 24, // Green
-  '#31682E': 30, // Dark Green
-  '#FF9344': 31, // Orange
-  '#D96623': 33, // Dark Orange
-  '#F4E658': 37 // Yellow
-}
-
-const colourNames = {
-  '#4194D0': 'Light Blue',
-  '#166CA0': 'Blue',
-  '#112A95': 'Dark Blue',
-  '#C047A3': 'Purple',
-  '#5E1014': 'Dark Red',
-  '#9B3235': 'Red',
-  '#66C889': 'Light Green',
-  '#30A747': 'Green',
-  '#31682E': 'Dark Green',
-  '#FF9344': 'Orange',
-  '#D96623': 'Dark Orange',
-  '#F4E658': 'Yellow'
-}
-
 export const getColorName = function (color) {
   return colourNames[color]
 }
@@ -148,6 +156,7 @@ export const exportSectors = function (canvas) {
       // May want to give all sectors a unique property to allow for more sector types in the future
       if (['rect', 'polygon', 'circle'].includes(sectors[i]['type'])) {
         str = sectors[i]['name']
+        // To avoid blockly drop down list conflicts
         if (typeof str === 'string') {
           str.replace(' ', '\u00A0')
         }
@@ -158,13 +167,6 @@ export const exportSectors = function (canvas) {
   }
   return sectorTypeObject
 }
-
-var sectorDict = {
-  'Start Sector': '#C047A3',
-  'Mid Sector': '#F4E658',
-  'End Sector': '#30A747'
-}
-var sectorList = Object.keys(sectorDict)
 
 export const updateSectorList = function (canvas) {
   const obj = canvas.getObjects()
