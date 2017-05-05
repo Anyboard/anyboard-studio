@@ -69,7 +69,7 @@
           token.on('connect', function () {
             this.connectedPlayers += 1;
             document.getElementById('ap'+token.address).className = 'green';
-            app.sendPaperSelectCmd(token, app.paperType)
+            token.paperSelect(this.paperType)
             if (app.requiredPlayers[0] === null || ((this.connectedPlayers >= app.requiredPlayers[0])
               && (this.connectedPlayers <= app.requiredPlayers[1]))) {
               $('#next').show()
@@ -311,7 +311,6 @@
       sendPaperSelectCmd: function (token, paperType) {
         var completedFunction = function (data) {
           hyper.log("We happily send the PAPERSELECT command");
-          hyper.log(data)
         };
 
         var errorCallback = function (errorMsg) {
@@ -392,6 +391,7 @@
   </button>
   <div id="tokens"></div>
   <button type="button" onclick="app.next_panel()" class="black" id="next" style="display: none;"> Next </button>
+  <br>
 </div>
 <div id="main">
   <h1 id="title">Game Title</h1>
