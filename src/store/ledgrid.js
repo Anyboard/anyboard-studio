@@ -21,7 +21,7 @@ export default {
       'smile': '0024242400423C00',
       'frown': '00242424003C4200'
     },
-    selectedGrid: 'smile'
+    selectedGrid: ''
   },
   mutations: {
     SET_GRID (state, grid) {
@@ -45,13 +45,20 @@ export default {
         state.savedGrids[payload.name] = data.result
       }
     },
+    UPDATE_GRID (state, payload) {
+      let data = binaryToHex(payload.str)
+      if (data.valid) {
+        state.savedGrids[state.selectedGrid] = data.result
+      }
+    },
     SELECT_GRID (state, gridName) {
       state.selectedGrid = gridName
     }
   },
   actions: {
     setGrid ({commit, state}, hexString) {
-      var newGrid = binaryToList(hexToBinary(hexString))
+      var binaryString = hexToBinary(hexString)['result']
+      var newGrid = binaryToList(binaryString)
       commit('SET_GRID', newGrid)
     },
     changeGrid ({commit, state}, n) {
@@ -68,6 +75,9 @@ export default {
       commit('PUSH_TO_SAVEDGRIDS', payload)
       commit('CLEAR_GRID')
     },
+    updateGrid ({commit}, payload) {
+      commit('UPDATE_GRID', payload)
+    },
     clearGrid ({commit}) {
       commit('CLEAR_GRID')
     },
@@ -77,6 +87,10 @@ export default {
       var binaryString = hexToBinary(hexString)['result']
       var newGrid = binaryToList(binaryString)
       commit('SET_GRID', newGrid)
+    },
+    deselectGrid ({commit, state}, gridName) {
+      commit('SELECT_GRID', '')
+      commit('CLEAR_GRID')
     }
   },
   getters: {

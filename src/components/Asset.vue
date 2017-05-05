@@ -7,6 +7,7 @@
         </collapse-item>
         <collapse-item title="LED Grids">
           <div class="asset-item" v-for="(grid, key) in savedGrids" @click="showLedgrid() + selectAsset('grid',key)">{{key}}</div>
+          <div class="asset-item" @click="showLedgrid() + newGrid()">NEW</div>
         </collapse-item>
       </collapse>
     </div>
@@ -58,6 +59,9 @@ export default {
         this.$store.dispatch('ledgrid/selectGrid', key)
       }
       this.type = type
+    },
+    newGrid () {
+      this.$store.dispatch('ledgrid/deselectGrid')
     }
   }
 }
