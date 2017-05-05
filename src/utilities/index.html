@@ -30,16 +30,13 @@
   <script>
     $(document).ready(function(){
       $("#summary").show();
-      $("#main").hide();
     });
   </script>
 
   <script>
     var app;
     app = {
-      currentColor: "some value",
       devices: {},
-      currentTile: "white",
       connectedPlayers: 0,
 
       //REPLACEMEOKAY//
@@ -54,25 +51,24 @@
           },
           // function to be executed upon failure
           function (errorCode) {
-            console.log(errorCode)
+            hyper.log(errorCode)
           }
         );
       },
 
       // Function to be executed upon having discovered a token
       addDiscovered: function (token) {
-        if (!this.devices[token.name]) {
-          this.devices[token.name] = token;
+        if (token.name.toLowerCase() === 'anypawn') {
+          this.devices[token.address] = token
 
           // Add button for token to body
           //document.body.innerHTML += '<button type="button" id="' + token.name + '" onclick="app.connect(' + "'" + token.name + "'" + ')" class="grey">' + token.name + ' </button><br />';
-          $("#tokens").append('<button type="button" id="' + token.name + '" onclick="app.connect(' + "'" + token.name + "'" + ')" class="grey">' + token.name + ' </button><br />');
+          $("#tokens").append('<button type="button" id="ap' + token.address + '" onclick="app.connect(' + "'" + token.address + "'" + ')" class="grey">' + token.name + ' </button><br />');
 
           // Add listener to be executed if the token connects
           token.on('connect', function () {
-            this.sendPaperSelectCmd(token, app.paperType)
             this.connectedPlayers += 1;
-            document.getElementById(token.name).className = 'green';
+            document.getElementById('ap'+token.address).className = 'green';
             if (app.requiredPlayers[0] === null || ((this.connectedPlayers >= app.requiredPlayers[0])
               && (this.connectedPlayers <= app.requiredPlayers[1]))) {
               $('#next').show()
@@ -89,21 +85,21 @@
       },
 
       // Attempts to connect to token.
-      connect: function (tokenName) {
-        var token = this.devices[tokenName];
+      connect: function (tokenAddress) {
+        var token = this.devices[tokenAddress];
 
         // If already connecting, stop
-        if (document.getElementById(tokenName).className == 'blue')
+        if (document.getElementById('ap'+token.address).className == 'blue')
           return;
 
         // If already connected, attempt to send green led command
-        if (document.getElementById(tokenName).className == 'green') {
+        if (document.getElementById('ap'+token.address).className == 'green') {
           this.sendVibrationCmd(token);
           return;
         }
 
         // Signal that we're attempting to connect
-        document.getElementById(tokenName).className = 'blue';
+        document.getElementById('ap'+token.address).className = 'blue';
         // Send connect command.
         token.connect();
       },
@@ -344,6 +340,7 @@
         );
       },
 
+      // Other methods
       next_panel: function () {
         $("#summary").hide();
         app.initiate();
@@ -412,8 +409,7 @@
   <div id="tokens"></div>
   <button type="button" onclick="app.next_panel()" class="black" id="next" style="display: none;"> Next </button>
 </div>
-<div id="connected"></div>
-<div id="token_constraint">
+<div id="main">
   <h1 id="title">Game Title</h1>
   <h1>Messages</h1>
 
