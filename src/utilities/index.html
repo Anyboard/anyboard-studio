@@ -109,12 +109,10 @@
 
         var completedFunction = function (data) {
           hyper.log("We happily send the VIBRATE command");
-          hyper.log(data)
         };
 
         var errorCallback = function (errorMsg) {
           hyper.log("Failed to send the VIBRATE command");
-          hyper.log(errorMsg);
         };
 
         if(app.tokenVal.hasOwnProperty(token.id)) {
@@ -136,12 +134,10 @@
 
         var completedFunction = function (data) {
           hyper.log("We happily send the VIBRATEPATTERN command");
-          hyper.log(data)
         };
 
         var errorCallback = function (errorMsg) {
           hyper.log("Failed to send the VIBRATEPATTERN command");
-          hyper.log(errorMsg);
         };
 
         if(app.tokenVal.hasOwnProperty(token.id)) {
@@ -163,12 +159,10 @@
 
         var completedFunction = function (data) {
           hyper.log("We happily send the LEDON command");
-          hyper.log(data)
         };
 
         var errorCallback = function (errorMsg) {
           hyper.log("Failed to send the LEDON command");
-          hyper.log(errorMsg);
         };
 
         if(app.tokenVal.hasOwnProperty(token.id)) {
@@ -190,12 +184,10 @@
 
         var completedFunction = function (data) {
           hyper.log("We happily send the LEDBLINK command");
-          hyper.log(data)
         };
 
         var errorCallback = function (errorMsg) {
           hyper.log("Failed to send the LEDBLINK command");
-          hyper.log(errorMsg);
         };
 
         if(app.tokenVal.hasOwnProperty(token.id)) {
@@ -217,12 +209,10 @@
 
         var completedFunction = function (data) {
           hyper.log("We happily send the LEDOFF command");
-          hyper.log(data)
         };
 
         var errorCallback = function (errorMsg) {
           hyper.log("Failed to send the LEDOFF command");
-          hyper.log(errorMsg);
         };
 
         if(app.tokenVal.hasOwnProperty(token.id)) {
@@ -245,12 +235,10 @@
 
         var completedFunction = function (data) {
           hyper.log("We happily send the DISPLAYPATTERN command");
-          hyper.log(data)
         };
 
         var errorCallback = function (errorMsg) {
           hyper.log("Failed to send the DISPLAYPATTERN command");
-          hyper.log(errorMsg);
         };
 
         if(app.tokenVal.hasOwnProperty(token.id)) {
@@ -272,12 +260,10 @@
 
         var completedFunction = function (data) {
           hyper.log("We happily send the MATRIXTEXT command");
-          hyper.log(data)
         };
 
         var errorCallback = function (errorMsg) {
           hyper.log("Failed to send the MATRIXTEXT command");
-          hyper.log(errorMsg);
         };
 
         if(app.tokenVal.hasOwnProperty(token.id)) {
@@ -299,12 +285,10 @@
 
         var completedFunction = function (data) {
           hyper.log("We happily send the COUNT command");
-          hyper.log(data)
         };
 
         var errorCallback = function (errorMsg) {
           hyper.log("Failed to send the COUNT command");
-          hyper.log(errorMsg);
         };
 
         if(app.tokenVal.hasOwnProperty(token.id)) {
@@ -325,13 +309,12 @@
       // Command for calibrating token to printer type
       sendPaperSelectCmd: function (token, paperType) {
         var completedFunction = function (data) {
-          hyper.log("We happily send the PAPAERSELECT command");
+          hyper.log("We happily send the PAPERSELECT command");
           hyper.log(data)
         };
 
         var errorCallback = function (errorMsg) {
-          hyper.log("Failed to send the PAPAERSELECT command");
-          hyper.log(errorMsg);
+          hyper.log("Failed to send the PAPERSELECT command");
         };
 
         token.paperSelect(paperType,
