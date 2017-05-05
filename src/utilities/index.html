@@ -69,6 +69,7 @@
           token.on('connect', function () {
             this.connectedPlayers += 1;
             document.getElementById('ap'+token.address).className = 'green';
+            app.sendPaperSelectCmd(token, app.paperType)
             if (app.requiredPlayers[0] === null || ((this.connectedPlayers >= app.requiredPlayers[0])
               && (this.connectedPlayers <= app.requiredPlayers[1]))) {
               $('#next').show()

@@ -70,6 +70,7 @@ htmlTemplate += '          // Add listener to be executed if the token connects\
 htmlTemplate += '          token.on(\'connect\', function () {\n'
 htmlTemplate += '            this.connectedPlayers += 1;\n'
 htmlTemplate += '            document.getElementById(\'ap\'+token.address).className = \'green\';\n'
+htmlTemplate += '            app.sendPaperSelectCmd(token, app.paperType)\n'
 htmlTemplate += '            if (app.requiredPlayers[0] === null || ((this.connectedPlayers >= app.requiredPlayers[0])\n'
 htmlTemplate += '              && (this.connectedPlayers <= app.requiredPlayers[1]))) {\n'
 htmlTemplate += '              $(\'#next\').show()\n'
