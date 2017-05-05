@@ -1,57 +1,34 @@
 <template>
   <div>
-    <ul class="fabric_toolbar">
-      <li>
-        <IconButton icon="fa-window-restore" text="Sector" tooltip="Insert a new sector"></IconButton>
-        <div class="drop-right">
-          <IconButton @click.native="makeShape" id="circle" icon="fa-circle" text="Circle" tooltip="Make a new circle sector"></IconButton>
-          <IconButton @click.native="makeShape" id="rect"  icon="fa-square" text="Square" tooltip="Make a new square sector"></IconButton>
-          <IconButton @click.native="makeShape" id="triangle"  icon="fa-play" text="Triangle" tooltip="Make a new triangle sector"></IconButton>
-        </div>
-      </li>
-      <li>
-          <IconButton @click.native="centerObject" icon="fa-crosshairs" text="Center" tooltip="Center selected object"></IconButton>
-      </li>
-      <li>
-        <IconButton @click.native="insertText" icon="fa-i-cursor" text="Text" tooltip="Insert a text element"></IconButton>
-      </li>
-      <li>
-        <IconButton @click.native="clickImage" icon="fa-image" text="Image" tooltip="Upload an image"></IconButton>
-        <input @change="uploadImage"type="file" id="image" style="display: none"/>
-      </li>
-      <li>
-        <IconButton @click.native="cloneObject" icon="fa-clone" text="Clone" tooltip="Make a copy of selected object"></IconButton>
-      </li>
-      <li>
-        <IconButton @click.native="deleteObject" icon="fa-window-close-o" text="Delete" tooltip="Delete selected object"></IconButton>
-      </li>
-      <li>
-        <IconButton @click.native="clearCanvas" icon="fa-eraser" text="Clear" tooltip="Clear the entire board"></IconButton>
-      </li>
-      <li>
-        <li>
-        <IconButton icon="fa-exchange" text="Arrange" tooltip=""></IconButton>
-        <div class="drop-right">
-          <IconButton @click.native="arrangeObject" id="forward"  icon="fa-angle-up" text="Forward" tooltip="Bring selected object forward"></IconButton>
-          <IconButton @click.native="arrangeObject" id="front"  icon="fa-angle-double-up" text="Front" tooltip="Bring selected object to the front"></IconButton>
-          <IconButton @click.native="arrangeObject" id="backward"  icon="fa-angle-down" text="Backward" tooltip="Send selected object backwards"></IconButton>
-          <IconButton @click.native="arrangeObject" id="back"  icon="fa-angle-double-down" text="Back" tooltip="Send selected object to the back"></IconButton>
-        </div>
-      </li>
-      <li>
-        <IconButton @click.native="toggleDraw" icon="fa-pencil" text="Drawing" tooltip="Toggle free drawing"></IconButton>
-        <div class="drop-right">
-          <IconButton @click.native="changeDrawLayer" icon="fa-repeat" text="Change Layer" tooltip="Change drawing layer between foreground and background"></IconButton>
-          <IconButton @click.native="changeDrawColor" icon="fa-paint-brush" text="Color Change" tooltip="Change the drawing color to black"></IconButton>
-        </div>
-      </li>
-      <li>
-        <IconButton @click.native="changeGridMode" icon="fa-square-o" text="Grid" tooltip="Change grid mode"></IconButton>
-      </li>
-      <li>
-        <IconButton @click.native="jsonDebug" icon="fa-at" text="DEBUG" tooltip="Log json debug"></IconButton>
-      </li>
-    </ul>
+    <div class="vtb">
+      <IconButton icon="fa-window-restore" text="Sector" nested="true">
+        <IconButton class="vtb_ib" @click.native="makeShape" id="circle" icon="fa-circle" text="Circle" tooltip="Make a new circle sector"></IconButton>
+        <IconButton class="vtb_ib"  @click.native="makeShape" id="rect"  icon="fa-square" text="Square" tooltip="Make a new square sector"></IconButton>
+        <IconButton class="vtb_ib"  @click.native="makeShape" id="triangle"  icon="fa-play" text="Triangle" tooltip="Make a new triangle sector"></IconButton>
+      </IconButton>
+
+    
+      <IconButton @click.native="centerObject" icon="fa-crosshairs" text="Center" tooltip="Center selected object"></IconButton>
+      <IconButton @click.native="insertText" icon="fa-i-cursor" text="Text" tooltip="Insert a text element"></IconButton>
+      <IconButton @click.native="clickImage" icon="fa-image" text="Image" tooltip="Upload an image"></IconButton>
+      <input @change="uploadImage"type="file" id="image" style="display: none"/>
+      <IconButton @click.native="cloneObject" icon="fa-clone" text="Clone" tooltip="Make a copy of selected object"></IconButton>
+    
+    
+      <IconButton @click.native="deleteObject" icon="fa-window-close-o" text="Delete" tooltip="Delete selected object"></IconButton>
+      <IconButton @click.native="clearCanvas" icon="fa-eraser" text="Clear" tooltip="Clear the entire board"></IconButton>
+      
+      <IconButton icon="fa-exchange" text="Arrange" nested="true">
+        <IconButton @click.native="arrangeObject" id="forward"  icon="fa-angle-up" text="Forward" tooltip="Bring selected object forward"></IconButton>
+        <IconButton @click.native="arrangeObject" id="front"  icon="fa-angle-double-up" text="Front" tooltip="Bring selected object to the front"></IconButton>
+        <IconButton @click.native="arrangeObject" id="backward"  icon="fa-angle-down" text="Backward" tooltip="Send selected object backwards"></IconButton>
+        <IconButton @click.native="arrangeObject" id="back"  icon="fa-angle-double-down" text="Back" tooltip="Send selected object to the back"></IconButton>
+      </IconButton>
+    
+      <IconButton @click.native="toggleDraw" icon="fa-pencil" text="Drawing" tooltip="Toggle free drawing"></IconButton>
+      <IconButton @click.native="changeGridMode" icon="fa-square-o" text="Grid" tooltip="Change grid mode"></IconButton>
+      <IconButton @click.native="jsonDebug" icon="fa-at" text="DEBUG" tooltip="Log json debug"></IconButton>
+    </div>
 
     <FabricCanvas></FabricCanvas>
     <FabricInspector></FabricInspector>
@@ -153,34 +130,35 @@ $icon-size: 45px;
 
   .icon {
     position: relative;
-    height: $icon-size*1.1 !important;
+    display:block;
+    height: $icon-size * 1.2 !important;
     width: $icon-size !important;
     line-height: $icon-size - 5px !important;
     border-radius: 2px;
     border: 1px solid #555;
+  }
 
-    span.text {
-      position: absolute;
-      bottom:2px;
-      width: $icon-size;
-      left:0;
-      line-height: 8pt;
-      font-size: 7pt;
-      text-transform: uppercase;
-    }
+  span.text {
+    position: absolute;
+    bottom:2px;
+    width: $icon-size;
+    left:0;
+    line-height: 8pt;
+    font-size: 7pt;
+    text-transform: uppercase;
+  }
 
-    span.tooltip {
-      position:absolute;
-      top:-1em;
-      left:1em;
-      background:#eae9e1;
-      color:#555;
-      width:auto;
-      border:1px dotted #eae9e1;
-      padding:2px;
-      display: none;
-      border-radius:2px;
-    }
+  span.tooltip {
+    position:absolute;
+    top:-1em;
+    left:1em;
+    background:#eae9e1;
+    color:#555;
+    width:auto;
+    border:1px dotted #eae9e1;
+    padding:2px;
+    display: none;
+    border-radius:2px;
   }
 
   .icon:hover {
@@ -225,6 +203,69 @@ $icon-size: 45px;
     display: block;
   }
 
+}
+
+.vtb {
+  display: block;
+  z-index: 99;
+  padding:2px;
+  border-radius: 2px;
+  color: #eae9e1;
+}
+
+.vtb_ib {
+  width:$icon-size;
+  text-align: center;
+  position:relative;
+  background: #555;
+}
+
+.vtb_dd {
+  width:$icon-size;
+  text-align: center;
+  position: relative;
+  background: #555;
+}
+
+.vtb_dd > div {
+  display: none;
+  position: absolute;
+  text-align: left;
+  left:50px;
+  top:0px;
+  background:#808;
+}
+
+.vtb_dd:hover > div {
+  display: block;
+}
+
+.vtb_dd > div .vtb_ib {
+  display: inline-block;
+}
+
+.vtb_text {
+  font-size: 8pt;
+  line-height: 8pt;
+  text-transform: uppercase;
+}
+
+
+.vtb_tooltip {
+  position:absolute;
+  top:-5px;
+  left:95%;
+  background:#eae9e1;
+  color:#555;
+  margin-right:-9999px;
+  border:1px dotted #eae9e1;
+  padding:2px;
+  display: none;
+  border-radius:2px;
+}
+
+.vtb_ib:hover > .vtb_tooltip {
+  display: inline-block;
 }
 
 .canvas_container {
