@@ -48,7 +48,7 @@
     },
     methods: {
       toggleIndex (n) {
-        this.$store.dispatch('ledgrid/setGrid', n)
+        this.$store.dispatch('ledgrid/changeGrid', n)
       },
       submitGrid () {
         if (this.validName) {

@@ -490,3 +490,12 @@ export const hexToBinary = function (s) {
   }
   return { valid: true, result: ret }
 }
+
+// converts a binary string into a list of false and true values
+export const binaryToList = function (s) {
+  let list = []
+  for (let i = 0; i < s.length; i += 1) {
+    list.push(s.substr(i, 1) === '1')
+  }
+  return list
+}

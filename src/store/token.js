@@ -8,8 +8,8 @@ export default {
 
   state: {
     savedTokens: {
-      Dragon: [[0, 255, 0], 'vibrate', 'tap'],
-      Human: [[255, 0, 0], 'shake']
+      'Dragon': [[0, 255, 0], 'vibrate', 'tap'],
+      'Human': [[255, 0, 0], 'shake']
     },
     numberOfDynamicTokens: 0,
     selectedToken: 'Dragon'
