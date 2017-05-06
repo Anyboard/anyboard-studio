@@ -90,6 +90,12 @@
         }
       })
 
+      document.addEventListener('keydown', (e) => {
+        if (e.keyCode === 46) {
+          this.$store.dispatch('deleteObject')
+        }
+      })
+
       this.$store.dispatch('setCanvas', cvs)
     }
   }
