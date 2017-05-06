@@ -478,3 +478,11 @@ export const hexToBinary = function (s) {
   }
   return { valid: true, result: ret }
 }
+
+// Traverses up the DOM until it finds an ancestor with the specified class
+export const findAncestor = function (el, cls) {
+  while (!el.classList.contains(cls)) {
+    el = el.parentElement
+  }
+  return el
+}

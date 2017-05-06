@@ -1,12 +1,14 @@
 <template>
   <div>
     <div class="vtb">
-      <IconButton icon="fa-window-restore" text="Sector" nested="true">
-        <IconButton class="vtb_ib" @click.native="makeShape" id="circle" icon="fa-circle" text="Circle" tooltip="Make a new circle sector"></IconButton>
-        <IconButton class="vtb_ib"  @click.native="makeShape" id="rect"  icon="fa-square" text="Square" tooltip="Make a new square sector"></IconButton>
-        <IconButton class="vtb_ib"  @click.native="makeShape" id="triangle"  icon="fa-play" text="Triangle" tooltip="Make a new triangle sector"></IconButton>
-      </IconButton>
-
+      <div class="vtb_dd">
+        <IconButton icon="fa-window-restore" text="Sector"></IconButton>
+        <div class="vtb_dropout">
+          <IconButton @click.native="makeShape" id="circle" icon="fa-circle" text="Circle" tooltip="Make a new circle sector"></IconButton>
+          <IconButton @click.native="makeShape" id="rect"  icon="fa-square" text="Square" tooltip="Make a new square sector"></IconButton>
+          <IconButton @click.native="makeShape" id="triangle"  icon="fa-play" text="Triangle" tooltip="Make a new triangle sector"></IconButton>
+        </div>
+      </div>
     
       <IconButton @click.native="centerObject" icon="fa-crosshairs" text="Center" tooltip="Center selected object"></IconButton>
       <IconButton @click.native="insertText" icon="fa-i-cursor" text="Text" tooltip="Insert a text element"></IconButton>
@@ -18,12 +20,16 @@
       <IconButton @click.native="deleteObject" icon="fa-window-close-o" text="Delete" tooltip="Delete selected object"></IconButton>
       <IconButton @click.native="clearCanvas" icon="fa-eraser" text="Clear" tooltip="Clear the entire board"></IconButton>
       
-      <IconButton icon="fa-exchange" text="Arrange" nested="true">
-        <IconButton @click.native="arrangeObject" id="forward"  icon="fa-angle-up" text="Forward" tooltip="Bring selected object forward"></IconButton>
-        <IconButton @click.native="arrangeObject" id="front"  icon="fa-angle-double-up" text="Front" tooltip="Bring selected object to the front"></IconButton>
-        <IconButton @click.native="arrangeObject" id="backward"  icon="fa-angle-down" text="Backward" tooltip="Send selected object backwards"></IconButton>
-        <IconButton @click.native="arrangeObject" id="back"  icon="fa-angle-double-down" text="Back" tooltip="Send selected object to the back"></IconButton>
-      </IconButton>
+      <div class="vtb_dd">
+        <IconButton icon="fa-exchange" text="Arrange"></IconButton>
+        <div class="vtb_dropout">
+          <IconButton @click.native="arrangeObject" id="forward"  icon="fa-angle-up" text="Forward" tooltip="Bring selected object forward"></IconButton>
+          <IconButton @click.native="arrangeObject" id="front"  icon="fa-angle-double-up" text="Front" tooltip="Bring selected object to the front"></IconButton>
+          <IconButton @click.native="arrangeObject" id="backward"  icon="fa-angle-down" text="Backward" tooltip="Send selected object backwards"></IconButton>
+          <IconButton @click.native="arrangeObject" id="back"  icon="fa-angle-double-down" text="Back" tooltip="Send selected object to the back"></IconButton>
+        </div>
+      </div>
+
     
       <IconButton @click.native="toggleDraw" icon="fa-pencil" text="Drawing" tooltip="Toggle free drawing"></IconButton>
       <IconButton @click.native="changeGridMode" icon="fa-square-o" text="Grid" tooltip="Change grid mode"></IconButton>
@@ -38,6 +44,7 @@
 </template>
 
 <script type="text/javascript">
+  import {findAncestor} from '../utilities/helpers.js'
 
   export default {
     name: 'BoardEditor',
@@ -47,7 +54,8 @@
     },
     methods: {
       makeShape (event) {
-        this.$store.dispatch('createShape', event.target.parentElement.id)
+        let ancestor = findAncestor(event.target, 'vtb_ib')
+        this.$store.dispatch('createShape', ancestor.id)
       },
       insertText () {
         this.$store.dispatch('insertText')
@@ -77,7 +85,8 @@
         this.$store.dispatch('centerObject')
       },
       arrangeObject (event) {
-        this.$store.dispatch('arrangeObject', event.target.id)
+        let ancestor = findAncestor(event.target, 'vtb_ib')
+        this.$store.dispatch('arrangeObject', ancestor.id)
       },
       clickImage () {
         document.getElementById('image').click()
@@ -108,109 +117,13 @@
 */
 $icon-size: 45px;
 
-.fabric_toolbar {
-  font-size:2em;
-  display: block;
-  list-style-type: none;
-  padding:2px;
-  background: #555;
-  border-radius: 2px;
-  color: #eae9e1;
-  z-index:99;
-  width:$icon-size + 4 ;
-
-  li {
-    position: relative;
-  }
-
-
-  span:hover {
-    color:#fff;
-  }
-
-  .icon {
-    position: relative;
-    display:block;
-    height: $icon-size * 1.2 !important;
-    width: $icon-size !important;
-    line-height: $icon-size - 5px !important;
-    border-radius: 2px;
-    border: 1px solid #555;
-  }
-
-  span.text {
-    position: absolute;
-    bottom:2px;
-    width: $icon-size;
-    left:0;
-    line-height: 8pt;
-    font-size: 7pt;
-    text-transform: uppercase;
-  }
-
-  span.tooltip {
-    position:absolute;
-    top:-1em;
-    left:1em;
-    background:#eae9e1;
-    color:#555;
-    width:auto;
-    border:1px dotted #eae9e1;
-    padding:2px;
-    display: none;
-    border-radius:2px;
-  }
-
-  .icon:hover {
-    border-color:#777 #444 #444 #777;
-  }
-
-  .icon:active {
-    border-color:#444 #777 #777 #444;
-  }
-
-  .icon:hover > .tooltip {
-    display: block;
-  }
-
-  .drop-right {
-    position: absolute;
-    display: none;
-    left:$icon-size + 1px ;
-    top:-2px;
-    width: 20px + ($icon-size * 2);
-    background: #666;
-    border-radius: 4px;
-    padding:4px;
-
-    .icon {
-      margin:0;
-      float: left;
-      margin:1px;
-      border-color:#666;
-    }
-
-    .icon:hover {
-      border-color:#777 #444 #444 #777;
-    }
-
-    .icon:active {
-      border-color:#444 #777 #777 #444;
-    }
-  }
-
-  li:hover > .drop-right {
-    display: block;
-  }
-
-}
-
 .vtb {
   display: block;
   z-index: 99;
   padding:2px;
   border-radius: 2px;
   color: #eae9e1;
+  background:#555;
 }
 
 .vtb_ib {
@@ -218,6 +131,15 @@ $icon-size: 45px;
   text-align: center;
   position:relative;
   background: #555;
+  border:1px solid #555;
+}
+
+.vtb_ib:hover {
+  border-color:#777 #444 #444 #777;
+}
+
+.vtb_ib:active {
+  border-color:#444 #777 #777 #444;
 }
 
 .vtb_dd {
@@ -227,16 +149,19 @@ $icon-size: 45px;
   background: #555;
 }
 
-.vtb_dd > div {
+.vtb_dd > div.vtb_dropout {
   display: none;
   position: absolute;
   text-align: left;
-  left:50px;
-  top:0px;
-  background:#808;
+  left:46px;
+  top:-3px;
+  background:#555;
+  margin-right:-999px;
+  padding:3px;
+  border-radius:2px;
 }
 
-.vtb_dd:hover > div {
+.vtb_dd:hover > div.vtb_dropout {
   display: block;
 }
 
@@ -245,9 +170,11 @@ $icon-size: 45px;
 }
 
 .vtb_text {
-  font-size: 8pt;
+  font-size: 6pt;
   line-height: 8pt;
   text-transform: uppercase;
+  display: inline-block;
+  width:$icon-size;
 }
 
 
@@ -262,6 +189,7 @@ $icon-size: 45px;
   padding:2px;
   display: none;
   border-radius:2px;
+  z-index:999;
 }
 
 .vtb_ib:hover > .vtb_tooltip {
