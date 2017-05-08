@@ -16,7 +16,7 @@ export default {
     allowLEDChange: true,
     allowTap: true,
     allowDoubleTap: true,
-    allowShake: true,
+    allowShake: false,
     allowTilt: true,
     allowTurn: true,
     allowTokenToken: true,

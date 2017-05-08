@@ -13,7 +13,7 @@
       </label>
       <label>
         LED Color:
-        <input id="tokenColor" value="#00ff00" type="color" list="colors" v-model="defaultLEDColor"/>
+        <input id="tokenColor" value="#00ff00" type="color" list="colors" :value="LEDColor" @input="updateLEDColor"/>
         <datalist id="colors">
           <option>#ff0000</option>
           <option>#00ff00</option>
@@ -28,43 +28,43 @@
       <p>Haptics:</p>
       <label>
         LED Change:
-        <input type="checkbox" v-model="allowLEDChange">
+        <input type="checkbox" :checked="allowLEDChange" @input="updateCheckbox('allowLEDChange')">
       </label>
 
       <label>
         Vibrate:
-        <input type="checkbox" v-model="allowVibrate">
+        <input type="checkbox" :checked="allowVibrate" @input="updateCheckbox('allowVibrate')">
       </label>
 
       <p>Actions:</p>
       <label>
         Tap:
-        <input type="checkbox" v-model="allowTap">
+        <input type="checkbox" :checked="allowTap" @input="updateCheckbox('allowTap')">
       </label>
 
       <label>
         Double-tap:
-        <input type="checkbox" v-model="allowDoubleTap">
+        <input type="checkbox" :checked="allowDoubleTap" @input="updateCheckbox('allowDoubleTap')">
       </label>
 
       <label>
         Shake:
-        <input type="checkbox" v-model="allowShake">
+        <input type="checkbox" :checked="allowShake" @input="updateCheckbox('allowShake')">
       </label>
 
       <label>
         Tilt:
-        <input type="checkbox" v-model="allowTilt">
+        <input type="checkbox" :checked="allowTilt" @input="updateCheckbox('allowTilt')">
       </label>
 
       <label>
         Turn:
-        <input type="checkbox" v-model="allowTurn">
+        <input type="checkbox" :checked="allowTurn" @input="updateCheckbox('allowTurn')">
       </label>
 
       <label>
         Token-token:
-        <input type="checkbox" v-model="allowTokenToken">
+        <input type="checkbox" :checked="allowTokenToken" @input="updateCheckbox('allowTokenToken')">
       </label>
       <button @click="createToken" :disabled="disableButton">Create token</button>
     </div>
@@ -81,15 +81,6 @@
       return {
         useDynamicName: true,
         staticName: '',
-        defaultLEDColor: '#00ff00',
-        allowLEDChange: true,
-        allowVibrate: true,
-        allowTap: true,
-        allowDoubleTap: true,
-        allowShake: true,
-        allowTilt: true,
-        allowTurn: true,
-        allowTokenToken: true,
         disableButton: true
       }
     },
@@ -111,8 +102,18 @@
     },
     computed: {
       ...mapState('token', {
-        savedTokens: state => state.savedTokens,
-        selectedToken: state => state.selectedToken
+        LEDColor: 'LEDColor',
+        savedTokens: 'savedTokens',
+        selectedToken: 'selectedToken',
+        allowVibrate: 'allowVibrate',
+        allowLEDChange: 'allowLEDChange',
+        allowTap: 'allowTap',
+        allowDoubleTap: 'allowDoubleTap',
+        allowShake: 'allowShake',
+        allowTilt: 'allowTilt',
+        allowTurn: 'allowTurn',
+        allowTokenToken: 'allowTokenToken',
+        disableButton: 'disableButton'
       }),
       isNewToken: function () {
         return !this.savedTokens.hasOwnProperty(this.selectedToken)
@@ -180,6 +181,12 @@
         if ('tokenToken' in token) {
           this.allowTokenToken = false
         }
+      },
+      updateCheckbox (checkboxName) {
+        this.$store.dispatch('token/updateTokenAttribute', checkboxName)
+      },
+      updateLEDColor (e) {
+        this.$store.dispatch('token/updateLEDColor', e.target.value)
       }
     }
   }
