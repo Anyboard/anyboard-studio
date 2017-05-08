@@ -62,6 +62,8 @@ export default {
     },
     newGrid () {
       this.$store.dispatch('ledgrid/deselectGrid')
+      this.$store.dispatch('ledgrid/clearGrid')
+      console.log(this.savedGrids)
     }
   }
 }
