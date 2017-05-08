@@ -102,17 +102,17 @@
     },
     computed: {
       ...mapState('token', {
-        LEDColor: 'LEDColor',
+        LEDColor: state => state.attributes.LEDColor,
         savedTokens: 'savedTokens',
         selectedToken: 'selectedToken',
-        allowVibrate: 'allowVibrate',
-        allowLEDChange: 'allowLEDChange',
-        allowTap: 'allowTap',
-        allowDoubleTap: 'allowDoubleTap',
-        allowShake: 'allowShake',
-        allowTilt: 'allowTilt',
-        allowTurn: 'allowTurn',
-        allowTokenToken: 'allowTokenToken'
+        allowVibrate: state => state.attributes.allowVibrate,
+        allowLEDChange: state => state.attributes.allowLEDChange,
+        allowTap: state => state.attributes.allowTap,
+        allowDoubleTap: state => state.attributes.allowDoubleTap,
+        allowShake: state => state.attributes.allowShake,
+        allowTilt: state => state.attributes.allowTilt,
+        allowTurn: state => state.attributes.allowTurn,
+        allowTokenToken: state => state.attributes.allowTokenToken
       }),
       isNewToken: function () {
         return !this.savedTokens.hasOwnProperty(this.selectedToken)

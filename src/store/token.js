@@ -14,7 +14,7 @@ export default {
     numberOfDynamicTokens: 0,
     selectedToken: '',
     attributes: {
-      LEDColor: '#00ff00',
+      LEDColor: '#00ffff',
       allowLEDChange: true,
       allowVibrate: true,
       allowTap: true,
