@@ -410,9 +410,14 @@ export const colorHexToRGB = function (hexCode) {
  *                        */
 export const colorRGBToHex = function (RGBArray) {
   let hexString = '#'
-  hexString += RGBArray[0].toString(16)
-  hexString += RGBArray[1].toString(16)
-  hexString += RGBArray[2].toString(16)
+  for (var i = 0; i < 3; i++) {
+    var string = RGBArray[i].toString(16)
+    console.log(string)
+    if (string.length === 1) {
+      string = '0' + string
+    }
+    hexString += string
+  }
   return hexString
 }
 
