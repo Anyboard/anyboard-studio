@@ -113,10 +113,7 @@
       ...mapState('token', {
         savedTokens: state => state.savedTokens,
         selectedToken: state => state.selectedToken
-      }),
-      isNewToken: function () {
-        return !this.savedTokens.hasOwnProperty(this.selectedToken)
-      }
+      })
     },
 
     methods: {
@@ -155,31 +152,7 @@
         this.$store.dispatch('token/saveToken', payload)
       },
       setTokenValues (token) {
-        this.defaultLEDColor = token[0]
-        if ('vibrate' in token) {
-          this.allowVibrate = false
-        }
-        if ('ledchange' in token) {
-          this.allowLEDChange = false
-        }
-        if ('tap' in token) {
-          this.allowTap = false
-        }
-        if ('shake' in token) {
-          this.allowShake = false
-        }
-        if ('doubleTap' in token) {
-          this.allowDoubleTap = false
-        }
-        if ('tilt' in token) {
-          this.allowTilt = false
-        }
-        if ('turn' in token) {
-          this.allowTurn = false
-        }
-        if ('tokenToken' in token) {
-          this.allowTokenToken = false
-        }
+
       }
     }
   }
