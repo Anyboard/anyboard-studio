@@ -1,14 +1,18 @@
 <template>
   <div class="LEDGridEditor">
-    <div>
+    <div v-if="isNewGrid">
       <label for="ledGridName">Pattern name:</label>
       <input id="ledGridName" class="normalinput" type="text" v-model="gridName" placeholder="Pattern name"/>
+    </div>
+    <div v-if="!isNewGrid">
+      <label for="ledGridName">{{selectedGrid}}</label>
     </div>
     <div id="ledGrid">
       <span v-for="(n,index) in grid" @click="toggleIndex(index)" :class="n?'active-led':'false'" :key="index"></span>
     </div>
     <div>
-      <button id="ledGridSubmitButton" @click="submitGrid">Submit</button>
+      <button v-if="isNewGrid" id="ledGridSubmitButton" @click="submitGrid">Submit</button>
+      <button v-if="!isNewGrid" id="ledGridUpdateButton" @click="updateGrid">Update</button>
       <button id="ledGridCancelButton" @click="clearGrid">Clear</button>
     </div>
   </div>
@@ -25,7 +29,13 @@
       }
     },
     computed: {
-      ...mapState('ledgrid', {grid: state => state.grid}),
+      ...mapState('ledgrid', {
+        grid: state => state.grid,
+        selectedGrid: state => state.selectedGrid
+      }),
+      isNewGrid: function () {
+        return this.selectedGrid === ''
+      },
       gridString: function () {
         let n = ''
         for (let i = 0; i < this.grid.length; i++) {
@@ -48,7 +58,7 @@
     },
     methods: {
       toggleIndex (n) {
-        this.$store.dispatch('ledgrid/setGrid', n)
+        this.$store.dispatch('ledgrid/changeGrid', n)
       },
       submitGrid () {
         if (this.validName) {
@@ -60,6 +70,9 @@
             document.getElementById('ledGridName').className = 'normalinput'
           }, 200)
         }
+      },
+      updateGrid () {
+        this.$store.dispatch('ledgrid/updateGrid', {str: this.gridString})
       },
       clearGrid () {
         this.$store.dispatch('ledgrid/clearGrid')

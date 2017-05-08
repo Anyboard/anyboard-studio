@@ -58,20 +58,20 @@
 
       // Function to be executed upon having discovered a token
       addDiscovered: function (token) {
-        if (!this.devices[token.name]) {
-          this.devices[token.name] = token;
+        if (token.name.toLowerCase() === 'anypawn') {
+          this.devices[token.address] = token
 
           // Add button for token to body
           //document.body.innerHTML += '<button type="button" id="' + token.name + '" onclick="app.connect(' + "'" + token.name + "'" + ')" class="grey">' + token.name + ' </button><br />';
-          $("#tokens").append('<button type="button" id="' + token.name + '" onclick="app.connect(' + "'" + token.name + "'" + ')" class="grey">' + token.name + ' </button><br />');
+          $("#tokens").append('<button type="button" id="ap' + token.address + '" onclick="app.connect(' + "'" + token.address + "'" + ')" class="grey">' + token.name + ' </button><br />');
 
           // Add listener to be executed if the token connects
           token.on('connect', function () {
-            this.sendPaperSelectCmd(token, app.paperType)
             this.connectedPlayers += 1;
-            document.getElementById(token.name).className = 'green';
-            if (app.requiredPlayers[0] === null || ((this.connectedPlayers >= app.requiredPlayers[0])
-              && (this.connectedPlayers <= app.requiredPlayers[1]))) {
+            document.getElementById('ap'+token.address).className = 'green';
+            token.paperSelect(app.paperType)
+            if (app.requiredPlayers[0] === null || ((app.connectedPlayers >= app.requiredPlayers[0])
+              && (app.connectedPlayers <= app.requiredPlayers[1]))) {
               $('#next').show()
             }
             //$("#token_feedback").append('<button type="button" onclick="app.verifyColor(' + "'" + token.name + "'" + ')"class="indicator3"> Verify color</button><br />');
@@ -86,21 +86,21 @@
       },
 
       // Attempts to connect to token.
-      connect: function (tokenName) {
-        var token = this.devices[tokenName];
+      connect: function (tokenAddress) {
+        var token = this.devices[tokenAddress];
 
         // If already connecting, stop
-        if (document.getElementById(tokenName).className == 'blue')
+        if (document.getElementById('ap'+token.address).className == 'blue')
           return;
 
         // If already connected, attempt to send green led command
-        if (document.getElementById(tokenName).className == 'green') {
-          this.sendVibrationCmd(token, 30);
+        if (document.getElementById('ap'+token.address).className == 'green') {
+          this.sendVibrationCmd(token);
           return;
         }
 
         // Signal that we're attempting to connect
-        document.getElementById(tokenName).className = 'blue';
+        document.getElementById('ap'+token.address).className = 'blue';
         // Send connect command.
         token.connect();
       },
@@ -110,12 +110,10 @@
 
         var completedFunction = function (data) {
           hyper.log("We happily send the VIBRATE command");
-          hyper.log(data)
         };
 
         var errorCallback = function (errorMsg) {
           hyper.log("Failed to send the VIBRATE command");
-          hyper.log(errorMsg);
         };
 
         if(app.tokenVal.hasOwnProperty(token.id)) {
@@ -137,12 +135,10 @@
 
         var completedFunction = function (data) {
           hyper.log("We happily send the VIBRATEPATTERN command");
-          hyper.log(data)
         };
 
         var errorCallback = function (errorMsg) {
           hyper.log("Failed to send the VIBRATEPATTERN command");
-          hyper.log(errorMsg);
         };
 
         if(app.tokenVal.hasOwnProperty(token.id)) {
@@ -164,12 +160,10 @@
 
         var completedFunction = function (data) {
           hyper.log("We happily send the LEDON command");
-          hyper.log(data)
         };
 
         var errorCallback = function (errorMsg) {
           hyper.log("Failed to send the LEDON command");
-          hyper.log(errorMsg);
         };
 
         if(app.tokenVal.hasOwnProperty(token.id)) {
@@ -191,12 +185,10 @@
 
         var completedFunction = function (data) {
           hyper.log("We happily send the LEDBLINK command");
-          hyper.log(data)
         };
 
         var errorCallback = function (errorMsg) {
           hyper.log("Failed to send the LEDBLINK command");
-          hyper.log(errorMsg);
         };
 
         if(app.tokenVal.hasOwnProperty(token.id)) {
@@ -218,12 +210,10 @@
 
         var completedFunction = function (data) {
           hyper.log("We happily send the LEDOFF command");
-          hyper.log(data)
         };
 
         var errorCallback = function (errorMsg) {
           hyper.log("Failed to send the LEDOFF command");
-          hyper.log(errorMsg);
         };
 
         if(app.tokenVal.hasOwnProperty(token.id)) {
@@ -246,12 +236,10 @@
 
         var completedFunction = function (data) {
           hyper.log("We happily send the DISPLAYPATTERN command");
-          hyper.log(data)
         };
 
         var errorCallback = function (errorMsg) {
           hyper.log("Failed to send the DISPLAYPATTERN command");
-          hyper.log(errorMsg);
         };
 
         if(app.tokenVal.hasOwnProperty(token.id)) {
@@ -273,12 +261,10 @@
 
         var completedFunction = function (data) {
           hyper.log("We happily send the MATRIXTEXT command");
-          hyper.log(data)
         };
 
         var errorCallback = function (errorMsg) {
           hyper.log("Failed to send the MATRIXTEXT command");
-          hyper.log(errorMsg);
         };
 
         if(app.tokenVal.hasOwnProperty(token.id)) {
@@ -300,12 +286,10 @@
 
         var completedFunction = function (data) {
           hyper.log("We happily send the COUNT command");
-          hyper.log(data)
         };
 
         var errorCallback = function (errorMsg) {
           hyper.log("Failed to send the COUNT command");
-          hyper.log(errorMsg);
         };
 
         if(app.tokenVal.hasOwnProperty(token.id)) {
@@ -326,13 +310,11 @@
       // Command for calibrating token to printer type
       sendPaperSelectCmd: function (token, paperType) {
         var completedFunction = function (data) {
-          hyper.log("We happily send the PAPAERSELECT command");
-          hyper.log(data)
+          hyper.log("We happily send the PAPERSELECT command");
         };
 
         var errorCallback = function (errorMsg) {
-          hyper.log("Failed to send the PAPAERSELECT command");
-          hyper.log(errorMsg);
+          hyper.log("Failed to send the PAPERSELECT command");
         };
 
         token.paperSelect(paperType,
@@ -409,6 +391,7 @@
   </button>
   <div id="tokens"></div>
   <button type="button" onclick="app.next_panel()" class="black" id="next" style="display: none;"> Next </button>
+  <br>
 </div>
 <div id="main">
   <h1 id="title">Game Title</h1>

@@ -6,7 +6,8 @@
           <div class="asset-item" v-for="(token, key) in savedTokens" @click="showToken() + selectAsset('token',key)">{{key}}</div>
         </collapse-item>
         <collapse-item title="LED Grids">
-          <div class="asset-item" v-for="grid in savedGrids" @click="showLedgrid"></div>
+          <div class="asset-item" v-for="(grid, key) in savedGrids" @click="showLedgrid() + selectAsset('grid',key)">{{key}}</div>
+          <div class="asset-item" @click="showLedgrid() + newGrid()">NEW</div>
         </collapse-item>
       </collapse>
     </div>
@@ -50,8 +51,16 @@ export default {
     },
     selectAsset (type, key) {
       console.log(key)
-      this.$store.dispatch('token/selectToken', key)
+      console.log('type: ' + type)
+      if (type === 'token') {
+        this.$store.dispatch('token/selectToken', key)
+      } else if (type === 'grid') {
+        this.$store.dispatch('ledgrid/selectGrid', key)
+      }
       this.type = type
+    },
+    newGrid () {
+      this.$store.dispatch('ledgrid/deselectGrid')
     }
   }
 }

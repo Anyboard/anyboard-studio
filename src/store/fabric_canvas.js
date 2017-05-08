@@ -1,6 +1,5 @@
 import {fabric as F} from 'fabric'
 import FileSaver from 'file-saver'
-// import createObjectURL from 'create-object-url'
 import {createPolyPoints, dataURLtoBlob, layerify, exportSectors, updateSectorList,
         renameSameSector, colorChange, renameSector, checkIfSameName, getColorName} from '../utilities/helpers.js'
 

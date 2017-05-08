@@ -775,7 +775,7 @@ const blocklyInit = function (Blockly, TOKENS, GRIDS, sectorObject, sectorNames,
   Blockly.JavaScript['wait'] = function (block) {
     var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
     var seconds = Blockly.JavaScript.valueToCode(block, 'SECONDS', Blockly.JavaScript.ORDER_ATOMIC)
-    var milliseconds = seconds * 1000
+    var milliseconds = seconds + ' * 1000'
     var code = 'setTimeout(function () {\n'
     code += stack
     code += '}, ' + milliseconds + ');\n'
@@ -955,7 +955,7 @@ const blocklyInit = function (Blockly, TOKENS, GRIDS, sectorObject, sectorNames,
     }
     var args = ['currentToken']
     for (var i = 1; i <= block.arguments_.length; i++) {
-      args[i] = Blockly.JavaScript.variableDB_.getName(block.arguments_[i],
+      args[i] = Blockly.JavaScript.variableDB_.getName(block.arguments_[i - 1],
           Blockly.Variables.NAME_TYPE)
     }
     var code = funcName + ': function (' + args.join(', ') + ') {\n' +

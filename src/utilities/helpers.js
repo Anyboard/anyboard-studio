@@ -53,16 +53,25 @@ export const createPolyPoints = function (sideCount, radius) {
   return (points)
 }
 
+// http://stackoverflow.com/questions/12168909
 export const dataURLtoBlob = function (dataurl) {
-  var arr = dataurl.split(',')
-  var mime = arr[0].match(/:(.*?);/)[1]
-  var bstr = atob(arr[1])
-  var n = bstr.length
-  var u8arr = new Uint8Array(n)
-  while (n--) {
-    u8arr[n] = bstr.charCodeAt(n)
+  // convert base64 to raw binary data held in a string
+  // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
+  var byteString = atob(dataurl.split(',')[1])
+
+  // separate out the mime component
+  var mimeString = dataurl.split(',')[0].split(':')[1].split(';')[0]
+
+  // write the bytes of the string to an ArrayBuffer
+  var ab = new ArrayBuffer(byteString.length)
+  var ia = new Uint8Array(ab)
+  for (var i = 0; i < byteString.length; i++) {
+    ia[i] = byteString.charCodeAt(i)
   }
-  return new Blob([u8arr], {type: mime})
+
+  // write the ArrayBuffer to a blob, and you're done
+  var blob = new Blob([ab], {type: mimeString})
+  return blob
 }
 
 // Helping function for layerify
@@ -172,6 +181,7 @@ export const updateSectorList = function (canvas) {
   const obj = canvas.getObjects()
   let usedColours = {}
   sectorList = Object.keys(sectorDict)
+  // Makes sure to always add the predefined sectors
   for (let i = 0; i < sectorList.length; i++) {
     insertIntoDict(usedColours, sectorList[i], sectorDict[sectorList[i]])
   }
@@ -203,7 +213,9 @@ export const checkIfSameName = function (name, dict, obj) {
 export const renameSameSector = function (obj, canvas) {
   if (['rect', 'polygon', 'circle'].includes(obj['type'])) {
     const objs = canvas.getObjects()
+    // Checks if there are already sectors with the same color
     if (_isContains(sectorDict, obj['fill'])) {
+      // The name is the key in sectorDict and this string returns that key by value
       obj['name'] = Object.keys(sectorDict)[Object.values(sectorDict).indexOf(obj['fill'])]
     } else {
       for (let i = 0, l = objs.length; i < l; ++i) {
@@ -477,4 +489,21 @@ export const hexToBinary = function (s) {
     }
   }
   return { valid: true, result: ret }
+}
+
+// Traverses up the DOM until it finds an ancestor with the specified class
+export const findAncestor = function (el, cls) {
+  while (!el.classList.contains(cls)) {
+    el = el.parentElement
+  }
+  return el
+}
+
+// converts a binary string into a list of false and true values
+export const binaryToList = function (s) {
+  let list = []
+  for (let i = 0; i < s.length; i += 1) {
+    list.push(s.substr(i, 1) === '1')
+  }
+  return list
 }
