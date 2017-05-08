@@ -4,7 +4,7 @@
       <collapse accordion>
         <collapse-item title="Tokens">
           <div class="asset-item" v-for="(token, key) in savedTokens" @click="showToken() + selectAsset('token',key)">{{key}}</div>
-          <div class="asset-item" @click="showTokenEditor()">NEW</div>
+          <div class="asset-item" @click="showToken() + newToken()">NEW</div>
         </collapse-item>
         <collapse-item title="LED Grids">
           <div class="asset-item" v-for="(grid, key) in savedGrids" @click="showLedgrid() + selectAsset('grid',key)">{{key}}</div>
@@ -63,7 +63,10 @@ export default {
     newGrid () {
       this.$store.dispatch('ledgrid/deselectGrid')
       this.$store.dispatch('ledgrid/clearGrid')
-      console.log(this.savedGrids)
+    },
+    newToken () {
+      this.$store.dispatch('token/deselectToken')
+      this.$store.dispatch('token/setStandardToken')
     }
   }
 }

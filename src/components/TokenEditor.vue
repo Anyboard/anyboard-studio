@@ -2,11 +2,12 @@
   <div>
     <div id="tokenOptions">
       <p>Token Editor</p>
-      <label class="switch">
+      <label class="switch" v-if="isNewToken">
         Static name:
         <input type="checkbox" id="dynamicName" v-model="useDynamicName"/>
         <div class="slider round"></div>
       </label>
+      <label v-if="!isNewToken">{{selectedToken}}</label>
       <label id="nameInput" v-if="useDynamicName">
         Name:
         <input type="text" id="tokenName" v-model="staticName" placeholder="Write a token name"/>
@@ -66,7 +67,12 @@
         Token-token:
         <input type="checkbox" :checked="allowTokenToken"/>
       </label>
-      <button @click="createToken" :disabled="disableButton">Create token</button>
+      <button @click="createToken" :disabled="disableButton" v-if="isNewToken">Create token</button>
+      <button v-if="!isNewToken">Update</button>
+      <div v-if="!isNewToken">
+        <button id="tokenCopyButton" @click="copyToken">Copy</button>
+        <button id="tokenDeleteButton" @click="deleteToken">Delete</button>
+      </div>
     </div>
   </div>
 </template>
@@ -115,7 +121,7 @@
         allowTokenToken: state => state.attributes.allowTokenToken
       }),
       isNewToken: function () {
-        return !this.savedTokens.hasOwnProperty(this.selectedToken)
+        return this.selectedToken === ''
       }
     },
 

@@ -62,13 +62,21 @@ export default {
       // inserting the new key-value pair into savedTokens.
       insertIntoDict(state.savedTokens, name, tokenData)
     },
-    SELECT_TOKEN (state, tokenName) {
+    SET_TOKEN (state, tokenName) {
       state.LEDColor = colorRGBToHex(state.savedTokens[tokenName][0])
       for (var key in state.attributes) {
         console.log(state.savedTokens[tokenName].includes(key))
         Vue.set(state.attributes, key, state.savedTokens[tokenName].includes(key))
       }
+    },
+    SELECT_TOKEN (state, tokenName) {
       state.selectedToken = tokenName
+    },
+    SET_STANDARD (state) {
+      state.LEDColor = 'ff0000'
+      for (let key in state.attributes) {
+        Vue.set(state.attributes, key, true)
+      }
     }
   },
 
@@ -82,9 +90,14 @@ export default {
     },
     // Selects a token for viewing/editing
     selectToken ({commit}, tokenName) {
-      console.log('I am here!')
-      console.log(tokenName)
+      commit('SET_TOKEN', tokenName)
       commit('SELECT_TOKEN', tokenName)
+    },
+    deselectToken ({commit}) {
+      commit('SELECT_TOKEN', '')
+    },
+    setStandardToken ({commit}) {
+      commit('SET_STANDARD')
     }
   },
 
