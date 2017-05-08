@@ -3,6 +3,7 @@
  */
 
 import {binaryToHex, hexToBinary, binaryToList} from '../utilities/helpers'
+import Vue from 'vue'
 
 export default {
   namespaced: true,
@@ -42,7 +43,7 @@ export default {
     PUSH_TO_SAVEDGRIDS (state, payload) {
       let data = binaryToHex(payload.str)
       if (data.valid) {
-        state.savedGrids[payload.name] = data.result
+        Vue.set(state.savedGrids, payload.name, data.result)
       }
     },
     UPDATE_GRID (state, payload) {
@@ -55,7 +56,7 @@ export default {
       state.selectedGrid = gridName
     },
     DELETE_GRID (state) {
-      delete state.savedGrids[state.selectedGrid]
+      Vue.delete(state.savedGrids, state.selectedGrid)
     }
   },
   actions: {

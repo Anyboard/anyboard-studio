@@ -32,10 +32,10 @@ export default {
   },
 
   computed: {
-    ...mapState('ledgrid', {savedGrids: state => state.savedGrids}),
+    ...mapState('ledgrid', {savedGrids: 'savedGrids'}),
     ...mapState('token', {
-      savedTokens: state => state.savedTokens,
-      selectedToken: state => state.selectedToken
+      savedTokens: 'savedTokens',
+      selectedToken: 'selectedToken'
     })
   },
   components: {
