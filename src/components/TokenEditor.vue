@@ -181,9 +181,9 @@
           this.allowTokenToken = false
         }
       },
-      updateCheckbox (e) {
+      updateCheckbox (checkboxName) {
         console.log('OK')
-        this.$store.dispatch('token/updateBooleanAttributes')
+        this.$store.dispatch('token/updateBooleanAttributes', checkboxName)
       },
       updateLEDColor (e) {
         this.$store.dispatch('token/changeLEDColor', e.target.value)

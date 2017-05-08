@@ -403,7 +403,6 @@ export const colorHexToRGB = function (hexCode) {
   return RGB
 }
 
-
 /*
  * converts from an RGB array to a hex color string
  * input: [X, X, X]

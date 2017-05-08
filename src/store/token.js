@@ -1,7 +1,7 @@
 /**
  * Created by Kriestian Spanck on 25.04.2017.
  */
-import {insertIntoDict, colorHexToRGB} from '../utilities/helpers.js'
+import {insertIntoDict, colorHexToRGB, colorRGBToHex} from '../utilities/helpers.js'
 import Vue from 'vue'
 export default {
   namespaced: true,
