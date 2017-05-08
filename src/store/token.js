@@ -73,7 +73,7 @@ export default {
       state.selectedToken = tokenName
     },
     SET_STANDARD (state) {
-      state.LEDColor = 'ff0000'
+      state.LEDColor = '#ff0000'
       for (let key in state.attributes) {
         Vue.set(state.attributes, key, true)
       }
