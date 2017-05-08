@@ -8,8 +8,8 @@ export default {
 
   state: {
     savedTokens: {
-      'Dragon': [[0, 255, 0], 'vibrate', 'tap'],
-      'Human': [[255, 0, 0], 'shake']
+      'Dragon': [[0, 255, 0], 'allowLEDChange', 'allowDoubleTap', 'allowShake', 'allowTilt', 'allowTurn', 'allowTokenToken'],
+      'Human': [[255, 0, 0], 'allowLEDChange', 'allowVibrate', 'allowTap', 'allowDoubleTap', 'allowTilt', 'allowTurn', 'allowTokenToken']
     },
     numberOfDynamicTokens: 0,
     selectedToken: '',
@@ -19,7 +19,7 @@ export default {
       allowVibrate: true,
       allowTap: true,
       allowDoubleTap: true,
-      allowShake: true,
+      allowShake: false,
       allowTilt: true,
       allowTurn: true,
       allowTokenToken: true
@@ -28,7 +28,7 @@ export default {
 
   mutations: {
     CHANGE_LED_COLOR (state, payload) {
-      state.attributes.LEDColor = payload
+      state.LEDColor = payload
     },
     UPDATE_TOKEN_ATTRIBUTE (state, payload) {
       console.log(state.attributes, payload, !state.attributes[payload])
@@ -53,35 +53,21 @@ export default {
         name = payload.name
       }
       // appending illegal actions for the token.
-      // the end result will be on the format [[R, G, B], 'illegalAction1', illegalAction2']
-      if (!state.attributes.allowLEDChange) {
-        tokenData.push('ledon')
-      }
-      if (!state.attributes.allowVibrate) {
-        tokenData.push('vibrate')
-      }
-      if (!state.attributes.allowTap) {
-        tokenData.push('tap')
-      }
-      if (!state.attributes.allowDoubleTap) {
-        tokenData.push('doubleTap')
-      }
-      if (!state.attributes.allowShake) {
-        tokenData.push('shake')
-      }
-      if (!state.attributes.allowTilt) {
-        tokenData.push('tilt')
-      }
-      if (!state.attributes.allowTurn) {
-        tokenData.push('turn')
-      }
-      if (!state.attributes.allowTokenToken) {
-        tokenData.push('tokenToken')
+      // the end result will be on the format [[R, G, B], 'legalAction1', legalAction2']
+      for (var key in state.attributes) {
+        if (state.attributes[key]) {
+          tokenData.push(key)
+        }
       }
       // inserting the new key-value pair into savedTokens.
       insertIntoDict(state.savedTokens, name, tokenData)
     },
     SELECT_TOKEN (state, tokenName) {
+      state.LEDColor = colorRGBToHex(state.savedTokens[tokenName][0])
+      for (var key in state.attributes) {
+        console.log(state.savedTokens[tokenName].includes(key))
+        Vue.set(state.attributes, key, state.savedTokens[tokenName].includes(key))
+      }
       state.selectedToken = tokenName
     }
   },

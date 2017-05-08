@@ -33,38 +33,38 @@
 
       <label>
         Vibrate:
-        <input type="checkbox" :checked="allowVibrate" @input="updateCheckbox('allowVibrate')">
+        <input type="checkbox" :checked="allowVibrate" @input="updateCheckbox('allowVibrate')"/>
       </label>
 
       <p>Actions:</p>
       <label @click="updateCheckbox('allowTap')">
         Tap:
-        <input type="checkbox" :checked="allowTap">
+        <input type="checkbox" :checked="allowTap" @input="updateCheckbox('allowTap')"/>
       </label>
 
       <label @click="updateCheckbox('allowDoubleTap')">
         Double-tap:
-        <input type="checkbox" :checked="allowDoubleTap">
+        <input type="checkbox" :checked="allowDoubleTap" @input="updateCheckbox('allowDoubleTap')"/>
       </label>
 
       <label @click="updateCheckbox('allowShake')">
         Shake:
-        <input type="checkbox" :checked="allowShake">
+        <input type="checkbox" :checked="allowShake" @input="updateCheckbox('allowShake')"/>
       </label>
 
       <label @click="updateCheckbox('allowTilt')">
         Tilt:
-        <input type="checkbox" :checked="allowTilt">
+        <input type="checkbox" :checked="allowTilt" @input="updateCheckbox('allowTilt')"/>
       </label>
 
       <label @click="updateCheckbox('allowTurn')">
         Turn:
-        <input type="checkbox" :checked="allowTurn">
+        <input type="checkbox" :checked="allowTurn" @input="updateCheckbox('allowTurn')"/>
       </label>
 
       <label @click="updateCheckbox('allowTokenToken')">
         Token-token:
-        <input type="checkbox" :checked="allowTokenToken">
+        <input type="checkbox" :checked="allowTokenToken" @input="updateCheckbox('allowTokenToken')"/>
       </label>
       <button @click="createToken" :disabled="disableButton">Create token</button>
     </div>
@@ -102,7 +102,7 @@
     },
     computed: {
       ...mapState('token', {
-        LEDColor: state => state.attributes.LEDColor,
+        LEDColor: 'LEDColor',
         savedTokens: 'savedTokens',
         selectedToken: 'selectedToken',
         allowVibrate: state => state.attributes.allowVibrate,
@@ -181,9 +181,9 @@
           this.allowTokenToken = false
         }
       },
-      updateCheckbox (checkboxName) {
-        console.log(checkboxName)
-        this.$store.dispatch('token/updateBooleanAttributes', checkboxName)
+      updateCheckbox (e) {
+        console.log('OK')
+        this.$store.dispatch('token/updateBooleanAttributes')
       },
       updateLEDColor (e) {
         this.$store.dispatch('token/changeLEDColor', e.target.value)
