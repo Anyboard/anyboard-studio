@@ -112,8 +112,7 @@
         allowShake: 'allowShake',
         allowTilt: 'allowTilt',
         allowTurn: 'allowTurn',
-        allowTokenToken: 'allowTokenToken',
-        disableButton: 'disableButton'
+        allowTokenToken: 'allowTokenToken'
       }),
       isNewToken: function () {
         return !this.savedTokens.hasOwnProperty(this.selectedToken)
@@ -183,10 +182,10 @@
         }
       },
       updateCheckbox (checkboxName) {
-        this.$store.dispatch('token/updateTokenAttribute', checkboxName)
+        this.$store.dispatch('token/updateBooleanAttributes', checkboxName)
       },
       updateLEDColor (e) {
-        this.$store.dispatch('token/updateLEDColor', e.target.value)
+        this.$store.dispatch('token/changeLEDColor', e.target.value)
       }
     }
   }
