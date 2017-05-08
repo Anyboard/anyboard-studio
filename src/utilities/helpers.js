@@ -386,6 +386,11 @@ export const makeZip = function (blob) {
   })
 }
 
+/*
+  converts a hex color string to an RGB array.
+  input: '#XXXXXX'
+  output: [X, X, X]
+                                        */
 export const colorHexToRGB = function (hexCode) {
   let RGB = [
     hexCode.slice(1, 3),
@@ -396,6 +401,20 @@ export const colorHexToRGB = function (hexCode) {
     RGB[i] = parseInt(RGB[i], 16)
   }
   return RGB
+}
+
+
+/*
+ * converts from an RGB array to a hex color string
+ * input: [X, X, X]
+ * output: '#XXXXXX'
+ *                        */
+export const colorRGBToHex = function (RGBArray) {
+  let hexString = '#'
+  hexString += RGBArray[0].toString(16)
+  hexString += RGBArray[1].toString(16)
+  hexString += RGBArray[2].toString(16)
+  return hexString
 }
 
 /* converters from binary to decimal, and vice versa

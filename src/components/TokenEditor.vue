@@ -37,34 +37,34 @@
       </label>
 
       <p>Actions:</p>
-      <label>
+      <label @click="updateCheckbox('allowTap')">
         Tap:
-        <input type="checkbox" :checked="allowTap" @input="updateCheckbox('allowTap')">
+        <input type="checkbox" :checked="allowTap">
       </label>
 
-      <label>
+      <label @click="updateCheckbox('allowDoubleTap')">
         Double-tap:
-        <input type="checkbox" :checked="allowDoubleTap" @input="updateCheckbox('allowDoubleTap')">
+        <input type="checkbox" :checked="allowDoubleTap">
       </label>
 
-      <label>
+      <label @click="updateCheckbox('allowShake')">
         Shake:
-        <input type="checkbox" :checked="allowShake" @input="updateCheckbox('allowShake')">
+        <input type="checkbox" :checked="allowShake">
       </label>
 
-      <label>
+      <label @click="updateCheckbox('allowTilt')">
         Tilt:
-        <input type="checkbox" :checked="allowTilt" @input="updateCheckbox('allowTilt')">
+        <input type="checkbox" :checked="allowTilt">
       </label>
 
-      <label>
+      <label @click="updateCheckbox('allowTurn')">
         Turn:
-        <input type="checkbox" :checked="allowTurn" @input="updateCheckbox('allowTurn')">
+        <input type="checkbox" :checked="allowTurn">
       </label>
 
-      <label>
+      <label @click="updateCheckbox('allowTokenToken')">
         Token-token:
-        <input type="checkbox" :checked="allowTokenToken" @input="updateCheckbox('allowTokenToken')">
+        <input type="checkbox" :checked="allowTokenToken">
       </label>
       <button @click="createToken" :disabled="disableButton">Create token</button>
     </div>
@@ -182,6 +182,7 @@
         }
       },
       updateCheckbox (checkboxName) {
+        console.log(checkboxName)
         this.$store.dispatch('token/updateBooleanAttributes', checkboxName)
       },
       updateLEDColor (e) {
