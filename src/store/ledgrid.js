@@ -53,6 +53,9 @@ export default {
     },
     SELECT_GRID (state, gridName) {
       state.selectedGrid = gridName
+    },
+    DELETE_GRID (state) {
+      delete state.savedGrids[state.selectedGrid]
     }
   },
   actions: {
@@ -90,7 +93,10 @@ export default {
     },
     deselectGrid ({commit, state}, gridName) {
       commit('SELECT_GRID', '')
-      commit('CLEAR_GRID')
+    },
+    deleteGrid ({commit, state}, gridName) {
+      commit('DELETE_GRID')
+      commit('SELECT_GRID', '')
     }
   },
   getters: {

@@ -15,6 +15,10 @@
       <button v-if="!isNewGrid" id="ledGridUpdateButton" @click="updateGrid">Update</button>
       <button id="ledGridCancelButton" @click="clearGrid">Clear</button>
     </div>
+    <div v-if="!isNewGrid">
+      <button id="ledGridCopyButton" @click="copyGrid">Copy</button>
+      <button id="ledGridDeleteButton" @click="deleteGrid">Delete</button>
+    </div>
   </div>
 </template>
 
@@ -76,6 +80,12 @@
       },
       clearGrid () {
         this.$store.dispatch('ledgrid/clearGrid')
+      },
+      copyGrid () {
+        this.$store.dispatch('ledgrid/deselectGrid')
+      },
+      deleteGrid () {
+        this.$store.dispatch('ledgrid/deleteGrid')
       }
     }
   }
