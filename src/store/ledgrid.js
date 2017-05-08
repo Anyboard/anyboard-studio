@@ -1,5 +1,5 @@
 /**
- * Created by KristAN Angelica on 05-Apr-17.
+ * Created by KristAN SPAngelica on 05-Apr-17.
  */
 
 import {binaryToHex, hexToBinary, binaryToList} from '../utilities/helpers'

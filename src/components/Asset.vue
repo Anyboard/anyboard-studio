@@ -4,6 +4,7 @@
       <collapse accordion>
         <collapse-item title="Tokens">
           <div class="asset-item" v-for="(token, key) in savedTokens" @click="showToken() + selectAsset('token',key)">{{key}}</div>
+          <div class="asset-item" @click="showTokenEditor()">NEW</div>
         </collapse-item>
         <collapse-item title="LED Grids">
           <div class="asset-item" v-for="(grid, key) in savedGrids" @click="showLedgrid() + selectAsset('grid',key)">{{key}}</div>

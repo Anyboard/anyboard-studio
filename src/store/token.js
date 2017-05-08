@@ -11,8 +11,18 @@ export default {
       'Dragon': [[0, 255, 0], 'vibrate', 'tap'],
       'Human': [[255, 0, 0], 'shake']
     },
+    defaultLEDColor: '#00ff00',
+    allowVibrate: true,
+    allowLEDChange: true,
+    allowTap: true,
+    allowDoubleTap: true,
+    allowShake: true,
+    allowTilt: true,
+    allowTurn: true,
+    allowTokenToken: true,
+    disableButton: true,
     numberOfDynamicTokens: 0,
-    selectedToken: 'Dragon'
+    selectedToken: ''
   },
 
   mutations: {
@@ -60,6 +70,9 @@ export default {
   getters: {
     GET_SAVEDTOKENS: state => {
       return state.savedTokens
+    },
+    GET_SELECTEDTOKEN: state => {
+      return state.savedTokens[state.selectedToken]
     }
   }
 }
