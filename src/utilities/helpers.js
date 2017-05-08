@@ -412,7 +412,6 @@ export const colorRGBToHex = function (RGBArray) {
   let hexString = '#'
   for (var i = 0; i < 3; i++) {
     var string = RGBArray[i].toString(16)
-    console.log(string)
     if (string.length === 1) {
       string = '0' + string
     }

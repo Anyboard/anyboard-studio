@@ -97,6 +97,7 @@ export default {
     },
     deleteGrid ({commit, state}, gridName) {
       commit('DELETE_GRID')
+      commit('CLEAR_GRID')
       commit('SELECT_GRID', '')
     }
   },

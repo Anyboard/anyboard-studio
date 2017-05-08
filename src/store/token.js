@@ -41,7 +41,7 @@ export default {
     ADD_NEW_TOKEN (state, payload) {
       // combining disallowed actions and LED color to one list.
       // LED color is always the first item
-      let tokenData = [colorHexToRGB(payload.LEDColor)]
+      let tokenData = [colorHexToRGB(state.LEDColor)]
 
       // handling whether token will be created with a static name or a generic name.
       // if dynamic name is used, token will be named token+dynamicNumber, e.g. token1, token2, token3 etc.
@@ -52,20 +52,34 @@ export default {
       } else {
         name = payload.name
       }
-      // appending illegal actions for the token.
+      // appending legal actions for the token.
       // the end result will be on the format [[R, G, B], 'legalAction1', legalAction2']
-      for (var key in state.attributes) {
+      for (let key in state.attributes) {
         if (state.attributes[key]) {
           tokenData.push(key)
         }
       }
       // inserting the new key-value pair into savedTokens.
-      insertIntoDict(state.savedTokens, name, tokenData)
+      Vue.set(state.savedTokens, name, tokenData)
+    },
+    UPDATE_TOKEN (state) {
+      // combining disallowed actions and LED color to one list.
+      // LED color is always the first item
+      let tokenData = [colorHexToRGB(state.LEDColor)]
+
+      // appending legal actions for the token.
+      // the end result will be on the format [[R, G, B], 'legalAction1', legalAction2']
+      for (let key in state.attributes) {
+        if (state.attributes[key]) {
+          tokenData.push(key)
+        }
+      }
+
+      Vue.set(state.savedTokens, state.selectedToken, tokenData)
     },
     SET_TOKEN (state, tokenName) {
       state.LEDColor = colorRGBToHex(state.savedTokens[tokenName][0])
-      for (var key in state.attributes) {
-        console.log(state.savedTokens[tokenName].includes(key))
+      for (let key in state.attributes) {
         Vue.set(state.attributes, key, state.savedTokens[tokenName].includes(key))
       }
     },
@@ -77,6 +91,9 @@ export default {
       for (let key in state.attributes) {
         Vue.set(state.attributes, key, true)
       }
+    },
+    DELETE_TOKEN (state) {
+      Vue.delete(state.savedTokens, state.selectedToken)
     }
   },
 
@@ -98,6 +115,18 @@ export default {
     },
     setStandardToken ({commit}) {
       commit('SET_STANDARD')
+    },
+    saveToken ({commit}, payload) {
+      commit('ADD_NEW_TOKEN', payload)
+      commit('SET_STANDARD')
+    },
+    updateToken ({commit}) {
+      commit('UPDATE_TOKEN')
+    },
+    deleteToken ({commit}) {
+      commit('DELETE_TOKEN')
+      commit('SET_STANDARD')
+      commit('SELECT_TOKEN', '')
     }
   },
 

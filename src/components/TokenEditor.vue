@@ -8,7 +8,7 @@
         <div class="slider round"></div>
       </label>
       <label v-if="!isNewToken">{{selectedToken}}</label>
-      <label id="nameInput" v-if="useDynamicName">
+      <label id="nameInput" v-if="useDynamicName && isNewToken">
         Name:
         <input type="text" id="tokenName" v-model="staticName" placeholder="Write a token name"/>
       </label>
@@ -68,7 +68,7 @@
         <input type="checkbox" :checked="allowTokenToken"/>
       </label>
       <button @click="createToken" :disabled="disableButton" v-if="isNewToken">Create token</button>
-      <button v-if="!isNewToken">Update</button>
+      <button v-if="!isNewToken" @click="updateToken">Update</button>
       <div v-if="!isNewToken">
         <button id="tokenCopyButton" @click="copyToken">Copy</button>
         <button id="tokenDeleteButton" @click="deleteToken">Delete</button>
@@ -127,65 +127,17 @@
 
     methods: {
       createToken () {
-        let illegalActions = []
-        if (!this.allowLEDChange) {
-          illegalActions.push('ledchange')
-        }
-        if (!this.allowVibrate) {
-          illegalActions.push('vibrate')
-        }
-        if (!this.allowTap) {
-          illegalActions.push('tap')
-        }
-        if (!this.allowShake) {
-          illegalActions.push('shake')
-        }
-        if (!this.allowDoubleTap) {
-          illegalActions.push('doubleTap')
-        }
-        if (!this.allowTilt) {
-          illegalActions.push('tilt')
-        }
-        if (!this.allowTurn) {
-          illegalActions.push('turn')
-        }
-        if (!this.allowTokenToken) {
-          illegalActions.push('tokenToken')
-        }
         let payload = {
           dynamicName: this.useDynamicName,
-          name: this.staticName,
-          LEDColor: this.defaultLEDColor,
-          illegalActions: illegalActions
+          name: this.staticName
         }
         this.$store.dispatch('token/saveToken', payload)
       },
-      setTokenValues (token) {
-        this.defaultLEDColor = token[0]
-        if ('vibrate' in token) {
-          this.allowVibrate = false
-        }
-        if ('ledchange' in token) {
-          this.allowLEDChange = false
-        }
-        if ('tap' in token) {
-          this.allowTap = false
-        }
-        if ('shake' in token) {
-          this.allowShake = false
-        }
-        if ('doubleTap' in token) {
-          this.allowDoubleTap = false
-        }
-        if ('tilt' in token) {
-          this.allowTilt = false
-        }
-        if ('turn' in token) {
-          this.allowTurn = false
-        }
-        if ('tokenToken' in token) {
-          this.allowTokenToken = false
-        }
+      updateToken () {
+        this.$store.dispatch('token/updateToken')
+      },
+      copyToken () {
+        this.$store.dispatch('token/deselectToken')
       },
       updateCheckbox (checkboxName) {
         console.log('OK')
@@ -193,6 +145,9 @@
       },
       updateLEDColor (e) {
         this.$store.dispatch('token/changeLEDColor', e.target.value)
+      },
+      deleteToken () {
+        this.$store.dispatch('token/deleteToken')
       }
     }
   }

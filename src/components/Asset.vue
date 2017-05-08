@@ -14,7 +14,6 @@
     </div>
 
     <div id="asset_inspector">
-      <p style="color:#fff; font-size:2em;"> Inspector: </br> {{selectedToken}}</p>
       <LEDGridEditor v-if="asset_type === 'led'"></LEDGridEditor>
       <TokenEditor v-if="asset_type === 'token'" chosen="chosenAsset"></TokenEditor>
     </div>
@@ -51,8 +50,6 @@ export default {
       this.asset_type = 'led'
     },
     selectAsset (type, key) {
-      console.log(key)
-      console.log('type: ' + type)
       if (type === 'token') {
         this.$store.dispatch('token/selectToken', key)
       } else if (type === 'grid') {

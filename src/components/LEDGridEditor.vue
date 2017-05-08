@@ -1,5 +1,6 @@
 <template>
   <div class="LEDGridEditor">
+    <p>Led Grid Editor</p>
     <div v-if="isNewGrid">
       <label for="ledGridName">Pattern name:</label>
       <input id="ledGridName" class="normalinput" type="text" v-model="gridName" placeholder="Pattern name"/>
