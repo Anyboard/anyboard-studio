@@ -1,9 +1,12 @@
 <template>
-  <span class="icon is-medium" :id="id">
-    <i :class="'fa ' + icon"></i>
-    <span class="text">{{text}}</span>
-    <span v-if="tooltip" class="tooltip">{{tooltip}}</span>
-  </span>
+  <div :id="id" class="vtb_ib">
+    <span class="icon is-medium">
+      <i :class="'fa ' + icon"></i>
+    </span>
+    <span class="vtb_text">{{text}}</span>
+    <span v-if="tooltip" class="vtb_tooltip">{{tooltip}}</span>
+  </div>
+  
 </template>
 
 <script type="text/javascript">
@@ -14,4 +17,5 @@
   }
 </script>
 
-<style lang="SASS"></style>
+<style lang="SASS">
+</style>
