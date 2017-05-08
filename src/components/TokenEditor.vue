@@ -140,7 +140,6 @@
         this.$store.dispatch('token/deselectToken')
       },
       updateCheckbox (checkboxName) {
-        console.log('OK')
         this.$store.dispatch('token/updateBooleanAttributes', checkboxName)
       },
       updateLEDColor (e) {

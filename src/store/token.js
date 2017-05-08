@@ -31,7 +31,6 @@ export default {
       state.LEDColor = payload
     },
     UPDATE_TOKEN_ATTRIBUTE (state, payload) {
-      console.log(state.attributes, payload, !state.attributes[payload])
       Vue.set(state.attributes, payload, !state.attributes[payload])
     },
     SUBMIT_TOKEN (state, payload) {
@@ -102,7 +101,6 @@ export default {
       commit('CHANGE_LED_COLOR', payload)
     },
     updateBooleanAttributes ({commit}, payload) {
-      console.log(payload)
       commit('UPDATE_TOKEN_ATTRIBUTE', payload)
     },
     // Selects a token for viewing/editing
