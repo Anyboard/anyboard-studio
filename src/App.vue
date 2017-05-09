@@ -4,13 +4,13 @@
       <span class="left">
         <a href="/#/" class="logo">Anyboard Studio</a>
       </span>
-      
+
       <span class="middle">
         <a href="/#/board">Board Editor</a>
         <a href="/#/assets">Game Assets</a>
         <a href="/#/code">Code Builder</a>
       </span>
-      
+
       <span class="right">
         <router-view name="extras"></router-view>
       </span>
@@ -65,7 +65,7 @@ export default {
   border-bottom:1px solid #000;
   text-align: center;
   box-shadow:1em 0 1em #000;
-  z-index: 10;
+  z-index: 100;
 
   span {
     flex-grow: 1;
