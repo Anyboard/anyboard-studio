@@ -143,6 +143,7 @@ export default {
 
     CLEAR_CANVAS (state) {
       state.canvas.clear()
+      state.canvas.setBackgroundColor('white')
       state.canvas.renderAll()
       state.gridAdded = false
     },
@@ -353,7 +354,7 @@ export default {
         state.checkHeight = canvasHeight
         state.gridAdded = true
         state.canvas.renderAll()
-        //  layerify(state.canvas)
+        layerify(state.canvas)
       }
     },
 
