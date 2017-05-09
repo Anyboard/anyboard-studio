@@ -16,8 +16,8 @@ export default {
     gridActive: true,
     gridAdded: false,
     gridSize: 50,
-    checkHeight: 0,
     checkWidth: 0,
+    checkHeight: 0,
     printableBoard: null
   },
 
@@ -30,7 +30,7 @@ export default {
     INIT_DRAW (state) {
       state.canvas.freeDrawingBrush = new F['PencilBrush'](state.canvas)
       state.canvas.freeDrawingBrush.width = 20
-      state.canvas.freeDrawingBrush.color = '#000000'
+      state.canvas.freeDrawingBrush.color = '#4194D0'
     },
 
     // Creating Sectors

@@ -54,6 +54,9 @@ This observes when paths are created, which are made through the free drawing fu
 is set to the layer which the user is currently drawing on so that the path can be layered properly. Finally
 it updates the Fabric Inspector's info.
 
+Currently path layers are not in use. They can be added by adding a button to the toolbar to change the freedrawing
+layer or something equivalent.
+
 ##### object:added
 
 First it checks if the grid has been added to the board. It won't do the following code if the grid adding process is
