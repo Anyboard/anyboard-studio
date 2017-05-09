@@ -1,12 +1,12 @@
 <template>
-  <div style="display: inline">
-    <a @click="exportCode" style="float:right">Export</a>
-    <a @click="downloadCode" style="float:right">Save</a>
-    <a @click="addCode" style="float:right">Add code</a>
+  <div>
+    <a @click="exportCode">Export</a>
+    <a @click="downloadCode">Save</a>
+    <a @click="addCode">Add code</a>
     <input @change="addCodeUpload"type="file" id="add" style="display: none"/>
-    <a @click="loadCode" style="float:right">Load code</a>
+    <a @click="loadCode">Load code</a>
     <input @change="loadCodeUpload"type="file" id="upload" style="display: none"/>
-    <a @click="logCode" style="float:right">Debug Log Code</a>
+    <a @click="logCode">Debug Log Code</a>
   </div>
 </template>
 

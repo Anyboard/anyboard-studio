@@ -65,7 +65,7 @@ export default {
   border-bottom:1px solid #000;
   text-align: center;
   box-shadow:1em 0 1em #000;
-  z-index: 100;
+  z-index: 10;
 
   span {
     flex-grow: 1;
@@ -78,6 +78,50 @@ export default {
 
   .right {
     text-align: right;
+  }
+
+  @media (max-width: 1024px) {
+    .right {
+      position: relative;
+      z-index: initial;
+    }
+
+    .right:before {
+      display: inline-block;
+      font: normal normal normal 14px/1 FontAwesome;
+      font-size: 2em;
+      padding:10px;
+      text-rendering: auto;
+      -webkit-font-smoothing: antialiased;
+      content: "\f0c9";
+      color:#555;
+    }
+
+    .right > div {
+      display: none;
+      position: absolute;
+      top:46px;
+      right: 0;
+    }
+
+    .right > div > a {
+      display: block;
+    }
+
+    .right:hover > div {
+      display: block;
+      background: #efefef;
+      border:1px solid #000;
+      border-top:0px;
+      box-shadow:5px 7px 10px 0 rgba(0,0,0,0.5);
+      z-index: -1;
+    }
+
+    .right:hover:before {
+      transform: rotate(90deg);
+    }
+
+
   }
 
   a {

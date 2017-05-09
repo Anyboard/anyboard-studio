@@ -1,9 +1,9 @@
 <template>
-  <div style="display: inline">
-    <a @click="downloadBoard" style="float:right">Save</a>
-    <a @click="loadBoard" style="float:right">Load</a>
-    <a @click="saveBoard" style="float:right">Download Image</a>
-    <a @click="printBoard" style="float:right">Print</a>
+  <div>
+    <a @click="downloadBoard">Save</a>
+    <a @click="loadBoard">Load</a>
+    <a @click="saveBoard">Download Image</a>
+    <a @click="printBoard">Print</a>
     <input @change="uploadBoard"type="file" id="upload" style="display: none"/>
   </div>
 </template>
