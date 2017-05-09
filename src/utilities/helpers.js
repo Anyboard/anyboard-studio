@@ -1,4 +1,3 @@
-// import {fabric} from 'fabric'
 import JSZip from 'jszip'
 import FileSaver from 'file-saver'
 
@@ -263,7 +262,7 @@ export const makeZip = function (blob) {
   let zip = new JSZip()
   // dist folder
   let dist = zip.folder('dist')
-  getFile('https://raw.githubusercontent.com/simonem/anyboard/firmwareWork/games/demo-anyPawn/dist/anyboard.js',
+  getFile('https://raw.githubusercontent.com/simonem/anyboard/master/games/demo-anyPawn/dist/anyboard.js',
     function (gameFile) {
       dist.file('anyboard.js', gameFile)
     })
@@ -280,7 +279,7 @@ export const makeZip = function (blob) {
       drivers.file('discovery.evothings.bluetooth.js', gameFile)
     })
 
-  getFile('https://raw.githubusercontent.com/simonem/anyboard/firmwareWork/games/demo-anyPawn/drivers/rfduino.evothings.bluetooth.js',
+  getFile('https://raw.githubusercontent.com/simonem/anyboard/master/games/demo-anyPawn/drivers/rfduino.evothings.bluetooth.js',
     function (gameFile) {
       drivers.file('rfduino.evothings.bluetooth.js', gameFile)
     })

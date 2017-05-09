@@ -20,7 +20,9 @@ export default {
     ],
     savedGrids: {
       'smile': '0024242400423C00',
-      'frown': '00242424003C4200'
+      'frown': '00242424003C4200',
+      'cross': '8142241818244281',
+      'checkmark': '0001020488502000'
     },
     selectedGrid: ''
   },
