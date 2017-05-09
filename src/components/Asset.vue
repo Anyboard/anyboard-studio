@@ -89,6 +89,7 @@ export default {
     padding:1em;
     background:#fff;
     margin:2px;
+    color: black;
   }
 }
 
