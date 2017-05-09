@@ -4,11 +4,11 @@
       <collapse accordion>
         <collapse-item title="Tokens">
           <div class="asset-item" v-for="(token, key) in savedTokens" @click="showToken() + selectAsset('token',key)">{{key}}</div>
-          <div class="asset-item" @click="showToken() + newToken()">NEW</div>
+          <div class="new-asset-item fa fa-plus" @click="showToken() + newToken()"></div>
         </collapse-item>
         <collapse-item title="LED Grids">
           <div class="asset-item" v-for="(grid, key) in savedGrids" @click="showLedgrid() + selectAsset('grid',key)">{{key}}</div>
-          <div class="asset-item" @click="showLedgrid() + newGrid()">NEW</div>
+          <div class="new-asset-item fa fa-plus" @click="showLedgrid() + newGrid()"></div>
         </collapse-item>
       </collapse>
     </div>
@@ -83,9 +83,39 @@ export default {
     width:5em;
     height: 5em;
     border-radius: 5px;
-    padding:1em;
-    background:#fff;
+    background: linear-gradient(135deg, #2d2d2d 0%,#2f2f2f 50%,#2c2c2c 50%,#2d2d2d 100%);
+    color: #d4d4d4;
     margin:2px;
+    line-height: 12em;
+    box-shadow: 1px 1px 1px #1f1f1f;
+    text-shadow: 1px 1px 2px #1f1f1f;
+    text-align: center;
+  }
+  .asset-item:hover{
+    background: #2c2c2c;
+    cursor: pointer;
+  }
+
+  .new-asset-item {
+    display: inline-block;
+    width: 1.5em;
+    height: 1.5em;
+    margin: 2px;
+    line-height: 1.58em;
+    border-radius: 50%;
+    font-size: 3em;
+    background: linear-gradient(135deg, #2d2d2d 0%,#2f2f2f 50%,#2c2c2c 50%,#2d2d2d 100%);
+    color: #777;
+    position: relative;
+    top: 5px;
+    box-shadow: 1px 1px 1px #1f1f1f;
+    text-shadow: 1px 1px 2px #1f1f1f;
+  }
+  .new-asset-item:hover {
+    background: #2c2c2c;
+    color: #666;
+    cursor: pointer;
+    box-shadow: 1px 1px 0 #1f1f1f;
   }
 }
 

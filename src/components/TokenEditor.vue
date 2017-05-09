@@ -138,6 +138,7 @@
           name: this.staticName
         }
         this.$store.dispatch('token/saveToken', payload)
+        this.staticName = ''
       },
       updateToken () {
         this.$store.dispatch('token/updateToken')
