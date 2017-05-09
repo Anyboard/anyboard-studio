@@ -1,23 +1,28 @@
 <template>
   <div>
-    <div id="assetWrapper">
-      <div id="asset-listing">
-        <collapse accordion>
-          <collapse-item title="Tokens">
-            <div class="asset-item" v-for="(token, key) in savedTokens" @click="showToken() + selectAsset('token',key)">{{limit(key)}}</div>
-            <div class="new-asset-item fa fa-plus" @click="showToken() + newToken()"></div>
-          </collapse-item>
-          <collapse-item title="LED Grids">
-            <div class="asset-item" v-for="(grid, key) in savedGrids" @click="showLedgrid() + selectAsset('grid',key)">{{limit(key)}}</div>
-            <div class="new-asset-item fa fa-plus" @click="showLedgrid() + newGrid()"></div>
-          </collapse-item>
-        </collapse>
-      </div>
+    <div id="asset-listing">
+      <collapse accordion>
+        <collapse-item title="Tokens">
+          <div class="asset-item" v-for="(token, key) in savedTokens" @click="showToken() + selectAsset('token',key)">{{limit(key)}}</div>
+          <div class="asset-item" @click="showToken() + newToken()">NEW</div>
+        </collapse-item>
+        <collapse-item title="LED Grids">
+          <div
+            class="asset-item"
+            v-for="(grid, key) in savedGrids"
+            @click="showLedgrid() + selectAsset('grid',key)">
+            <SVGMatrix :code="grid" :key="key"></SVGMatrix>
+            <span>{{key}}</span>
+          </div>
 
-      <div id="asset_inspector">
-        <LEDGridEditor v-if="asset_type === 'led'"></LEDGridEditor>
-        <TokenEditor v-if="asset_type === 'token'" chosen="chosenAsset"></TokenEditor>
-      </div>
+          <div class="asset-item" @click="showLedgrid() + newGrid()">NEW</div>
+        </collapse-item>
+      </collapse>
+    </div>
+
+    <div id="asset_inspector">
+      <LEDGridEditor v-if="asset_type === 'led'"></LEDGridEditor>
+      <TokenEditor v-if="asset_type === 'token'" chosen="chosenAsset"></TokenEditor>
     </div>
   </div>
 </template>
@@ -42,7 +47,8 @@ export default {
   components: {
     LEDGridEditor: require('./LEDGridEditor.vue'),
     TokenEditor: require('./TokenEditor.vue'),
-    IconButton: require('./IconButton.vue')
+    IconButton: require('./IconButton.vue'),
+    SVGMatrix: require('./SVGMatrix.vue')
   },
   methods: {
     limit (key) {
@@ -82,8 +88,8 @@ export default {
 
 <style lang="SASS" scoped>
 #asset-listing {
-  width:50vw;
-
+  width:70vw;
+  background:#383;
 
   .collapse-wrap {
     width:100%;
@@ -91,17 +97,27 @@ export default {
 
   .asset-item {
     display: inline-block;
-    width:5em;
-    height: 5em;
+    font-size: .75em;
+    width:6em;
     border-radius: 5px;
     background: linear-gradient(135deg, #2d2d2d 0%,#2f2f2f 50%,#2c2c2c 50%,#2d2d2d 100%);
     color: #d4d4d4;
     margin:2px;
-    margin-right: 10px;
-    line-height: 12em;
-    box-shadow: 1px 1px 1px #1f1f1f;
-    text-shadow: 1px 1px 2px #1f1f1f;
+    color: black;
     text-align: center;
+
+    .svg {
+      width: 4em;
+      height: 4em;
+
+      .inactive {fill:#efefef;}
+      .active{ fill:#080; }
+    }
+
+    span {
+      text-transform: capitalize;
+      font-size: .8em;
+    }
   }
   .asset-item:hover{
     background: #2c2c2c;
