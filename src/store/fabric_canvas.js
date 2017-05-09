@@ -16,6 +16,8 @@ export default {
     gridActive: true,
     gridAdded: false,
     gridSize: 50,
+    checkHeight: 0,
+    checkWidth: 0,
     printableBoard: null
   },
 
@@ -320,23 +322,24 @@ export default {
       state.gridSize = payload
     },
 
-    REMOVE_GRID (state) {
-      const objs = state.canvas.getObjects()
-      let toBeRemoved = []
-      for (let i = 0, l = objs.length; i < l; ++i) {
-        if (objs[i]['type'] === 'line') {
-          toBeRemoved.push(objs[i])
-        }
-      }
-      for (let i in toBeRemoved) {
-        state.canvas.remove(toBeRemoved[i])
-      }
-    },
-
     ADD_GRID (state) {
       const canvasWidth = state.canvas.width
       const canvasHeight = state.canvas.height
-      if (!state.gridAdded) {
+      // Checks if the grid has not been added, or if the screen size has changed since last time grid was viewed
+      if (!state.gridAdded || (state.checkHeight === 0 || state.checkHeight !== canvasHeight) ||
+        (state.checkWidth === 0 || state.checkWidth !== canvasWidth)) {
+        // Gets previous grid and removes it
+        const objs = state.canvas.getObjects()
+        let toBeRemoved = []
+        for (let i = 0, l = objs.length; i < l; ++i) {
+          if (objs[i]['type'] === 'line') {
+            toBeRemoved.push(objs[i])
+          }
+        }
+        for (let i in toBeRemoved) {
+          state.canvas.remove(toBeRemoved[i])
+        }
+        // Redraws the grid
         for (let i = 0; i < (canvasWidth / state.gridSize); i++) {
           state.canvas.add(new F.Line([i * state.gridSize, 0, i * state.gridSize, canvasHeight],
             { stroke: '#ccc', selectable: false, id: 'grid1' }))
@@ -345,6 +348,9 @@ export default {
           state.canvas.add(new F.Line([0, i * state.gridSize, canvasWidth, i * state.gridSize],
             { stroke: '#ccc', selectable: false, id: 'grid2' }))
         }
+        // Sets control values
+        state.checkWidth = canvasWidth
+        state.checkHeight = canvasHeight
         state.gridAdded = true
         state.canvas.renderAll()
         layerify(state.canvas)
@@ -528,7 +534,6 @@ export default {
 
     changeGridSize ({commit}, size) {
       commit('UNADD_GRID')
-      commit('REMOVE_GRID')
       commit('CHANGE_GRID_SIZE', size)
       commit('ADD_GRID')
       commit('HANDLE_DRAW_GRID')

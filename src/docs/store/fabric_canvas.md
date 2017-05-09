@@ -241,7 +241,8 @@ Changes the snap to grid size to the payload.
 
 #### ADD_GRID (state)
 
-Draws the snap to grid onto the canvas if it has not already been drawn, and makes the grid unselectable or changeable.
+Draws the snap to grid onto the canvas if it has not already been drawn or if the screen size has changed since the last
+time the canvas was mounted, and makes the grid unselectable or changeable.
 It then layerifies the board to make sure the grid is always on the bottom of the objects.
 
 `layerify` is further documented in `helpers.js`
