@@ -4,7 +4,7 @@
       <collapse accordion>
         <collapse-item title="Tokens">
           <div class="asset-item" v-for="(token, key) in savedTokens" @click="showToken() + selectAsset('token',key)">{{limit(key)}}</div>
-          <div class="new-asset-item" @click="showToken() + newToken()"></div>
+          <div class="new-asset-item fa fa-plus" @click="showToken() + newToken()"></div>
         </collapse-item>
         <collapse-item title="LED Grids">
           <div
@@ -15,7 +15,7 @@
             <span>{{key}}</span>
           </div>
 
-          <div class="new-asset-item" @click="showLedgrid() + newGrid()"></div>
+          <div class="new-asset-item fa fa-plus" @click="showLedgrid() + newGrid()"></div>
         </collapse-item>
       </collapse>
     </div>
