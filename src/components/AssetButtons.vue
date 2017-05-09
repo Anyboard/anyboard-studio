@@ -1,10 +1,10 @@
 <template>
   <div>
-    <a @click="downloadTokens">Download Tokens</a>
-    <a @click="downloadGrids">Download Grids</a>
-    <a @click="loadTokens">Upload Tokens</a>
+    <a @click="downloadTokens">Save Tokens</a>
+    <a @click="downloadGrids">Save Grids</a>
+    <a @click="loadTokens">Load Tokens</a>
     <input @change="loadTokensUpload"type="file" id="tokens" style="display: none"/>
-    <a @click="loadGrids">Upload Grids</a>
+    <a @click="loadGrids">Load Grids</a>
     <input @change="loadGridsUpload"type="file" id="grids" style="display: none"/>
   </div>
 </template>
