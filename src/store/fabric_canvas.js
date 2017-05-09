@@ -277,7 +277,7 @@ export default {
     DOWNLOAD_BOARD (state) {
       if (state.canvas.getObjects().length > 0) {
         const blob = new Blob([JSON.stringify(state.canvasState)], {type: 'text/plain;charset=utf-8'})
-        FileSaver.saveAs(blob, 'BFoard.json')
+        FileSaver.saveAs(blob, 'Board.json')
       }
     },
 
