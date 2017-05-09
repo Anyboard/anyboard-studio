@@ -7,7 +7,14 @@
           <div class="asset-item" @click="showToken() + newToken()">NEW</div>
         </collapse-item>
         <collapse-item title="LED Grids">
-          <div class="asset-item" v-for="(grid, key) in savedGrids" @click="showLedgrid() + selectAsset('grid',key)">{{limit(key)}}</div>
+          <div 
+            class="asset-item" 
+            v-for="(grid, key) in savedGrids" 
+            @click="showLedgrid() + selectAsset('grid',key)">
+            <SVGMatrix :code="grid" :key="key"></SVGMatrix>
+            <span>{{key}}</span>
+          </div>
+          
           <div class="asset-item" @click="showLedgrid() + newGrid()">NEW</div>
         </collapse-item>
       </collapse>
@@ -40,7 +47,8 @@ export default {
   components: {
     LEDGridEditor: require('./LEDGridEditor.vue'),
     TokenEditor: require('./TokenEditor.vue'),
-    IconButton: require('./IconButton.vue')
+    IconButton: require('./IconButton.vue'),
+    SVGMatrix: require('./SVGMatrix.vue')
   },
   methods: {
     limit (key) {
@@ -83,13 +91,27 @@ export default {
 
   .asset-item {
     display: inline-block;
-    width:5em;
-    height: 5em;
+    font-size: .75em;
+    width:6em;
     border-radius: 5px;
     padding:1em;
     background:#fff;
     margin:2px;
     color: black;
+    text-align: center;
+
+    .svg {
+      width: 4em;
+      height: 4em;
+
+      .inactive {fill:#efefef;}
+      .active{ fill:#080; }
+    }
+
+    span {
+      text-transform: capitalize;
+      font-size: .8em;
+    }
   }
 }
 
