@@ -16,8 +16,8 @@ export default {
     gridActive: true,
     gridAdded: false,
     gridSize: 50,
-    checkHeight: 0,
     checkWidth: 0,
+    checkHeight: 0,
     printableBoard: null
   },
 
@@ -30,7 +30,7 @@ export default {
     INIT_DRAW (state) {
       state.canvas.freeDrawingBrush = new F['PencilBrush'](state.canvas)
       state.canvas.freeDrawingBrush.width = 20
-      state.canvas.freeDrawingBrush.color = '#000000'
+      state.canvas.freeDrawingBrush.color = '#4194D0'
     },
 
     // Creating Sectors
@@ -143,6 +143,7 @@ export default {
 
     CLEAR_CANVAS (state) {
       state.canvas.clear()
+      state.canvas.setBackgroundColor('white')
       state.canvas.renderAll()
       state.gridAdded = false
     },
@@ -277,7 +278,7 @@ export default {
     DOWNLOAD_BOARD (state) {
       if (state.canvas.getObjects().length > 0) {
         const blob = new Blob([JSON.stringify(state.canvasState)], {type: 'text/plain;charset=utf-8'})
-        FileSaver.saveAs(blob, 'BFoard.json')
+        FileSaver.saveAs(blob, 'Board.json')
       }
     },
 

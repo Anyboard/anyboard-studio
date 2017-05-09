@@ -3,6 +3,7 @@
  */
 import {insertIntoDict, colorHexToRGB, colorRGBToHex} from '../utilities/helpers.js'
 import Vue from 'vue'
+import FileSaver from 'file-saver'
 export default {
   namespaced: true,
 
@@ -94,6 +95,15 @@ export default {
     },
     DELETE_TOKEN (state) {
       Vue.delete(state.savedTokens, state.selectedToken)
+    },
+
+    DOWNLOAD_TOKENS (state) {
+      const blob = new Blob([JSON.stringify(state.savedTokens)], {type: 'text/plain;charset=utf-8'})
+      FileSaver.saveAs(blob, 'Tokens.json')
+    },
+
+    UPLOAD_TOKENS (state, payload) {
+      state.savedTokens = payload
     }
   },
 
@@ -126,6 +136,12 @@ export default {
       commit('DELETE_TOKEN')
       commit('SET_STANDARD')
       commit('SELECT_TOKEN', '')
+    },
+    downloadTokens ({commit}) {
+      commit('DOWNLOAD_TOKENS')
+    },
+    uploadTokens ({commit}, tokens) {
+      commit('UPLOAD_TOKENS', tokens)
     }
   },
 

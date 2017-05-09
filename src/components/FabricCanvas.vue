@@ -49,6 +49,7 @@
         this.$store.dispatch('fabricInspector/updateInfo', this.$store.getters.GET_ACTIVEOBJ)
         var keys = this.$store.getters.GET_USED_SECTORS
         this.$store.dispatch('fabricInspector/setPredefinedSectors', keys)
+        this.$store.dispatch('stateHandling')
       })
 
       cvs.on('object:modified', () => {
@@ -78,6 +79,7 @@
         this.$store.dispatch('fabricInspector/updateInfo', this.$store.getters.GET_ACTIVEOBJ)
         var keys = this.$store.getters.GET_USED_SECTORS
         this.$store.dispatch('fabricInspector/setPredefinedSectors', keys)
+        this.$store.dispatch('stateHandling')
       })
 
       cvs.on('object:moving', (e) => {

@@ -9,17 +9,17 @@
           <IconButton @click.native="makeShape" id="triangle"  icon="fa-play" text="Triangle" tooltip="Make a new triangle sector"></IconButton>
         </div>
       </div>
-    
+
       <IconButton @click.native="centerObject" icon="fa-crosshairs" text="Center" tooltip="Center selected object"></IconButton>
       <IconButton @click.native="insertText" icon="fa-i-cursor" text="Text" tooltip="Insert a text element"></IconButton>
       <IconButton @click.native="clickImage" icon="fa-image" text="Image" tooltip="Upload an image"></IconButton>
       <input @change="uploadImage"type="file" id="image" style="display: none"/>
       <IconButton @click.native="cloneObject" icon="fa-clone" text="Clone" tooltip="Make a copy of selected object"></IconButton>
-    
-    
+
+
       <IconButton @click.native="deleteObject" icon="fa-window-close-o" text="Delete" tooltip="Delete selected object"></IconButton>
       <IconButton @click.native="clearCanvas" icon="fa-eraser" text="Clear" tooltip="Clear the entire board"></IconButton>
-      
+
       <div class="vtb_dd">
         <IconButton icon="fa-exchange" text="Arrange"></IconButton>
         <div class="vtb_dropout">
@@ -30,7 +30,7 @@
         </div>
       </div>
 
-    
+
       <IconButton @click.native="toggleDraw" icon="fa-pencil" text="Drawing" tooltip="Toggle free drawing"></IconButton>
       <IconButton @click.native="changeGridMode" icon="fa-square-o" text="Grid" tooltip="Change grid mode"></IconButton>
       <IconButton @click.native="jsonDebug" icon="fa-at" text="DEBUG" tooltip="Log json debug"></IconButton>

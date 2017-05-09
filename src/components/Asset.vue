@@ -3,11 +3,11 @@
     <div id="asset-listing">
       <collapse accordion>
         <collapse-item title="Tokens">
-          <div class="asset-item" v-for="(token, key) in savedTokens" @click="showToken() + selectAsset('token',key)">{{key}}</div>
+          <div class="asset-item" v-for="(token, key) in savedTokens" @click="showToken() + selectAsset('token',key)">{{limit(key)}}</div>
           <div class="new-asset-item fa fa-plus" @click="showToken() + newToken()"></div>
         </collapse-item>
         <collapse-item title="LED Grids">
-          <div class="asset-item" v-for="(grid, key) in savedGrids" @click="showLedgrid() + selectAsset('grid',key)">{{key}}</div>
+          <div class="asset-item" v-for="(grid, key) in savedGrids" @click="showLedgrid() + selectAsset('grid',key)">{{limit(key)}}</div>
           <div class="new-asset-item fa fa-plus" @click="showLedgrid() + newGrid()"></div>
         </collapse-item>
       </collapse>
@@ -43,6 +43,9 @@ export default {
     IconButton: require('./IconButton.vue')
   },
   methods: {
+    limit (key) {
+      return key.replace(' ', '_').substr(0, 6)
+    },
     showToken () {
       this.asset_type = 'token'
     },

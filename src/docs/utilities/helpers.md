@@ -34,10 +34,9 @@ The method creates an array that can be used by Fabric to create a polygon with 
 Takes in a `dataurl` and turns it into a blob. It is used to create a blob of the canvas which can be saved as a
 png-file.
 
-#### restoreObjs (group, cvs)
+#### pushForward (layer, cvs)
 
-Used by `layerify` to restore Fabric Groups back Fabric objects. `group` is a Fabric group and `cvs` is the Fabric
-canvas object.
+Used by `layerify` to push layers to front in ascending order.
 
 #### layerify (cvs)
 
@@ -45,11 +44,7 @@ Used to "layerify" the canvas. As Fabric doesn't have native layer support this 
 layers. The goal is to have grids always be on the bottom, followed by images, then by free drawn paths made to be drawn
 in the background, then sectors, then free drawn paths in the foreground and finally text.
 
-It pushes all objects on the canvas into their relative arrays, makes Fabric Groups out of the arrays, clears the board
-and readds the Fabric Groups onto the canvas and restores the objects using `restoreObjs'`
-
-For future work to improve optimisation, clearing and readding objects should be avoided. Making better use of sending
-objects to the back in correct orders could improve performance.
+Once all objects have been grouped they are pushed to front in ascending order using `pushForward`
 
 #### insertIntoDict (dict, key, value)
 

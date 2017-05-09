@@ -4,6 +4,7 @@
 
 import {binaryToHex, hexToBinary, binaryToList} from '../utilities/helpers'
 import Vue from 'vue'
+import FileSaver from 'file-saver'
 
 export default {
   namespaced: true,
@@ -20,7 +21,9 @@ export default {
     ],
     savedGrids: {
       'smile': '0024242400423C00',
-      'frown': '00242424003C4200'
+      'frown': '00242424003C4200',
+      'cross': '8142241818244281',
+      'checkmark': '0001020488502000'
     },
     selectedGrid: ''
   },
@@ -57,6 +60,14 @@ export default {
     },
     DELETE_GRID (state) {
       Vue.delete(state.savedGrids, state.selectedGrid)
+    },
+    DOWNLOAD_GRIDS (state) {
+      const blob = new Blob([JSON.stringify(state.savedGrids)], {type: 'text/plain;charset=utf-8'})
+      FileSaver.saveAs(blob, 'Grids.json')
+    },
+
+    UPLOAD_GRIDS (state, payload) {
+      state.savedGrids = payload
     }
   },
   actions: {
@@ -99,6 +110,12 @@ export default {
       commit('DELETE_GRID')
       commit('CLEAR_GRID')
       commit('SELECT_GRID', '')
+    },
+    downloadGrids ({commit}) {
+      commit('DOWNLOAD_GRIDS')
+    },
+    uploadGrids ({commit}, grids) {
+      commit('UPLOAD_GRIDS', grids)
     }
   },
   getters: {
