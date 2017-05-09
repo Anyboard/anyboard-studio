@@ -16,6 +16,8 @@ export default {
     gridActive: true,
     gridAdded: false,
     gridSize: 50,
+    checkWidth: 0,
+    checkHeight: 0,
     printableBoard: null
   },
 
@@ -28,7 +30,7 @@ export default {
     INIT_DRAW (state) {
       state.canvas.freeDrawingBrush = new F['PencilBrush'](state.canvas)
       state.canvas.freeDrawingBrush.width = 20
-      state.canvas.freeDrawingBrush.color = '#000000'
+      state.canvas.freeDrawingBrush.color = '#4194D0'
     },
 
     // Creating Sectors
@@ -141,7 +143,6 @@ export default {
 
     CLEAR_CANVAS (state) {
       state.canvas.clear()
-      state.canvas.setBackgroundColor('white')
       state.canvas.renderAll()
       state.gridAdded = false
     },
@@ -321,31 +322,38 @@ export default {
       state.gridSize = payload
     },
 
-    REMOVE_GRID (state) {
-      const objs = state.canvas.getObjects()
-      let toBeRemoved = []
-      for (let i = 0, l = objs.length; i < l; ++i) {
-        if (objs[i]['type'] === 'line') {
-          toBeRemoved.push(objs[i])
-        }
-      }
-      for (let i in toBeRemoved) {
-        state.canvas.remove(toBeRemoved[i])
-      }
-    },
-
     ADD_GRID (state) {
       const canvasWidth = state.canvas.width
-      if (!state.gridAdded) {
+      const canvasHeight = state.canvas.height
+      // Checks if the grid has not been added, or if the screen size has changed since last time grid was viewed
+      if (!state.gridAdded || (state.checkHeight === 0 || state.checkHeight !== canvasHeight) ||
+        (state.checkWidth === 0 || state.checkWidth !== canvasWidth)) {
+        // Gets previous grid and removes it
+        const objs = state.canvas.getObjects()
+        let toBeRemoved = []
+        for (let i = 0, l = objs.length; i < l; ++i) {
+          if (objs[i]['type'] === 'line') {
+            toBeRemoved.push(objs[i])
+          }
+        }
+        for (let i in toBeRemoved) {
+          state.canvas.remove(toBeRemoved[i])
+        }
+        // Redraws the grid
         for (let i = 0; i < (canvasWidth / state.gridSize); i++) {
-          state.canvas.add(new F.Line([i * state.gridSize, 0, i * state.gridSize, canvasWidth],
+          state.canvas.add(new F.Line([i * state.gridSize, 0, i * state.gridSize, canvasHeight],
             { stroke: '#ccc', selectable: false, id: 'grid1' }))
+        }
+        for (let i = 0; i < (canvasHeight / state.gridSize); i++) {
           state.canvas.add(new F.Line([0, i * state.gridSize, canvasWidth, i * state.gridSize],
             { stroke: '#ccc', selectable: false, id: 'grid2' }))
         }
+        // Sets control values
+        state.checkWidth = canvasWidth
+        state.checkHeight = canvasHeight
         state.gridAdded = true
         state.canvas.renderAll()
-        layerify(state.canvas)
+        //  layerify(state.canvas)
       }
     },
 
@@ -526,7 +534,6 @@ export default {
 
     changeGridSize ({commit}, size) {
       commit('UNADD_GRID')
-      commit('REMOVE_GRID')
       commit('CHANGE_GRID_SIZE', size)
       commit('ADD_GRID')
       commit('HANDLE_DRAW_GRID')
