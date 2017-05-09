@@ -32,6 +32,11 @@
         <input type="checkbox" :checked="allowLEDChange" >
       </label>
 
+      <label @click="updateCheckbox('allowLEDBlink')">
+        LED Blink:
+        <input type="checkbox" :checked="allowLEDBlink" >
+      </label>
+
       <label @click="updateCheckbox('allowVibrate')">
         Vibrate:
         <input type="checkbox" :checked="allowVibrate"/>
@@ -113,6 +118,7 @@
         selectedToken: 'selectedToken',
         allowVibrate: state => state.attributes.allowVibrate,
         allowLEDChange: state => state.attributes.allowLEDChange,
+        allowLEDBlink: state => state.attributes.allowLEDBlink,
         allowTap: state => state.attributes.allowTap,
         allowDoubleTap: state => state.attributes.allowDoubleTap,
         allowShake: state => state.attributes.allowShake,
