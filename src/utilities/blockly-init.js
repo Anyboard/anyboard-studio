@@ -254,7 +254,7 @@ const blocklyInit = function (Blockly, TOKENS, GRIDS, sectorObject, sectorNames,
       this.appendStatementInput('STACK')
           .setCheck(null)
       this.setColour(65)
-      this.setTooltip('Triggered when a token is moved next to another token.')
+      this.setTooltip('Feature currently not available.\n Triggered when a token is moved next to another token.')
       this.setHelpUrl('')
     }
   }
@@ -288,7 +288,7 @@ const blocklyInit = function (Blockly, TOKENS, GRIDS, sectorObject, sectorNames,
       this.appendStatementInput('STACK')
         .setCheck(null)
       this.setColour(65)
-      this.setTooltip('This runs at the start of the game. Do not include any currentToken blocks here.')
+      this.setTooltip('This runs at the start of the game.\n Do not include any currentToken blocks here.')
       this.setHelpUrl('')
     }
   }
@@ -337,7 +337,7 @@ const blocklyInit = function (Blockly, TOKENS, GRIDS, sectorObject, sectorNames,
       this.setPreviousStatement(true, null)
       this.setNextStatement(true, null)
       this.setColour(120)
-      this.setTooltip('Scrolls through the first 29 letters of the provided text.')
+      this.setTooltip('Feature currently not available.\n Scrolls through the first 29 letters of the provided text.')
       this.setHelpUrl('')
     }
   }
@@ -365,7 +365,7 @@ const blocklyInit = function (Blockly, TOKENS, GRIDS, sectorObject, sectorNames,
       this.setPreviousStatement(true, null)
       this.setNextStatement(true, null)
       this.setColour(120)
-      this.setTooltip('Counts on a token.')
+      this.setTooltip('Feature currently not available.\n Counts on a token.')
       this.setHelpUrl('')
     }
   }
@@ -423,7 +423,7 @@ const blocklyInit = function (Blockly, TOKENS, GRIDS, sectorObject, sectorNames,
           .appendField('Current Token')
       this.setOutput(true, 'Token')
       this.setColour(290)
-      this.setTooltip('The token that who triggered the current event. Do not use in Set Up the Game.')
+      this.setTooltip('The token that who triggered the current event.\n Do not use in Set Up the Game.')
       this.setHelpUrl('')
     }
   }
@@ -433,7 +433,7 @@ const blocklyInit = function (Blockly, TOKENS, GRIDS, sectorObject, sectorNames,
           .appendField('Other Token')
       this.setOutput(true, 'Token')
       this.setColour(290)
-      this.setTooltip('ONLY USE THIS IN Move Token Close to Other Token! The token that was moved close to the current token.')
+      this.setTooltip('Feature currently not available.\n ONLY USE THIS IN Move Token Close to Other Token!\n The token that was moved close to the current token.')
       this.setHelpUrl('')
     }
   }
