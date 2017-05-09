@@ -4,7 +4,7 @@
       <collapse accordion>
         <collapse-item title="Tokens">
           <div class="asset-item" v-for="(token, key) in savedTokens" @click="showToken() + selectAsset('token',key)">{{limit(key)}}</div>
-          <div class="asset-item" @click="showToken() + newToken()">NEW</div>
+          <div class="new-asset-item" @click="showToken() + newToken()"></div>
         </collapse-item>
         <collapse-item title="LED Grids">
           <div
@@ -15,7 +15,7 @@
             <span>{{key}}</span>
           </div>
 
-          <div class="asset-item" @click="showLedgrid() + newGrid()">NEW</div>
+          <div class="new-asset-item" @click="showLedgrid() + newGrid()"></div>
         </collapse-item>
       </collapse>
     </div>
@@ -86,7 +86,7 @@ export default {
 }
 </script>
 
-<style lang="SASS" scoped>
+<style lang="SASS">
 #asset-listing {
   width:70vw;
   background:#383;
@@ -99,6 +99,7 @@ export default {
     display: inline-block;
     font-size: .75em;
     width:6em;
+    padding: 1em;
     border-radius: 5px;
     background: linear-gradient(135deg, #2d2d2d 0%,#2f2f2f 50%,#2c2c2c 50%,#2d2d2d 100%);
     color: #d4d4d4;
@@ -110,13 +111,15 @@ export default {
       width: 4em;
       height: 4em;
 
-      .inactive {fill:#efefef;}
+      .inactive {fill:#292929;}
       .active{ fill:#080; }
     }
 
     span {
       text-transform: capitalize;
       font-size: .8em;
+      color: #efefef;
+      text-shadow: 1px 1px 1px #1f1f1f;
     }
   }
   .asset-item:hover{
