@@ -160,9 +160,41 @@
 </script>
 
 <style>
+  label{
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none;
+  }
+  input[type='checkbox']{
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none;
+  }
   #tokenOptions {
     display: flex;
     flex-direction: column;
     color: #eae9e1;
+  }
+  input[type="color"] {
+    -webkit-appearance: none;
+    border: none;
+    width: 18px;
+    height: 16px;
+  }
+  input[type="color"]::-webkit-color-swatch-wrapper {
+    border: 1px solid black;
+    padding: 0;
+    margin: 0;
+  }
+  input[type="color"]::-webkit-color-swatch {
+    border: none;
+    padding: 0;
+    margin: 0;
   }
 </style>

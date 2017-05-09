@@ -1,21 +1,23 @@
 <template>
   <div>
-    <div id="asset-listing">
-      <collapse accordion>
-        <collapse-item title="Tokens">
-          <div class="asset-item" v-for="(token, key) in savedTokens" @click="showToken() + selectAsset('token',key)">{{limit(key)}}</div>
-          <div class="new-asset-item fa fa-plus" @click="showToken() + newToken()"></div>
-        </collapse-item>
-        <collapse-item title="LED Grids">
-          <div class="asset-item" v-for="(grid, key) in savedGrids" @click="showLedgrid() + selectAsset('grid',key)">{{limit(key)}}</div>
-          <div class="new-asset-item fa fa-plus" @click="showLedgrid() + newGrid()"></div>
-        </collapse-item>
-      </collapse>
-    </div>
+    <div id="assetWrapper">
+      <div id="asset-listing">
+        <collapse accordion>
+          <collapse-item title="Tokens">
+            <div class="asset-item" v-for="(token, key) in savedTokens" @click="showToken() + selectAsset('token',key)">{{limit(key)}}</div>
+            <div class="new-asset-item fa fa-plus" @click="showToken() + newToken()"></div>
+          </collapse-item>
+          <collapse-item title="LED Grids">
+            <div class="asset-item" v-for="(grid, key) in savedGrids" @click="showLedgrid() + selectAsset('grid',key)">{{limit(key)}}</div>
+            <div class="new-asset-item fa fa-plus" @click="showLedgrid() + newGrid()"></div>
+          </collapse-item>
+        </collapse>
+      </div>
 
-    <div id="asset_inspector">
-      <LEDGridEditor v-if="asset_type === 'led'"></LEDGridEditor>
-      <TokenEditor v-if="asset_type === 'token'" chosen="chosenAsset"></TokenEditor>
+      <div id="asset_inspector">
+        <LEDGridEditor v-if="asset_type === 'led'"></LEDGridEditor>
+        <TokenEditor v-if="asset_type === 'token'" chosen="chosenAsset"></TokenEditor>
+      </div>
     </div>
   </div>
 </template>
@@ -44,7 +46,13 @@ export default {
   },
   methods: {
     limit (key) {
-      return key.replace(' ', '_').substr(0, 6)
+      let formattedString = key.charAt(0).toUpperCase()
+      formattedString += key.substr(1, key.length).toLowerCase()
+      if (formattedString.length > 7) {
+        return formattedString.substr(0, 7) + '..'
+      } else {
+        return formattedString
+      }
     },
     showToken () {
       this.asset_type = 'token'
@@ -72,10 +80,10 @@ export default {
 }
 </script>
 
-<style lang="SASS">
+<style lang="SASS" scoped>
 #asset-listing {
-  width:70vw;
-  background:#383;
+  width:50vw;
+
 
   .collapse-wrap {
     width:100%;
@@ -89,6 +97,7 @@ export default {
     background: linear-gradient(135deg, #2d2d2d 0%,#2f2f2f 50%,#2c2c2c 50%,#2d2d2d 100%);
     color: #d4d4d4;
     margin:2px;
+    margin-right: 10px;
     line-height: 12em;
     box-shadow: 1px 1px 1px #1f1f1f;
     text-shadow: 1px 1px 2px #1f1f1f;
@@ -122,9 +131,9 @@ export default {
   }
 }
 
-#asset-inspector {
-  width:30vw;
-  background:#f90;
+#asset_inspector {
+  width:50vw;
+  padding: 30px;
 }
 
 .assetTab{
@@ -138,6 +147,9 @@ export default {
   background-color: #2d2d2d;
 }
 #assetWrapper{
+  width: 100vw;
+  padding: 0px;
+  margin: 0px;
   color: white;
   display: flex;
   align-items: stretch;
