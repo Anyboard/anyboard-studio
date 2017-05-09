@@ -1,4 +1,4 @@
-import {fabric} from 'fabric'
+// import {fabric} from 'fabric'
 import JSZip from 'jszip'
 import FileSaver from 'file-saver'
 
@@ -75,18 +75,12 @@ export const dataURLtoBlob = function (dataurl) {
 }
 
 // Helping function for layerify
-export const restoreObjs = function (group, cvs) {
-  // Gets a list of objects from the group
-  let items = group._objects
-  // Restores the states of the objects from the group
-  group._restoreObjectsState()
-  // Removes the group object to canvas to avoid clogging with empty groups
-  cvs.remove(group)
-  // Goes through all objects and adds them to the canvas
-  for (let i = 0, l = items.length; i < l; ++i) {
-    cvs.add(items[i])
+function pushForward (layer, cvs) {
+  for (var i in layer) {
+    cvs.bringToFront(layer[i])
   }
 }
+
 // Layers types of objects, text > top paths > sectors > bottom paths > images > grid
 export const layerify = function (cvs) {
   // Sets up variables for all objects and lists for the types
@@ -113,30 +107,13 @@ export const layerify = function (cvs) {
       lineLayer.push(obj[i])
     }
   }
-  // Adds lists of objects to respective fabric groups
-  var lineGroup = new fabric.Group(lineLayer)
-  var textGroup = new fabric.Group(textLayer)
-  var sectorGroup = new fabric.Group(sectorLayer)
-  var bPathGroup = new fabric.Group(bPathLayer)
-  var imageGroup = new fabric.Group(imageLayer)
-  var fPathGroup = new fabric.Group(fPathLayer)
-  // Clears old objects
-  cvs.clear().renderAll()
-  cvs.setBackgroundColor('white')
-  // Adds groups to canvas
-  cvs.add(lineGroup)
-  cvs.add(imageGroup)
-  cvs.add(bPathGroup)
-  cvs.add(sectorGroup)
-  cvs.add(fPathGroup)
-  cvs.add(textGroup)
-  // Restores objects from group to canvas to allow layerify to work multiple times
-  restoreObjs(lineGroup, cvs)
-  restoreObjs(imageGroup, cvs)
-  restoreObjs(bPathGroup, cvs)
-  restoreObjs(sectorGroup, cvs)
-  restoreObjs(fPathGroup, cvs)
-  restoreObjs(textGroup, cvs)
+  // Pushes each layer to the front in ascending layer order
+  pushForward(lineLayer, cvs)
+  pushForward(imageLayer, cvs)
+  pushForward(bPathLayer, cvs)
+  pushForward(sectorLayer, cvs)
+  pushForward(fPathLayer, cvs)
+  pushForward(textLayer, cvs)
 }
 
 // Helping function for inserting sectors into json object

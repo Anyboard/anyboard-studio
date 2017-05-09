@@ -353,7 +353,7 @@ export default {
         state.checkHeight = canvasHeight
         state.gridAdded = true
         state.canvas.renderAll()
-        layerify(state.canvas)
+        //  layerify(state.canvas)
       }
     },
 
