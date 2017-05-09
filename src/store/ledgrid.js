@@ -67,7 +67,7 @@ export default {
     },
 
     UPLOAD_GRIDS (state, payload) {
-      state.savedTokens = payload
+      state.savedGrids = payload
     }
   },
   actions: {
