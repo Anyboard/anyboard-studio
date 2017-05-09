@@ -141,7 +141,6 @@ export default {
 
     CLEAR_CANVAS (state) {
       state.canvas.clear()
-      state.canvas.setBackgroundColor('white')
       state.canvas.renderAll()
       state.gridAdded = false
     },
@@ -336,9 +335,10 @@ export default {
 
     ADD_GRID (state) {
       const canvasWidth = state.canvas.width
+      const canvasHeight = state.canvas.height
       if (!state.gridAdded) {
         for (let i = 0; i < (canvasWidth / state.gridSize); i++) {
-          state.canvas.add(new F.Line([i * state.gridSize, 0, i * state.gridSize, canvasWidth],
+          state.canvas.add(new F.Line([i * state.gridSize, 0, i * state.gridSize, canvasHeight],
             { stroke: '#ccc', selectable: false, id: 'grid1' }))
           state.canvas.add(new F.Line([0, i * state.gridSize, canvasWidth, i * state.gridSize],
             { stroke: '#ccc', selectable: false, id: 'grid2' }))
