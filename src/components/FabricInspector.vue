@@ -36,10 +36,10 @@
       <collapse-item title="Sectorlist" class="sector_list">
         <p v-for="(sector, key) in sectors" @click="spanMake(key)" :class="clicked === key ? 'is_clicked' : ''">
           {{key}} <span :style="'background-color:' + sector"></span> {{sector}}
-          <span class="dropdown" v-for="index in colors">
-            <a @click="makeShape('rect',sector)">Make a rectangle</a>
-            <a @click="makeShape('circle',sector)">Make a circle</a>
-            <a @click="makeShape('triangle',sector)">Make a triangle</a>
+          <span class="dropdown">
+            <IconButton @click.native="makeShape('circle',sector)" id="circle" icon="fa-circle" text="Circle"></IconButton>
+            <IconButton @click.native="makeShape('rect',sector)" id="rect"  icon="fa-square" text="Square"></IconButton>
+            <IconButton @click.native="makeShape('triangle',sector)" id="triangle"  icon="fa-play" text="Triangle"></IconButton>
           </span>
         </p>
       </collapse-item>
@@ -137,7 +137,8 @@
       }
     },
     components: {
-      ChoiceColor: choiceColor
+      ChoiceColor: choiceColor,
+      IconButton: require('./IconButton.vue')
     }
   }
 </script>
@@ -193,23 +194,29 @@
   .sector_list p {
     position: relative;
   }
+
   .sector_list p > span {
-    display:inline-block;
+    display: inline-block;
     padding:5px;
+
   }
 
   .sector_list p .dropdown {
-    position: absolute;
-    display:none;
-    left:-100%;
+    position: relative;
+    display: none;
     top:0;
     right:0;
-    width:50px;
-    height:50px;
-    background:#fff;
+    left: -5px;
+    background:#555;
+    width: 120px;
   }
 
   .sector_list p.is_clicked .dropdown {
-    display: block;
+    top:10px;
+    display: inline-flex;
+    align-content: flex-end;
   }
+
+
+
 </style>
