@@ -340,6 +340,8 @@ export default {
         for (let i = 0; i < (canvasWidth / state.gridSize); i++) {
           state.canvas.add(new F.Line([i * state.gridSize, 0, i * state.gridSize, canvasHeight],
             { stroke: '#ccc', selectable: false, id: 'grid1' }))
+        }
+        for (let i = 0; i < (canvasHeight / state.gridSize); i++) {
           state.canvas.add(new F.Line([0, i * state.gridSize, canvasWidth, i * state.gridSize],
             { stroke: '#ccc', selectable: false, id: 'grid2' }))
         }
