@@ -12,7 +12,7 @@
             v-for="(grid, key) in savedGrids"
             @click="showLedgrid() + selectAsset('grid',key)">
             <SVGMatrix :code="grid" :key="key"></SVGMatrix>
-            <span>{{key}}</span>
+            <span>{{limit(key)}}</span>
           </div>
 
           <div class="new-asset-item fa fa-plus" @click="showLedgrid() + newGrid()"></div>
