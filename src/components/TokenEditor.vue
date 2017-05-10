@@ -37,6 +37,11 @@
         <input type="checkbox" :checked="allowLEDBlink" >
       </label>
 
+      <label @click="updateCheckbox('allowDisplayPattern')">
+        Display Pattern:
+        <input type="checkbox" :checked="allowDisplayPattern" >
+      </label>
+
       <label @click="updateCheckbox('allowVibrate')">
         Vibrate:
         <input type="checkbox" :checked="allowVibrate"/>
@@ -68,10 +73,6 @@
         <input type="checkbox" :checked="allowTurn"/>
       </label>
 
-      <label @click="updateCheckbox('allowTokenToken')">
-        Token-token:
-        <input type="checkbox" :checked="allowTokenToken"/>
-      </label>
       <button @click="createToken" :disabled="disableButton" v-if="isNewToken">Create token</button>
       <button v-if="!isNewToken" @click="updateToken">Update</button>
       <div v-if="!isNewToken">
@@ -119,12 +120,13 @@
         allowVibrate: state => state.attributes.allowVibrate,
         allowLEDChange: state => state.attributes.allowLEDChange,
         allowLEDBlink: state => state.attributes.allowLEDBlink,
+        allowDisplayPattern: state => state.attributes.allowDisplayPattern,
         allowTap: state => state.attributes.allowTap,
         allowDoubleTap: state => state.attributes.allowDoubleTap,
         allowShake: state => state.attributes.allowShake,
         allowTilt: state => state.attributes.allowTilt,
-        allowTurn: state => state.attributes.allowTurn,
-        allowTokenToken: state => state.attributes.allowTokenToken
+        allowTurn: state => state.attributes.allowTurn
+        // allowTokenToken: state => state.attributes.allowTokenToken
       }),
       isNewToken: function () {
         return this.selectedToken === ''

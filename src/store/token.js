@@ -9,8 +9,8 @@ export default {
 
   state: {
     savedTokens: {
-      'Dragon': [[0, 255, 0], 'allowLEDChange', 'allowLEDBlink', 'allowDoubleTap', 'allowShake', 'allowTilt', 'allowTurn', 'allowTokenToken'],
-      'Human': [[255, 0, 0], 'allowLEDChange', 'allowLEDBlink', 'allowVibrate', 'allowTap', 'allowDoubleTap', 'allowTilt', 'allowTurn', 'allowTokenToken']
+      'Dragon': [[0, 255, 0], 'allowLEDChange', 'allowLEDBlink', 'allowDoubleTap', 'allowShake', 'allowTilt', 'allowTurn', 'allowDisplayPattern'],
+      'Human': [[255, 0, 0], 'allowLEDChange', 'allowLEDBlink', 'allowVibrate', 'allowTap', 'allowDoubleTap', 'allowTilt', 'allowTurn', 'allowDisplayPattern']
     },
     numberOfDynamicTokens: 0,
     selectedToken: '',
@@ -18,13 +18,14 @@ export default {
     attributes: {
       allowLEDChange: true,
       allowLEDBlink: true,
+      allowDisplayPattern: true,
       allowVibrate: true,
       allowTap: true,
       allowDoubleTap: true,
-      allowShake: false,
+      allowShake: true,
       allowTilt: true,
-      allowTurn: true,
-      allowTokenToken: true
+      allowTurn: true
+      // allowTokenToken: false
     }
   },
 
