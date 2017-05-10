@@ -243,7 +243,7 @@
         };
 
         if(app.tokenVal.hasOwnProperty(token.id)) {
-          if (app.tokenVal[token.id].includes('allowdDisplayPattern')) {
+          if (app.tokenVal[token.id].includes('allowDisplayPattern')) {
             token.displayPattern(pattern,
               completedFunction,  // function to be executed when token signals
               errorCallback  // function to be executed in case of failure to send command to token
