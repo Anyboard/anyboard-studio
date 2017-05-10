@@ -614,7 +614,7 @@ const blocklyInit = function (Blockly, TOKENS, GRIDS, sectorObject, sectorNames,
   }
   Blockly.JavaScript['token_test'] = function (block) {
     var token = Blockly.JavaScript.valueToCode(block, 'TOKEN', Blockly.JavaScript.ORDER_EQUALITY)
-    var code = 'currentToken.id == ' + token
+    var code = 'currentToken == ' + token
     return [code, Blockly.JavaScript.ORDER_EQUALITY]
   }
   Blockly.JavaScript['random_token'] = function (block) {

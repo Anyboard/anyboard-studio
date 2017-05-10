@@ -6,7 +6,7 @@
           <div class="asset-item" v-for="(token, key) in savedTokens" @click="showToken() + selectAsset('token',key)">{{limit(key)}}</div>
           <div class="new-asset-item fa fa-plus" @click="showToken() + newToken()"></div>
         </collapse-item>
-        <collapse-item title="LED Grids">
+        <collapse-item title="Display Patterns">
           <div
             class="asset-item"
             v-for="(grid, key) in savedGrids"
