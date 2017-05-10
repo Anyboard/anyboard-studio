@@ -692,8 +692,10 @@ const blocklyInit = function (Blockly, TOKENS, GRIDS, sectorObject, sectorNames,
   Blockly.JavaScript['tap'] = function (block) {
     var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
     var code = 'var handleTokenTap = function(currentToken , options) {\n'
+    code += 'if(app.tokenVal.hasOwnProperty(currentToken.id)) {'
     code += 'if (!app.tokenVal[currentToken.id].includes("allowTap")) {\n'
     code += 'return\n'
+    code += '}\n'
     code += '}\n'
     code += stack + '};\n'
     code += 'AnyBoard.TokenManager.onTokenEvent("TAP", handleTokenTap);\n'
@@ -702,8 +704,10 @@ const blocklyInit = function (Blockly, TOKENS, GRIDS, sectorObject, sectorNames,
   Blockly.JavaScript['double_tap'] = function (block) {
     var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
     var code = 'var handleTokenDoubleTap = function(currentToken , options) {\n'
+    code += 'if(app.tokenVal.hasOwnProperty(currentToken.id)) {'
     code += 'if (!app.tokenVal[currentToken.id].includes("allowDoubleTap")) {\n'
     code += 'return\n'
+    code += '}\n'
     code += '}\n'
     code += stack + '};\n'
     code += 'AnyBoard.TokenManager.onTokenEvent("DOUBLE_TAP", handleTokenDoubleTap);\n'
@@ -712,8 +716,10 @@ const blocklyInit = function (Blockly, TOKENS, GRIDS, sectorObject, sectorNames,
   Blockly.JavaScript['tilt'] = function (block) {
     var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
     var code = 'var handleTokenTilt = function(currentToken , options) {\n'
+    code += 'if(app.tokenVal.hasOwnProperty(currentToken.id)) {'
     code += 'if (!app.tokenVal[currentToken.id].includes("allowTilt")) {\n'
     code += 'return\n'
+    code += '}\n'
     code += '}\n'
     code += stack + '};\n'
     code += 'AnyBoard.TokenManager.onTokenEvent("TILT", handleTokenTilt);\n'
@@ -723,8 +729,10 @@ const blocklyInit = function (Blockly, TOKENS, GRIDS, sectorObject, sectorNames,
     var stack1 = Blockly.JavaScript.statementToCode(block, 'STACK1')
     var stack2 = Blockly.JavaScript.statementToCode(block, 'STACK2')
     var code = 'var handleTokenTurn = function(currentToken , direction , options) {\n'
+    code += 'if(app.tokenVal.hasOwnProperty(currentToken.id)) {'
     code += 'if (!app.tokenVal[currentToken.id].includes("allowTurn")) {\n'
     code += 'return\n'
+    code += '}\n'
     code += '}\n'
     code += 'if (direction == 1) {\n'
     code += stack1
@@ -738,8 +746,10 @@ const blocklyInit = function (Blockly, TOKENS, GRIDS, sectorObject, sectorNames,
   Blockly.JavaScript['shake'] = function (block) {
     var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
     var code = 'var handleTokenShake = function(currentToken , options) {\n'
+    code += 'if(app.tokenVal.hasOwnProperty(currentToken.id)) {'
     code += 'if (!app.tokenVal[currentToken.id].includes("allowShake")) {\n'
     code += 'return\n'
+    code += '}\n'
     code += '}\n'
     code += stack + '};\n'
     code += 'AnyBoard.TokenManager.onTokenEvent("SHAKE", handleTokenShake);\n'
@@ -748,8 +758,10 @@ const blocklyInit = function (Blockly, TOKENS, GRIDS, sectorObject, sectorNames,
   Blockly.JavaScript['token_token_interaction'] = function (block) {
     var stack = Blockly.JavaScript.statementToCode(block, 'STACK')
     var code = 'var handleTokenTokenInteraction = function(currentToken , otherToken , options) {\n'
+    code += 'if(app.tokenVal.hasOwnProperty(currentToken.id) && app.tokenVal.hasOwnProperty(otherToken.id)) {'
     code += 'if (!app.tokenVal[currentToken.id].includes("allowTokenToken") || !app.otherToken[token.id].includes("allowTokenToken")) {\n'
     code += 'return\n'
+    code += '}\n'
     code += '}\n'
     code += stack + '};\n'
     code += 'AnyBoard.TokenManager.onTokenEvent("TTE", handleTokenTokenInteraction);\n'
