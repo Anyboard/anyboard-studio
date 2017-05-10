@@ -104,7 +104,7 @@ export default {
     background: linear-gradient(135deg, #2d2d2d 0%,#2f2f2f 50%,#2c2c2c 50%,#2d2d2d 100%);
     color: #d4d4d4;
     margin:2px;
-    color: black;
+    color: white;
     text-align: center;
 
     .svg {
