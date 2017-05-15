@@ -1,0 +1,201 @@
+<!doctype html>
+<html>
+  <head>
+    <style type="text/css">
+      html, body {
+        padding:0;
+        margin:0;
+      }
+
+      body {
+        font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+        font-size:12px;
+        background:#333;
+      }
+
+      #navigation {
+        background:#efefef;
+        padding:0 1em;
+        border-bottom:1px solid #000;
+      }
+
+      #navigation > a {
+        color:#333;
+        text-decoration: none;
+        display:inline-block;
+        font-family: Tahoma, Geneva, sans-serif;
+      }
+
+      #navigation > *:not(#logo) {
+        font-size: 1em;
+        padding:1.25em 2em 0.95em 2em;
+        text-transform: uppercase;
+      }
+
+      #navigation > a:hover {
+        background:#cdcdcd;
+      }
+
+      #navigation > #logo {
+        font-size:1.5em;
+        padding:.5em 2.5em;
+        background-image: url('./src/assets/logo.svg');
+        background-size: 1.5em 1.5em;
+        background-position: .5em;
+        background-repeat: no-repeat;
+        letter-spacing: .1em;
+        margin-right:2em;
+      }
+
+      #wrapper {
+        display:flex;
+        flex-direction: row;
+        align-items: flex-start;
+        align-content: stretch;
+        margin:1em;
+        height:100%;
+        min-height: 100%;
+
+      }
+      
+      #wrapper > * {
+        margin-top:1em;
+      }
+
+
+      /**
+      * TOOLBAR 
+      */
+      #tools {
+        font-size:2em;
+        display: flex;
+        flex-direction: column;
+        list-style-type: none;
+        padding:0;
+      }
+
+      #tools > li {
+        position: relative;
+        color: #fff;
+        padding:.25em;
+        background-color:#555;
+        border-bottom:1px solid #333;
+        border-top:1px solid #777;
+      }
+
+      #tools > li:first-of-type {
+        border-top-left-radius: .2em;
+        border-top-right-radius: .2em;
+      }
+
+      #tools > li:last-of-type {
+        border-bottom-left-radius: .2em;
+        border-bottom-right-radius: .2em;
+      }
+
+      #tools > li > svg {
+        width:1em;
+        height:1em;
+        color:#bbb;
+        fill:currentColor;
+      }
+
+      #tools > li:hover > svg {
+        color:#fff;
+      }
+      #tools > li > span {
+        visibility: hidden;
+        position: absolute;
+        display: block;
+        width: 0px;
+        font-size:.5em;
+        height:2.4em;
+        overflow: hidden;
+        left:105%;
+        top:-1px;
+        padding:.5em .5em;
+        background:#c0c1b5;
+        border-top-right-radius: .5em;
+        border-bottom-right-radius: .5em;
+        -webkit-transition: width .15s;
+        transition: width .15s;
+        border-top:1px solid #777;
+        border-bottom:1px solid #777;
+        border-right:1px solid #333;
+        color:#333;
+      }
+      #tools > li:hover {
+        background:#666;
+        border-top-right-radius: .0em;
+        border-bottom-right-radius: .0em;
+      }
+      #tools > li:hover > span{
+        visibility: visible;
+        width:250px;
+      }
+
+
+      /**
+      * CONTENT
+      */ 
+      #content {
+        flex-grow:10;
+        min-width: 580px;
+        min-height: 300px;
+        background-color:#fff;
+        border:1px solid #000;
+        margin:1em;
+      }
+
+      #inspector {
+        flex-grow:3;
+        min-width: 200px;
+        background:#888;
+        border-radius:.2em;
+      }
+
+      
+
+    </style>
+  </head>
+  <body>
+    <nav id="navigation">
+      <a id="logo" href="#">Anyboard Studio</a>
+      <a href="#">File</a>
+      <a href="#">Edit</a>
+      <a href="#">Game</a>
+      <a href="#">Help</a>
+    </nav>
+
+    <div id="wrapper">
+      <ul id="tools" class="toolbar">
+        <li>
+          <svg viewBox="0 0 20 20"><use xlink:href="./src/assets/glyphs/controller-record.svg#Record"></use></svg>
+          <span><b>New Circle</b></br>Add circle to canvas</span>
+        </li>
+        
+        <li>
+          <svg viewBox="0 0 20 20"><use xlink:href="./src/assets/glyphs/controller-stop.svg#Stop"></use></svg>
+          <span><b>New Square</b></br>Add square to canvas</span>
+        </li>
+
+        <li>
+          <svg viewBox="0 0 20 20"><use xlink:href="./src/assets/glyphs/dots-three-horizontal.svg#Dots_three_horizontal"></use></svg>
+          <span><b>Settings</b></br>Open the game settings panel</span>
+        </li>
+
+        <li>
+          <svg viewBox="0 0 20 20"><use xlink:href="./src/assets/glyphs/image-inverted.svg#Image_inverted"></use></svg>
+          <span><b>Insert Image</b></br>Create an artwork tile.</span>
+        </li>
+      </ul>
+      <div id="content">
+        
+      </div>
+      <div id="inspector">
+        c
+      </div>
+    </div>
+    
+  </body>
+</html>
