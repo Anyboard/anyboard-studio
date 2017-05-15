@@ -19,14 +19,7 @@
     },
 
     mounted () {
-      console.log(`\n\n===== MOUNTED: ${Date.now()} ======`)
       this.$store.dispatch('blockly/blocklyInit')
-    },
-
-    watch: {
-      blocklyState: function (newa) {
-        console.log('123123')
-      }
     }
   }
 </script>

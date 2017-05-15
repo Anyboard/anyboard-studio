@@ -360,11 +360,6 @@ export default {
 
     UNADD_GRID (state) {
       state.gridAdded = false
-    },
-
-    // Debugging
-    JSON_DEBUG (state) {
-      console.log(JSON.stringify(state.canvas.getObjects()))
     }
   },
 
@@ -538,11 +533,6 @@ export default {
       commit('CHANGE_GRID_SIZE', size)
       commit('ADD_GRID')
       commit('HANDLE_DRAW_GRID')
-    },
-
-    // Debugging
-    jsonDebug ({commit}) {
-      commit('JSON_DEBUG')
     }
   },
   getters: {

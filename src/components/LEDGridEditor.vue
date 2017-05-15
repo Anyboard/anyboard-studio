@@ -53,10 +53,8 @@
       },
       validName: function () {
         if (this.gridName === '') {
-          console.log('HEY???')
           return false
         } else {
-          console.log('grid has a name')
           return true
         }
       }

@@ -38,9 +38,6 @@ export default {
     },
     UPLOAD_CODE (state, code) {
       state.blocklyState = code
-    },
-    LOG_CODE (state) {
-      console.log(Blockly.JavaScript.workspaceToCode(state.workspace))
     }
   },
   getters: {
@@ -60,7 +57,6 @@ export default {
       let sectorObject = rootGetters.GET_SECTORS
       let tokenVal = rootGetters['token/GET_SAVEDTOKENS']
       let ledGrids = rootGetters['ledgrid/GET_SAVEDLEDGRIDS']
-      console.log(tokenVal, ledGrids)
       let sectorNames = toMatrix(Object.keys(sectorObject), 1)  // used tilesnames for dropdown
       if (sectorNames.length === 0) {
         sectorNames = [[]]
@@ -86,15 +82,12 @@ export default {
 
       function loadState () {
         let scopedstate = context.getters.GET_BLOCKLY_STATE
-        console.log(scopedstate)
         if (scopedstate !== 0) {
           const textToDom = Blockly.Xml.textToDom(scopedstate)
           Blockly.Xml.domToWorkspace(textToDom, Blockly.mainWorkspace)
           Blockly.mainWorkspace.render()
         }
       }
-
-      console.log(context)
 
       loadState()
     },
@@ -116,9 +109,6 @@ export default {
       const textToDom = Blockly.Xml.textToDom(code)
       Blockly.Xml.domToWorkspace(textToDom, Blockly.mainWorkspace)
       Blockly.mainWorkspace.render()
-    },
-    logCode ({commit}) {
-      commit('LOG_CODE')
     }
   }
 }

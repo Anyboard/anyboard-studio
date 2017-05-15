@@ -47,9 +47,6 @@
           this.$store.dispatch('blockly/loadCode', xmlObj)
         }
         document.getElementById('upload').value = ''
-      },
-      logCode () {
-        this.$store.dispatch('blockly/logCode')
       }
     }
   }
