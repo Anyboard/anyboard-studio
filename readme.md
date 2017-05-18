@@ -22,6 +22,12 @@ The current build of Anyboard Studio has succesfully been run on the environment
 |Yarn        	|0.24.4  	|
 |NPM        	|4.4.0  	|
 
+### Windows 10 v.1703 build 15063.296
+|Program	    |Version  |
+|---	        |---	    |
+|Node.js      |7.7.1    |
+|NPM        	|4.1.2  	|
+
 Note: If the machine has less than 1GB of ram available Yarn might run into 'out of memory'-exceptions.
 
 ## Installation Steps
