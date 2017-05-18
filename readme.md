@@ -8,14 +8,10 @@ Read more about Yarn here: https://yarnpkg.com/en/
 ```shell
 cd my/prefered/project/folder
 git clone git@github.com:bronlund/anyboard-studio.git
-# > my/prefered/project/folder/anyboard-studio
+# Creates my/prefered/project/folder/anyboard-studio
 ```
-2. Install using Yarn
-```shell
-cd my/prefered/project/folder/anyboard-studio
-yarn install
-```
-3. Run using Yarn
-```shell
-yarn run dev
-```
+2. Cd into folder and install using Yarn `yarn install`
+3. Initiate server using Yarn `yarn run dev`
+
+## Server requirements
+The current build of Anyboard Studio has succesfully been run on the following environments.
