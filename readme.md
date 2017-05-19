@@ -26,6 +26,7 @@ The current build of Anyboard Studio has succesfully been run on the environment
 |Program	    |Version  |
 |---	        |---	    |
 |Node.js      |7.7.1    |
+|Yarn        	|0.24.5  	|
 |NPM        	|4.1.2  	|
 
 Note: If the machine has less than 1GB of ram available Yarn might run into 'out of memory'-exceptions.
