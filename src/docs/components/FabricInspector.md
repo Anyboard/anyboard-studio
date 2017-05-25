@@ -33,4 +33,7 @@ Used to toggle the dropdown that appears when a sector from the
 sector list is clicked.
 
 #### changeGridSize
+
+Used to update the grid size when the grid size
+slider is used in the object properties list. 
  
