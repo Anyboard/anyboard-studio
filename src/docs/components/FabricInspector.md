@@ -4,7 +4,34 @@ FabricInspector.vue displays various information about `FabricCanvas.vue`. This 
 
 ## Template
 
-### forskjellige components relevante til fabric inspector og beskrivelse av de her
+Fabric Inspector is divided into three parts, namely Colorpicker, Object properties and Sector list, each with its own purpose. 
+The component also interacts with the FabricCanvas.
+
+### FabricCanvas 
+The FabricCanvas.vue component is the actual 
+component that includes the visual board. 
+When the user uses the Fabric Inspector to make changes 
+they will be reflected in this component. 
+
+### Colorpicker
+
+The colorpicker is used to change the color of a selected
+object or a new sector. By clicking on a color, the color will be set to active, indicated by the largest color box.
+
+### Object properties
+
+Object properties shows the various properties of the selected object.
+The user can change the name of the selected object by entering a new name
+in the text field. The user can also change the size of the board grid by using
+the slider. 
+
+### Sector list
+
+The sector list shows the list of all sectors 
+currently on the board, with the exception of the three
+predefined sectors. These sectors are always present in the list.
+By clicking on a sector, the user is given the option to create a new sector
+of that kind by clicking on a sector shape.
 
 ## Script
 
