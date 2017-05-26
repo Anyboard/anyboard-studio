@@ -2,16 +2,14 @@
 
 ## State
 
-### Grid
-
 `grid` saves the current state of the LED grid in `LEDGridEditor.vue` as an array of boolean values.
 
-`savedGrids` is an object containing the saved LED grids. The name of each grid is used as the key, 
+`savedGrids` is an object containing the saved LED grids. The name of each grid is used as the key,
 and the value is a 16-bit hexadecimal string that represents the grid.
 
 `selectedGrid` is the currently selected grid in `LEDGridEditor.vue`. An empty string means no grid has been selected.
 
-### Mutations
+## Mutations
 
 `SET_GRID` sets the state `grid` to a new grid.
 
@@ -27,10 +25,10 @@ and the value is a 16-bit hexadecimal string that represents the grid.
 
 `DOWNLOAD_GRIDS` creates a `.json`-file out of savedGrids so that the user can download their progress.
 
-`UPLOAD_GRIDS` replaces `savedGrids` with a different set of saved grids. 
+`UPLOAD_GRIDS` replaces `savedGrids` with a different set of saved grids.
 This is used if a users wishes to upload grids from a `.json`-file
 
-### Actions
+## Actions
 
 `setGrid` transforms a 16-bit hexadecimal string to a 64-bit binary string and uses it to set new values for the state `grid`
 

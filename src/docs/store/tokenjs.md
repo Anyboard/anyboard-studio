@@ -15,7 +15,7 @@ and the value is an array where the first value always is an array of RGB-values
 
 `attributes` is an object containing boolean values for the haptics and actions of the currently selected token.
 
-### Mutations
+## Mutations
 
 `CHANGE_LED_COLOR` updates the state's LEDColor.
 
@@ -35,10 +35,10 @@ and the value is an array where the first value always is an array of RGB-values
 
 `UPLOAD_TOKENS` is used to upload saved tokens from a `.json`-file. This function replaces the currently saved tokens with the tokens from the `.json`-file.
 
-### Actions
+## Actions
 
 The actions of the `token.js` store call mutations in different orders to propagate application behavior.
 
-### Getters
+## Getters
 
 The two getters `GET_SAVEDTOKENS` and `GET_SELECTEDTOKEN` are used by other components in the application to load data created with `TokenEditor.vue`
