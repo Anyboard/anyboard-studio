@@ -1,6 +1,6 @@
 # FabricCanvas.vue
 
-FabricCanvas.vue is a vue comoponent which includes the html5 canvas element, which is what the user will draw their
+FabricCanvas.vue is a vue component which includes the html5 canvas element, which is what the user will draw their
 game board on.
 
 ## Template
