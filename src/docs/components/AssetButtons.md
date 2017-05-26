@@ -1,4 +1,4 @@
-# AssetButtons.md
+# AssetButtons.vue
 
 Buttons that are added to the navbar, used to download and upload various game assets.
 

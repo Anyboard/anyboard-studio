@@ -1,4 +1,4 @@
-# BoardButtons.md
+# BoardButtons.vue
 
 Buttons that are added to the navbar, related to exporting and importing the board.
 
