@@ -11,7 +11,7 @@ export default {
   state: {
     workspace: null,
     blocklyState: 0,
-    exportedCode: null
+    exportedCode: null //deprecated
   },
 
   mutations: {
@@ -69,8 +69,8 @@ export default {
       if (GRIDS.length === 0) {
         GRIDS = [[]]
       }
-      blocklyInit(Blockly, TOKENS, GRIDS, sectorObject, sectorNames, tokenVal, ledGrids)
-      const workspace = Blockly.inject('blockly-wrapper', {toolbox: toolbox})
+      blocklyInit(Blockly, TOKENS, GRIDS, sectorObject, sectorNames, tokenVal, ledGrids) // adding customised blocks and logic to Blockly as defined in utilities/blockly-init
+      const workspace = Blockly.inject('blockly-wrapper', {toolbox: toolbox}) // injecting blockly into the blockly-wrapper div in Blockly.vue using the utilities/blockly-toolbox.js
 
       workspace.addChangeListener(function () {
         const blocklyXML = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace)
