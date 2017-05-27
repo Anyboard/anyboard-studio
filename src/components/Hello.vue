@@ -7,7 +7,8 @@
         and we use the Fabric.js and Blockly.js libs for building the games.
       </p>
 
-      <p>Head over to the <a>docs</a> for information on how to get started on your fully personal game.</p>
+      <p>Head over to the <a href="https://github.com/arzmir/anyboard-studio">docs</a> for information on how to get
+        started on your fully personal game.</p>
 
       <h2>How to get started</h2>
       <h3> Board editor </h3>
@@ -24,9 +25,9 @@
       </p>
       <h3>Game assets</h3>
       <p>
-      This tab contains various functions for editing the cards printed by the Anydeck, a list of available token grids
-        and a mode for customising your own grids. You can also edit various tokens properties, such as name and
-        valid actions.
+        This tab contains various functions for customising your game assets. You can create new token roles to assign
+        to AnyPawns, and give the roles names, colors and other attributes. You can also create various display patterns
+        which can be displayed on top of the AnyPawns.
       </p>
       <h3>Code builder</h3>
       <p>
@@ -37,16 +38,16 @@
       </p>
         <img src="../assets/dragonlogic.png" alt="Code logic example">
         <p>When you are done making the logic for your game, hit the export button in the top right corner.
-          This will you give a HTML file that contains the code for your game. Place the HTML file inside the
-          game folder.
+          This will download a zipped file which contains all the necessary game files. Unzip the folder and locate the
+          index.html file. This will be used in the next step.
         </p>
       <h3>EvoThings</h3>
       <p>
       Open EvoThings on the computer and click the Connect tab. Click on the Get Key button to generate a key.
         Open up the EvoThings application on the smart phone and type in the key. Click connect and wait for a screen
-        that says “Connected”. Go back in to EvoThings on the computer and click on the My Apps tab. Locate the game
-        in the list called AnyboardGameDemo and click on Run. The game is now running on the smartphone in the
-        EvoThings application. Click on Discover bluetooth devices and select the Anypawn. The Anypawn is now
+        that says “Connected”. Go back in to EvoThings on the computer and click on the My Apps tab. Drag the index.html
+        file from the previous step into the My Apps tab, and click Run. The game is now running on the smartphone
+        in the EvoThings application. Click on Discover bluetooth devices and select the Anypawn. The Anypawn is now
         connected to the phone which is running the code you created with the code builder.
       </p>
     </div>
