@@ -11,7 +11,7 @@ export default {
   state: {
     workspace: null,
     blocklyState: 0,
-    exportedCode: null //deprecated
+    exportedCode: null // deprecated
   },
 
   mutations: {
