@@ -35,7 +35,7 @@ Note: If the machine has less than 1GB of ram available Yarn might run into 'out
 1. Clone the repository to your prefered location
 ```shell
 cd my/prefered/project/folder
-git clone git@github.com:bronlund/anyboard-studio.git
+git clone https://github.com/simonem/anyboard-studio
 # Creates my/prefered/project/folder/anyboard-studio
 ```
 2. Navigate into folder and install with `yarn install`
